@@ -386,7 +386,8 @@
       monitor: "https://img.icons8.com/fluency-systems-filled/96/1a1b1c/monitor.png", paintBrush: "https://img.icons8.com/fluency-systems-filled/96/1a1b1c/paint-brush.png",
       cloud: "https://img.icons8.com/fluency-systems-filled/96/1a1b1c/cloud.png", globe: "https://img.icons8.com/fluency-systems-filled/96/1a1b1c/globe.png",
       updateAppIcon: "https://img.icons8.com/fluency/96/update-left-rotation.png",
-      smartHome: "https://img.icons8.com/fluency-systems-filled/96/1a1b1c/home.png"
+      smartHome: "https://img.icons8.com/fluency-systems-filled/96/1a1b1c/home.png",
+      laptop: "https://img.icons8.com/fluency/96/laptop.png"
     };
 
     const APPS = [
@@ -700,11 +701,11 @@
                </div>
                <div class="px-5 py-3 space-y-3 border-b border-white/40">
                    <div class="flex items-center justify-between">
-                       <span class="text-xs font-semibold text-slate-700 flex items-center"><img src="${ICONS.laptop}" class="w-3.5 h-3.5 mr-2 opacity-70">Local Compute</span>
+                       <span class="text-xs font-semibold text-slate-700 flex items-center">${imgTag(ICONS.laptop, "w-3.5 h-3.5 mr-2 opacity-70")}Local Compute</span>
                        <span class="text-[10px] font-bold text-emerald-600 bg-emerald-100 px-1.5 py-0.5 rounded">Active</span>
                    </div>
                    <div class="flex items-center justify-between">
-                       <span class="text-xs font-semibold text-slate-700 flex items-center"><img src="${ICONS.cloud}" class="w-3.5 h-3.5 mr-2 opacity-70">Cloud PC (Win365)</span>
+                       <span class="text-xs font-semibold text-slate-700 flex items-center">${imgTag(ICONS.cloud, "w-3.5 h-3.5 mr-2 opacity-70")}Cloud PC (Win365)</span>
                        <span class="text-[10px] font-bold text-slate-500 bg-slate-100 border border-slate-200 px-1.5 py-0.5 rounded">Standby</span>
                    </div>
                </div>
@@ -1185,7 +1186,7 @@
         if(tab === 'System') {
             main = `
             <div class="flex items-center gap-6 mb-8">
-               <img src="${ICONS.laptop}" class="w-20 h-20 drop-shadow-sm">
+               ${imgTag(ICONS.laptop, "w-20 h-20 drop-shadow-sm")}
                <div>
                  <h1 class="text-3xl font-bold text-slate-900 tracking-tight">Vision-PC</h1>
                  <p class="text-slate-600 font-medium text-sm mt-1">Windows 12 Pro (Core)</p>
