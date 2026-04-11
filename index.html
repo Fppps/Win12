@@ -3,68 +3,87 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Windows 12 Official</title>
+  <title>Windows 12 Preview (1H01)</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
-    // Global error handler initialized early to catch image load failures during HTML parsing
+    // ============================================================================
+    // GLOBAL ERROR HANDLER & BSOD INTERCEPTOR
+    // ============================================================================
     window.__imgErrors = [];
     window.handleImgError = function(img) {
       if (!img || !img.getAttribute('src') || img.dataset.errorHandled === "true" || img.src.includes('undefined')) return; 
-      
-      console.error("IMAGE_LOAD_FAILURE: " + img.src);
       img.dataset.errorHandled = "true";
-
-      // If it's a non-critical asset (like a user file preview), just use a placeholder
+      
       if (img.classList.contains('non-critical')) {
         img.src = 'https://img.icons8.com/fluency/96/image.png';
         return;
       }
-
-      // Critical system assets trigger the kernel panic (BSOD)
+      
+      console.error("IMAGE_LOAD_FAILURE: " + img.src);
       if (typeof window.triggerBSOD === 'function') {
         window.triggerBSOD("KERNEL_DATA_INPAGE_ERROR (" + (img.src.split('/').pop() || 'IMG_LOAD_FAIL') + ")");
-      } else {
-        window.__imgErrors.push(img);
       }
     };
   </script>
   <style>
+    /* ============================================================================
+       CORE STYLES, FONTS, AND ANIMATIONS
+       ============================================================================ */
     @import url('https://fonts.googleapis.com/css2?family=Segoe+UI:wght@300;400;500;600;700;900&display=swap');
     
-    body { font-family: 'Segoe UI', system-ui, sans-serif; overflow: hidden; background: black; }
+    body { 
+        font-family: 'Segoe UI', system-ui, sans-serif; 
+        overflow: hidden; 
+        background: black; 
+    }
     
     .custom-scrollbar::-webkit-scrollbar { width: 6px; }
     .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
     .custom-scrollbar::-webkit-scrollbar-thumb { background-color: rgba(0,0,0,0.2); border-radius: 10px; }
-    
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-    .mica-light { background: rgba(255, 255, 255, 0.5); backdrop-filter: blur(32px); border: 1px solid rgba(255, 255, 255, 0.5); box-shadow: 0 8px 32px rgba(0,0,0,0.15); color: #0f172a; }
-    .acrylic-light { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.6); color: #0f172a; }
-    .acrylic-solid { background: rgba(250, 250, 250, 0.95); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.3); box-shadow: 0 30px 80px -15px rgba(0,0,0,0.5); color: #0f172a; }
+    /* Premium Microsoft Fluent Design Materials */
+    .mica-light { background: rgba(255, 255, 255, 0.65); backdrop-filter: blur(40px); border: 1px solid rgba(255, 255, 255, 0.5); box-shadow: 0 8px 32px rgba(0,0,0,0.15); color: #0f172a; }
+    .acrylic-light { background: rgba(255, 255, 255, 0.75); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.6); color: #0f172a; }
+    .acrylic-solid { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(30px); border: 1px solid rgba(255, 255, 255, 0.6); box-shadow: 0 30px 80px -15px rgba(0,0,0,0.4); color: #0f172a; }
     
     .hidden { display: none !important; }
-    .fade-in { animation: fadeIn 0.3s ease-out forwards; }
-    .slide-up { animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-    .slide-down { animation: slideDown 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+    .fade-in { animation: fadeIn 0.4s ease-out forwards; }
+    .slide-up { animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+    .slide-right { animation: slideRight 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+    .zoom-in { animation: zoomIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
     
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-    @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-    @keyframes slideDown { from { transform: translateY(-20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    @keyframes slideRight { from { transform: translateX(-100%); } to { transform: translateX(0); } }
+    @keyframes zoomIn { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
     @keyframes bouncePulse {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-25%); }
+      0%, 100% { transform: translateY(0); opacity: 0.5; }
+      50% { transform: translateY(-30%); opacity: 1; }
     }
 
-    #taskbar { transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
+    .win-spinner-dot {
+      position: absolute; width: 100%; height: 100%; opacity: 0;
+      animation: win-spin 3s infinite cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .win-spinner-dot::after {
+      content: ''; position: absolute; top: 0; left: 50%; width: 5px; height: 5px;
+      background: white; border-radius: 50%; transform: translateX(-50%);
+    }
+    @keyframes win-spin {
+      0% { transform: rotate(-90deg); opacity: 0; }
+      10% { opacity: 1; }
+      70% { transform: rotate(630deg); opacity: 1; }
+      100% { transform: rotate(990deg); opacity: 0; }
+    }
+
+    #taskbar { transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
     .taskbar-top { bottom: auto !important; top: 4px !important; }
-    .overlay-top { bottom: auto !important; top: 72px !important; transform: translateY(-20px); animation: slideDown 0.3s forwards; }
+    .taskbar-left-align #tb-center-hub { position: relative !important; left: 0 !important; transform: none !important; justify-content: flex-start; margin-left: 1rem; }
     
-    /* Action Center Custom Sliders */
-    input[type=range].action-slider { height: 4px; border-radius: 4px; appearance: none; outline: none; background: rgba(255,255,255,0.7); }
-    input[type=range].action-slider::-webkit-slider-thumb { appearance: none; width: 14px; height: 14px; border-radius: 50%; background: currentColor; cursor: pointer; transition: transform 0.1s; }
-    input[type=range].action-slider::-webkit-slider-thumb:hover { transform: scale(1.2); }
+    .settings-nav-active { background: rgba(0,0,0,0.05); font-weight: 700; position: relative; }
+    .settings-nav-active::before { content: ''; position: absolute; left: 0; top: 20%; height: 60%; width: 4px; background: #0067c0; border-radius: 4px; }
   </style>
 </head>
 <body class="select-none text-slate-900 text-sm" oncontextmenu="return false;">
@@ -77,43 +96,51 @@
 
     <!-- BOOT SCREEN -->
     <div id="screen-boot" class="absolute inset-0 bg-black flex flex-col items-center justify-center cursor-none z-[50000]">
-      <img src="https://img.icons8.com/fluency/96/windows-11.png" alt="Windows" class="w-20 h-20 mb-12 animate-pulse drop-shadow-2xl" draggable="false">
-      <div class="flex items-center space-x-2.5">
-        <div class="w-1.5 h-1.5 bg-white/80 rounded-full" style="animation: bouncePulse 1s infinite 0ms;"></div>
-        <div class="w-1.5 h-1.5 bg-white/80 rounded-full" style="animation: bouncePulse 1s infinite 150ms;"></div>
-        <div class="w-1.5 h-1.5 bg-white/80 rounded-full" style="animation: bouncePulse 1s infinite 300ms;"></div>
+      <div class="absolute top-[40%] left-1/2 -translate-x-1/2 -translate-y-1/2">
+        <img src="https://img.icons8.com/color/144/windows-11.png" alt="Windows" class="w-28 h-28" draggable="false">
+      </div>
+      <div class="absolute bottom-[25%] left-1/2 -translate-x-1/2">
+        <div class="relative w-10 h-10">
+          <div class="win-spinner-dot" style="animation-delay: 0ms"></div>
+          <div class="win-spinner-dot" style="animation-delay: 150ms"></div>
+          <div class="win-spinner-dot" style="animation-delay: 300ms"></div>
+          <div class="win-spinner-dot" style="animation-delay: 450ms"></div>
+          <div class="win-spinner-dot" style="animation-delay: 600ms"></div>
+        </div>
       </div>
     </div>
 
     <!-- LOGIN SCREEN -->
     <div id="screen-login" class="absolute inset-0 bg-black hidden z-[40000]">
       <div id="login-wallpaper" class="absolute inset-0 bg-cover bg-center transition-all duration-700"></div>
+      
       <div id="login-time-view" class="absolute top-24 left-1/2 -translate-x-1/2 flex flex-col items-center text-white drop-shadow-lg transition-all duration-500">
         <h1 id="login-clock" class="text-8xl font-extralight tracking-tighter mb-2"></h1>
         <p id="login-date" class="text-2xl font-medium"></p>
+        <p class="mt-8 text-sm font-semibold opacity-70 animate-pulse">Click or press any key to unlock</p>
       </div>
+
       <div id="login-auth-view" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center transition-all duration-500 translate-y-20 opacity-0 pointer-events-none">
-        <img id="login-avatar" src="" class="w-32 h-32 rounded-full border-4 border-white/20 shadow-2xl mb-6 object-cover non-critical" draggable="false" onerror="window.handleImgError(this)">
+        <img id="login-avatar" src="https://img.icons8.com/fluency/96/user-male-circle.png" class="w-32 h-32 rounded-full border-4 border-white/20 shadow-2xl mb-6 object-cover bg-slate-800 non-critical" draggable="false" onerror="window.handleImgError(this)">
         <h2 class="text-white text-3xl font-semibold mb-6 drop-shadow-md">Administrator</h2>
         <div id="login-input-area" class="flex flex-col items-center w-72">
+          <p id="login-instruction" class="text-white/80 text-sm mb-3 font-medium">Enter your password</p>
           <div class="relative w-full">
-            <input type="password" id="login-pwd" placeholder="PIN or Password" class="w-full bg-black/40 border-b-2 border-white/50 text-white px-4 py-3 text-center focus:outline-none focus:border-blue-500 transition-colors placeholder:text-white/50 backdrop-blur-md rounded-t-md">
-            <button id="login-submit" class="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 hover:bg-white/20 rounded transition-colors">
-              <img src="https://img.icons8.com/fluency-systems-filled/96/475569/chevron-right.png" class="w-5 h-5 invert brightness-0" draggable="false" onerror="window.handleImgError(this)">
+            <input type="password" id="login-pwd" placeholder="Password" class="w-full bg-black/50 border border-white/30 text-white px-4 py-3 text-center focus:outline-none focus:border-blue-500 transition-colors placeholder:text-white/50 backdrop-blur-md rounded-xl shadow-inner">
+            <button id="login-submit" class="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 hover:bg-white/20 rounded-lg transition-colors">
+              <img src="https://img.icons8.com/fluency-systems-filled/96/475569/chevron-right.png" class="w-5 h-5 invert brightness-0" draggable="false">
             </button>
           </div>
-          <div class="mt-8 flex flex-col items-center">
-            <p class="text-white/80 text-[12px] mb-3 font-medium">Sign-in options</p>
-            <div class="flex space-x-3">
-              <button class="p-2.5 rounded-md border border-white/30 bg-white/20 hover:bg-white/30 transition-all shadow-sm"><img src="https://img.icons8.com/fluency-systems-filled/96/ffffff/keypad.png" class="w-5 h-5 drop-shadow-md" draggable="false" onerror="window.handleImgError(this)"></button>
-              <button class="p-2.5 rounded-md border border-transparent hover:border-white/30 hover:bg-white/10 transition-all"><img src="https://img.icons8.com/fluency-systems-filled/96/ffffff/password.png" class="w-5 h-5 opacity-70 hover:opacity-100" draggable="false" onerror="window.handleImgError(this)"></button>
-            </div>
-          </div>
+          <p id="login-error" class="text-red-400 text-xs font-bold mt-2 h-4 transition-opacity opacity-0">Incorrect password.</p>
+          <button id="login-reset" onclick="window.resetPassword()" class="text-blue-400 hover:text-blue-300 text-xs font-bold mt-1 cursor-pointer transition-opacity hidden">Reset password</button>
         </div>
         <div id="login-loading-area" class="flex flex-col items-center hidden">
-          <div class="flex space-x-1.5 mb-4">
-            <div class="w-1 h-1 bg-white rounded-full animate-bounce"></div>
-            <div class="w-1 h-1 bg-white rounded-full animate-bounce"></div>
+          <div class="relative w-10 h-10 mb-6">
+            <div class="win-spinner-dot" style="animation-delay: 0ms"></div>
+            <div class="win-spinner-dot" style="animation-delay: 150ms"></div>
+            <div class="win-spinner-dot" style="animation-delay: 300ms"></div>
+            <div class="win-spinner-dot" style="animation-delay: 450ms"></div>
+            <div class="win-spinner-dot" style="animation-delay: 600ms"></div>
           </div>
           <p class="text-white text-lg font-medium">Welcome</p>
         </div>
@@ -122,12 +149,12 @@
 
     <!-- WELCOME SCREEN -->
     <div id="screen-welcome" class="absolute inset-0 bg-black hidden z-[30000]">
-      <div id="welcome-wallpaper" class="absolute inset-0 bg-cover bg-center opacity-50 blur-lg scale-105"></div>
+      <div id="welcome-wallpaper" class="absolute inset-0 bg-cover bg-center opacity-50 blur-xl scale-105"></div>
       <div class="absolute inset-0 flex flex-col items-center justify-center text-white fade-in z-10 text-center px-6">
-        <img src="https://img.icons8.com/fluency/96/windows-11.png" class="w-24 h-24 mb-8 drop-shadow-2xl" draggable="false">
-        <h1 class="text-6xl font-light mb-4 tracking-tight drop-shadow-md">Welcome to Windows 12</h1>
-        <p class="text-xl text-blue-100 mb-12 drop-shadow">The official next era of personal computing.</p>
-        <button onclick="setOsState('desktop')" class="px-10 py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transition-all active:scale-95">Get Started</button>
+        <img src="https://img.icons8.com/fluency/96/windows-11.png" class="w-28 h-28 mb-8 drop-shadow-[0_0_40px_rgba(59,130,246,0.6)]" draggable="false">
+        <h1 class="text-6xl font-light mb-4 tracking-tight drop-shadow-md">Windows 12 Preview</h1>
+        <p class="text-xl text-blue-200 mb-12 drop-shadow font-semibold">Build 1H01 - The Persistence Update</p>
+        <button onclick="setOsState('desktop')" class="px-12 py-4 bg-blue-600 hover:bg-blue-500 text-white rounded-2xl font-bold text-lg shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all active:scale-95">Enter Environment</button>
       </div>
     </div>
 
@@ -140,25 +167,31 @@
 
     <!-- UPDATING SCREEN -->
     <div id="screen-updating" class="absolute inset-0 bg-[#005A9E] text-white flex flex-col items-center justify-center cursor-none hidden z-[50000]">
-      <div class="flex space-x-2 mb-8">
-        <div class="w-2 h-2 bg-white rounded-full" style="animation: bouncePulse 1s infinite 0ms;"></div>
-        <div class="w-2 h-2 bg-white rounded-full" style="animation: bouncePulse 1s infinite 150ms;"></div>
-        <div class="w-2 h-2 bg-white rounded-full" style="animation: bouncePulse 1s infinite 300ms;"></div>
+      <div class="relative w-12 h-12 mb-10">
+        <div class="win-spinner-dot" style="animation-delay: 0ms"></div>
+        <div class="win-spinner-dot" style="animation-delay: 150ms"></div>
+        <div class="win-spinner-dot" style="animation-delay: 300ms"></div>
+        <div class="win-spinner-dot" style="animation-delay: 450ms"></div>
+        <div class="win-spinner-dot" style="animation-delay: 600ms"></div>
       </div>
       <h2 id="update-build-label" class="text-3xl font-light mb-4">Working on updates</h2>
       <p id="update-progress-text" class="text-xl font-medium mb-2">0% complete.</p>
       <p class="text-lg text-white/80">Don't turn off your PC. This will take a while.</p>
-      
-      <!-- UPDATER BUILD LABEL -->
-      <div class="absolute bottom-16 right-16 text-right pointer-events-none drop-shadow-md z-0 opacity-70">
-        <p class="text-white text-lg font-semibold tracking-wide">Windows 12 Pro</p>
-        <p class="text-white text-base font-medium tracking-wide">Build 30000.1H00</p>
+      <div class="absolute bottom-16 right-16 text-right pointer-events-none drop-shadow-md z-0 opacity-80">
+        <p class="text-white text-[13px] font-semibold tracking-wide">Windows 12 preview</p>
+        <p class="text-white text-[13px] font-semibold tracking-wide">Build 1H01</p>
       </div>
     </div>
 
     <!-- RESTARTING SCREEN -->
     <div id="screen-restarting" class="absolute inset-0 bg-black text-white flex flex-col items-center justify-center cursor-none hidden z-[50000]">
-      <div class="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mb-6"></div>
+      <div class="relative w-10 h-10 mb-8">
+        <div class="win-spinner-dot" style="animation-delay: 0ms"></div>
+        <div class="win-spinner-dot" style="animation-delay: 150ms"></div>
+        <div class="win-spinner-dot" style="animation-delay: 300ms"></div>
+        <div class="win-spinner-dot" style="animation-delay: 450ms"></div>
+        <div class="win-spinner-dot" style="animation-delay: 600ms"></div>
+      </div>
       <h2 class="text-2xl font-light">Restarting</h2>
     </div>
 
@@ -170,59 +203,56 @@
       <div id="windows-area" class="absolute inset-0 z-10 pointer-events-none"></div>
 
       <!-- Overlays -->
-      <div id="overlay-start" class="absolute bottom-24 left-1/2 -translate-x-1/2 w-[640px] h-[720px] rounded-3xl mica-light flex flex-col p-6 z-[9998] shadow-2xl hidden slide-up"></div>
-      <div id="overlay-action" class="absolute bottom-24 right-4 w-[380px] rounded-3xl mica-light p-5 z-[9998] flex flex-col shadow-2xl hidden slide-up"></div>
-      <div id="overlay-calendar" class="absolute bottom-24 right-4 w-[340px] rounded-3xl mica-light p-5 z-[9998] flex flex-col shadow-2xl hidden slide-up"></div>
-      <div id="overlay-news" class="absolute bottom-24 left-4 w-[400px] h-[640px] rounded-3xl mica-light p-6 z-[9998] flex flex-col shadow-2xl hidden slide-up"></div>
-      <div id="overlay-context" class="absolute w-64 py-2 rounded-xl acrylic-light shadow-[0_15px_50px_rgba(0,0,0,0.3)] z-[10000] hidden border border-white/20"></div>
+      <div id="overlay-start" class="absolute bottom-24 left-1/2 -translate-x-1/2 w-[640px] h-[720px] rounded-3xl mica-light flex flex-col p-6 z-[9998] shadow-2xl hidden slide-up border border-white/40"></div>
+      <div id="overlay-action" class="absolute bottom-24 right-4 w-[380px] rounded-3xl mica-light p-5 z-[9998] flex flex-col shadow-2xl hidden slide-up border border-white/40"></div>
+      <div id="overlay-calendar" class="absolute bottom-24 right-4 w-[340px] rounded-3xl mica-light p-5 z-[9998] flex flex-col shadow-2xl hidden slide-up border border-white/40"></div>
+      <div id="overlay-widgets" class="absolute top-0 left-0 w-[420px] h-full rounded-r-3xl mica-light p-6 z-[9998] shadow-[20px_0_50px_rgba(0,0,0,0.3)] hidden slide-right border-r border-white/40 overflow-y-auto custom-scrollbar"></div>
       
-      <div id="notifications-area" class="absolute bottom-28 right-4 flex flex-col space-y-3 z-[10001] pointer-events-none"></div>
-
-      <!-- Taskbar (Floating Pill UX) -->
-      <div id="taskbar" class="absolute bottom-4 left-1/2 -translate-x-1/2 w-[98%] max-w-[1400px] h-[64px] mica-light border border-white/30 rounded-3xl flex items-center justify-between px-4 z-[9999] shadow-[0_12px_40px_rgba(0,0,0,0.3)] backdrop-blur-3xl">
-        <!-- Widgets (Left) -->
+      <!-- Right-Click Context Menu -->
+      <div id="overlay-context" class="absolute w-64 py-2 rounded-xl acrylic-light shadow-[0_15px_50px_rgba(0,0,0,0.3)] z-[10000] hidden border border-white/50 backdrop-blur-3xl"></div>
+      
+      <!-- Taskbar -->
+      <div id="taskbar" class="absolute bottom-4 left-1/2 -translate-x-1/2 w-[98%] max-w-[1400px] h-[64px] mica-light border border-white/40 rounded-3xl flex items-center justify-between px-4 z-[9999] shadow-[0_12px_40px_rgba(0,0,0,0.3)] backdrop-blur-3xl">
         <div class="flex-1 flex justify-start overflow-hidden">
-          <div id="tb-weather" class="flex items-center space-x-3 hover:bg-white/20 p-2 rounded-2xl cursor-pointer transition-all w-auto max-w-[200px] border border-transparent hover:border-white/20 group">
-            <img src="https://img.icons8.com/color/96/partly-cloudy-day--v1.png" class="w-8 h-8 drop-shadow-sm group-hover:scale-110 transition-transform" draggable="false" onerror="window.handleImgError(this)">
-            <div class="flex flex-col whitespace-nowrap overflow-hidden">
-              <span class="text-xs font-semibold leading-tight text-slate-800 truncate">72°F Partly Cloudy</span>
-              <span class="text-[10px] text-slate-600 leading-tight font-medium uppercase tracking-tighter truncate">AQI: 42 Optimal</span>
+          <div id="tb-widgets-btn" class="flex items-center space-x-3 hover:bg-white/40 p-2 rounded-2xl cursor-pointer transition-all w-auto max-w-[200px] border border-transparent hover:border-white/40 group shadow-sm">
+            <img src="https://img.icons8.com/color/96/partly-cloudy-day--v1.png" class="w-8 h-8 drop-shadow-sm group-hover:scale-110 transition-transform" draggable="false">
+            <div class="flex flex-col whitespace-nowrap overflow-hidden pr-2">
+              <span class="text-xs font-bold leading-tight text-slate-900 truncate">72°F Partly Cloudy</span>
+              <span class="text-[10px] text-blue-800 leading-tight font-black uppercase tracking-tighter truncate">Widgets Board</span>
             </div>
           </div>
         </div>
 
-        <!-- Main Hub (Center) -->
-        <div class="flex-shrink-0 flex items-center justify-center space-x-1.5 max-w-[60%]">
-          <button id="tb-start" class="p-2.5 flex-shrink-0 rounded-2xl transition-all transform active:scale-90 hover:bg-white/30 border border-transparent">
+        <div id="tb-center-hub" class="flex-shrink-0 flex items-center justify-center space-x-1.5 max-w-[60%] absolute left-1/2 -translate-x-1/2 h-full transition-all duration-500">
+          <button id="tb-start" class="p-2.5 flex-shrink-0 rounded-2xl transition-all transform active:scale-90 hover:bg-white/50 border border-transparent shadow-sm hover:shadow-md">
             <img src="https://img.icons8.com/fluency/96/windows-11.png" class="w-8 h-8 drop-shadow-sm" draggable="false">
           </button>
-          <button id="tb-copilot" class="p-2.5 flex-shrink-0 rounded-2xl transition-all transform active:scale-90 hover:bg-white/30 border border-transparent" title="Copilot">
-            <img src="https://img.icons8.com/fluency/96/artificial-intelligence.png" class="w-8 h-8 drop-shadow-sm" draggable="false">
-          </button>
-          <div class="w-px h-7 bg-slate-400/30 mx-1 flex-shrink-0"></div>
-          <div id="tb-search" class="flex flex-shrink-0 items-center bg-white/30 rounded-2xl px-4 py-2 border border-white/40 w-48 hover:bg-white/50 transition-all shadow-sm cursor-text group">
-            <img src="https://img.icons8.com/fluency-systems-filled/96/475569/search.png" class="w-4 h-4 mr-2 opacity-70">
-            <span class="text-sm text-slate-600 font-medium select-none">Search...</span>
-          </div>
-          <div class="w-px h-7 bg-slate-400/30 mx-1 flex-shrink-0"></div>
           
-          <div id="taskbar-apps" class="flex items-center space-x-1 overflow-x-auto no-scrollbar scroll-smooth"></div>
+          <div class="w-px h-7 bg-slate-400/50 mx-2 flex-shrink-0"></div>
+          
+          <div id="tb-search" class="flex flex-shrink-0 items-center bg-white/50 rounded-2xl px-4 py-2 border border-white/60 w-48 hover:bg-white/70 focus-within:w-64 transition-all shadow-sm cursor-text group">
+            <img src="https://img.icons8.com/color/96/google-logo.png" class="w-4 h-4 mr-2 drop-shadow-sm" draggable="false">
+            <span class="text-sm text-slate-700 font-bold select-none group-focus-within:hidden">Search Google...</span>
+            <input type="text" id="tb-search-input" class="bg-transparent border-none outline-none text-sm text-slate-900 font-bold w-full hidden group-focus-within:block placeholder-slate-600" placeholder="Type to search..." />
+          </div>
+          
+          <div class="w-px h-7 bg-slate-400/50 mx-2 flex-shrink-0"></div>
+          <div id="taskbar-apps" class="flex items-center space-x-1.5 overflow-x-auto no-scrollbar scroll-smooth relative h-full"></div>
         </div>
 
-        <!-- Tray (Right) -->
         <div class="flex-1 flex items-center space-x-3 justify-end overflow-hidden min-w-[150px]">
-          <div id="live-stats" class="flex flex-col text-[9px] font-black text-slate-500 uppercase tracking-tighter items-end opacity-60 hidden md:flex">
-            <span id="stat-cpu">CPU: 12%</span>
-            <span id="stat-ram">RAM: 4.2GB</span>
+          <div id="live-stats" class="flex flex-col text-[9px] font-black text-slate-600 uppercase tracking-tighter items-end opacity-90 hidden lg:flex bg-white/50 px-3 py-1.5 rounded-xl border border-white/50 shadow-sm">
+            <span id="stat-cpu" class="text-blue-800">CPU: 12%</span>
+            <span id="stat-ram" class="text-indigo-800">RAM: 4.2GB</span>
           </div>
-          <div id="tb-action" class="flex items-center hover:bg-white/20 p-2.5 rounded-2xl cursor-pointer transition-all space-x-2 lg:space-x-3 border border-transparent hover:border-white/20">
-            <img id="tb-icon-wifi" src="" class="w-4 h-4 opacity-80" draggable="false" onerror="window.handleImgError(this)">
-            <img id="tb-icon-vol" src="" class="w-4 h-4 opacity-80" draggable="false" onerror="window.handleImgError(this)">
-            <img id="tb-icon-bat" src="https://img.icons8.com/fluency-systems-filled/96/1e293b/full-battery.png" class="w-4 h-4 opacity-80" draggable="false">
+          <div id="tb-action" class="flex items-center hover:bg-white/40 p-2.5 rounded-2xl cursor-pointer transition-all space-x-2 lg:space-x-3 border border-transparent hover:border-white/50 shadow-sm hover:shadow-md">
+            <img id="tb-icon-wifi" src="" class="w-4 h-4 opacity-90" draggable="false" onerror="window.handleImgError(this)">
+            <img id="tb-icon-vol" src="" class="w-4 h-4 opacity-90" draggable="false" onerror="window.handleImgError(this)">
+            <img id="tb-icon-bat" src="https://img.icons8.com/fluency-systems-filled/96/1e293b/full-battery.png" class="w-4 h-4 opacity-90" draggable="false">
           </div>
-          <div id="tb-clock-area" class="flex flex-col items-end hover:bg-white/20 p-2.5 rounded-2xl cursor-pointer transition-all border border-transparent hover:border-white/20 whitespace-nowrap">
-            <span id="tb-time" class="text-xs font-bold text-slate-800 tracking-tight"></span>
-            <span id="tb-date" class="text-[10px] text-slate-600 font-semibold"></span>
+          <div id="tb-clock-area" class="flex flex-col items-end hover:bg-white/40 p-2.5 rounded-2xl cursor-pointer transition-all border border-transparent hover:border-white/50 shadow-sm hover:shadow-md whitespace-nowrap">
+            <span id="tb-time" class="text-xs font-black text-slate-900 tracking-tight"></span>
+            <span id="tb-date" class="text-[10px] text-slate-700 font-bold"></span>
           </div>
         </div>
       </div>
@@ -230,12 +260,19 @@
   </div>
 
   <script>
-    const SYSTEM_WALLPAPERS = ["https://i.redd.it/some-new-wallpapers-i-created-for-my-new-windows-concept-v0-6m3zzxs250891.png?width=2560&format=png&auto=webp&s=312e6a64db5b1d1bab9157f29dbc7763c35bf2be"];
+    // --- System Constants & Storage ---
+    const STORAGE_KEY = 'win12_data_1H01';
+    const DEFAULT_WALLPAPER = "https://i.redd.it/some-new-wallpapers-i-created-for-my-new-windows-concept-v0-6m3zzxs250891.png?width=2560&format=png&auto=webp&s=312e6a64db5b1d1bab9157f29dbc7763c35bf2be";
+    const SYSTEM_WALLPAPERS = [
+      DEFAULT_WALLPAPER,
+      "https://images.unsplash.com/photo-1702539336564-b37d0f3276e7?fm=jpg&q=60&w=3000&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8d2luZG93cyUyMDExJTIwd2FsbHBhcGVyfGVufDB8fDB8fHww"
+    ];
     const USER_AVATAR = "https://preview.redd.it/windows-11-default-account-pictures-re-done-one-for-male-v0-idtnwharehae1.png?width=448&format=png&auto=webp&s=1ed93c99c11c421dcf8a626e382c22acd40eae5e";
+    let buildVersion = "1H01";
 
     const ICONS = {
       start: "https://img.icons8.com/fluency/96/windows-11.png", search: "https://img.icons8.com/fluency-systems-filled/96/64748b/search.png",
-      copilot: "https://img.icons8.com/fluency/96/artificial-intelligence.png",
+      copilot: "https://img.icons8.com/fluency/96/artificial-intelligence.png", chrome: "https://img.icons8.com/color/96/chrome--v1.png",
       lock: "https://img.icons8.com/fluency/96/lock.png", weather: "https://img.icons8.com/color/96/partly-cloudy-day--v1.png",
       wifiTray: "https://img.icons8.com/fluency-systems-filled/96/1e293b/wifi.png", wifiOffTray: "https://img.icons8.com/fluency-systems-filled/96/1e293b/no-network.png",
       volumeTray: "https://img.icons8.com/fluency-systems-filled/96/1e293b/low-volume.png", volumeOffTray: "https://img.icons8.com/fluency-systems-filled/96/1e293b/mute.png",
@@ -244,37 +281,22 @@
       minimize: "https://img.icons8.com/fluency-systems-filled/96/475569/minus.png", maximize: "https://img.icons8.com/fluency-systems-filled/96/475569/maximize-button.png", 
       restore: "https://img.icons8.com/fluency-systems-filled/96/475569/restore-window.png", close: "https://img.icons8.com/fluency-systems-filled/96/475569/multiply.png",
       home: "https://img.icons8.com/fluency/96/home.png", refresh: "https://img.icons8.com/fluency-systems-filled/96/475569/refresh.png",
-      update: "https://img.icons8.com/fluency/96/available-updates.png",
-      chevronUp: "https://img.icons8.com/fluency-systems-filled/96/475569/chevron-up.png", 
-      chevronDown: "https://img.icons8.com/fluency-systems-filled/96/475569/chevron-down.png",
-      chevronLeft: "https://img.icons8.com/fluency-systems-filled/96/475569/chevron-left.png", 
-      chevronRight: "https://img.icons8.com/fluency-systems-filled/96/475569/chevron-right.png",
-      check: "https://img.icons8.com/fluency-systems-filled/96/10b981/checkmark.png",
-      
-      // Action Center specific clean filled icons
-      wifi: "https://img.icons8.com/fluency-systems-filled/96/ffffff/wifi.png",
-      wifiOff: "https://img.icons8.com/fluency-systems-filled/96/ffffff/no-network.png",
-      bluetooth: "https://img.icons8.com/fluency-systems-filled/96/ffffff/bluetooth.png",
-      airplane: "https://img.icons8.com/fluency-systems-filled/96/ffffff/airplane-take-off.png",
-      nightLight: "https://img.icons8.com/fluency-systems-filled/96/ffffff/do-not-disturb.png",
-      moon: "https://img.icons8.com/fluency-systems-filled/96/ffffff/moon-symbol.png",
-      settings: "https://img.icons8.com/fluency-systems-filled/96/ffffff/settings.png",
-      volume: "https://img.icons8.com/fluency-systems-filled/96/475569/low-volume.png",
-      volumeOff: "https://img.icons8.com/fluency-systems-filled/96/475569/mute.png",
-      brightness: "https://img.icons8.com/fluency-systems-filled/96/475569/sun.png"
+      chevronUp: "https://img.icons8.com/fluency-systems-filled/96/475569/chevron-up.png", chevronRight: "https://img.icons8.com/fluency-systems-filled/96/475569/chevron-right.png",
+      wifi: "https://img.icons8.com/fluency-systems-filled/96/ffffff/wifi.png", wifiOff: "https://img.icons8.com/fluency-systems-filled/96/ffffff/no-network.png",
+      bluetooth: "https://img.icons8.com/fluency-systems-filled/96/ffffff/bluetooth.png", airplane: "https://img.icons8.com/fluency-systems-filled/96/ffffff/airplane-take-off.png",
+      nightLight: "https://img.icons8.com/fluency-systems-filled/96/ffffff/do-not-disturb.png", moon: "https://img.icons8.com/fluency-systems-filled/96/ffffff/moon-symbol.png",
+      settings: "https://img.icons8.com/fluency-systems-filled/96/ffffff/settings.png", volume: "https://img.icons8.com/fluency-systems-filled/96/475569/low-volume.png",
+      volumeOff: "https://img.icons8.com/fluency-systems-filled/96/475569/mute.png", brightness: "https://img.icons8.com/fluency-systems-filled/96/475569/sun.png",
+      update: "https://img.icons8.com/fluency-systems-filled/96/475569/available-updates.png", check: "https://img.icons8.com/fluency-systems-filled/96/10b981/checkmark.png",
+      monitor: "https://img.icons8.com/fluency-systems-filled/96/475569/monitor.png", paintBrush: "https://img.icons8.com/fluency-systems-filled/96/475569/paint-brush.png",
+      bottomNav: "https://img.icons8.com/fluency-systems-filled/96/475569/bottom-navigation.png", laptop: "https://img.icons8.com/fluency/96/laptop.png",
+      google: "https://img.icons8.com/color/96/google-logo.png"
     };
-
-    const NEWS_FEED = [
-      { id: 1, source: "The Verge", headline: "Windows 12 officially rolls out globally with AI features", time: "1h ago" },
-      { id: 2, source: "Reuters", headline: "Tech Stocks Surge as New Desktop Paradigms Drive Hardware Upgrades", time: "3h ago" },
-      { id: 3, source: "Wired", headline: "The future of silicon: Quantum processors moving into consumer PCs", time: "6h ago" },
-      { id: 4, source: "Ars Technica", headline: "Experimental solid-state batteries triple laptop battery life", time: "8h ago" }
-    ];
 
     const APPS = [
       { id: 'explorer', name: 'File Explorer', icon: ICONS.folder, size: { w: 900, h: 650 } },
-      { id: 'browser', name: 'Edge Browser', icon: "https://img.icons8.com/fluency/96/ms-edge-new.png", size: { w: 1024, h: 700 } },
-      { id: 'terminal', name: 'Terminal', icon: "https://img.icons8.com/fluency/96/console.png", size: { w: 750, h: 500 } },
+      { id: 'browser', name: 'Google Chrome', icon: ICONS.chrome, size: { w: 1024, h: 700 } },
+      { id: 'terminal', name: 'Terminal', icon: "https://img.icons8.com/fluency/96/console.png", size: { w: 800, h: 500 } },
       { id: 'paint', name: 'Paint Studio', icon: "https://img.icons8.com/fluency/96/paint-palette.png", size: { w: 850, h: 600 } },
       { id: 'notepad', name: 'Notepad', icon: "https://img.icons8.com/fluency/96/notepad.png", size: { w: 600, h: 550 } },
       { id: 'taskmgr', name: 'Task Manager', icon: "https://img.icons8.com/fluency/96/combo-chart.png", size: { w: 800, h: 600 } },
@@ -282,68 +304,33 @@
       { id: 'settings', name: 'Settings', icon: "https://img.icons8.com/fluency/96/settings.png", size: { w: 950, h: 700 } }
     ];
 
-    const fileSystem = {
-      "Root": {
-        "Desktop": { "Welcome.txt": "Welcome to Windows 12!\n\nThis is the official release. Enjoy the new interface, advanced taskbar, and integrated AI features." },
-        "Documents": { "Project_Alpha.txt": "Confidential specifications for next-gen UI paradigms.", "System_Logs.log": "Boot sequence initiated...\nKernel loaded.\nUI initialized." },
-        "Pictures": { "Mountain_View.jpg": "https://images.unsplash.com/photo-1494500764479-0c8f2919a3d4?q=80&w=1200&auto=format&fit=crop", "City_Night.png": "https://images.unsplash.com/photo-1449844908441-8829872d2607?q=80&w=1200&auto=format&fit=crop" },
-        "System": { "Config.sys": "OS_VERSION=12.0\nBUILD=30000" }
-      }
+    let osData = {
+        password: '', wallpaper: DEFAULT_WALLPAPER, taskbarTop: false, taskbarLabels: true, startAlign: 'center', taskbarColor: '#ffffff',
+        hwState: { wifi: true, bluetooth: false, airplane: false, nightLight: false, focus: false, vol: 60, brightness: 100 },
+        fileSystem: {
+            "Root": {
+                "Desktop": { "Welcome_1H01.txt": "Welcome to Windows 12 Build 1H01!\n\nThis build introduces True System Persistence. Any files you create in Terminal (using echo) or folders in File Explorer will save locally.\n\nEnjoy the power user features!" },
+                "Documents": { "System_Logs.log": "Boot sequence initiated...\nKernel loaded.\nUI initialized.\nPersistence Engine Active." },
+                "Pictures": { "Mountain_View.jpg": "https://images.unsplash.com/photo-1494500764479-0c8f2919a3d4?q=80&w=1200&auto=format&fit=crop" }
+            }
+        }
     };
 
-    let osState = 'boot'; 
-    let wallpaper = SYSTEM_WALLPAPERS[0];
-    let buildVersion = "10.0.30000.1H00";
-    let windows = {}; 
-    let activeWindow = null;
-    let zIndexCounter = 10;
-    let hwState = { wifi: true, bluetooth: false, airplane: false, nightLight: false, focus: false, vol: 60, brightness: 100, taskbarTop: false, taskbarLabels: true };
-    let appStates = {};
-    let selectedDesktopIcon = null;
+    function loadState() { const saved = localStorage.getItem(STORAGE_KEY); if (saved) { try { osData = { ...osData, ...JSON.parse(saved) }; } catch(e) { console.error("Save corrupted"); } } }
+    function saveState() { localStorage.setItem(STORAGE_KEY, JSON.stringify(osData)); }
+
+    let osState = 'boot'; let windows = {}; let activeWindow = null; let zIndexCounter = 10;
+    let overlays = { start: false, action: false, calendar: false, widgets: false, context: false };
+    let appStates = {}; let selectedDesktopIcon = null;
 
     const $ = (s) => document.querySelector(s);
-    const screens = { 
-      boot: $('#screen-boot'), login: $('#screen-login'), welcome: $('#screen-welcome'), 
-      bsod: $('#screen-bsod'), update: $('#screen-updating'), restarting: $('#screen-restarting'), 
-      desktop: $('#screen-desktop') 
-    };
+    const screens = { boot: $('#screen-boot'), login: $('#screen-login'), welcome: $('#screen-welcome'), bsod: $('#screen-bsod'), update: $('#screen-updating'), restarting: $('#screen-restarting'), desktop: $('#screen-desktop') };
 
+    // --- Core System Functions ---
     window.triggerBSOD = function(code = "CRITICAL_PROCESS_DIED") {
-      $('#bsod-error-code').innerText = "Stop code: " + code;
+      if ($('#bsod-error-code')) $('#bsod-error-code').innerText = "Stop code: " + code; 
       setOsState('bsod');
-      setTimeout(() => rebootSystem(), 5000);
-    };
-
-    function rebootSystem() {
-      setOsState('off');
-      Object.keys(windows).forEach(id => closeWindow(id));
-      setTimeout(() => setOsState('boot'), 1500);
-    }
-
-    // Windows Update Mechanism
-    window.triggerSystemUpdate = function() {
-      closeOverlays();
-      Object.keys(windows).forEach(id => closeWindow(id));
-      setOsState('update');
-      let p = 0;
-      $('#update-build-label').innerText = `Working on updates`;
-      
-      const itv = setInterval(() => {
-        p += Math.floor(Math.random() * 8) + 2;
-        if(p >= 100) {
-          p = 100;
-          clearInterval(itv);
-          $('#update-progress-text').innerText = `100% complete.`;
-          setTimeout(() => {
-            setOsState('restarting');
-            setTimeout(() => {
-              window.location.href = 'Updates/index.html';
-            }, 2500);
-          }, 1000);
-        } else {
-          $('#update-progress-text').innerText = `${p}% complete.`;
-        }
-      }, 400);
+      setTimeout(() => { setOsState('off'); Object.keys(windows).forEach(id => closeWindow(id)); setTimeout(() => setOsState('boot'), 1000); }, 5000);
     };
 
     function imgTag(src, cls="", critical=true) {
@@ -352,75 +339,256 @@
     }
 
     function setOsState(state) {
-      osState = state;
-      Object.values(screens).forEach(el => el.classList.add('hidden'));
+      osState = state; Object.values(screens).forEach(el => { if (el) el.classList.add('hidden'); });
       if(state !== 'off' && screens[state]) screens[state].classList.remove('hidden');
-      if(state === 'boot') setTimeout(() => setOsState('login'), 3500);
-      if(state === 'desktop') {
-        $('#desktop-bg').style.backgroundImage = `url(${wallpaper})`;
-        renderDesktopIcons();
+      if(state === 'boot') setTimeout(() => initLoginSequence(), 2500);
+      if(state === 'desktop') { 
+        if ($('#desktop-bg')) $('#desktop-bg').style.backgroundImage = `url(${osData.wallpaper})`; 
+        if ($('#desktop-watermark-build')) $('#desktop-watermark-build').innerText = `Build 30000.${buildVersion}`;
+        renderDesktopIcons(); 
       }
     }
 
-    function renderDesktopIcons() {
-      $('#desktop-icons').innerHTML = APPS.map(app => {
-        const isSel = selectedDesktopIcon === app.id;
-        return `
-        <div onclick="event.stopPropagation(); window.selectedDesktopIcon='${app.id}'; window.renderDesktopIcons();" ondblclick="openApp('${app.id}')" class="flex flex-col items-center justify-center w-24 p-2 rounded-2xl transition-all cursor-pointer group pointer-events-auto border ${isSel ? 'bg-white/20 border-white/30 shadow-md' : 'border-transparent hover:bg-white/10 hover:border-white/10'}">
-          ${imgTag(app.icon, "w-12 h-12 drop-shadow-md group-hover:scale-110 transition-transform")}
-          <span class="text-white text-xs mt-2 text-center font-medium drop-shadow-md ${isSel ? 'bg-blue-600/80' : 'bg-black/20'} px-2 py-0.5 rounded-lg backdrop-blur-sm line-clamp-2 leading-tight">${app.name}</span>
-        </div>
-      `}).join('');
+    // --- LOCK SCREEN LOGIC ---
+    function initLoginSequence() {
+        setOsState('login');
+        if ($('#login-wallpaper')) {
+            $('#login-wallpaper').style.backgroundImage = `url(${osData.wallpaper})`;
+            $('#login-wallpaper').classList.remove('blur-2xl', 'scale-110', 'brightness-50');
+        }
+        if ($('#login-avatar')) $('#login-avatar').src = USER_AVATAR;
+        
+        if ($('#login-time-view')) $('#login-time-view').classList.remove('opacity-0', '-translate-y-20', 'pointer-events-none');
+        if ($('#login-auth-view')) $('#login-auth-view').classList.add('opacity-0', 'pointer-events-none', 'translate-y-20');
+
+        if (!osData.password) { 
+            if ($('#login-instruction')) $('#login-instruction').innerText = "Create a new Password / PIN"; 
+            if ($('#login-pwd')) $('#login-pwd').placeholder = "Enter new password"; 
+            if ($('#login-reset')) $('#login-reset').classList.add('hidden');
+        } else { 
+            if ($('#login-instruction')) $('#login-instruction').innerText = "Enter your password"; 
+            if ($('#login-pwd')) $('#login-pwd').placeholder = "Password"; 
+            if ($('#login-reset')) $('#login-reset').classList.remove('hidden');
+        }
     }
 
-    function renderNews() {
-      $('#overlay-news').innerHTML = `
-        <div class="flex justify-between items-center mb-8 px-2">
-          <h2 class="text-2xl font-bold text-slate-800 flex items-center tracking-tight">${imgTag("https://img.icons8.com/fluency/96/news.png", "w-8 h-8 mr-4")} Intelligence Feed</h2>
-        </div>
-        <div class="flex-grow space-y-5 overflow-y-auto custom-scrollbar pr-3">
-          ${NEWS_FEED.map(n => `
-            <div class="bg-white/60 hover:bg-white/95 p-5 rounded-3xl cursor-pointer transition-all border border-white/50 shadow-sm hover:shadow-xl group">
-              <div class="flex justify-between items-center mb-2"><span class="text-[10px] font-black uppercase tracking-widest text-blue-600 bg-blue-100/50 px-2 py-0.5 rounded-lg">${n.source}</span><span class="text-[10px] font-bold text-slate-500">${n.time}</span></div>
-              <p class="text-base font-bold text-slate-800 leading-snug group-hover:text-blue-800 transition-colors">${n.headline}</p>
+    window.unlockScreen = function() {
+        const timeView = $('#login-time-view');
+        if (timeView && !timeView.classList.contains('opacity-0')) {
+            timeView.classList.add('opacity-0', '-translate-y-20', 'pointer-events-none');
+            if ($('#login-auth-view')) $('#login-auth-view').classList.remove('opacity-0', 'pointer-events-none', 'translate-y-20');
+            if ($('#login-wallpaper')) $('#login-wallpaper').classList.add('blur-2xl', 'scale-110', 'brightness-50');
+            setTimeout(() => { if ($('#login-pwd')) $('#login-pwd').focus(); }, 400);
+        }
+    };
+
+    if ($('#screen-login')) {
+      $('#screen-login').onclick = (e) => { 
+        if(e.target.tagName==='INPUT' || e.target.tagName==='BUTTON' || e.target.closest('button')) return; 
+        window.unlockScreen(); 
+      };
+    }
+    
+    document.addEventListener('keydown', (e) => {
+        if (osState === 'login') {
+            window.unlockScreen();
+        }
+    });
+
+    function processLogin() {
+        const input = $('#login-pwd')?.value;
+        if (!osData.password) { 
+            osData.password = input; 
+            saveState(); 
+            loginSuccess(); 
+        } else {
+            if (input === osData.password) { 
+                loginSuccess(); 
+            } else { 
+                if ($('#login-error')) $('#login-error').classList.remove('opacity-0'); 
+                if ($('#login-pwd')) $('#login-pwd').value = ''; 
+                setTimeout(() => { if ($('#login-error')) $('#login-error').classList.add('opacity-0') }, 3000); 
+            }
+        }
+    }
+
+    window.resetPassword = function() {
+        osData.password = ''; saveState(); initLoginSequence();
+        if ($('#login-pwd')) $('#login-pwd').value = '';
+        if ($('#login-error')) $('#login-error').classList.add('opacity-0');
+        if ($('#login-pwd')) $('#login-pwd').focus();
+    };
+
+    function loginSuccess() { 
+      if ($('#login-input-area')) $('#login-input-area').classList.add('hidden'); 
+      if ($('#login-loading-area')) $('#login-loading-area').classList.remove('hidden'); 
+      setTimeout(() => setOsState('welcome'), 1200); 
+    }
+
+    // --- UI RENDERING LOGIC ---
+    function renderDesktopIcons() {
+      if (!$('#desktop-icons')) return;
+      $('#desktop-icons').innerHTML = APPS.map(app => {
+        const isSel = selectedDesktopIcon === app.id;
+        return `<div onclick="event.stopPropagation(); window.selectedDesktopIcon='${app.id}'; window.renderDesktopIcons();" ondblclick="openApp('${app.id}')" class="flex flex-col items-center justify-center w-24 p-2 rounded-2xl transition-all cursor-pointer group pointer-events-auto border ${isSel ? 'bg-white/30 border-white/40 shadow-lg' : 'border-transparent hover:bg-white/20 hover:border-white/30'}">
+          ${imgTag(app.icon, "w-12 h-12 drop-shadow-lg group-hover:scale-110 transition-transform")}
+          <span class="text-white text-xs mt-2 text-center font-bold drop-shadow-md ${isSel ? 'bg-blue-600 border border-blue-400' : 'bg-black/40 border border-white/20'} px-2.5 py-1 rounded-lg backdrop-blur-md line-clamp-2 leading-tight">${app.name}</span>
+        </div>`}).join('');
+    }
+
+    function renderWidgets() {
+      if (!$('#overlay-widgets')) return;
+      $('#overlay-widgets').innerHTML = `
+        <div class="flex justify-between items-center mb-10 mt-2 px-2"><h2 class="text-3xl font-black text-slate-800 tracking-tighter flex items-center">${imgTag("https://img.icons8.com/color/96/partly-cloudy-day--v1.png", "w-10 h-10 mr-3")} Widgets Board</h2></div>
+        <div class="space-y-6">
+            <div class="bg-gradient-to-br from-blue-400 to-blue-600 p-6 rounded-3xl text-white shadow-xl">
+                <div class="flex justify-between items-start mb-4"><div><h3 class="text-xl font-bold">Louisville, KY</h3><p class="text-sm opacity-80 font-medium">Partly Cloudy</p></div><span class="text-5xl font-light tracking-tighter">72°</span></div>
+                <div class="flex justify-between mt-6 text-sm font-bold opacity-90"><p>H: 78° L: 61°</p><p>AQI: 42</p></div>
             </div>
-          `).join('')}
+            <div class="bg-white/60 p-6 rounded-3xl border border-white/50 shadow-lg backdrop-blur-md">
+                <h3 class="font-black text-slate-800 mb-4 flex items-center">${imgTag("https://img.icons8.com/fluency/96/bullish.png", "w-5 h-5 mr-2")} Markets</h3>
+                <div class="space-y-3">
+                    <div class="flex justify-between font-bold text-sm"><span class="text-slate-800">MSFT</span><span class="text-emerald-600">+2.4%</span></div>
+                    <div class="flex justify-between font-bold text-sm"><span class="text-slate-800">AAPL</span><span class="text-emerald-600">+1.1%</span></div>
+                    <div class="flex justify-between font-bold text-sm"><span class="text-slate-800">GOOGL</span><span class="text-rose-600">-0.3%</span></div>
+                </div>
+            </div>
+            <h3 class="font-black text-slate-800 mt-8 mb-4 px-2 text-lg">Top Stories</h3>
+            ${[{src: "The Verge", hd: "Windows 12 introduces System Persistence"}, {src: "Wired", hd: "Quantum processors hit the consumer market"}].map(n => `
+                <div class="bg-white/60 hover:bg-white/90 p-5 rounded-3xl cursor-pointer transition-all border border-white/50 shadow-md hover:shadow-xl group mb-4 backdrop-blur-md">
+                  <span class="text-[10px] font-black uppercase tracking-widest text-blue-700 bg-blue-100/80 px-2.5 py-1 rounded-lg mb-3 inline-block">${n.src}</span><p class="text-sm font-bold text-slate-900 leading-snug group-hover:text-blue-800 transition-colors">${n.hd}</p>
+                </div>
+            `).join('')}
         </div>
       `;
     }
 
     function renderCalendar(d) {
+      if (!$('#overlay-calendar')) return;
       $('#overlay-calendar').innerHTML = `
-        <div class="border-b border-slate-300/40 pb-6 mb-6 pl-2 text-slate-800">
-          <h2 class="text-5xl font-light tracking-tighter mb-2">${d.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</h2>
-          <p class="text-sm text-blue-600 font-bold uppercase tracking-widest">${d.toLocaleDateString(undefined, {weekday:'long', month:'long', day:'numeric'})}</p>
-        </div>
-        <div class="grid grid-cols-7 gap-1 text-center mb-4 text-slate-400 font-black text-[10px] uppercase">${['Su','Mo','Tu','We','Th','Fr','Sa'].map(d=>`<span>${d}</span>`).join('')}</div>
+        <div class="border-b border-white/30 pb-6 mb-6 pl-2 text-slate-900"><h2 class="text-5xl font-light tracking-tighter mb-2 drop-shadow-sm">${d.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</h2><p class="text-sm text-blue-800 font-black uppercase tracking-widest drop-shadow-sm">${d.toLocaleDateString(undefined, {weekday:'long', month:'long', day:'numeric'})}</p></div>
+        <div class="grid grid-cols-7 gap-1 text-center mb-4 text-slate-600 font-black text-[10px] uppercase">${['Su','Mo','Tu','We','Th','Fr','Sa'].map(d=>`<span>${d}</span>`).join('')}</div>
         <div class="grid grid-cols-7 gap-2 text-center">
           ${Array.from({length:35}, (_,i)=>i-2).map(day => {
-            const isToday = day === d.getDate();
-            const cls = (day<1||day>31) ? "text-slate-400/30" : "text-slate-700 hover:bg-white/70";
-            const todayCls = (isToday&&day>0&&day<=31) ? "bg-blue-600 text-white shadow-lg scale-105" : "";
-            return `<div class="w-10 h-10 flex items-center justify-center rounded-2xl text-sm font-bold mx-auto transition-all ${cls} ${todayCls}">${day>0&&day<=31?day:(day<=0?30+day:day-31)}</div>`;
+            const isToday = day === d.getDate(); const cls = (day<1||day>31) ? "text-slate-500/40" : "text-slate-800 font-bold hover:bg-white/60 hover:border-white/50 shadow-sm backdrop-blur-md bg-white/30"; const todayCls = (isToday&&day>0&&day<=31) ? "bg-blue-600/90 text-white shadow-lg scale-105 border-blue-400 font-black" : "border-white/30";
+            return `<div class="w-10 h-10 flex items-center justify-center rounded-2xl text-sm mx-auto transition-all border ${cls} ${todayCls}">${day>0&&day<=31?day:(day<=0?30+day:day-31)}</div>`;
           }).join('')}
         </div>
       `;
     }
 
+    function renderStartMenu() {
+      if (!$('#overlay-start')) return;
+      const searchVal = appStates._startSearch || "";
+      const filtered = APPS.filter(a => a.name.toLowerCase().includes(searchVal.toLowerCase()));
+      $('#overlay-start').innerHTML = `
+        <div class="p-6 flex-grow">
+          <div class="relative mb-8">
+            <input type="text" id="start-search-input" value="${searchVal}" placeholder="Search apps and documents..." class="w-full bg-white/60 border border-white/60 rounded-2xl py-4 pl-12 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 font-bold shadow-inner backdrop-blur-xl text-slate-900">
+            ${imgTag(ICONS.search, "w-5 h-5 absolute left-4 top-4 opacity-70")}
+          </div>
+          <div class="flex justify-between items-center mb-4 px-2">
+            <h3 class="text-sm font-black text-slate-900 drop-shadow-sm">Pinned</h3>
+            <button class="text-xs font-bold text-slate-700 hover:bg-white/50 px-3 py-1.5 rounded-lg transition-all shadow-sm backdrop-blur-md">All apps</button>
+          </div>
+          <div class="grid grid-cols-6 gap-6 mb-8">
+            ${filtered.map(a => `<div onclick="openApp('${a.id}')" class="flex flex-col items-center cursor-pointer hover:bg-white/50 p-2 rounded-2xl transition-all border border-transparent hover:border-white/50 transform hover:-translate-y-1 shadow-none hover:shadow-md backdrop-blur-sm">${imgTag(a.icon, "w-10 h-10 mb-2 drop-shadow-md")}<span class="text-[11px] font-bold text-slate-900 text-center leading-tight drop-shadow-sm">${a.name}</span></div>`).join('')}
+          </div>
+          <div class="flex justify-between items-center mb-4 px-2">
+            <h3 class="text-sm font-black text-slate-900 drop-shadow-sm">Recommended</h3>
+            <button class="text-xs font-bold text-slate-700 hover:bg-white/50 px-3 py-1.5 rounded-lg transition-all shadow-sm backdrop-blur-md">More</button>
+          </div>
+          <div class="grid grid-cols-2 gap-4 px-2">
+             <div class="flex items-center gap-4 p-3 bg-white/40 hover:bg-white/70 border border-white/50 rounded-xl cursor-pointer transition-all shadow-sm backdrop-blur-md group" onclick="openApp('notepad', {title: 'Welcome_1H01.txt', text: osData.fileSystem.Root.Desktop['Welcome_1H01.txt']})">
+                 <div class="bg-white/80 p-2 rounded-lg shadow-sm group-hover:scale-105 transition-transform">${imgTag(ICONS.file, "w-6 h-6")}</div>
+                 <div class="flex flex-col"><span class="text-xs font-bold text-slate-900">Welcome_1H01.txt</span><span class="text-[10px] font-semibold text-slate-600">Recently added</span></div>
+             </div>
+             <div class="flex items-center gap-4 p-3 bg-white/40 hover:bg-white/70 border border-white/50 rounded-xl cursor-pointer transition-all shadow-sm backdrop-blur-md group" onclick="openApp('gallery')">
+                 <div class="bg-white/80 p-2 rounded-lg shadow-sm group-hover:scale-105 transition-transform">${imgTag(ICONS.image, "w-6 h-6")}</div>
+                 <div class="flex flex-col"><span class="text-xs font-bold text-slate-900">Mountain_View.jpg</span><span class="text-[10px] font-semibold text-slate-600">1 hour ago</span></div>
+             </div>
+          </div>
+        </div>
+        <div class="mt-auto border-t border-white/30 pt-4 pb-2 px-6 flex justify-between items-center bg-white/20 backdrop-blur-md rounded-b-3xl">
+          <div class="flex items-center space-x-4 bg-white/40 hover:bg-white/60 p-2 pr-6 rounded-2xl cursor-pointer transition-all shadow-sm border border-white/40">
+             ${imgTag(USER_AVATAR, "w-10 h-10 rounded-full border-2 border-white shadow-md object-cover bg-slate-800")}
+             <span class="font-black text-slate-900 drop-shadow-sm">Administrator</span>
+          </div>
+          <button onclick="setOsState('off')" class="bg-white/40 hover:bg-red-100 p-3 rounded-2xl transition-all shadow-sm border border-white/50 group">
+             <img src="https://img.icons8.com/fluency/96/shutdown.png" class="w-5 h-5 group-hover:scale-110 transition-transform">
+          </button>
+        </div>
+      `;
+      if ($('#start-search-input')) {
+         $('#start-search-input').oninput = (e) => { appStates._startSearch = e.target.value; renderStartMenu(); document.getElementById('start-search-input').focus(); };
+      }
+    }
+
+    function renderActionCenter() {
+      if (!$('#overlay-action')) return;
+      const act = (b) => b ? "bg-blue-600/90 border-blue-500 text-white shadow-lg backdrop-blur-md" : "bg-white/50 border-white/50 text-slate-900 hover:bg-white/70 backdrop-blur-md shadow-sm";
+      const actIco = (b) => b ? "brightness-0 invert drop-shadow-md" : "opacity-90 drop-shadow-sm";
+      
+      $('#overlay-action').innerHTML = `
+        <div class="grid grid-cols-3 gap-4 mb-6">
+          <div onclick="window.toggleHW('wifi')" class="flex flex-col items-center cursor-pointer group"><div class="w-full h-16 rounded-2xl flex items-center justify-center transition-all border ${act(osData.hwState.wifi)}">${imgTag(osData.hwState.wifi ? ICONS.wifi : ICONS.wifiOff, `w-7 h-7 transition-all ${actIco(osData.hwState.wifi)}`, false)}</div><span class="text-[12px] font-bold mt-2 text-slate-900 drop-shadow-sm">Network</span></div>
+          <div onclick="window.toggleHW('bluetooth')" class="flex flex-col items-center cursor-pointer group"><div class="w-full h-16 rounded-2xl flex items-center justify-center transition-all border ${act(osData.hwState.bluetooth)}">${imgTag(ICONS.bluetooth, `w-7 h-7 transition-all ${actIco(osData.hwState.bluetooth)}`, false)}</div><span class="text-[12px] font-bold mt-2 text-slate-900 drop-shadow-sm">Bluetooth</span></div>
+          <div onclick="window.toggleHW('focus')" class="flex flex-col items-center cursor-pointer group"><div class="w-full h-16 rounded-2xl flex items-center justify-center transition-all border ${act(osData.hwState.focus)}">${imgTag(ICONS.moon, `w-7 h-7 transition-all ${actIco(osData.hwState.focus)}`, false)}</div><span class="text-[12px] font-bold mt-2 text-slate-900 drop-shadow-sm">Focus assist</span></div>
+          <div onclick="window.toggleHW('airplane')" class="flex flex-col items-center cursor-pointer group mt-2"><div class="w-full h-16 rounded-2xl flex items-center justify-center transition-all border ${act(osData.hwState.airplane)}">${imgTag(ICONS.airplane, `w-7 h-7 transition-all ${actIco(osData.hwState.airplane)}`, false)}</div><span class="text-[12px] font-bold mt-2 text-slate-900 drop-shadow-sm">Airplane Mode</span></div>
+          <div onclick="window.toggleHW('nightLight')" class="flex flex-col items-center cursor-pointer group mt-2"><div class="w-full h-16 rounded-2xl flex items-center justify-center transition-all border ${act(osData.hwState.nightLight)}">${imgTag(ICONS.nightLight, `w-7 h-7 transition-all ${actIco(osData.hwState.nightLight)}`, false)}</div><span class="text-[12px] font-bold mt-2 text-slate-900 drop-shadow-sm">Night light</span></div>
+          <div onclick="openApp('settings')" class="flex flex-col items-center cursor-pointer group mt-2"><div class="w-full h-16 rounded-2xl flex items-center justify-center transition-all border ${act(false)}">${imgTag(ICONS.settings, `w-7 h-7 transition-all ${actIco(false)}`, false)}</div><span class="text-[12px] font-bold mt-2 text-slate-900 drop-shadow-sm">Settings</span></div>
+        </div>
+        <div class="p-6 bg-white/40 rounded-3xl border border-white/50 space-y-6 shadow-inner backdrop-blur-xl">
+          <div class="flex items-center space-x-4">
+              ${imgTag(osData.hwState.vol>0?ICONS.volume:ICONS.volumeOff, "w-6 h-6 opacity-80 drop-shadow-sm", false)}
+              <input type="range" class="action-slider w-full h-2 bg-white/70 rounded-full appearance-none cursor-pointer shadow-inner accent-blue-600" value="${osData.hwState.vol}" oninput="osData.hwState.vol=this.value;updateHwUI();saveState()">
+              <span class="text-xs font-black text-slate-800 w-8 text-right drop-shadow-sm">{osData.hwState.vol}</span>
+          </div>
+          <div class="flex items-center space-x-4">
+              ${imgTag(ICONS.brightness, "w-6 h-6 opacity-80 drop-shadow-sm", false)}
+              <input type="range" class="action-slider w-full h-2 bg-white/70 rounded-full appearance-none cursor-pointer shadow-inner accent-amber-500" value="${osData.hwState.brightness}" oninput="osData.hwState.brightness=this.value;updateHwUI();saveState()">
+              <span class="text-xs font-black text-slate-800 w-8 text-right drop-shadow-sm">{osData.hwState.brightness}</span>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderContextMenu() {
+      const ctx = $('#overlay-context');
+      if (!ctx) return;
+      ctx.innerHTML = `
+          <div class="py-1">
+              <div class="px-4 py-2 hover:bg-white/40 cursor-pointer flex items-center gap-3 text-sm font-bold text-slate-900 transition-colors mx-1 rounded-md"><img src="https://img.icons8.com/fluency-systems-filled/96/475569/grid.png" class="w-4 h-4 opacity-80 drop-shadow-sm"> View</div>
+              <div class="px-4 py-2 hover:bg-white/40 cursor-pointer flex items-center gap-3 text-sm font-bold text-slate-900 transition-colors mx-1 rounded-md"><img src="https://img.icons8.com/fluency-systems-filled/96/475569/sorting-options.png" class="w-4 h-4 opacity-80 drop-shadow-sm"> Sort by</div>
+              <div class="px-4 py-2 hover:bg-white/40 cursor-pointer flex items-center gap-3 text-sm font-bold text-slate-900 transition-colors mx-1 rounded-md" onclick="window.location.reload()"><img src="${ICONS.refresh}" class="w-4 h-4 opacity-80 drop-shadow-sm"> Refresh</div>
+              <div class="h-px bg-white/40 my-1 mx-2 shadow-sm"></div>
+              <div class="px-4 py-2 hover:bg-white/40 cursor-pointer flex items-center gap-3 text-sm font-bold text-slate-900 transition-colors mx-1 rounded-md" onclick="openApp('settings')"><img src="${ICONS.settings}" class="w-4 h-4 opacity-80 drop-shadow-sm"> Personalize</div>
+              <div class="px-4 py-2 hover:bg-white/40 cursor-pointer flex items-center gap-3 text-sm font-bold text-slate-900 transition-colors mx-1 rounded-md" onclick="openApp('terminal')"><img src="https://img.icons8.com/fluency-systems-filled/96/475569/console.png" class="w-4 h-4 opacity-80 drop-shadow-sm"> Open in Terminal</div>
+          </div>
+      `;
+    }
+
+    // --- Taskbar & HW Logic ---
     setInterval(() => {
       const d = new Date();
-      const timeStr = d.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-      const dateStr = d.toLocaleDateString();
-      if(osState==='login') { $('#login-clock').innerText = timeStr; $('#login-date').innerText = d.toLocaleDateString(undefined, {weekday:'long', month:'long', day:'numeric'}); }
-      if(osState==='desktop') { $('#tb-time').innerText = timeStr; $('#tb-date').innerText = dateStr; }
-      
-      $('#stat-cpu').innerText = `CPU: ${Math.floor(Math.random() * 15) + 5}%`;
-      $('#stat-ram').innerText = `RAM: ${(4.2 + Math.random() * 0.5).toFixed(1)}GB`;
+      if(osState==='login') { 
+          if ($('#login-clock')) $('#login-clock').innerText = d.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}); 
+          if ($('#login-date')) $('#login-date').innerText = d.toLocaleDateString(undefined, {weekday:'long', month:'long', day:'numeric'}); 
+      }
+      if(osState==='desktop') { 
+          if ($('#tb-time')) $('#tb-time').innerText = d.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}); 
+          if ($('#tb-date')) $('#tb-date').innerText = d.toLocaleDateString(); 
+      }
+      if ($('#stat-cpu')) $('#stat-cpu').innerText = `CPU: ${Math.floor(Math.random() * 15) + 5}%`; 
+      if ($('#stat-ram')) $('#stat-ram').innerText = `RAM: ${(4.2 + Math.random() * 0.5).toFixed(1)}GB`;
     }, 1000);
 
     function closeOverlays() {
-      ['start', 'action', 'calendar', 'news', 'context'].forEach(o => $(`#overlay-${o}`).classList.add('hidden'));
-      $('#tb-start').classList.remove('bg-white/30');
+      ['start', 'action', 'calendar', 'widgets', 'context'].forEach(o => {
+          const el = $(`#overlay-${o}`);
+          if (el) el.classList.add('hidden');
+      });
+      if ($('#tb-start')) $('#tb-start').classList.remove('bg-white/50', 'shadow-md');
     }
 
     document.body.addEventListener('click', (e) => { 
@@ -428,66 +596,161 @@
         if(!e.target.closest('#desktop-icons > div')) { window.selectedDesktopIcon = null; renderDesktopIcons(); }
     });
 
+    document.body.addEventListener('contextmenu', (e) => {
+        if (osState === 'desktop') {
+            e.preventDefault();
+            closeOverlays();
+            const ctx = $('#overlay-context');
+            if (ctx) {
+                let x = e.clientX; let y = e.clientY;
+                if (x > window.innerWidth - 260) x = window.innerWidth - 260;
+                if (y > window.innerHeight - 350) y = window.innerHeight - 350;
+                ctx.style.left = x + 'px';
+                ctx.style.top = y + 'px';
+                renderContextMenu();
+                ctx.classList.remove('hidden');
+            }
+        }
+    });
+
     function updateTaskbarApps() {
       const container = $('#taskbar-apps');
+      if (!container) return;
       let html = '';
       APPS.forEach(app => {
         const isOpen = Object.values(windows).some(w => w.appId === app.id);
         const isActive = activeWindow === Object.values(windows).find(w => w.appId === app.id)?.id;
-        const activeCls = isActive ? "bg-white/40 shadow-sm border-white/40" : isOpen ? "bg-white/20 hover:bg-white/30 border-transparent" : "hover:bg-white/20 border-transparent";
-        html += `
-          <button onclick="openApp('${app.id}')" class="p-2.5 rounded-2xl transition-all flex items-center flex-shrink-0 transform active:scale-90 border ${activeCls} ${hwState.taskbarLabels ? 'px-4' : ''}" title="${app.name}">
-            ${imgTag(app.icon, `w-7 h-7 drop-shadow-sm transition-transform ${isActive?'scale-110':''}`)}
-            ${hwState.taskbarLabels ? `<span class="ml-3 font-bold text-slate-800 text-[11px] truncate max-w-[80px]">${app.name}</span>` : ''}
-            ${isOpen ? `<div class="absolute bottom-1 left-1/2 -translate-x-1/2 w-4 h-1 rounded-full transition-all ${isActive?'bg-blue-500 shadow-[0_0_5px_rgba(59,130,246,0.5)]':'bg-slate-400'}"></div>` : ''}
-          </button>
-        `;
+        const activeCls = isActive ? "taskbar-btn-active bg-white/50 shadow-md border-white/50" : isOpen ? "bg-white/30 hover:bg-white/40 border-transparent" : "hover:bg-white/30 border-transparent";
+        html += `<button id="tb-btn-${app.id}" onclick="openApp('${app.id}')" class="p-2.5 rounded-2xl transition-all flex items-center flex-shrink-0 transform active:scale-90 border ${activeCls} ${osData.taskbarLabels ? 'px-4' : ''}" title="${app.name}">
+            ${imgTag(app.icon, `w-7 h-7 drop-shadow-md transition-transform ${isActive?'scale-110':''}`)}
+            ${osData.taskbarLabels ? `<span class="ml-3 font-bold text-slate-900 text-[11px] truncate max-w-[80px] drop-shadow-sm">${app.name}</span>` : ''}
+            ${isOpen && !isActive ? `<div class="absolute bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1 rounded-full bg-slate-500 shadow-sm transition-all"></div>` : ''}
+          </button>`;
       });
-      container.innerHTML = html;
+      
+      let indicator = document.getElementById('taskbar-active-indicator');
+      let oldLeft = indicator ? indicator.style.transform : 'translateX(0px)';
+      let oldOpacity = indicator ? indicator.style.opacity : '0';
+
+      container.innerHTML = html + `<div id="taskbar-active-indicator" class="absolute bottom-1.5 h-1.5 rounded-full bg-blue-600 shadow-[0_0_8px_rgba(37,99,235,0.8)] transition-all duration-300 pointer-events-none" style="width: 18px; transform: ${oldLeft}; opacity: ${oldOpacity}; left: 0;"></div>`;
+
+      setTimeout(() => {
+         const ind = document.getElementById('taskbar-active-indicator');
+         const activeBtn = container.querySelector('.taskbar-btn-active');
+         if (ind && activeBtn) {
+             const leftPos = activeBtn.offsetLeft + (activeBtn.offsetWidth / 2) - 9;
+             ind.style.transform = `translateX(${leftPos}px)`;
+             ind.style.opacity = '1';
+         } else if (ind) {
+             ind.style.opacity = '0';
+         }
+      }, 10);
     }
 
+    window.triggerSystemUpdate = function() {
+      closeOverlays(); Object.keys(windows).forEach(id => closeWindow(id)); setOsState('update'); let p = 0;
+      if ($('#update-build-label')) $('#update-build-label').innerText = `Working on updates`;
+      
+      const itv = setInterval(() => {
+        p += Math.floor(Math.random() * 8) + 2;
+        if(p >= 100) { 
+            p = 100; 
+            clearInterval(itv); 
+            if ($('#update-progress-text')) $('#update-progress-text').innerText = `100% complete.`; 
+            setTimeout(() => { 
+                setOsState('restarting'); 
+                setTimeout(() => { window.location.href = 'Updates/index.html'; }, 2500); 
+            }, 1000); 
+        } else { 
+            if ($('#update-progress-text')) $('#update-progress-text').innerText = `${p}% complete.`; 
+        }
+      }, 400);
+    };
+
     window.toggleHW = function(prop) {
-      if(prop==='airplane') {
-        hwState.airplane = !hwState.airplane;
-        if(hwState.airplane) { hwState.wifi=false; hwState.bluetooth=false; }
-        else { hwState.wifi=true; }
-      } else {
-        hwState[prop] = !hwState[prop];
-        if(hwState[prop] && (prop==='wifi' || prop==='bluetooth')) hwState.airplane = false;
-      }
-      updateHwUI();
+      if(prop==='airplane') { osData.hwState.airplane = !osData.hwState.airplane; if(osData.hwState.airplane) { osData.hwState.wifi=false; osData.hwState.bluetooth=false; } else { osData.hwState.wifi=true; } } 
+      else { osData.hwState[prop] = !osData.hwState[prop]; if(osData.hwState[prop] && (prop==='wifi' || prop==='bluetooth')) osData.hwState.airplane = false; }
+      saveState(); updateHwUI();
+    };
+
+    window.updateTaskbarColor = function() {
+      const hex = osData.taskbarColor || '#ffffff';
+      let r = parseInt(hex.substring(1,3), 16) || 255;
+      let g = parseInt(hex.substring(3,5), 16) || 255;
+      let b = parseInt(hex.substring(5,7), 16) || 255;
+      const rgba = `rgba(${r}, ${g}, ${b}, 0.55)`;
+      
+      if ($('#taskbar')) $('#taskbar').style.backgroundColor = rgba;
+      if ($('#overlay-start')) $('#overlay-start').style.backgroundColor = rgba;
+      if ($('#overlay-action')) $('#overlay-action').style.backgroundColor = rgba;
+      if ($('#overlay-calendar')) $('#overlay-calendar').style.backgroundColor = rgba;
+      if ($('#overlay-widgets')) $('#overlay-widgets').style.backgroundColor = rgba;
     };
 
     function updateHwUI() {
-      $('#tb-icon-wifi').src = hwState.wifi ? ICONS.wifiTray : ICONS.wifiOffTray;
-      $('#tb-icon-vol').src = hwState.vol > 0 ? ICONS.volumeTray : ICONS.volumeOffTray;
-      $('#filter-brightness').style.opacity = 1 - (hwState.brightness / 100);
-      if(hwState.taskbarTop) {
-        $('#taskbar').classList.add('taskbar-top');
-        ['start', 'action', 'calendar', 'news'].forEach(o => $(`#overlay-${o}`).classList.add('overlay-top'));
-      } else {
-        $('#taskbar').classList.remove('taskbar-top');
-        ['start', 'action', 'calendar', 'news'].forEach(o => $(`#overlay-${o}`).classList.remove('overlay-top'));
+      if ($('#tb-icon-wifi')) $('#tb-icon-wifi').src = osData.hwState.wifi ? ICONS.wifiTray : ICONS.wifiOffTray;
+      if ($('#tb-icon-vol')) $('#tb-icon-vol').src = osData.hwState.vol > 0 ? ICONS.volumeTray : ICONS.volumeOffTray;
+      if ($('#filter-brightness')) $('#filter-brightness').style.opacity = 1 - (osData.hwState.brightness / 100);
+      
+      const taskbar = $('#taskbar');
+      if (taskbar) {
+          if(osData.taskbarTop) { 
+              taskbar.classList.add('taskbar-top'); 
+              ['start', 'action', 'calendar', 'widgets'].forEach(o => { if ($(`#overlay-${o}`)) $(`#overlay-${o}`).classList.add('overlay-top'); }); 
+          } else { 
+              taskbar.classList.remove('taskbar-top'); 
+              ['start', 'action', 'calendar', 'widgets'].forEach(o => { if ($(`#overlay-${o}`)) $(`#overlay-${o}`).classList.remove('overlay-top'); }); 
+          }
+
+          if(osData.startAlign === 'left') { 
+              taskbar.classList.add('taskbar-left-align'); 
+              if ($('#overlay-start')) {
+                  $('#overlay-start').classList.remove('left-1/2', '-translate-x-1/2'); 
+                  $('#overlay-start').classList.add('left-4'); 
+              }
+          } else { 
+              taskbar.classList.remove('taskbar-left-align'); 
+              if ($('#overlay-start')) {
+                  $('#overlay-start').classList.add('left-1/2', '-translate-x-1/2'); 
+                  $('#overlay-start').classList.remove('left-4'); 
+              }
+          }
       }
-      updateTaskbarApps();
-      if(!$('#overlay-action').classList.contains('hidden')) renderActionCenter();
+
+      updateTaskbarApps(); 
+      if($('#overlay-action') && !$('#overlay-action').classList.contains('hidden')) renderActionCenter();
     }
 
-    $('#tb-start').onclick = (e) => { e.stopPropagation(); closeOverlays(); renderStartMenu(); $('#overlay-start').classList.remove('hidden'); };
-    $('#tb-action').onclick = (e) => { e.stopPropagation(); closeOverlays(); renderActionCenter(); $('#overlay-action').classList.remove('hidden'); };
-    $('#tb-clock-area').onclick = (e) => { e.stopPropagation(); closeOverlays(); renderCalendar(new Date()); $('#overlay-calendar').classList.remove('hidden'); };
-    $('#tb-weather').onclick = (e) => { e.stopPropagation(); closeOverlays(); renderNews(); $('#overlay-news').classList.remove('hidden'); };
-
-    $('#tb-copilot').onclick = (e) => {
-      e.stopPropagation(); closeOverlays(); openApp('browser');
-      setTimeout(() => {
-        const id = activeWindow;
-        if(id && windows[id]) {
-          const inp = $(`#br-in-${id}`); if(inp) { inp.value = "https://copilot.microsoft.com/"; inp.dispatchEvent(new KeyboardEvent('keydown', {'key':'Enter'})); }
+    // Connect UI events safely
+    if ($('#login-pwd')) $('#login-pwd').onkeydown = (e) => { if(e.key==='Enter') processLogin(); };
+    if ($('#login-submit')) $('#login-submit').onclick = processLogin;
+    
+    if ($('#tb-start')) $('#tb-start').onclick = (e) => { e.stopPropagation(); closeOverlays(); renderStartMenu(); $('#overlay-start').classList.remove('hidden'); $('#tb-start').classList.add('bg-white/50', 'shadow-md'); };
+    if ($('#tb-action')) $('#tb-action').onclick = (e) => { e.stopPropagation(); closeOverlays(); renderActionCenter(); $('#overlay-action').classList.remove('hidden'); };
+    if ($('#tb-clock-area')) $('#tb-clock-area').onclick = (e) => { e.stopPropagation(); closeOverlays(); renderCalendar(new Date()); $('#overlay-calendar').classList.remove('hidden'); };
+    if ($('#tb-widgets-btn')) $('#tb-widgets-btn').onclick = (e) => { e.stopPropagation(); closeOverlays(); renderWidgets(); $('#overlay-widgets').classList.remove('hidden'); };
+    
+    // --- Google Search Taskbar Integration ---
+    if ($('#tb-search')) $('#tb-search').onclick = (e) => { 
+        e.stopPropagation(); 
+        closeOverlays(); 
+        const input = $('#tb-search-input');
+        if (input) {
+            input.focus();
         }
-      }, 300);
     };
+    
+    if ($('#tb-search-input')) {
+        $('#tb-search-input').onkeydown = (e) => {
+            if (e.key === 'Enter' && e.target.value.trim() !== '') {
+                const query = e.target.value.trim();
+                openApp('browser', { url: `https://www.google.com/search?q=${encodeURIComponent(query)}` });
+                e.target.value = '';
+            }
+        };
+    }
 
+    // --- Window Manager Core (AWM) ---
     function openApp(appId, args = null) {
       closeOverlays();
       const app = APPS.find(a => a.id === appId);
@@ -506,24 +769,28 @@
       const id = 'win_' + Date.now();
       const winEl = document.createElement('div');
       winEl.id = id;
-      winEl.className = 'absolute rounded-3xl border border-slate-400/30 acrylic-solid flex flex-col pointer-events-auto shadow-2xl overflow-hidden fade-in';
+      
+      // ADDED: zoom-in animation and acrylic-solid class for gorgeous fluent glass effects on apps
+      winEl.className = 'absolute rounded-3xl border border-white/40 acrylic-solid flex flex-col pointer-events-auto shadow-[0_30px_80px_-15px_rgba(0,0,0,0.5)] overflow-hidden zoom-in backdrop-blur-3xl bg-white/70';
       winEl.style.width = app.size.w + 'px'; winEl.style.height = app.size.h + 'px';
-      winEl.style.left = '50px'; winEl.style.top = '50px';
+      winEl.style.left = Math.max(10, (window.innerWidth/2)-(app.size.w/2)+((Object.keys(windows).length%5)*30)) + 'px';
+      winEl.style.top = Math.max(10, (window.innerHeight/2)-(app.size.h/2)+((Object.keys(windows).length%5)*30)) + 'px';
       winEl.style.zIndex = ++zIndexCounter;
 
       winEl.innerHTML = `
-        <div class="win-titlebar h-14 flex items-center justify-between pl-6 pr-3 select-none bg-white/95 border-b border-slate-200/50 backdrop-blur-md">
-          <div class="flex items-center space-x-4 pointer-events-none text-slate-800">
-            ${imgTag(app.icon, "w-6 h-6")}
-            <span class="text-sm font-bold tracking-tight">${app.name}</span>
+        <div class="win-resize-n absolute top-0 left-0 w-full h-2 cursor-ns-resize z-50"></div><div class="win-resize-s absolute bottom-0 left-0 w-full h-2 cursor-ns-resize z-50"></div><div class="win-resize-w absolute top-0 left-0 w-2 h-full cursor-ew-resize z-50"></div><div class="win-resize-e absolute top-0 right-0 w-2 h-full cursor-ew-resize z-50"></div><div class="win-resize-nw absolute top-0 left-0 w-4 h-4 cursor-nwse-resize z-50"></div><div class="win-resize-ne absolute top-0 right-0 w-4 h-4 cursor-nesw-resize z-50"></div><div class="win-resize-sw absolute bottom-0 left-0 w-4 h-4 cursor-nesw-resize z-50"></div><div class="win-resize-se absolute bottom-0 right-0 w-4 h-4 cursor-nwse-resize z-50"></div>
+        <div class="win-titlebar h-14 flex items-center justify-between pl-6 pr-3 select-none bg-white/50 border-b border-white/40 backdrop-blur-xl">
+          <div class="flex items-center space-x-4 pointer-events-none text-slate-900">
+            ${imgTag(app.icon, "w-6 h-6 drop-shadow-md")}
+            <span class="text-sm font-bold tracking-tight drop-shadow-sm">${app.name}</span>
           </div>
-          <div class="flex items-center space-x-1" onmousedown="event.stopPropagation()">
-            <button class="win-min w-12 h-10 flex items-center justify-center hover:bg-black/5 rounded-xl transition-all">${imgTag(ICONS.minimize, "w-5 h-5")}</button>
-            <button class="win-max w-12 h-10 flex items-center justify-center hover:bg-black/5 rounded-xl transition-all">${imgTag(ICONS.maximize, "w-4 h-4")}</button>
-            <button class="win-close w-12 h-10 flex items-center justify-center hover:bg-red-600 rounded-xl group">${imgTag(ICONS.close, "w-5 h-5 group-hover:invert brightness-0")}</button>
+          <div class="flex items-center space-x-2" onmousedown="event.stopPropagation()">
+            <button class="win-min w-11 h-9 flex items-center justify-center hover:bg-black/10 rounded-xl transition-all">${imgTag(ICONS.minimize, "w-4 h-4 opacity-80")}</button>
+            <button class="win-max w-11 h-9 flex items-center justify-center hover:bg-black/10 rounded-xl transition-all" id="btn-max-${id}">${imgTag(ICONS.maximize, "w-3.5 h-3.5 opacity-80")}</button>
+            <button class="win-close w-11 h-9 flex items-center justify-center hover:bg-red-600 rounded-xl group transition-colors">${imgTag(ICONS.close, "w-4 h-4 opacity-80 group-hover:invert brightness-0 transition-all")}</button>
           </div>
         </div>
-        <div class="win-content flex-grow bg-white/95 flex flex-col overflow-hidden"></div>
+        <div class="win-content flex-grow bg-transparent relative overflow-hidden flex flex-col"></div>
       `;
 
       $('#windows-area').appendChild(winEl);
@@ -536,9 +803,13 @@
 
     function focusWindow(id) {
       if(!windows[id]) return;
-      Object.values(windows).forEach(w => w.el.style.boxShadow = "none");
-      windows[id].el.style.boxShadow = "0 30px 80px -15px rgba(0,0,0,0.5)";
-      windows[id].el.style.zIndex = ++zIndexCounter;
+      Object.values(windows).forEach(w => {
+          if (w.el) w.el.style.boxShadow = "none";
+      });
+      if (windows[id].el) {
+          windows[id].el.style.boxShadow = "0 30px 80px -15px rgba(0,0,0,0.6)";
+          windows[id].el.style.zIndex = ++zIndexCounter;
+      }
       activeWindow = id;
       updateTaskbarApps();
     }
@@ -550,9 +821,25 @@
       win.querySelector('.win-close').onclick = () => closeWindow(id);
       win.querySelector('.win-min').onclick = () => { win.classList.add('hidden'); updateTaskbarApps(); };
       
+      const toggleMax = () => {
+        const w = windows[id]; w.max = !w.max;
+        if(w.max) {
+          w.px=w.el.style.left; w.py=w.el.style.top; w.pw=w.el.style.width; w.ph=w.el.style.height;
+          win.style.left='0px'; win.style.top='0px'; win.style.width='100%'; win.style.height='calc(100% - 88px)';
+          win.classList.remove('rounded-3xl');
+          win.querySelector('.win-max').innerHTML = imgTag(ICONS.restore, "w-4 h-4 opacity-80");
+        } else {
+          win.style.left=w.px; win.style.top=w.py; win.style.width=w.pw; win.style.height=w.ph;
+          win.classList.add('rounded-3xl');
+          win.querySelector('.win-max').innerHTML = imgTag(ICONS.maximize, "w-3.5 h-3.5 opacity-80");
+        }
+      };
+      win.querySelector('.win-max').onclick = toggleMax;
+      win.querySelector('.win-titlebar').ondblclick = toggleMax;
+
       let drag = false, ox, oy;
       win.querySelector('.win-titlebar').onmousedown = (e) => { drag = true; ox = e.clientX - win.offsetLeft; oy = e.clientY - win.offsetTop; };
-      document.addEventListener('mousemove', (e) => { if(drag) { win.style.left = (e.clientX - ox)+'px'; win.style.top = (e.clientY - oy)+'px'; } });
+      document.addEventListener('mousemove', (e) => { if(drag && !windows[id].max) { win.style.left = (e.clientX - ox)+'px'; win.style.top = (e.clientY - oy)+'px'; } });
       document.addEventListener('mouseup', () => drag = false);
     }
 
@@ -561,44 +848,69 @@
     window.init_explorer = (content, id) => {
       appStates[id] = { path: ['Root'] };
       content.innerHTML = `
-        <div class="h-full flex flex-col bg-white">
-          <div class="flex items-center p-3 border-b border-slate-100 bg-slate-50 space-x-3 justify-between">
-            <div class="flex space-x-2">
-              <button id="fe-up-${id}" class="p-2 hover:bg-slate-200 rounded-xl transition-all">${imgTag(ICONS.chevronLeft, "w-5 h-5")}</button>
-              <div class="flex-grow flex items-center bg-white border border-slate-200 rounded-xl px-4 py-2 shadow-inner text-sm text-slate-600 font-bold min-w-[200px]">
-                ${imgTag(ICONS.home, "w-4 h-4 mr-3")} <span id="fe-path-${id}"></span>
-              </div>
+        <div class="h-full flex bg-transparent">
+          <!-- Sidebar -->
+          <div class="w-64 bg-white/40 border-r border-white/40 flex flex-col pt-4 pb-2 px-3 backdrop-blur-xl overflow-y-auto custom-scrollbar">
+            <div class="text-[11px] font-black text-slate-600 mb-2 uppercase tracking-widest px-2 drop-shadow-sm">Quick Access</div>
+            <div class="space-y-1">
+              ${['Desktop', 'Documents', 'Pictures'].map(loc => `
+                <div class="flex items-center space-x-3 px-3 py-2 rounded-xl cursor-pointer text-sm font-bold transition-all text-slate-900 hover:bg-white/50 border border-transparent hover:border-white/30 hover:shadow-sm" onclick="document.getElementById('fe-nav-${id}-${loc}').click()">
+                  <img src="${loc==='Desktop'?'https://img.icons8.com/fluency/96/mac-client.png':(loc==='Documents'?'https://img.icons8.com/fluency/96/documents-folder.png':'https://img.icons8.com/fluency/96/opened-folder.png')}" class="w-5 h-5 drop-shadow-sm"> 
+                  <span class="drop-shadow-sm">${loc}</span>
+                  <button id="fe-nav-${id}-${loc}" class="hidden"></button>
+                </div>
+              `).join('')}
             </div>
-            <button id="fe-new-${id}" class="px-4 py-2 hover:bg-blue-50 text-blue-600 rounded-xl border border-blue-200 transition-all font-bold text-xs flex items-center gap-2">${imgTag("https://img.icons8.com/fluency/96/add-folder.png", "w-5 h-5")} New Folder</button>
+            <div class="text-[11px] font-black text-slate-600 mt-6 mb-2 uppercase tracking-widest px-2 drop-shadow-sm">This PC</div>
+            <div class="flex items-center space-x-3 px-3 py-2 rounded-xl cursor-pointer text-sm font-bold transition-all text-slate-900 hover:bg-white/50 border border-transparent hover:border-white/30 hover:shadow-sm">
+              <img src="${ICONS.drive}" class="w-5 h-5 drop-shadow-sm"> <span class="drop-shadow-sm">Local Disk (C:)</span>
+            </div>
           </div>
-          <div id="fe-view-${id}" class="flex-grow p-8 overflow-y-auto bg-white custom-scrollbar"></div>
+          <!-- Main Content -->
+          <div class="flex-grow flex flex-col bg-white/60 backdrop-blur-md">
+            <div class="flex items-center p-3 border-b border-white/40 bg-white/40 space-x-3 justify-between shadow-sm">
+              <div class="flex space-x-2">
+                <button id="fe-up-${id}" class="p-2 hover:bg-white/60 rounded-xl transition-all shadow-sm border border-transparent hover:border-white/50">${imgTag(ICONS.chevronLeft, "w-5 h-5")}</button>
+                <div class="flex-grow flex items-center bg-white/60 border border-white/50 rounded-xl px-4 py-2 shadow-inner text-sm text-slate-900 font-bold min-w-[200px]">
+                  ${imgTag(ICONS.home, "w-4 h-4 mr-3")} <span id="fe-path-${id}" class="drop-shadow-sm"></span>
+                </div>
+              </div>
+              <button id="fe-new-${id}" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl border border-blue-500 transition-all font-black text-xs flex items-center gap-2 shadow-md">${imgTag("https://img.icons8.com/fluency/96/add-folder.png", "w-5 h-5")} New Folder</button>
+            </div>
+            <div id="fe-view-${id}" class="flex-grow p-8 overflow-y-auto bg-transparent custom-scrollbar"></div>
+          </div>
         </div>
       `;
 
       $(`#fe-new-${id}`).onclick = () => {
           const folderName = prompt("Enter new folder name:", "New Folder");
           if(folderName && folderName.trim() !== '') {
-              let curr = fileSystem; appStates[id].path.forEach(p => { curr = curr[p]; });
+              let curr = osData.fileSystem; appStates[id].path.forEach(p => { curr = curr[p]; });
               if(typeof curr === 'object' && !curr[folderName]) {
                   curr[folderName.trim()] = {};
-                  render();
+                  saveState(); render();
               }
           }
       };
+      
+      ['Desktop', 'Documents', 'Pictures'].forEach(loc => {
+          const btn = $(`#fe-nav-${id}-${loc}`);
+          if (btn) btn.onclick = () => { appStates[id].path = ['Root', loc]; render(); };
+      });
 
       const render = () => {
         const path = appStates[id].path; $(`#fe-path-${id}`).innerText = path.join(' / ');
-        let curr = fileSystem; path.forEach(p => { if(curr[p]) curr = curr[p]; });
+        let curr = osData.fileSystem; path.forEach(p => { if(curr[p]) curr = curr[p]; });
         const view = $(`#fe-view-${id}`);
         
-        view.innerHTML = `<div class="grid grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-8 content-start">
+        view.innerHTML = `<div class="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6 content-start">
           ${Object.keys(curr).map(k => {
             const isF = typeof curr[k] !== 'string';
             const isI = !isF && (k.endsWith('.png')||k.endsWith('.jpg'));
-            let icon = isF ? imgTag(ICONS.folder, "w-16 h-16 mb-4 transform group-hover:scale-110 transition-transform") 
-                         : (isI ? `<div class="w-16 h-16 mb-4 rounded-2xl shadow-md overflow-hidden transform group-hover:scale-110 transition-transform"><img src="${curr[k]}" class="w-full h-full object-cover non-critical" onerror="this.src='https://img.icons8.com/fluency/96/image.png'"></div>` : imgTag(ICONS.file, "w-16 h-16 mb-4 transform group-hover:scale-110 transition-transform"));
-            return `<div id="fe-btn-${id}-${k.replace(/ /g, '')}" class="relative flex flex-col items-center justify-start p-4 rounded-3xl hover:bg-blue-50/50 cursor-pointer transition-all text-center group border border-transparent hover:border-blue-100 shadow-none hover:shadow-lg">
-              ${icon}<span class="text-xs font-bold text-slate-700 line-clamp-2 w-full">${k}</span>
+            let icon = isF ? imgTag(ICONS.folder, "w-16 h-16 mb-4 transform group-hover:scale-110 transition-transform drop-shadow-md") 
+                         : (isI ? `<div class="w-16 h-16 mb-4 rounded-2xl shadow-lg border border-white/50 overflow-hidden transform group-hover:scale-110 transition-transform"><img src="${curr[k]}" class="w-full h-full object-cover non-critical" onerror="this.src='https://img.icons8.com/fluency/96/image.png'"></div>` : imgTag(ICONS.file, "w-16 h-16 mb-4 transform group-hover:scale-110 transition-transform drop-shadow-md"));
+            return `<div id="fe-btn-${id}-${k.replace(/ /g, '')}" class="relative flex flex-col items-center justify-start p-4 rounded-3xl hover:bg-white/50 cursor-pointer transition-all text-center group border border-transparent hover:border-white/50 shadow-none hover:shadow-lg backdrop-blur-sm">
+              ${icon}<span class="text-xs font-bold text-slate-900 line-clamp-2 w-full drop-shadow-sm">${k}</span>
             </div>`;
           }).join('')}
         </div>`;
@@ -606,15 +918,10 @@
         Object.keys(curr).forEach(k => { 
           const b = $(`#fe-btn-${id}-${k.replace(/ /g, '')}`); 
           if(b) b.ondblclick = () => { 
-            if(typeof curr[k] !== 'string') {
-              appStates[id].path.push(k); render(); 
-            } else {
-              // It's a file, open the appropriate app
-              if (k.endsWith('.png') || k.endsWith('.jpg')) {
-                openApp('gallery', curr[k]);
-              } else if (k.endsWith('.txt') || k.endsWith('.log') || k.endsWith('.sys')) {
-                openApp('notepad', curr[k]);
-              }
+            if(typeof curr[k] !== 'string') { appStates[id].path.push(k); render(); } 
+            else {
+              if (k.endsWith('.png') || k.endsWith('.jpg')) openApp('gallery', curr[k]);
+              else openApp('notepad', { title: k, text: curr[k] });
             }
           }; 
         });
@@ -624,19 +931,20 @@
 
     window.init_paint = (content, id) => {
         content.innerHTML = `
-          <div class="h-full flex flex-col bg-slate-50">
-            <div class="flex items-center p-3 border-b border-slate-200 bg-white gap-6 px-6">
-               <div class="flex items-center gap-2">
-                 <span class="text-xs font-bold text-slate-500">Color:</span>
-                 <input type="color" id="paint-color-${id}" value="#000000" class="w-8 h-8 rounded cursor-pointer border-0 p-0 shadow-sm">
+          <div class="h-full flex flex-col bg-transparent">
+            <div class="flex items-center p-3 border-b border-white/30 bg-white/50 backdrop-blur-xl gap-6 px-6 shadow-sm z-10">
+               <div class="flex items-center gap-3">
+                 <span class="text-sm font-bold text-slate-900 drop-shadow-sm">Color</span>
+                 <input type="color" id="paint-color-${id}" value="#000000" class="w-10 h-10 rounded cursor-pointer border border-white/50 p-0 shadow-md bg-transparent">
                </div>
-               <div class="flex items-center gap-2">
-                 <span class="text-xs font-bold text-slate-500">Size:</span>
-                 <input type="range" id="paint-size-${id}" min="1" max="50" value="5" class="w-32 accent-blue-600">
+               <div class="w-px h-8 bg-slate-300/50 mx-2 shadow-sm"></div>
+               <div class="flex items-center gap-3">
+                 <span class="text-sm font-bold text-slate-900 drop-shadow-sm">Brush Size</span>
+                 <input type="range" id="paint-size-${id}" min="1" max="50" value="5" class="w-40 h-2 bg-white/70 rounded-full appearance-none cursor-pointer shadow-inner accent-blue-600">
                </div>
-               <button id="paint-clear-${id}" class="px-5 py-2 bg-red-50 hover:bg-red-100 border border-red-100 rounded-xl text-xs font-bold text-red-600 transition-all ml-auto shadow-sm">Clear Canvas</button>
+               <button id="paint-clear-${id}" class="px-6 py-2.5 bg-white/80 hover:bg-red-50 border border-white/60 hover:border-red-200 rounded-xl text-sm font-black text-slate-800 hover:text-red-700 transition-all ml-auto shadow-md backdrop-blur-md">Clear Canvas</button>
             </div>
-            <div class="flex-grow w-full relative overflow-hidden bg-white cursor-crosshair">
+            <div class="flex-grow w-full relative overflow-hidden bg-white/90 cursor-crosshair">
                 <canvas id="paint-canvas-${id}" class="absolute inset-0 w-full h-full touch-none"></canvas>
             </div>
           </div>
@@ -646,7 +954,6 @@
         const ctx = canvas.getContext('2d');
         let isDrawing = false;
         
-        // Resize canvas to match its visual size
         setTimeout(() => {
             canvas.width = canvas.parentElement.clientWidth;
             canvas.height = canvas.parentElement.clientHeight;
@@ -676,19 +983,31 @@
     };
 
     window.init_notepad = (content, id, args) => {
-      const defaultText = args ? args : "Ready for input.\n\n...";
+      const defaultText = args ? args.text : "Ready for input.\n\n...";
+      const title = args ? args.title : "Untitled.txt";
       content.innerHTML = `
-        <div class="h-full flex flex-col bg-white">
-          <div class="flex items-center px-4 py-2 border-b border-slate-100 bg-slate-50/50 text-xs font-bold text-slate-600">
-            ${['File','Edit','Format','View'].map(l=>`<button class="px-4 py-2 hover:bg-slate-200/50 rounded-lg transition-all">${l}</button>`).join('')}
+        <div class="h-full flex flex-col bg-transparent">
+          <div class="flex items-center px-4 py-2 border-b border-white/30 bg-white/50 backdrop-blur-xl text-sm font-bold text-slate-900 justify-between shadow-sm z-10">
+            <div class="flex space-x-1">${['File','Edit','Format','View'].map(l=>`<button class="px-4 py-2 hover:bg-white/60 rounded-lg transition-all drop-shadow-sm border border-transparent hover:border-white/50 shadow-sm hover:shadow">${l}</button>`).join('')}</div>
+            <span class="text-blue-700 mr-4 italic font-black drop-shadow-md" id="np-saved-${id}"></span>
           </div>
-          <textarea id="np-ta-${id}" class="flex-grow w-full resize-none outline-none p-8 font-mono text-base leading-relaxed text-slate-800 bg-white" spellcheck="false">${defaultText}</textarea>
-          <div id="np-stat-${id}" class="h-8 border-t border-slate-100 bg-slate-50 flex items-center justify-end px-6 text-[10px] font-black text-slate-400 uppercase tracking-widest"></div>
+          <textarea id="np-ta-${id}" class="flex-grow w-full resize-none outline-none p-8 font-mono text-[15px] leading-relaxed text-slate-900 bg-white/80 placeholder-slate-600 font-semibold custom-scrollbar" spellcheck="false">${defaultText}</textarea>
+          <div id="np-stat-${id}" class="h-8 border-t border-white/30 bg-white/50 backdrop-blur-xl flex items-center justify-end px-6 text-xs font-black text-slate-800 uppercase tracking-widest drop-shadow-sm z-10"></div>
         </div>
       `;
-      const ta = $(`#np-ta-${id}`); const stat = $(`#np-stat-${id}`);
-      const update = () => { const lines = ta.value.split('\n'); stat.innerText = `L ${lines.length} | C ${ta.value.length} | UTF-8`; };
-      ta.oninput = update; update();
+      const ta = $(`#np-ta-${id}`); const stat = $(`#np-stat-${id}`); const saved = $(`#np-saved-${id}`);
+      let timeout;
+      const update = () => { 
+          const lines = ta.value.split('\n'); stat.innerText = `${title} | L ${lines.length} | C ${ta.value.length}`; 
+          clearTimeout(timeout);
+          saved.innerText = "Saving...";
+          timeout = setTimeout(() => {
+              osData.fileSystem.Root.Documents[title] = ta.value;
+              saveState();
+              saved.innerText = "Saved locally";
+          }, 1000);
+      };
+      ta.oninput = update; update(); saved.innerText = "";
     };
 
     window.update_notepad = (id, args) => {
@@ -699,10 +1018,10 @@
     window.init_gallery = (content, id, args) => {
       appStates[id] = args ? args : SYSTEM_WALLPAPERS[0];
       const render = () => {
-        content.innerHTML = `<div class="h-full flex flex-col bg-slate-950"><div class="h-16 flex items-center px-8 bg-slate-900 border-b border-white/5 space-x-6 font-bold text-white text-xs tracking-widest uppercase"><span>Gallery</span><button class="opacity-50 hover:opacity-100 transition-opacity">Edit</button><button class="opacity-50 hover:opacity-100 transition-opacity">Export</button></div><div class="flex-grow flex p-10 items-center justify-center relative bg-black/40 shadow-inner"><img src="${appStates[id]}" class="max-h-full max-w-full object-contain drop-shadow-[0_0_50px_rgba(0,0,0,1)] rounded-xl non-critical" onerror="this.src='https://img.icons8.com/fluency/96/image.png'"></div><div class="h-32 bg-slate-900 border-t border-white/5 flex items-center justify-center space-x-4 px-6 overflow-x-auto" id="gal-t-${id}"></div></div>`;
+        content.innerHTML = `<div class="h-full flex flex-col bg-slate-950/80 backdrop-blur-2xl"><div class="h-16 flex items-center px-8 bg-slate-900/60 border-b border-white/20 space-x-6 font-bold text-white text-xs tracking-widest uppercase shadow-md z-10"><span>Gallery</span><button class="opacity-60 hover:opacity-100 transition-opacity bg-white/10 px-4 py-2 rounded-lg border border-white/20">Edit</button><button class="opacity-60 hover:opacity-100 transition-opacity bg-white/10 px-4 py-2 rounded-lg border border-white/20">Export</button></div><div class="flex-grow flex p-10 items-center justify-center relative bg-black/40 shadow-inner z-0"><img src="${appStates[id]}" class="max-h-full max-w-full object-contain drop-shadow-[0_0_50px_rgba(0,0,0,1)] rounded-xl non-critical" onerror="this.src='https://img.icons8.com/fluency/96/image.png'"></div><div class="h-36 bg-slate-900/60 border-t border-white/20 flex items-center justify-center space-x-6 px-6 overflow-x-auto z-10 shadow-[0_-10px_30px_rgba(0,0,0,0.5)]" id="gal-t-${id}"></div></div>`;
         const tb = $(`#gal-t-${id}`);
         SYSTEM_WALLPAPERS.forEach(wp => {
-           const i = document.createElement('img'); i.src=wp; i.className=`h-20 w-32 object-cover rounded-xl cursor-pointer border-4 transition-all hover:scale-105 ${appStates[id]===wp?'border-blue-500 opacity-100 shadow-lg':'border-transparent opacity-40 hover:opacity-100'}`;
+           const i = document.createElement('img'); i.src=wp; i.className=`h-24 w-40 object-cover rounded-xl cursor-pointer border-2 transition-all hover:scale-105 ${appStates[id]===wp?'border-blue-500 opacity-100 shadow-[0_0_20px_rgba(59,130,246,0.6)]':'border-transparent opacity-50 hover:opacity-100 shadow-md'}`;
            i.onclick = () => { appStates[id]=wp; render(); }; tb.appendChild(i);
         });
       };
@@ -713,98 +1032,243 @@
       if(args) { appStates[id] = args; const img = $(`#win_${id} .bg-black\\/40 img`); if(img) img.src = args; }
     };
 
-    window.init_browser = (content, id) => {
+    // --- Google Chrome Sandbox Integration ---
+    window.init_browser = (content, id, args) => {
+      const initialUrl = args && args.url ? args.url : "https://www.google.com";
+      
       content.innerHTML = `
-        <div class="h-full flex flex-col bg-white">
-          <div class="flex px-4 pt-3 bg-slate-100 space-x-1">
-            <div class="bg-white rounded-t-2xl px-6 py-2.5 text-xs font-bold flex items-center space-x-3 w-64 shadow-sm border-t border-x border-slate-200">
-              ${imgTag("https://img.icons8.com/fluency-systems-filled/96/3b82f6/globe.png", "w-4 h-4")}
-              <span class="truncate">New Tab</span>
+        <div class="h-full flex flex-col bg-transparent">
+          <div class="flex px-4 pt-3 bg-white/40 backdrop-blur-xl space-x-1 border-b border-white/30 z-10">
+            <div class="bg-white/80 backdrop-blur-2xl rounded-t-2xl px-6 py-2.5 text-sm font-bold flex items-center space-x-3 w-64 shadow-md border-t border-x border-white/50 relative">
+              ${imgTag(ICONS.google, "w-4 h-4")}
+              <span class="truncate text-slate-900 drop-shadow-sm">Google Search</span>
+              <div class="absolute bottom-[-1px] left-0 w-full h-px bg-white/80"></div>
             </div>
           </div>
-          <div class="flex items-center p-3 border-b border-slate-100 bg-white space-x-4 shadow-sm z-10">
-            <div class="flex space-x-1">
-              <button class="p-2 hover:bg-slate-100 rounded-xl transition-all">${imgTag(ICONS.chevronLeft, "w-5 h-5 opacity-60")}</button>
-              <button class="p-2 hover:bg-slate-100 rounded-xl transition-all" id="br-refresh-${id}">${imgTag(ICONS.refresh, "w-4 h-4 opacity-70")}</button>
+          <div class="flex items-center p-3 border-b border-white/40 bg-white/60 backdrop-blur-xl space-x-4 shadow-md z-10">
+            <div class="flex space-x-2">
+              <button class="p-2 hover:bg-white/60 rounded-xl transition-all shadow-sm border border-transparent hover:border-white/50">${imgTag(ICONS.chevronLeft, "w-5 h-5 opacity-80")}</button>
+              <button class="p-2 hover:bg-white/60 rounded-xl transition-all shadow-sm border border-transparent hover:border-white/50" id="br-refresh-${id}">${imgTag(ICONS.refresh, "w-4 h-4 opacity-80")}</button>
             </div>
             <div class="flex-grow relative flex items-center">
-              <div class="absolute left-4 p-1 rounded-full bg-slate-100">${imgTag("https://img.icons8.com/fluency-systems-filled/96/059669/lock.png", "w-3 h-3")}</div>
-              <input type="text" id="br-in-${id}" value="https://microsoft.com/windows" class="w-full bg-slate-100 border border-transparent rounded-2xl px-12 py-2.5 text-sm focus:outline-none focus:bg-white focus:border-blue-400 transition-all font-semibold">
+              <div class="absolute left-4 p-1 rounded-full bg-white/60 shadow-sm">${imgTag("https://img.icons8.com/fluency-systems-filled/96/059669/lock.png", "w-3 h-3")}</div>
+              <input type="text" id="br-in-${id}" value="${initialUrl}" class="w-full bg-white/70 border border-white/60 rounded-full px-12 py-2 text-[15px] focus:outline-none focus:bg-white focus:border-blue-400 transition-all font-bold text-slate-900 shadow-inner">
             </div>
           </div>
-          <div id="br-content-${id}" class="flex-grow bg-slate-50 flex flex-col items-center justify-center p-12 relative"></div>
+          <div id="br-content-${id}" class="flex-grow bg-white/80 flex flex-col items-center justify-center p-12 relative z-0"></div>
         </div>
       `;
+      
       const renderPage = (url, loading) => {
-        $(`#br-content-${id}`).innerHTML = loading ? `<div class="absolute top-0 left-0 h-1 bg-blue-600 w-full animate-pulse shadow-[0_0_10px_rgba(37,99,235,0.5)]"></div>` : `
-          <div class="text-center max-w-2xl bg-white p-16 rounded-[40px] shadow-2xl border border-slate-100 transform scale-100 animate-in zoom-in-95 duration-500">
-             ${imgTag("https://img.icons8.com/fluency/96/ms-edge-new.png", "w-24 h-24 mx-auto mb-8 drop-shadow-xl")}
-             <h3 class="text-3xl font-black text-slate-800 mb-4 tracking-tighter">Edge Safe Mode</h3>
-             <p class="text-lg text-slate-500 mb-10 font-medium leading-relaxed px-4">Live browsing is restricted in the preview environment. Navigating to:</p>
-             <div class="bg-blue-50 border border-blue-100 rounded-3xl p-6 font-mono text-sm text-blue-600 break-all select-all font-black shadow-inner mb-8">${url}</div>
+        const isGoogle = url.includes("google.com");
+        
+        $(`#br-content-${id}`).innerHTML = loading ? `<div class="absolute top-0 left-0 h-1 bg-blue-600 w-full animate-pulse shadow-[0_0_10px_rgba(37,99,235,0.8)] z-50"></div>` : `
+          <div class="text-center w-full max-w-2xl bg-white/70 backdrop-blur-2xl p-16 rounded-[40px] shadow-2xl border border-white/60 transform scale-100 animate-in zoom-in-95 duration-500 flex flex-col items-center">
+             ${isGoogle ? 
+               `${imgTag("https://img.icons8.com/color/144/google-logo.png", "w-24 h-24 mb-8 drop-shadow-md")}
+                <div class="relative w-full max-w-md mb-10 group">
+                   <input type="text" id="br-google-search-${id}" class="w-full rounded-full border-2 border-slate-200 py-3.5 px-6 shadow-sm focus:outline-none focus:ring-4 focus:ring-blue-400/50 bg-white/90 text-slate-900 font-bold transition-all text-base" placeholder="Search Google or type a URL" />
+                   ${imgTag("https://img.icons8.com/fluency-systems-filled/96/475569/microphone.png", "w-6 h-6 absolute right-5 top-3.5 opacity-60 group-focus-within:opacity-100 transition-opacity cursor-pointer")}
+                </div>` : 
+               `${imgTag(ICONS.chrome, "w-24 h-24 mx-auto mb-8 drop-shadow-2xl")}
+                <h3 class="text-3xl font-black text-slate-900 mb-4 tracking-tighter drop-shadow-sm">Chrome Sandbox</h3>
+                <p class="text-lg text-slate-800 mb-10 font-bold leading-relaxed px-4">Live browsing is restricted in the preview environment. Navigating to:</p>
+                <div class="bg-blue-100/70 border border-blue-300/50 rounded-2xl p-6 font-mono text-sm text-blue-900 break-all select-all font-black shadow-inner mb-8 w-full">${url}</div>`
+             }
              
-             <div class="grid grid-cols-3 gap-4 mt-8 pt-8 border-t border-slate-100">
-                <button class="br-btn hover:bg-slate-50 p-4 rounded-2xl border border-slate-200 shadow-sm transition-all flex flex-col items-center" data-url="https://youtube.com"><img src="https://img.icons8.com/fluency/96/youtube-play.png" class="w-8 h-8 mb-2">YouTube</button>
-                <button class="br-btn hover:bg-slate-50 p-4 rounded-2xl border border-slate-200 shadow-sm transition-all flex flex-col items-center" data-url="https://github.com"><img src="https://img.icons8.com/fluency/96/github.png" class="w-8 h-8 mb-2">GitHub</button>
-                <button class="br-btn hover:bg-slate-50 p-4 rounded-2xl border border-slate-200 shadow-sm transition-all flex flex-col items-center" data-url="https://copilot.microsoft.com"><img src="${ICONS.copilot}" class="w-8 h-8 mb-2">Copilot</button>
+             <div class="grid grid-cols-3 gap-6 mt-4 pt-8 border-t border-white/50 w-full">
+                <button class="br-btn bg-white/50 hover:bg-white/90 p-5 rounded-3xl border border-white/60 shadow-md transition-all flex flex-col items-center group" data-url="https://youtube.com"><img src="https://img.icons8.com/fluency/96/youtube-play.png" class="w-10 h-10 mb-3 group-hover:scale-110 transition-transform drop-shadow-sm"><span class="font-black text-slate-900">YouTube</span></button>
+                <button class="br-btn bg-white/50 hover:bg-white/90 p-5 rounded-3xl border border-white/60 shadow-md transition-all flex flex-col items-center group" data-url="https://github.com"><img src="https://img.icons8.com/fluency/96/github.png" class="w-10 h-10 mb-3 group-hover:scale-110 transition-transform drop-shadow-sm"><span class="font-black text-slate-900">GitHub</span></button>
+                <button class="br-btn bg-white/50 hover:bg-white/90 p-5 rounded-3xl border border-white/60 shadow-md transition-all flex flex-col items-center group" data-url="https://copilot.microsoft.com"><img src="${ICONS.copilot}" class="w-10 h-10 mb-3 group-hover:scale-110 transition-transform drop-shadow-sm"><span class="font-black text-slate-900">Copilot</span></button>
              </div>
           </div>
         `;
+        
         if(!loading) {
             document.querySelectorAll(`#br-content-${id} .br-btn`).forEach(btn => {
                 btn.onclick = () => { $(`#br-in-${id}`).value = btn.dataset.url; nav(); };
             });
+            const searchInput = $(`#br-google-search-${id}`);
+            if (searchInput) {
+                searchInput.onkeydown = (e) => {
+                    if(e.key === 'Enter') { $(`#br-in-${id}`).value = `https://www.google.com/search?q=${encodeURIComponent(e.target.value)}`; nav(); }
+                };
+            }
         }
       };
+      
       renderPage($(`#br-in-${id}`).value, false);
       const nav = () => { renderPage($(`#br-in-${id}`).value, true); setTimeout(() => renderPage($(`#br-in-${id}`).value, false), 800); };
-      $(`#br-refresh-${id}`).onclick = nav;
-      $(`#br-in-${id}`).onkeydown = (e) => { if(e.key==='Enter') nav(); };
+      if ($(`#br-refresh-${id}`)) $(`#br-refresh-${id}`).onclick = nav;
+      if ($(`#br-in-${id}`)) $(`#br-in-${id}`).onkeydown = (e) => { if(e.key==='Enter') nav(); };
+    };
+
+    window.update_browser = (id, args) => {
+      const input = $(`#br-in-${id}`);
+      if(input && args && args.url) { 
+          input.value = args.url; 
+          input.dispatchEvent(new KeyboardEvent('keydown', {'key':'Enter'})); 
+      }
     };
 
     window.init_settings = (content, id) => {
-      appStates[id] = 'Windows Update';
+      appStates[id] = 'System';
       let updateSt = 'check';
 
       const render = () => {
         const tab = appStates[id]; let main = '';
-        if(tab === 'Windows Update') {
+        
+        if(tab === 'System') {
+            main = `
+            <div class="flex items-center gap-6 mb-8">
+               ${imgTag(ICONS.laptop, "w-24 h-24 drop-shadow-md")}
+               <div>
+                 <h1 class="text-4xl font-black text-slate-900 tracking-tight drop-shadow-sm">Vision-PC</h1>
+                 <p class="text-slate-700 font-bold text-lg drop-shadow-sm">Windows 12 Pro</p>
+               </div>
+            </div>
+            <div class="bg-white/60 backdrop-blur-2xl border border-white/50 rounded-2xl shadow-lg mb-6 overflow-hidden">
+               <div class="p-6 border-b border-white/40"><h3 class="font-black text-xl text-slate-900 drop-shadow-sm">Device specifications</h3></div>
+               <div class="p-6 grid grid-cols-3 gap-y-5 text-[15px]">
+                 <div class="font-bold text-slate-700">Processor</div><div class="col-span-2 text-slate-900 font-black drop-shadow-sm">Snapdragon® X Elite X1E-80-100 @ 3.40 GHz</div>
+                 <div class="font-bold text-slate-700">Installed RAM</div><div class="col-span-2 text-slate-900 font-black drop-shadow-sm">32.0 GB (31.7 GB usable)</div>
+                 <div class="font-bold text-slate-700">System type</div><div class="col-span-2 text-slate-900 font-black drop-shadow-sm">64-bit operating system, ARM-based processor</div>
+               </div>
+            </div>
+            <div class="bg-white/60 backdrop-blur-2xl border border-white/50 rounded-2xl shadow-lg overflow-hidden">
+               <div class="p-6 border-b border-white/40"><h3 class="font-black text-xl text-slate-900 drop-shadow-sm">Windows specifications</h3></div>
+               <div class="p-6 grid grid-cols-3 gap-y-5 text-[15px]">
+                 <div class="font-bold text-slate-700">Edition</div><div class="col-span-2 text-slate-900 font-black drop-shadow-sm">Windows 12 Pro</div>
+                 <div class="font-bold text-slate-700">Version</div><div class="col-span-2 text-slate-900 font-black drop-shadow-sm">1H01</div>
+                 <div class="font-bold text-slate-700">OS build</div><div class="col-span-2 text-slate-900 font-black drop-shadow-sm">${buildVersion}</div>
+               </div>
+            </div>
+            `;
+        }
+        else if(tab === 'Personalization') {
+            main = `
+            <h2 class="text-4xl font-black mb-8 text-slate-900 drop-shadow-sm">Personalization</h2>
+            <div class="bg-white/60 backdrop-blur-2xl border border-white/50 rounded-2xl shadow-lg p-8">
+                <h3 class="font-black text-xl mb-2 text-slate-900 drop-shadow-sm">Background</h3>
+                <p class="text-base text-slate-700 font-bold mb-6">Personalize your desktop background</p>
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-6 mb-8" id="s-wp-${id}"></div>
+                <div class="pt-8 border-t border-white/40 flex items-center justify-between mb-8">
+                    <p class="text-base font-black text-slate-900 drop-shadow-sm">Choose a photo</p>
+                    <input type="file" id="s-upload-${id}" accept="image/*" class="hidden">
+                    <button onclick="document.getElementById('s-upload-${id}').click()" class="bg-white/80 hover:bg-white text-slate-900 font-black py-3 px-8 rounded-xl transition-all border border-white/60 shadow-md">Browse photos</button>
+                </div>
+                <div class="pt-8 border-t border-white/40 flex items-center justify-between">
+                    <div>
+                        <p class="text-base font-black text-slate-900 drop-shadow-sm">Taskbar Color</p>
+                        <p class="text-sm text-slate-700 font-bold">Customize the glass tint color</p>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <input type="color" id="s-tb-color-${id}" value="${osData.taskbarColor || '#ffffff'}" class="w-12 h-12 rounded-xl cursor-pointer border border-white/50 shadow-md bg-transparent" onchange="window.updateTaskbarColorProxy(this.value)">
+                        <button onclick="window.updateTaskbarColorProxy('#ffffff')" class="bg-white/80 hover:bg-white text-slate-900 font-black py-3 px-6 rounded-xl transition-all border border-white/60 shadow-md text-sm">Reset</button>
+                    </div>
+                </div>
+            </div>`;
+        }
+        else if(tab === 'Taskbar') {
+            main = `
+            <h2 class="text-4xl font-black mb-8 text-slate-900 drop-shadow-sm">Taskbar</h2>
+            <div class="bg-white/60 backdrop-blur-2xl border border-white/50 rounded-2xl shadow-lg">
+                <div class="flex items-center justify-between p-8 border-b border-white/40">
+                    <div><p class="font-black text-xl text-slate-900 drop-shadow-sm">Taskbar behaviors</p><p class="text-base text-slate-700 font-bold mt-1">Alignment, badging, automatically hide, and multiple displays</p></div>
+                </div>
+                <div class="p-8 space-y-8 bg-white/40 rounded-b-2xl">
+                    <div class="flex items-center justify-between">
+                        <span class="text-base font-black text-slate-900 drop-shadow-sm">Taskbar alignment</span>
+                        <select onchange="osData.startAlign=this.value;saveState();updateHwUI()" class="bg-white/80 border border-white/60 text-slate-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block py-2.5 px-4 outline-none cursor-pointer shadow-md font-bold">
+                            <option value="center" ${osData.startAlign==='center'?'selected':''}>Center</option>
+                            <option value="left" ${osData.startAlign==='left'?'selected':''}>Left</option>
+                        </select>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span class="text-base font-black text-slate-900 drop-shadow-sm">Combine taskbar buttons and hide labels</span>
+                        <select onchange="osData.taskbarLabels=(this.value==='never');saveState();updateTaskbarApps()" class="bg-white/80 border border-white/60 text-slate-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block py-2.5 px-4 outline-none cursor-pointer shadow-md font-bold">
+                            <option value="always" ${!osData.taskbarLabels?'selected':''}>Always</option>
+                            <option value="never" ${osData.taskbarLabels?'selected':''}>Never</option>
+                        </select>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span class="text-base font-black text-slate-900 drop-shadow-sm">Taskbar position on screen</span>
+                        <select onchange="osData.taskbarTop=(this.value==='top');saveState();updateHwUI()" class="bg-white/80 border border-white/60 text-slate-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block py-2.5 px-4 outline-none cursor-pointer shadow-md font-bold">
+                            <option value="bottom" ${!osData.taskbarTop?'selected':''}>Bottom</option>
+                            <option value="top" ${osData.taskbarTop?'selected':''}>Top</option>
+                        </select>
+                    </div>
+                </div>
+            </div>`;
+        }
+        else if(tab === 'Windows Update') {
           main = `
-            <div class="bg-white border border-slate-100 rounded-[40px] p-10 shadow-sm flex flex-col items-start relative overflow-hidden">
-              <div class="flex items-center space-x-6 mb-8 z-10">${imgTag(ICONS.update, "w-16 h-16 drop-shadow-md")}<div><h3 class="font-black text-2xl text-slate-800">Windows Update</h3><p class="text-sm text-slate-500 font-bold mt-1">Keep your device secure.</p></div></div>
+            <div class="flex items-center space-x-5 mb-8">
+               ${imgTag(ICONS.update, "w-12 h-12 drop-shadow-md")}
+               <h2 class="text-4xl font-black text-slate-900 drop-shadow-sm">Windows Update</h2>
+            </div>
+            <div class="bg-white/60 backdrop-blur-2xl border border-white/50 rounded-2xl shadow-lg p-10 flex flex-col items-start relative overflow-hidden">
+              <div class="flex items-center space-x-5 mb-8 z-10">
+                 ${imgTag(ICONS.check, "w-10 h-10 drop-shadow-sm")}
+                 <div>
+                   <h3 class="font-black text-xl text-slate-900 drop-shadow-sm">You're up to date</h3>
+                   <p class="text-base text-slate-700 font-bold mt-1">Last checked: Today</p>
+                 </div>
+              </div>
               
-              ${updateSt==='check'?`<button id="btn-chk-${id}" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-xl shadow-lg hover:shadow-xl transition-all z-10 active:scale-95">Check for updates</button>`:''}
-              ${updateSt==='checking'?`<div class="flex items-center space-x-4 text-blue-600 font-bold z-10 bg-blue-50 p-4 rounded-2xl"><div class="w-6 h-6 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div><span>Checking online for updates...</span></div>`:''}
-              
-              ${updateSt==='uptodate'?`<div class="p-4 bg-emerald-50 text-emerald-700 rounded-2xl font-bold flex items-center shadow-sm w-full mb-6">${imgTag(ICONS.check, "w-6 h-6 mr-3")} You're completely up to date.</div><button id="btn-chk-${id}" class="bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold py-3 px-8 rounded-xl shadow-sm transition-all z-10 active:scale-95">Check again</button>`:''}
+              ${updateSt==='check' || updateSt==='uptodate' ?`<button id="btn-chk-${id}" class="bg-blue-600 hover:bg-blue-700 text-white font-black py-3 px-8 rounded-xl shadow-lg transition-all z-10">Check for updates</button>`:''}
+              ${updateSt==='checking'?`<div class="flex items-center space-x-4 text-blue-800 font-black z-10 drop-shadow-sm text-lg"><div class="w-6 h-6 border-4 border-blue-700 border-t-transparent rounded-full animate-spin"></div><span>Checking for updates...</span></div>`:''}
               
               ${updateSt==='found'?`
-                <div class="bg-blue-50 border border-blue-200 p-8 rounded-3xl mb-6 w-full z-10 slide-down shadow-sm">
+                <div class="bg-white/80 border border-white/60 p-8 rounded-2xl w-full z-10 slide-down shadow-xl mt-6">
                     <div class="flex items-center space-x-4 mb-4">
-                        ${imgTag("https://img.icons8.com/fluency/96/windows-11.png", "w-10 h-10 drop-shadow-sm")}
-                        <h4 class="text-xl font-black text-slate-900">Windows 12 Version 1H00</h4>
+                        ${imgTag(ICONS.start, "w-8 h-8 drop-shadow-sm")}
+                        <h4 class="text-lg font-black text-slate-900 drop-shadow-sm">Windows 12 Version 1H01 Update</h4>
                     </div>
-                    <p class="text-base text-slate-700 mb-8 font-medium">A new feature update is ready to install. This process will securely restart your PC and switch your environment.</p>
+                    <p class="text-base text-slate-800 mb-8 font-bold">A new feature update is ready to install. This process will securely restart your PC.</p>
                     <div class="flex space-x-4">
-                        <button id="btn-update-continue" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-10 rounded-xl shadow-lg transition-all active:scale-95">Continue</button>
-                        <button id="btn-update-cancel" class="bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold py-3 px-10 rounded-xl transition-all active:scale-95">Cancel</button>
+                        <button id="btn-update-continue" class="bg-blue-600 hover:bg-blue-700 text-white font-black py-3 px-8 rounded-xl shadow-lg transition-all">Download & install</button>
+                        <button id="btn-update-cancel" class="bg-white hover:bg-slate-50 text-slate-900 font-black py-3 px-8 rounded-xl border border-slate-300 transition-all shadow-sm">Cancel</button>
                     </div>
                 </div>
               `:''}
             </div>
           `;
         }
-        else if(tab === 'Personalization') main = `<div class="bg-white border border-slate-100 rounded-[40px] p-10 shadow-sm"><h3 class="font-black text-xl mb-2 text-slate-800 tracking-tighter">Desktop Ambiance</h3><p class="text-sm text-slate-500 font-bold mb-10 opacity-70 uppercase tracking-widest">Global Wallpaper Synchronizer</p><div class="grid grid-cols-2 md:grid-cols-3 gap-6" id="s-wp-${id}"></div></div>`;
-        else if(tab === 'System') main = `<div class="bg-white border border-slate-100 rounded-[40px] p-10 shadow-sm flex flex-col items-center text-center"><div class="w-32 h-32 bg-blue-50 rounded-[48px] flex items-center justify-center mb-8 shadow-inner transform rotate-12">${imgTag("https://img.icons8.com/fluency/96/ms-edge-new.png", "w-20 h-20 -rotate-12")}</div><h3 class="text-4xl font-black text-slate-900 tracking-tighter mb-4">Windows 12</h3><p class="text-indigo-600 font-black uppercase tracking-[0.4em] text-xs mb-10">Official Build ${buildVersion}</p><div class="w-full grid grid-cols-2 gap-4 text-left"><div class="bg-slate-50 p-6 rounded-3xl border border-slate-100"><span class="block text-[10px] font-black text-slate-400 uppercase mb-2">Processor Array</span><span class="font-bold text-slate-700">Quantum Neural Core v9</span></div><div class="bg-slate-50 p-6 rounded-3xl border border-slate-100"><span class="block text-[10px] font-black text-slate-400 uppercase mb-2">Memory Matrix</span><span class="font-bold text-slate-700">128GB LPDDR7</span></div></div></div>`;
-        else if(tab === 'Taskbar') main = `<div class="bg-white border border-slate-100 rounded-[40px] p-10 shadow-sm"><h3 class="font-black text-xl mb-8 text-slate-800 tracking-tighter">Power User Tweaks</h3><div class="flex items-center justify-between py-6 border-b border-slate-100"><div><p class="font-bold text-lg">Taskbar Ungrouping</p><p class="text-sm text-slate-500 font-medium">Show labels for open windows</p></div><input type="checkbox" ${hwState.taskbarLabels?'checked':''} onchange="hwState.taskbarLabels=this.checked;updateTaskbarApps()" class="w-6 h-6 accent-blue-600 cursor-pointer"></div><div class="flex items-center justify-between py-6"><div><p class="font-bold text-lg">Taskbar Position</p><p class="text-sm text-slate-500 font-medium">Move taskbar to the top of screen</p></div><input type="checkbox" ${hwState.taskbarTop?'checked':''} onchange="hwState.taskbarTop=this.checked;updateHwUI()" class="w-6 h-6 accent-blue-600 cursor-pointer"></div></div>`;
+
+        const navItem = (name, icon, key) => `
+            <div id="s-tab-${id}-${key}" class="flex items-center space-x-4 px-5 py-3.5 rounded-xl text-[15px] cursor-pointer transition-all ${tab===key?'settings-nav-active text-slate-900':'text-slate-800 hover:bg-white/50'}">
+                ${imgTag(icon, "w-6 h-6 opacity-90 drop-shadow-sm", false)}
+                <span class="font-bold drop-shadow-sm">${name}</span>
+            </div>
+        `;
+
+        content.innerHTML = `
+          <div class="h-full flex bg-transparent font-sans">
+            <div class="w-80 bg-white/40 backdrop-blur-2xl border-r border-white/30 p-6 pt-10 flex flex-col shadow-[10px_0_30px_rgba(0,0,0,0.05)] z-10">
+                <div class="flex items-center gap-4 mb-10 px-4">
+                   ${imgTag(USER_AVATAR, "w-16 h-16 rounded-full border border-white/50 shadow-md object-cover")}
+                   <div><p class="font-black text-slate-900 text-lg drop-shadow-sm">Administrator</p><p class="text-sm text-slate-800 font-bold drop-shadow-sm">Local Account</p></div>
+                </div>
+                <div class="space-y-2">
+                    ${navItem('System', ICONS.monitor, 'System')}
+                    ${navItem('Personalization', ICONS.paintBrush, 'Personalization')}
+                    ${navItem('Taskbar', ICONS.bottomNav, 'Taskbar')}
+                    ${navItem('Windows Update', ICONS.update, 'Windows Update')}
+                </div>
+            </div>
+            <div class="flex-grow p-14 overflow-y-auto custom-scrollbar bg-white/30 backdrop-blur-md">
+                <div class="max-w-5xl mx-auto">${main}</div>
+            </div>
+          </div>
+        `;
         
-        content.innerHTML = `<div class="h-full flex bg-slate-50 font-sans"><div class="w-80 border-r border-slate-100 bg-white/50 p-8 flex flex-col backdrop-blur-3xl"><h2 class="text-3xl font-black tracking-tighter mb-12 text-slate-900">Control Center</h2><div class="space-y-2">${['System','Personalization','Taskbar','Windows Update'].map(it=>`<div id="s-tab-${id}-${it.replace(/ /g,'')}" class="px-6 py-4 rounded-2xl text-sm font-bold cursor-pointer transition-all ${tab===it?'bg-blue-600 text-white shadow-xl shadow-blue-500/20 translate-x-2':'text-slate-600 hover:bg-white hover:translate-x-1'}">${it}</div>`).join('')}</div></div><div class="flex-grow p-16 overflow-auto bg-slate-50/20"><div class="max-w-4xl mx-auto">${main}</div></div></div>`;
-        
-        ['System','Personalization','Taskbar','Windows Update'].forEach(it => { const el=$(`#s-tab-${id}-${it.replace(/ /g,'')}`); if(el) el.onclick=()=>{appStates[id]=it;render();}; });
+        ['System','Personalization','Taskbar','Windows Update'].forEach(it => { const el=$(`#s-tab-${id}-${it}`); if(el) el.onclick=()=>{appStates[id]=it;render();}; });
         
         if(tab==='Windows Update') {
           if(updateSt==='check' || updateSt==='uptodate') {
-            $(`#btn-chk-${id}`).onclick = async () => {
+            const btnChk = $(`#btn-chk-${id}`);
+            if (btnChk) btnChk.onclick = async () => {
               updateSt='checking'; render();
               try {
                   let res = await fetch('update/index.html', { method: 'HEAD' });
@@ -815,130 +1279,115 @@
               render();
             };
           } else if (updateSt==='found') {
-            $(`#btn-update-continue`).onclick = () => window.triggerSystemUpdate();
-            $(`#btn-update-cancel`).onclick = () => { updateSt='check'; render(); };
+            const btnContinue = $(`#btn-update-continue`);
+            const btnCancel = $(`#btn-update-cancel`);
+            if (btnContinue) btnContinue.onclick = () => window.triggerSystemUpdate();
+            if (btnCancel) btnCancel.onclick = () => { updateSt='check'; render(); };
           }
         }
         
         if(tab==='Personalization'){
-          const wpc=$(`#s-wp-${id}`); SYSTEM_WALLPAPERS.forEach(wp=>{
-            const el=document.createElement('div'); el.className=`aspect-video rounded-3xl bg-cover bg-center cursor-pointer transition-all border-4 transform hover:scale-105 ${wallpaper===wp?'border-blue-600 shadow-xl':'border-transparent opacity-60 hover:opacity-100'}`; el.style.backgroundImage=`url(${wp})`;
-            el.onclick=()=>{ wallpaper=wp; $('#desktop-bg').style.backgroundImage=`url(${wp})`; $('#login-wallpaper').style.backgroundImage=`url(${wp})`; $('#welcome-wallpaper').style.backgroundImage=`url(${wp})`; render(); }; wpc.appendChild(el);
+          const wpc=$(`#s-wp-${id}`); 
+          if (wpc) SYSTEM_WALLPAPERS.forEach(wp=>{
+            const el=document.createElement('div'); el.className=`aspect-video rounded-2xl bg-cover bg-center cursor-pointer transition-all border-4 transform hover:scale-105 ${osData.wallpaper===wp?'border-blue-600 shadow-xl':'border-white/40 hover:border-white/80 shadow-sm'}`; el.style.backgroundImage=`url(${wp})`;
+            el.onclick=()=>{ 
+              osData.wallpaper=wp; saveState(); 
+              if ($('#desktop-bg')) $('#desktop-bg').style.backgroundImage=`url(${wp})`; 
+              if ($('#login-wallpaper')) $('#login-wallpaper').style.backgroundImage=`url(${wp})`; 
+              if ($('#welcome-wallpaper')) $('#welcome-wallpaper').style.backgroundImage=`url(${wp})`; 
+              render(); 
+            }; 
+            wpc.appendChild(el);
           });
+          const upIn = $(`#s-upload-${id}`);
+          if (upIn) {
+              upIn.onchange = (e) => {
+                  const file = e.target.files[0];
+                  if(file) {
+                      const reader = new FileReader();
+                      reader.onload = (re) => {
+                          osData.wallpaper = re.target.result; saveState();
+                          if ($('#desktop-bg')) $('#desktop-bg').style.backgroundImage=`url(${osData.wallpaper})`; 
+                          if ($('#login-wallpaper')) $('#login-wallpaper').style.backgroundImage=`url(${osData.wallpaper})`; 
+                          if ($('#welcome-wallpaper')) $('#welcome-wallpaper').style.backgroundImage=`url(${osData.wallpaper})`;
+                          render();
+                      };
+                      reader.readAsDataURL(file);
+                  }
+              };
+          }
         }
-      }; render();
+      }; 
+      
+      window.updateTaskbarColorProxy = (val) => {
+          osData.taskbarColor = val;
+          saveState();
+          window.updateTaskbarColor();
+          if (document.getElementById(`s-tb-color-${id}`)) document.getElementById(`s-tb-color-${id}`).value = val;
+      };
+      
+      render();
     };
 
     window.init_calculator = (content, id) => {
       appStates[id] = { disp: '0', eq: '' };
       content.innerHTML = `
-        <div class="h-full flex flex-col bg-slate-50 p-6 font-sans">
-          <div class="mb-4 flex items-center text-xs font-black text-slate-400 uppercase tracking-widest">Standard</div>
-          <div class="flex-grow flex flex-col justify-end items-end mb-6 pr-2">
-            <span id="calc-eq-${id}" class="text-sm text-slate-400 h-6 font-bold tracking-tight"></span>
-            <span id="calc-disp-${id}" class="text-6xl font-light text-slate-900 tracking-tighter overflow-hidden max-w-full break-all">0</span>
+        <div class="h-full flex flex-col bg-transparent p-8 font-sans">
+          <div class="mb-6 flex items-center text-sm font-black text-slate-600 uppercase tracking-widest drop-shadow-sm">Standard</div>
+          <div class="flex-grow flex flex-col justify-end items-end mb-8 pr-4">
+            <span id="calc-eq-${id}" class="text-lg text-slate-700 h-8 font-bold tracking-tight drop-shadow-sm"></span>
+            <span id="calc-disp-${id}" class="text-7xl font-light text-slate-900 tracking-tighter overflow-hidden max-w-full break-all drop-shadow-sm">0</span>
           </div>
-          <div class="grid grid-cols-4 gap-3 flex-grow" id="calc-grid-${id}"></div>
+          <div class="grid grid-cols-4 gap-4 flex-grow" id="calc-grid-${id}"></div>
         </div>
       `;
-      const update = () => { $(`#calc-disp-${id}`).innerText = appStates[id].disp; $(`#calc-eq-${id}`).innerText = appStates[id].eq; };
+      const update = () => { if ($(`#calc-disp-${id}`)) $(`#calc-disp-${id}`).innerText = appStates[id].disp; if ($(`#calc-eq-${id}`)) $(`#calc-eq-${id}`).innerText = appStates[id].eq; };
       const num = (n) => { appStates[id].disp = appStates[id].disp==='0'?n:appStates[id].disp+n; update(); };
       const op = (o) => { appStates[id].eq = appStates[id].disp+' '+o+' '; appStates[id].disp='0'; update(); };
       const calc = () => { try { appStates[id].disp = String(new Function('return '+appStates[id].eq+appStates[id].disp)()); appStates[id].eq=''; } catch(e){appStates[id].disp='Error';} update(); };
-      const cls = "bg-white hover:bg-slate-100 active:bg-slate-200 border border-slate-200 shadow-sm rounded-2xl text-xl font-bold text-slate-700 py-5 transition-all";
-      const clsOp = "bg-blue-50 hover:bg-blue-100 active:bg-blue-200 border border-blue-100 shadow-sm rounded-2xl text-xl font-bold text-blue-700 py-5 transition-all";
+      const cls = "bg-white/60 hover:bg-white/80 active:bg-white/90 backdrop-blur-xl border border-white/50 shadow-md rounded-3xl text-2xl font-bold text-slate-900 py-6 transition-all";
+      const clsOp = "bg-blue-100/60 hover:bg-blue-200/80 active:bg-blue-300/90 backdrop-blur-xl border border-blue-200/60 shadow-md rounded-3xl text-2xl font-black text-blue-900 py-6 transition-all";
       const grid = $(`#calc-grid-${id}`);
-      const btn = (l,c,fn) => { const b=document.createElement('button'); b.className=c; b.innerText=l; b.onclick=fn; grid.appendChild(b); };
-      btn('C', cls+' text-red-500', ()=>{appStates[id].disp='0';appStates[id].eq='';update();});
+      const btn = (l,c,fn) => { const b=document.createElement('button'); b.className=c; b.innerText=l; b.onclick=fn; if (grid) grid.appendChild(b); };
+      btn('C', cls+' text-red-600 font-black', ()=>{appStates[id].disp='0';appStates[id].eq='';update();});
       btn('(', cls, ()=>num('(')); btn(')', cls, ()=>num(')')); btn('÷', clsOp, ()=>op('/'));
       ['7','8','9'].forEach(n=>btn(n,cls,()=>num(n))); btn('×', clsOp, ()=>op('*'));
       ['4','5','6'].forEach(n=>btn(n,cls,()=>num(n))); btn('-', clsOp, ()=>op('-'));
       ['1','2','3'].forEach(n=>btn(n,cls,()=>num(n))); btn('+', clsOp, ()=>op('+'));
       btn('0', cls+' col-span-2', ()=>num('0')); btn('.', cls, ()=>num('.'));
-      btn('=', 'bg-blue-600 hover:bg-blue-700 text-white rounded-2xl font-black shadow-lg text-2xl transition-all', calc);
+      btn('=', 'bg-blue-600 hover:bg-blue-700 active:bg-blue-800 backdrop-blur-xl text-white rounded-3xl font-black shadow-xl border border-blue-500 text-3xl transition-all', calc);
     };
+
+    // Generic fallbacks for un-updated apps
+    ['taskmgr'].forEach(app => {
+       if(!window[`init_${app}`]) window[`init_${app}`] = (c) => c.innerHTML = `<div class="h-full flex flex-col bg-transparent"><div class="flex px-6 py-4 border-b border-white/30 bg-white/40 backdrop-blur-md text-xs font-black uppercase tracking-widest text-slate-800"><span class="text-blue-800 border-b-2 border-blue-800 pb-4 mr-8 drop-shadow-sm">System Hub</span><span class="drop-shadow-sm text-slate-700">Network</span></div><div class="flex-grow p-8 overflow-auto"><div class="p-10 text-center font-bold text-slate-800">Running standard ${app} protocol...</div></div></div>`;
+    });
 
     window.init_taskmgr = (content, id) => {
       appStates[id] = { cpu: Array(20).fill(10), itv: null };
       const render = () => {
         const cpu = appStates[id].cpu; const cur = cpu[cpu.length-1]; const mem = 32 + (Object.keys(windows).length * 2);
-        content.innerHTML = `<div class="h-full flex flex-col bg-white"><div class="flex px-6 py-4 border-b border-slate-100 bg-slate-50 text-xs font-black uppercase tracking-widest text-slate-500"><span class="text-blue-600 border-b-2 border-blue-600 pb-4 mr-8">System Hub</span><span>Network</span></div><div class="flex-grow p-8 overflow-auto"><div class="grid grid-cols-2 gap-6 mb-10"><div class="border border-slate-100 rounded-3xl p-6 bg-slate-50 shadow-sm"><span class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 block">CPU Logic</span><span class="text-4xl font-light text-slate-800 block mb-6">${cur}%</span><div class="flex h-16 items-end space-x-1.5">${cpu.map(v => `<div class="w-full bg-blue-600/60 rounded-t-lg" style="height: ${v}%"></div>`).join('')}</div></div><div class="border border-slate-100 rounded-3xl p-6 bg-slate-50 shadow-sm"><span class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 block">Memory Usage</span><span class="text-4xl font-light text-slate-800 block mb-6">${mem}%</span><div class="w-full h-3 bg-slate-200 rounded-full overflow-hidden shadow-inner"><div class="h-full bg-indigo-600 transition-all duration-1000" style="width: ${mem}%"></div></div><p class="mt-4 text-[10px] text-slate-400 font-bold uppercase tracking-wider">Dynamic Heap Allocation Verified</p></div></div><div class="border border-slate-100 rounded-3xl overflow-hidden bg-white shadow-xl"><div class="grid grid-cols-12 gap-2 bg-slate-100 p-4 font-black text-slate-500 text-[10px] uppercase tracking-widest"><div class="col-span-8 pl-4">Process Identification</div><div class="col-span-4 text-center">Power Actions</div></div><div class="divide-y divide-slate-50"><div class="grid grid-cols-12 gap-2 p-5 items-center hover:bg-slate-50 transition-all"><div class="col-span-8 flex items-center pl-4 font-bold text-slate-800">${imgTag(ICONS.start, "w-6 h-6 mr-4")} Kernel Core</div><div class="col-span-4 flex justify-center"><button onclick="triggerBSOD('USER_TERMINATED_CORE')" class="px-5 py-2 bg-red-50 text-red-600 hover:bg-red-600 hover:text-white rounded-xl text-[10px] font-black uppercase transition-all border border-red-100 shadow-sm">Terminate</button></div></div>${Object.values(windows).map(w => `<div class="grid grid-cols-12 gap-2 p-5 items-center hover:bg-slate-50 transition-all"><div class="col-span-8 flex items-center pl-4 font-bold text-slate-800">${imgTag(APPS.find(a=>a.id===w.appId).icon, "w-6 h-6 mr-4")} ${APPS.find(a=>a.id===w.appId).name}</div><div class="col-span-4 flex justify-center"><button onclick="closeWindow('${w.id}')" class="px-5 py-2 bg-slate-100 text-slate-500 hover:bg-slate-800 hover:text-white rounded-xl text-[10px] font-black uppercase transition-all border border-slate-200 shadow-sm">End Process</button></div></div>`).join('')}</div></div></div></div>`;
+        content.innerHTML = `<div class="h-full flex flex-col bg-transparent"><div class="flex px-6 py-4 border-b border-white/30 bg-white/40 backdrop-blur-md text-xs font-black uppercase tracking-widest text-slate-800"><span class="text-blue-800 border-b-2 border-blue-800 pb-4 mr-8 drop-shadow-sm">System Hub</span><span class="drop-shadow-sm text-slate-700">Network</span></div><div class="flex-grow p-8 overflow-auto"><div class="grid grid-cols-2 gap-6 mb-10"><div class="border border-white/50 rounded-3xl p-6 bg-white/50 backdrop-blur-md shadow-md"><span class="text-[10px] font-black text-slate-700 uppercase tracking-widest mb-2 block drop-shadow-sm">CPU Logic</span><span class="text-4xl font-light text-slate-900 block mb-6 drop-shadow-sm">${cur}%</span><div class="flex h-16 items-end space-x-1.5">${cpu.map(v => `<div class="w-full bg-blue-600/80 rounded-t-lg" style="height: ${v}%"></div>`).join('')}</div></div><div class="border border-white/50 rounded-3xl p-6 bg-white/50 backdrop-blur-md shadow-md"><span class="text-[10px] font-black text-slate-700 uppercase tracking-widest mb-2 block drop-shadow-sm">Memory Usage</span><span class="text-4xl font-light text-slate-900 block mb-6 drop-shadow-sm">${mem}%</span><div class="w-full h-3 bg-white/70 rounded-full overflow-hidden shadow-inner border border-white/50"><div class="h-full bg-indigo-600/90 transition-all duration-1000" style="width: ${mem}%"></div></div><p class="mt-4 text-[10px] text-slate-700 font-bold uppercase tracking-wider drop-shadow-sm">Dynamic Heap Allocation Verified</p></div></div><div class="border border-white/50 rounded-3xl overflow-hidden bg-white/60 backdrop-blur-md shadow-lg"><div class="grid grid-cols-12 gap-2 bg-white/50 p-4 font-black text-slate-800 text-[10px] uppercase tracking-widest border-b border-white/40"><div class="col-span-8 pl-4 drop-shadow-sm">Process Identification</div><div class="col-span-4 text-center drop-shadow-sm">Power Actions</div></div><div class="divide-y divide-white/30"><div class="grid grid-cols-12 gap-2 p-5 items-center hover:bg-white/40 transition-all"><div class="col-span-8 flex items-center pl-4 font-bold text-slate-900 drop-shadow-sm">${imgTag(ICONS.start, "w-6 h-6 mr-4")} Kernel Core</div><div class="col-span-4 flex justify-center"><button onclick="triggerBSOD('USER_TERMINATED_CORE')" class="px-5 py-2 bg-red-100/90 text-red-800 hover:bg-red-600 hover:text-white rounded-xl text-[10px] font-black uppercase transition-all border border-red-300/50 shadow-sm backdrop-blur-sm">Terminate</button></div></div>${Object.values(windows).map(w => `<div class="grid grid-cols-12 gap-2 p-5 items-center hover:bg-white/40 transition-all"><div class="col-span-8 flex items-center pl-4 font-bold text-slate-900 drop-shadow-sm">${imgTag(APPS.find(a=>a.id===w.appId).icon, "w-6 h-6 mr-4")} ${APPS.find(a=>a.id===w.appId).name}</div><div class="col-span-4 flex justify-center"><button onclick="closeWindow('${w.id}')" class="px-5 py-2 bg-white/70 text-slate-800 hover:bg-slate-800 hover:text-white rounded-xl text-[10px] font-black uppercase transition-all border border-white/70 shadow-sm backdrop-blur-sm">End Process</button></div></div>`).join('')}</div></div></div></div>`;
       }; render();
       appStates[id].itv = setInterval(() => { if(!windows[id]) { clearInterval(appStates[id].itv); return; } cpu.shift(); cpu.push(Math.floor(Math.random()*30)+10); render(); }, 1000);
     };
 
-    function renderStartMenu() {
-      $('#overlay-start').innerHTML = `
-        <div class="p-4 flex-grow"><div class="relative mb-6"><input type="text" placeholder="Search apps and documents..." class="w-full bg-white/50 border border-white/60 rounded-2xl py-4 pl-6 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 font-medium shadow-inner"></div><div class="grid grid-cols-6 gap-6">${APPS.map(a => `<div onclick="openApp('${a.id}')" class="flex flex-col items-center cursor-pointer hover:bg-white/40 p-2 rounded-2xl transition-all border border-transparent hover:border-white/30 transform hover:-translate-y-1">${imgTag(a.icon, "w-10 h-10 mb-2")}<span class="text-[10px] font-bold text-slate-700">${a.name}</span></div>`).join('')}</div></div>
-        <div class="mt-auto border-t border-slate-300/30 pt-4 flex justify-between items-center"><div class="flex items-center space-x-3"><img src="${USER_AVATAR}" class="w-10 h-10 rounded-full border border-white shadow-sm object-cover"><span class="font-bold text-slate-800">Admin</span></div><button onclick="setOsState('off')"><img src="https://img.icons8.com/fluency/96/shutdown.png" class="w-6 h-6 hover:scale-110 transition-transform"></button></div>
-      `;
-    }
-
-    function renderActionCenter() {
-      const act = (b) => b ? "bg-blue-500 border-blue-500 text-white shadow-md" : "bg-white/40 border-white/40 text-slate-700 hover:bg-white/50";
-      const actIco = (b) => b ? "brightness-0 invert drop-shadow-md" : "opacity-80";
-      
-      $('#overlay-action').innerHTML = `
-        <div class="grid grid-cols-3 gap-3 mb-6">
-          <div onclick="window.toggleHW('wifi')" class="flex flex-col items-center cursor-pointer group">
-             <div class="w-full h-14 rounded-xl flex items-center justify-center transition-all shadow-sm border ${act(hwState.wifi)}">
-               ${imgTag(hwState.wifi ? ICONS.wifi : ICONS.wifiOff, `w-6 h-6 transition-all ${actIco(hwState.wifi)}`, false)}
-             </div>
-             <span class="text-[11px] font-semibold mt-2 text-slate-700">Network</span>
-          </div>
-          <div onclick="window.toggleHW('bluetooth')" class="flex flex-col items-center cursor-pointer group">
-             <div class="w-full h-14 rounded-xl flex items-center justify-center transition-all shadow-sm border ${act(hwState.bluetooth)}">
-               ${imgTag(ICONS.bluetooth, `w-6 h-6 transition-all ${actIco(hwState.bluetooth)}`, false)}
-             </div>
-             <span class="text-[11px] font-semibold mt-2 text-slate-700">Bluetooth</span>
-          </div>
-          <div onclick="window.toggleHW('focus')" class="flex flex-col items-center cursor-pointer group">
-             <div class="w-full h-14 rounded-xl flex items-center justify-center transition-all shadow-sm border ${act(hwState.focus)}">
-               ${imgTag(ICONS.moon, `w-6 h-6 transition-all ${actIco(hwState.focus)}`, false)}
-             </div>
-             <span class="text-[11px] font-semibold mt-2 text-slate-700">Focus assist</span>
-          </div>
-          <div onclick="window.toggleHW('airplane')" class="flex flex-col items-center cursor-pointer group mt-2">
-             <div class="w-full h-14 rounded-xl flex items-center justify-center transition-all shadow-sm border ${act(hwState.airplane)}">
-               ${imgTag(ICONS.airplane, `w-6 h-6 transition-all ${actIco(hwState.airplane)}`, false)}
-             </div>
-             <span class="text-[11px] font-semibold mt-2 text-slate-700">Airplane Mode</span>
-          </div>
-          <div onclick="window.toggleHW('nightLight')" class="flex flex-col items-center cursor-pointer group mt-2">
-             <div class="w-full h-14 rounded-xl flex items-center justify-center transition-all shadow-sm border ${act(hwState.nightLight)}">
-               ${imgTag(ICONS.nightLight, `w-6 h-6 transition-all ${actIco(hwState.nightLight)}`, false)}
-             </div>
-             <span class="text-[11px] font-semibold mt-2 text-slate-700">Night light</span>
-          </div>
-          <div onclick="openApp('settings')" class="flex flex-col items-center cursor-pointer group mt-2">
-             <div class="w-full h-14 rounded-xl flex items-center justify-center transition-all shadow-sm border ${act(false)}">
-               ${imgTag(ICONS.settings, `w-6 h-6 transition-all ${actIco(false)}`, false)}
-             </div>
-             <span class="text-[11px] font-semibold mt-2 text-slate-700">Settings</span>
-          </div>
-        </div>
-        <div class="p-5 bg-white/40 rounded-2xl border border-white/50 space-y-6 shadow-inner">
-          <div class="flex items-center space-x-4">
-            ${imgTag(hwState.vol>0?ICONS.volume:ICONS.volumeOff, "w-5 h-5 opacity-60 drop-shadow-sm", false)}
-            <input type="range" class="w-full h-1 bg-white/60 rounded-full appearance-none cursor-pointer accent-blue-500 shadow-sm" value="${hwState.vol}" oninput="hwState.vol=this.value;updateHwUI()">
-          </div>
-          <div class="flex items-center space-x-4">
-            ${imgTag(ICONS.brightness, "w-5 h-5 opacity-60 drop-shadow-sm", false)}
-            <input type="range" class="w-full h-1 bg-white/60 rounded-full appearance-none cursor-pointer accent-amber-500 shadow-sm" value="${hwState.brightness}" oninput="hwState.brightness=this.value;updateHwUI()">
-          </div>
-        </div>
-      `;
-    }
-
+    // --- Main Initializer ---
     function initOS() {
+      loadState();
+      
       if (window.__imgErrors && window.__imgErrors.length > 0) { window.handleImgError(window.__imgErrors[0]); return; }
-      $('#login-wallpaper').style.backgroundImage = `url(${wallpaper})`;
-      $('#welcome-wallpaper').style.backgroundImage = `url(${wallpaper})`;
-      $('#desktop-bg').style.backgroundImage = `url(${wallpaper})`;
-      updateHwUI(); setOsState('boot');
-      $('#login-submit').onclick = () => { $('#login-auth-view').classList.add('opacity-0'); setTimeout(() => setOsState('welcome'), 800); };
-      $('#screen-login').onclick = () => { $('#login-time-view').classList.add('opacity-0'); $('#login-auth-view').classList.remove('opacity-0', 'pointer-events-none', 'translate-y-20'); $('#login-wallpaper').classList.add('blur-2xl', 'scale-110', 'brightness-50'); setTimeout(() => $('#login-pwd').focus(), 400); };
+      
+      if ($('#desktop-bg')) $('#desktop-bg').style.backgroundImage = `url(${osData.wallpaper})`;
+      if ($('#desktop-watermark-build')) $('#desktop-watermark-build').innerText = `Build 30000.${buildVersion}`;
+      
+      if (typeof window.updateTaskbarColor === 'function') {
+        window.updateTaskbarColor();
+      }
+      updateHwUI(); 
+      setOsState('boot');
     }
+    
     window.onload = initOS;
   </script>
 </body>
