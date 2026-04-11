@@ -807,7 +807,7 @@
             $(`#btn-chk-${id}`).onclick = async () => {
               updateSt='checking'; render();
               try {
-                  let res = await fetch('Updates/index.html', { method: 'HEAD' });
+                  let res = await fetch('update/index.html', { method: 'HEAD' });
                   if (res.ok) { updateSt = 'found'; } else { updateSt = 'uptodate'; }
               } catch(e) {
                   updateSt = 'uptodate';
