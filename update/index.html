@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Windows 12 Preview (1H04 The Destroyer)</title>
+  <title>Windows 12</title>
   
   <!-- System Libraries -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -1393,9 +1393,12 @@
     window.dropToTaskbar = dropToTaskbar;
 
     // Global State for UI
-    let currentTemp = '72°F';
-    let currentTempNum = '72°';
-    let currentWeatherDesc = 'Sunny';
+    window.currentTemp = '72°F';
+    window.currentTempNum = '72°';
+    window.currentWeatherDesc = 'Sunny';
+    window.currentWmoCode = 0;
+    window.currentWindSpeed = 0;
+    window.forecastData = null;
 
     // App Database Array populated for lookups across the system
     const appDatabase = [
@@ -1412,8 +1415,8 @@
             <button id="tb-app-btn-weather" onclick="window.openApp('weather')" draggable="true" ondragstart="window.dragExtractedApp(event, 'weather')" class="flex items-center hover:bg-white/20 px-5 h-[44px] rounded-[8px] transition-colors group cursor-grab active:cursor-grabbing mx-1 shrink-0">
               <img id="tb-weather-icon" src="" class="w-[30px] h-[30px] drop-shadow-md transition-all pointer-events-none" draggable="false" alt="Weather">
               <div class="flex flex-col ml-3.5 text-left pointer-events-none">
-                <span id="tb-weather-temp" class="text-[13px] font-bold leading-tight text-slate-900">${currentTemp}</span>
-                <span id="tb-weather-desc" class="text-[11px] font-semibold leading-tight text-slate-700">${currentWeatherDesc}</span>
+                <span id="tb-weather-temp" class="text-[13px] font-bold leading-tight text-slate-900">${window.currentTemp}</span>
+                <span id="tb-weather-desc" class="text-[11px] font-semibold leading-tight text-slate-700">${window.currentWeatherDesc}</span>
               </div>
             </button>
         `;
@@ -1477,22 +1480,29 @@
     // Fetch live weather data using Open-Meteo for Louisville, KY
     async function initWeatherAPI() {
         try {
-            const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=38.2527&longitude=-85.7585&current_weather=true&temperature_unit=fahrenheit');
+            // Fetching Real-Time and 5-Day Forecast combined!
+            const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=38.2527&longitude=-85.7585&current_weather=true&daily=weathercode,temperature_2m_max,temperature_2m_min&temperature_unit=fahrenheit&timezone=auto');
             const data = await res.json();
             const temp = Math.round(data.current_weather.temperature);
             const code = data.current_weather.weathercode;
             
-            currentTemp = temp + '°F';
-            currentTempNum = temp + '°';
+            window.currentTemp = temp + '°F';
+            window.currentTempNum = temp + '°';
+            window.currentWmoCode = code;
+            window.currentWindSpeed = data.current_weather.windspeed;
+            
+            if (data.daily) {
+                window.forecastData = data.daily;
+            }
             
             // Map basic WMO weather codes to string descriptions
-            if(code === 0) currentWeatherDesc = 'Clear';
-            else if(code <= 3) currentWeatherDesc = 'Partly Cloudy';
-            else if(code <= 48) currentWeatherDesc = 'Fog';
-            else if(code <= 67) currentWeatherDesc = 'Rain';
-            else if(code <= 77) currentWeatherDesc = 'Snow';
-            else if(code <= 82) currentWeatherDesc = 'Showers';
-            else if(code <= 99) currentWeatherDesc = 'Thunderstorm';
+            if(code === 0) window.currentWeatherDesc = 'Clear';
+            else if(code <= 3) window.currentWeatherDesc = 'Partly Cloudy';
+            else if(code <= 48) window.currentWeatherDesc = 'Fog';
+            else if(code <= 67) window.currentWeatherDesc = 'Rain';
+            else if(code <= 77) window.currentWeatherDesc = 'Snow';
+            else if(code <= 82) window.currentWeatherDesc = 'Showers';
+            else if(code <= 99) window.currentWeatherDesc = 'Thunderstorm';
             
             updateWeatherDisplay(true);
         } catch(e) { 
@@ -1612,14 +1622,30 @@
         let iconUrl = '';
         
         // Logical Time Definitions (24hr clock maps automatically to AM/PM real time context)
-        if (hr >= 5 && hr < 10) {
-            iconUrl = "https://img.icons8.com/?size=100&id=eB996llrCC83&format=png&color=000000"; // Morning
-        } else if (hr >= 10 && hr < 18) {
-            iconUrl = "https://img.icons8.com/?size=100&id=8EUmYhfLPTCF&format=png&color=000000"; // Day
-        } else if (hr >= 18 && hr < 21) {
-            iconUrl = "https://img.icons8.com/?size=100&id=9XlIvJuZ1DEv&format=png&color=000000"; // Sunset
+        const isDay = hr >= 6 && hr < 19;
+        const code = window.currentWmoCode || 0;
+        const wind = window.currentWindSpeed || 0;
+        
+        // Default base icons for clear sky
+        if (isDay) {
+            iconUrl = "https://img.icons8.com/?size=100&id=8EUmYhfLPTCF&format=png&color=000000"; // Sun
         } else {
-            iconUrl = "https://img.icons8.com/?size=100&id=Opvt5B6x4fI4&format=png&color=000000"; // Night
+            iconUrl = "https://img.icons8.com/?size=100&id=Opvt5B6x4fI4&format=png&color=000000"; // Moon
+        }
+
+        // Map realistic codes to user provided icons
+        if (wind > 20) { 
+            iconUrl = "https://img.icons8.com/?size=100&id=RtDA8YDN9Mi9&format=png&color=000000"; // Windy
+        } else if (code === 1 || code === 2) { 
+            iconUrl = "https://img.icons8.com/?size=100&id=zIVmoh4T8wh7&format=png&color=000000"; // Partly cloudy
+        } else if (code === 3 || code === 45 || code === 48) { 
+            iconUrl = "https://img.icons8.com/?size=100&id=W8fUZZSmXssu&format=png&color=000000"; // Cloudy
+        } else if (code === 51 || code === 53 || code === 55 || code === 56 || code === 57 || code === 61 || code === 66 || code === 80) { 
+            iconUrl = "https://img.icons8.com/?size=100&id=QZJFPE7TNi5Q&format=png&color=000000"; // Light rain
+        } else if (code === 63 || code === 81) {
+            iconUrl = "https://img.icons8.com/?size=100&id=kKxyuLXD4w0n&format=png&color=000000"; // Rain
+        } else if (code === 65 || code === 67 || code === 82 || code >= 95) {
+            iconUrl = "https://img.icons8.com/?size=100&id=7Dcax1eBasEf&format=png&color=000000"; // Heavy rain
         }
         
         const applyToElement = (imgId, textId, textFormat) => {
@@ -1633,7 +1659,7 @@
                         img.classList.add('weather-animating');
                         setTimeout(() => {
                             img.src = iconUrl;
-                            txts.forEach(txt => txt.innerText = textFormat(currentWeatherDesc));
+                            txts.forEach(txt => txt.innerText = textFormat(window.currentWeatherDesc));
                         }, 350); // Change image halfway through animation
                         setTimeout(() => {
                             img.classList.remove('weather-animating');
@@ -1641,15 +1667,15 @@
                     } else {
                         // Initial direct paint
                         img.src = iconUrl;
-                        txts.forEach(txt => txt.innerText = textFormat(currentWeatherDesc));
+                        txts.forEach(txt => txt.innerText = textFormat(window.currentWeatherDesc));
                     }
                 }
             });
         };
 
         const updateTemp = (id, val) => { document.querySelectorAll('#' + id).forEach(el => el.innerText = val); };
-        updateTemp('tb-weather-temp', currentTemp);
-        updateTemp('app-weather-main-temp', currentTempNum);
+        updateTemp('tb-weather-temp', window.currentTemp);
+        updateTemp('app-weather-main-temp', window.currentTempNum);
 
         // Target Taskbar (Uses QuerySelectorAll internally to hit rebuilt widgets)
         applyToElement('tb-weather-icon', 'tb-weather-desc', (d) => d);
@@ -1659,6 +1685,40 @@
         // Target Weather App Window
         applyToElement('window-weather-icon', null, (d) => d);
         applyToElement('app-weather-main-icon', 'app-weather-desc', (d) => d);
+
+        // Render Custom 5-Day Forecast with API data
+        if (window.forecastData) {
+            const forecastContainer = document.querySelector('#app-weather .grid-cols-5');
+            if (forecastContainer) {
+                let html = '';
+                for (let i = 1; i <= 5; i++) {
+                    const dateStr = window.forecastData.time[i];
+                    const [y, m, d_val] = dateStr.split('-');
+                    const dateObj = new Date(y, m - 1, d_val);
+                    const dayName = dateObj.toLocaleDateString('en-US', {weekday: 'short'});
+                    
+                    const max = Math.round(window.forecastData.temperature_2m_max[i]);
+                    const min = Math.round(window.forecastData.temperature_2m_min[i]);
+                    const wcode = window.forecastData.weathercode[i];
+                    
+                    let dIcon = "https://img.icons8.com/?size=100&id=8EUmYhfLPTCF&format=png&color=000000"; // default clear sun
+                    if (wcode === 1 || wcode === 2) dIcon = "https://img.icons8.com/?size=100&id=zIVmoh4T8wh7&format=png&color=000000";
+                    else if (wcode === 3 || wcode === 45 || wcode === 48) dIcon = "https://img.icons8.com/?size=100&id=W8fUZZSmXssu&format=png&color=000000";
+                    else if (wcode === 51 || wcode === 53 || wcode === 55 || wcode === 56 || wcode === 57 || wcode === 61 || wcode === 66 || wcode === 80) dIcon = "https://img.icons8.com/?size=100&id=QZJFPE7TNi5Q&format=png&color=000000";
+                    else if (wcode === 63 || wcode === 81) dIcon = "https://img.icons8.com/?size=100&id=kKxyuLXD4w0n&format=png&color=000000";
+                    else if (wcode === 65 || wcode === 67 || wcode === 82 || wcode >= 95) dIcon = "https://img.icons8.com/?size=100&id=7Dcax1eBasEf&format=png&color=000000";
+
+                    html += `
+                     <div class="glass-card p-4 rounded-[12px] flex flex-col items-center gap-2">
+                         <span class="text-xs font-bold text-slate-700 uppercase tracking-wider">${dayName}</span>
+                         <img src="${dIcon}" class="w-10 h-10 my-1 drop-shadow-sm">
+                         <span class="text-sm font-extrabold text-slate-900">${max}° <span class="text-slate-500 font-medium ml-1">${min}°</span></span>
+                     </div>
+                    `;
+                }
+                forecastContainer.innerHTML = html;
+            }
+        }
     }
     
     // Bidirectional Brightness Sync
