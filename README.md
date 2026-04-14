@@ -14,3 +14,7 @@ The me updates will be released every few hours or so.
 
 A youtube channel has been made for this very topic:
 https://www.youtube.com/@Sicricrosoft-FakeOfficial
+
+## Windows 12 realism:
+
+Every update will include either small or large changes based for realism or predictions.
