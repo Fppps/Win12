@@ -3,11 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Windows 12 Preview (Hudson Valley 1H02)</title>
+  <title>Windows 12 Preview (Hudson Valley 1H03)</title>
+  
+  <!-- System Libraries -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <!-- Phosphor Icons for System UI -->
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
   <script>
     // ============================================================================
-    // GLOBAL ERROR HANDLER & BSOD INTERCEPTOR (2-Strike Rule)
+    // GLOBAL ERROR HANDLER & BSOD INTERCEPTOR (Fault Tolerant)
     // ============================================================================
     window.__imgErrors = [];
     window.__criticalErrorCount = 0; 
@@ -16,7 +22,8 @@
       if (!img || !img.getAttribute('src') || img.dataset.errorHandled === "true" || img.src.includes('undefined')) return; 
       img.dataset.errorHandled = "true";
       
-      img.src = 'https://img.icons8.com/fluency/96/image.png';
+      // Elegant visible fallback so broken images don't collapse the layout
+      img.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' fill='%23cbd5e1' rx='4'/%3E%3Ccircle cx='12' cy='12' r='4' fill='%2394a3b8'/%3E%3C/svg%3E";
       
       if (img.classList.contains('non-critical')) {
         console.warn("Non-critical resource failed to load.");
@@ -26,7 +33,7 @@
       window.__criticalErrorCount++;
       console.warn("Critical resource failed to load. Strike: " + window.__criticalErrorCount);
       
-      if (window.__criticalErrorCount >= 2) {
+      if (window.__criticalErrorCount >= 5) {
         console.error("SYSTEM FAILURE: Multiple critical resources failed to load.");
         if (typeof window.triggerBSOD === 'function') {
           window.triggerBSOD("RESOURCE_EXHAUSTION_FAILURE (" + window.__criticalErrorCount + "_ERRORS)");
@@ -70,187 +77,293 @@
   </script>
   <style>
     /* ============================================================================
-       WINDOWS 12 "HUDSON VALLEY" DESIGN FRAMEWORK & SMART ANIMATIONS
+       WINDOWS 12 "HUDSON VALLEY" DESIGN FRAMEWORK & HYPOREALISM (LIGHT THEME)
        ============================================================================ */
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Roboto:wght@300;400;500;700&family=Segoe+UI:wght@300;400;500;600;700;900&family=Space+Grotesk:wght@400;500;600;700&display=swap');
     
     :root {
         --os-font: 'Segoe UI Variable', 'Segoe UI', system-ui, sans-serif;
-        --liquid-blur: 45px;
+        --liquid-blur: 60px;
         --liquid-sat: 200%;
+        --tb-color-tint: rgba(255, 255, 255, 0.45);
+        /* Subtle white noise texture for frosted glass */
+        --glass-noise: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E");
     }
 
     body { 
         font-family: var(--os-font); 
         overflow: hidden; 
-        background: black; 
+        background: #f1f5f9; /* Light default base */
         transition: font-family 0.4s ease;
     }
     
-    .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+    .custom-scrollbar::-webkit-scrollbar { width: 6px; }
     .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
     .custom-scrollbar::-webkit-scrollbar-thumb { background-color: rgba(0,0,0,0.15); border-radius: 10px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background-color: rgba(0,0,0,0.25); }
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-    /* LIQUID GLASS MATERIAL */
+    /* ==========================================================================
+       GRADIENT ICON ENGINE
+       ========================================================================== */
+    .icon-grad {
+        -webkit-background-clip: text !important;
+        background-clip: text !important;
+        -webkit-text-fill-color: transparent !important;
+        color: transparent !important;
+        display: inline-block;
+    }
+    .grad-blue { background-image: linear-gradient(135deg, #2563eb, #22d3ee) !important; }
+    .grad-slate { background-image: linear-gradient(135deg, #64748b, #94a3b8) !important; }
+    .grad-slate-dark { background-image: linear-gradient(135deg, #334155, #64748b) !important; }
+    .grad-emerald { background-image: linear-gradient(135deg, #10b981, #34d399) !important; }
+    .grad-amber { background-image: linear-gradient(135deg, #f59e0b, #fcd34d) !important; }
+    .grad-red { background-image: linear-gradient(135deg, #ef4444, #fca5a5) !important; }
+    .grad-purple { background-image: linear-gradient(135deg, #8b5cf6, #d8b4fe) !important; }
+    .grad-white { background-image: linear-gradient(135deg, #ffffff, #f1f5f9) !important; }
+
+    /* Interactive Hover Gradients */
+    .group:hover .group-hover\:grad-blue { background-image: linear-gradient(135deg, #2563eb, #22d3ee) !important; }
+    .group:hover .group-hover\:grad-red { background-image: linear-gradient(135deg, #ef4444, #fca5a5) !important; }
+    .group:hover .group-hover\:grad-amber { background-image: linear-gradient(135deg, #f59e0b, #fcd34d) !important; }
+    .hover\:grad-blue:hover { background-image: linear-gradient(135deg, #2563eb, #22d3ee) !important; }
+    .group:focus-within .group-focus-within\:grad-blue { background-image: linear-gradient(135deg, #2563eb, #22d3ee) !important; }
+
+    /* ==========================================================================
+       TRUE REALISTIC GLASS ENGINE (Deeply transparent, frosted, specular borders)
+       ========================================================================== */
+    
+    /* Used for overlays like Start Menu, Action Center */
     .liquid-glass { 
-        background: linear-gradient(135deg, rgba(255, 255, 255, 0.55) 0%, rgba(255, 255, 255, 0.25) 100%);
+        background-image: var(--glass-noise), linear-gradient(135deg, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0.1) 100%);
         backdrop-filter: blur(var(--liquid-blur)) saturate(var(--liquid-sat)); 
         -webkit-backdrop-filter: blur(var(--liquid-blur)) saturate(var(--liquid-sat));
-        border: 1px solid rgba(255, 255, 255, 0.6); 
-        box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.9), 0 12px 40px rgba(0,0,0,0.15);
-        color: #1a1b1c; 
+        border-top: 1px solid rgba(255, 255, 255, 0.8);
+        border-left: 1px solid rgba(255, 255, 255, 0.5);
+        border-right: 1px solid rgba(255, 255, 255, 0.2);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.6), 0 16px 40px rgba(0,0,0,0.15);
+        color: #0f172a; 
     }
     
+    /* Used for actual App Windows */
     .liquid-glass-heavy {
-        background: linear-gradient(135deg, rgba(240, 240, 245, 0.8) 0%, rgba(255, 255, 255, 0.5) 100%);
-        backdrop-filter: blur(60px) saturate(250%); 
-        -webkit-backdrop-filter: blur(60px) saturate(250%);
-        border: 1px solid rgba(255, 255, 255, 0.8); 
-        box-shadow: inset 0 1px 3px rgba(255, 255, 255, 1), 0 20px 50px rgba(0,0,0,0.2);
+        background-image: var(--glass-noise), linear-gradient(135deg, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0.15) 100%);
+        backdrop-filter: blur(80px) saturate(220%); 
+        -webkit-backdrop-filter: blur(80px) saturate(220%);
+        border-top: 1px solid rgba(255, 255, 255, 0.9);
+        border-left: 1px solid rgba(255, 255, 255, 0.6);
+        border-right: 1px solid rgba(255, 255, 255, 0.2);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.8), 0 20px 60px rgba(0,0,0,0.2);
+        color: #0f172a;
     }
 
-    /* CONCEPT 1: Ambient Active Window Glow (Light Bleed) */
-    .ambient-glow {
-        box-shadow: 0 0 100px -20px rgba(59, 130, 246, 0.5), 0 30px 80px rgba(0,0,0,0.25) !important;
-        border-color: rgba(255, 255, 255, 1) !important;
-        transition: box-shadow 0.5s ease, border-color 0.5s ease;
+    /* Used for elements INSIDE apps (Settings cards, Explorer folders) */
+    .glass-card {
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0.1) 100%);
+        border-top: 1px solid rgba(255, 255, 255, 0.8);
+        border-left: 1px solid rgba(255, 255, 255, 0.4);
+        border-right: 1px solid rgba(255, 255, 255, 0.1);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.5), 0 4px 12px rgba(0,0,0,0.05);
+        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     }
-
-    /* CONCEPT 2: Elastic Physics / Spring Animations */
-    .elastic-bounce {
-        transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.2s, box-shadow 0.2s, border-color 0.2s;
-    }
-    .elastic-bounce:active {
-        transform: scale(0.85) !important;
-    }
-
-    /* Depth Animations */
-    .desktop-depth-active {
-        transform: scale(0.97) translateY(-10px);
-        filter: blur(8px) brightness(0.8);
-        border-radius: 30px;
-    }
-
-    /* Spring Animations */
-    .slide-up { animation: slideUp 0.6s cubic-bezier(0.2, 0.9, 0.1, 1) forwards; }
-    .slide-down-quick { animation: slideDownQuick 0.3s cubic-bezier(0.2, 0.9, 0.1, 1) forwards; }
-    .slide-right { animation: slideRight 0.6s cubic-bezier(0.2, 0.9, 0.1, 1) forwards; }
-    .zoom-in { animation: zoomIn 0.4s cubic-bezier(0.2, 0.9, 0.1, 1) forwards; }
-    .fade-in { animation: fadeIn 0.4s ease-out forwards; }
     
-    @keyframes slideUp { from { transform: translateY(60px) scale(0.95); opacity: 0; } to { transform: translateY(0) scale(1); opacity: 1; } }
-    @keyframes slideDownQuick { from { transform: translateY(-15px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-    @keyframes slideRight { from { transform: translateX(-100%); opacity: 0;} to { transform: translateX(0); opacity: 1;} }
-    @keyframes zoomIn { from { transform: scale(0.90); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    .glass-card:hover {
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0.2) 100%);
+        box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.7), 0 8px 24px rgba(0,0,0,0.1);
+        transform: translateY(-2px);
+    }
+
+    /* Dynamic Taskbar Background */
+    .taskbar-segment {
+        background-color: var(--tb-color-tint) !important;
+        background-image: var(--glass-noise), linear-gradient(180deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.1) 100%);
+        backdrop-filter: blur(var(--liquid-blur)) saturate(var(--liquid-sat)); 
+        -webkit-backdrop-filter: blur(var(--liquid-blur)) saturate(var(--liquid-sat));
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        border-top-color: rgba(255, 255, 255, 0.8);
+        box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.6), 0 8px 24px rgba(0,0,0,0.12);
+        transition: background-color 0.4s ease, transform 0.2s ease;
+    }
+
+    /* Clean Active Window Focus */
+    .ambient-glow {
+        box-shadow: 0 20px 60px rgba(0,0,0,0.25), 0 0 0 1px rgba(0, 103, 192, 0.15) !important;
+        border-top-color: rgba(255, 255, 255, 1) !important;
+        border-left-color: rgba(255, 255, 255, 0.9) !important;
+        transition: box-shadow 0.3s ease, border-color 0.3s ease;
+        z-index: 999;
+    }
+
+    /* Snappy Windows Animations */
+    .slide-up { animation: winFlyUp 0.4s cubic-bezier(0.2, 0.9, 0.1, 1) forwards; }
+    .slide-down-quick { animation: slideDownQuick 0.4s cubic-bezier(0.2, 0.9, 0.1, 1) forwards; }
+    .slide-right { animation: slideRight 0.7s cubic-bezier(0.2, 0.9, 0.1, 1) forwards; }
+    .zoom-in { animation: winPopIn 0.35s cubic-bezier(0.2, 0.9, 0.1, 1) forwards; }
+    .fade-in { animation: fadeIn 0.3s ease-out forwards; }
+    
+    @keyframes winFlyUp { from { transform: translateY(40px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    @keyframes slideDownQuick { from { transform: translateY(-30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    @keyframes winPopIn { from { transform: scale(0.97) translateY(10px); opacity: 0; } to { transform: scale(1) translateY(0); opacity: 1; } }
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-    /* Fluent Sliders */
-    .fluent-slider { -webkit-appearance: none; width: 100%; height: 6px; border-radius: 999px; background: rgba(0,0,0,0.1); outline: none; }
-    .fluent-slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 16px; height: 16px; border-radius: 50%; background: #0067c0; cursor: pointer; border: 4px solid #fff; box-shadow: 0 2px 6px rgba(0,0,0,0.3); transition: transform 0.1s cubic-bezier(0.34, 1.56, 0.64, 1); }
-    .fluent-slider::-webkit-slider-thumb:hover { transform: scale(1.25); }
+    /* Boot Animations */
+    @keyframes float {
+        0% { transform: translateY(0px) translateX(-50%); }
+        50% { transform: translateY(-8px) translateX(-50%); filter: drop-shadow(0 0 20px rgba(37,99,235,0.6)) brightness(1.2); }
+        100% { transform: translateY(0px) translateX(-50%); }
+    }
+
+    /* Light Theme Fluent Sliders */
+    .fluent-slider { -webkit-appearance: none; width: 100%; height: 4px; border-radius: 999px; background: rgba(0,0,0,0.1); outline: none; }
+    .fluent-slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 16px; height: 16px; border-radius: 50%; background: #0067c0; cursor: pointer; border: 3px solid #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.2); transition: transform 0.1s; }
+    .fluent-slider::-webkit-slider-thumb:hover { transform: scale(1.2); }
     
     .hidden { display: none !important; }
 
     .win-spinner-dot { position: absolute; width: 100%; height: 100%; opacity: 0; animation: win-spin 3s infinite cubic-bezier(0.4, 0, 0.2, 1); }
-    .win-spinner-dot::after { content: ''; position: absolute; top: 0; left: 50%; width: 5px; height: 5px; background: white; border-radius: 50%; transform: translateX(-50%); }
+    .win-spinner-dot::after { content: ''; position: absolute; top: 0; left: 50%; width: 5px; height: 5px; background: #0067c0; border-radius: 50%; transform: translateX(-50%); box-shadow: 0 0 2px rgba(0,103,192,0.4); }
     @keyframes win-spin { 0% { transform: rotate(-90deg); opacity: 0; } 10% { opacity: 1; } 70% { transform: rotate(630deg); opacity: 1; } 100% { transform: rotate(990deg); opacity: 0; } }
 
-    .settings-nav-active { background: rgba(0,0,0,0.06); font-weight: 600; position: relative; border-radius: 12px; }
-    .settings-nav-active::before { content: ''; position: absolute; left: 0; top: 25%; height: 50%; width: 4px; background: #0067c0; border-radius: 4px; }
+    .settings-nav-active { background: linear-gradient(135deg, rgba(255,255,255,0.8), rgba(255,255,255,0.3)); font-weight: 600; position: relative; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+    .settings-nav-active::before { content: ''; position: absolute; left: 0px; top: 25%; height: 50%; width: 3px; background: #0067c0; border-radius: 4px; }
 
-    /* MS Snap Layouts Concept */
-    .snap-menu-wrapper { position: relative; }
-    .snap-menu { display: none; position: absolute; top: calc(100% + 4px); left: 50%; transform: translateX(-50%); width: 120px; background: rgba(255,255,255,0.9); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.8); border-radius: 12px; padding: 8px; gap: 4px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); z-index: 10000; grid-template-columns: 1fr 1fr; }
-    .snap-menu-wrapper:hover .snap-menu { display: grid; animation: fadeIn 0.2s ease-out forwards; }
-    .snap-option { background: rgba(0,0,0,0.05); border: 1px solid rgba(0,0,0,0.1); border-radius: 4px; transition: all 0.2s; cursor: pointer; }
-    .snap-option:hover { background: #0067c0; border-color: #0067c0; }
-    .snap-option.half { height: 40px; }
-    .snap-option.third { height: 40px; grid-column: span 2; }
+    /* Elastic Physics / Spring Animations */
+    .elastic-bounce { transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.3s, box-shadow 0.3s, border-color 0.3s, filter 0.3s; }
+    .elastic-bounce:active { transform: scale(0.92) !important; }
+    .elastic-hover:hover { transform: scale(1.05) translateY(-2px); filter: drop-shadow(0 8px 16px rgba(0,0,0,0.1)); }
+
+    /* Next-Gen Window Spring */
+    .fluent-window { animation: fluentWindow 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+    @keyframes fluentWindow { 
+        0% { transform: scale(0.92) translateY(15px); opacity: 0; filter: blur(8px); } 
+        100% { transform: scale(1) translateY(0); opacity: 1; filter: blur(0); } 
+    }
+    
+    .fluent-pop { animation: fluentPop 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+    @keyframes fluentPop { 
+        0% { transform: scale(0.95) translateY(20px); opacity: 0; filter: blur(10px); } 
+        100% { transform: scale(1) translateY(0); opacity: 1; filter: blur(0); } 
+    }
+
+    .fluent-pop-center { animation: fluentPopCenter 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+    @keyframes fluentPopCenter { 
+        0% { transform: translate(-50%, 20px) scale(0.95); opacity: 0; filter: blur(10px); } 
+        100% { transform: translate(-50%, 0) scale(1); opacity: 1; filter: blur(0); } 
+    }
+
+    /* Depth Animations */
+    .desktop-depth-active {
+        transform: scale(0.98) translateY(-5px);
+        filter: blur(8px) brightness(0.9);
+        border-radius: 20px;
+    }
   </style>
 </head>
 <body class="select-none text-slate-900 text-sm" oncontextmenu="return false;">
 
-  <div id="os-root" class="relative w-full h-screen overflow-hidden">
-    
-    <!-- HARDWARE OVERLAYS -->
+  <div id="os-root" class="relative w-full h-screen overflow-hidden bg-slate-100">
+
     <div id="filter-brightness" class="absolute inset-0 pointer-events-none z-[100000] bg-black transition-opacity duration-300" style="opacity: 0;"></div>
     <div id="filter-nightlight" class="absolute inset-0 pointer-events-none z-[100000] bg-[#ff9900] mix-blend-multiply transition-opacity duration-700 opacity-0"></div>
 
-    <!-- BOOT SCREEN -->
-    <div id="screen-boot" class="absolute inset-0 bg-black flex flex-col items-center justify-center cursor-none z-[50000]">
-      <div class="absolute top-[40%] left-1/2 -translate-x-1/2 -translate-y-1/2">
-        <img src="https://img.icons8.com/color/144/windows-11.png" alt="Windows" class="w-28 h-28" draggable="false">
-      </div>
-      <div class="absolute bottom-[25%] left-1/2 -translate-x-1/2">
-        <div class="relative w-10 h-10">
-          <div class="win-spinner-dot" style="animation-delay: 0ms"></div>
-          <div class="win-spinner-dot" style="animation-delay: 150ms"></div>
-          <div class="win-spinner-dot" style="animation-delay: 300ms"></div>
-          <div class="win-spinner-dot" style="animation-delay: 450ms"></div>
-          <div class="win-spinner-dot" style="animation-delay: 600ms"></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- LOGIN SCREEN -->
-    <div id="screen-login" class="absolute inset-0 bg-black hidden z-[40000]">
-      <div id="login-wallpaper" class="absolute inset-0 bg-cover bg-center transition-all duration-700"></div>
+    <!-- BOOT SCREEN (Concept Style) -->
+    <div id="screen-boot" class="absolute inset-0 bg-slate-50 flex flex-col items-center justify-center cursor-none z-[50000] overflow-hidden">
+      <!-- Background ambient glow -->
+      <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-blue-400/10 rounded-full blur-[100px] pointer-events-none"></div>
       
-      <div id="login-time-view" class="absolute top-24 left-1/2 -translate-x-1/2 flex flex-col items-center text-white drop-shadow-lg transition-all duration-500">
-        <h1 id="login-clock" class="text-8xl font-medium tracking-tighter mb-2 drop-shadow-md"></h1>
-        <p id="login-date" class="text-2xl font-normal drop-shadow-md"></p>
-        <p class="mt-8 text-sm font-medium opacity-80 animate-pulse">Click or press any key to unlock</p>
-      </div>
-
-      <div id="login-auth-view" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center transition-all duration-500 translate-y-20 opacity-0 pointer-events-none">
-        <img id="login-avatar" src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=200&auto=format&fit=crop" class="w-32 h-32 rounded-full border-2 border-white/30 shadow-[0_10px_40px_rgba(0,0,0,0.5)] mb-6 object-cover bg-slate-800" draggable="false" onerror="window.handleImgError(this)">
-        <h2 class="text-white text-3xl font-semibold mb-6 drop-shadow-md tracking-tight">Administrator</h2>
-        <div id="login-input-area" class="flex flex-col items-center w-72">
-          <div class="relative w-full">
-            <input type="password" id="login-pwd" placeholder="PIN" class="w-full bg-black/30 border-b-2 border-white/50 text-white px-4 py-3 text-center focus:outline-none focus:border-blue-400 transition-colors placeholder:text-white/70 backdrop-blur-3xl rounded-t-xl shadow-inner font-semibold tracking-widest">
-            <button id="login-submit" class="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 hover:bg-white/20 rounded-lg transition-colors">
-              <img src="https://img.icons8.com/fluency-systems-filled/96/ffffff/forward.png" class="w-5 h-5" draggable="false">
-            </button>
-          </div>
-          <p id="login-error" class="text-red-400 text-xs font-semibold mt-2 h-4 transition-opacity opacity-0">Incorrect PIN.</p>
-          <button id="login-reset" onclick="window.resetPassword()" class="text-white/70 hover:text-white text-xs font-medium mt-2 cursor-pointer transition-colors hidden">I forgot my PIN</button>
-        </div>
-        <div id="login-loading-area" class="flex flex-col items-center hidden">
-          <div class="relative w-8 h-8 mb-6">
-            <div class="win-spinner-dot" style="animation-delay: 0ms"></div>
-            <div class="win-spinner-dot" style="animation-delay: 150ms"></div>
-            <div class="win-spinner-dot" style="animation-delay: 300ms"></div>
-            <div class="win-spinner-dot" style="animation-delay: 450ms"></div>
-            <div class="win-spinner-dot" style="animation-delay: 600ms"></div>
-          </div>
-          <p class="text-white text-lg font-medium">Welcome</p>
+      <div class="relative z-10 flex flex-col items-center mt-[-10%]">
+        <i class="ph-fill ph-windows-logo text-[120px] icon-grad grad-blue drop-shadow-sm transition-all duration-1000 absolute" style="animation: float 4s ease-in-out infinite;"></i>
+        
+        <div class="mt-40 flex flex-col items-center">
+            <div class="relative w-10 h-10 mt-8">
+              <div class="win-spinner-dot" style="animation-delay: 0ms"></div>
+              <div class="win-spinner-dot" style="animation-delay: 150ms"></div>
+              <div class="win-spinner-dot" style="animation-delay: 300ms"></div>
+              <div class="win-spinner-dot" style="animation-delay: 450ms"></div>
+              <div class="win-spinner-dot" style="animation-delay: 600ms"></div>
+            </div>
+            <p class="text-[10px] font-bold text-slate-400 tracking-[0.3em] mt-8 uppercase animate-pulse">Loading Windows Core</p>
         </div>
       </div>
     </div>
 
-    <!-- WELCOME SCREEN -->
-    <div id="screen-welcome" class="absolute inset-0 bg-black hidden z-[30000]">
-      <div id="welcome-wallpaper" class="absolute inset-0 bg-cover bg-center opacity-40 blur-3xl scale-110"></div>
-      <div class="absolute inset-0 flex flex-col items-center justify-center text-white fade-in z-10 text-center px-6">
-        <div class="relative mb-8 group elastic-bounce hover:scale-105">
-           <img src="https://img.icons8.com/fluency/96/windows-11.png" class="w-24 h-24 drop-shadow-2xl relative z-10" draggable="false">
+    <!-- LOGIN SCREEN (Light Glass) -->
+    <div id="screen-login" class="absolute inset-0 bg-slate-100 hidden z-[40000] overflow-hidden">
+      <div id="login-wallpaper" class="absolute inset-0 bg-cover bg-center transition-all duration-1000 ease-in-out scale-105 z-[-1]"></div>
+      <div class="absolute inset-0 bg-white/20 transition-opacity duration-1000 z-[-1]" id="login-dimmer"></div>
+      
+      <div id="login-time-view" class="absolute top-[12%] left-1/2 -translate-x-1/2 flex flex-col items-center text-slate-900 drop-shadow-sm transition-all duration-500 z-10">
+        <h1 id="login-clock" class="text-[120px] leading-none font-bold tracking-tighter mb-0 text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.3)]"></h1>
+        <p id="login-date" class="text-2xl font-semibold text-white drop-shadow-[0_2px_5px_rgba(0,0,0,0.3)]"></p>
+      </div>
+
+      <div id="login-controls" class="absolute bottom-8 right-8 flex items-center space-x-3 transition-all duration-500 opacity-100 z-10">
+         <button class="w-10 h-10 rounded-lg bg-white/40 hover:bg-white/60 border border-white/40 flex items-center justify-center transition-colors backdrop-blur-xl shadow-sm elastic-bounce group">
+             <i id="login-wifi" class="ph-fill ph-wifi-high text-slate-800 text-lg group-hover:text-blue-600"></i>
+         </button>
+         <button class="w-10 h-10 rounded-lg bg-white/40 hover:bg-white/60 border border-white/40 flex items-center justify-center transition-colors backdrop-blur-xl shadow-sm elastic-bounce group">
+             <i id="login-access" class="ph-fill ph-wheelchair text-slate-800 text-lg group-hover:text-blue-600"></i>
+         </button>
+         <button class="w-10 h-10 rounded-lg bg-white/40 hover:bg-white/60 border border-white/40 flex items-center justify-center transition-colors backdrop-blur-xl shadow-sm elastic-bounce group">
+             <i id="login-power" class="ph-bold ph-power text-slate-800 text-lg group-hover:text-red-600"></i>
+         </button>
+      </div>
+
+      <div id="login-instruction-float" class="absolute bottom-16 left-1/2 -translate-x-1/2 text-white font-semibold text-sm animate-pulse transition-opacity duration-500 tracking-wide drop-shadow-md z-10">
+          Click or press any key to unlock
+      </div>
+
+      <div id="login-auth-view" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center transition-all duration-500 translate-y-24 opacity-0 pointer-events-none w-[400px] z-20">
+        
+        <div class="liquid-glass w-full p-8 pt-10 rounded-3xl flex flex-col items-center shadow-[0_20px_50px_rgba(0,0,0,0.15)] border-white/80">
+            <img id="login-avatar" src="" class="w-28 h-28 rounded-full shadow-md mb-5 object-cover border-[3px] border-white non-critical" draggable="false" onerror="window.handleImgError(this)" referrerpolicy="no-referrer">
+            <h2 class="text-slate-900 text-2xl font-bold mb-1 tracking-tight">Administrator</h2>
+            
+            <div id="hello-container" class="h-8 flex items-center justify-center mb-6">
+                <p id="hello-text" class="text-sm text-slate-600 font-semibold flex items-center fade-in">
+                    <i id="hello-icon" class="ph-bold ph-scan text-xl mr-2 animate-pulse icon-grad grad-blue"></i> 
+                    Looking for you...
+                </p>
+            </div>
+            
+            <div id="login-input-area" class="flex flex-col items-center w-full transition-opacity duration-300 opacity-0 pointer-events-none hidden">
+              <div class="relative w-full max-w-[260px]">
+                <input type="password" id="login-pwd" placeholder="PIN" class="w-full bg-white/60 border border-slate-300 text-slate-900 px-5 py-3.5 text-center focus:outline-none focus:border-blue-500 focus:bg-white/90 transition-all placeholder:text-slate-500 rounded-full shadow-inner font-bold tracking-widest text-lg">
+                <button id="login-submit" class="absolute right-2 top-1/2 -translate-y-1/2 p-2 hover:bg-slate-200 rounded-full transition-colors group">
+                  <i id="login-arrow" class="ph-bold ph-arrow-right text-lg icon-grad grad-slate group-hover:grad-blue transition-all"></i>
+                </button>
+              </div>
+              <p id="login-error" class="text-red-500 text-xs font-semibold mt-3 h-4 transition-opacity opacity-0">Incorrect PIN. Please try again.</p>
+              <button id="login-reset" onclick="window.resetPassword()" class="text-slate-600 hover:text-slate-900 text-xs font-semibold mt-3 cursor-pointer transition-colors hidden hover:underline">I forgot my PIN</button>
+              <button class="text-slate-600 hover:text-slate-900 text-xs font-semibold mt-3 cursor-pointer transition-colors hover:underline">Sign-in options</button>
+            </div>
+            
+            <div id="login-loading-area" class="flex flex-col items-center hidden mt-4 h-24 justify-center">
+              <div class="relative w-8 h-8 mb-4">
+                <div class="win-spinner-dot" style="animation-delay: 0ms"></div>
+                <div class="win-spinner-dot" style="animation-delay: 150ms"></div>
+                <div class="win-spinner-dot" style="animation-delay: 300ms"></div>
+                <div class="win-spinner-dot" style="animation-delay: 450ms"></div>
+                <div class="win-spinner-dot" style="animation-delay: 600ms"></div>
+              </div>
+              <p class="text-slate-800 text-sm font-semibold tracking-wide">Welcome</p>
+            </div>
         </div>
-        <h1 class="text-6xl font-semibold mb-3 tracking-tighter drop-shadow-lg">Windows 12</h1>
-        <p class="text-xl text-white/80 mb-12 font-medium tracking-wide">Hudson Valley • Core System Initiated</p>
-        <button onclick="setOsState('desktop')" class="px-10 py-3 bg-white/10 hover:bg-white/20 border border-white/30 text-white rounded-xl font-semibold text-sm backdrop-blur-md transition-all elastic-bounce shadow-[0_10px_30px_rgba(0,0,0,0.3)] hover:shadow-xl">Enter Workspace</button>
       </div>
     </div>
 
-    <!-- UPDATED BSOD SCREEN -->
+    <!-- BSOD SCREEN -->
     <div id="screen-bsod" class="absolute inset-0 bg-[#0078D7] text-white p-20 cursor-none flex flex-col justify-center hidden z-[60000] font-sans">
       <h1 class="text-9xl font-light mb-12">:(</h1>
       <h2 class="text-3xl font-normal leading-tight max-w-4xl mb-8">Your PC ran into a problem and needs to restart. We're just collecting some error info, and then we'll restart for you.</h2>
       <h3 class="text-2xl font-medium mb-12"><span id="bsod-progress">0</span>% complete</h3>
       
       <div class="flex items-start space-x-6 mt-8">
-        <img src="https://img.icons8.com/fluency-systems-filled/96/ffffff/qr-code.png" class="w-28 h-28 bg-white/20 p-2 rounded-lg shadow-sm" draggable="false">
+        <img id="bsod-qr" src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/QR_code_for_mobile_English_Wikipedia.svg/512px-QR_code_for_mobile_English_Wikipedia.svg.png" class="w-28 h-28 bg-white/20 p-2 rounded-lg shadow-sm non-critical" draggable="false" onerror="window.handleImgError(this)" referrerpolicy="no-referrer">
         <div class="flex flex-col justify-between h-28 py-1">
            <p class="text-sm text-white/90">For more information about this issue and possible fixes, visit<br>https://windows.com/stopcode</p>
            <p class="text-sm text-white/90 mt-2">If you call a support person, give them this info:<br>Stop code: <span id="bsod-error-code" class="font-bold">CRITICAL_PROCESS_DIED</span></p>
@@ -259,8 +372,8 @@
     </div>
     
     <!-- UPDATING SCREEN -->
-    <div id="screen-updating" class="absolute inset-0 bg-black text-white flex flex-col items-center justify-center cursor-none hidden z-[50000]">
-      <div class="absolute inset-0 bg-blue-900/20 blur-3xl mix-blend-screen"></div>
+    <div id="screen-updating" class="absolute inset-0 bg-slate-900 text-white flex flex-col items-center justify-center cursor-none hidden z-[50000]">
+      <div class="absolute inset-0 bg-blue-600/20 blur-3xl mix-blend-screen z-[-1]"></div>
       <div class="relative w-12 h-12 mb-10 z-10">
         <div class="win-spinner-dot" style="animation-delay: 0ms"></div>
         <div class="win-spinner-dot" style="animation-delay: 150ms"></div>
@@ -274,93 +387,103 @@
     </div>
 
     <!-- DESKTOP ENVIRONMENT -->
-    <div id="screen-desktop" class="absolute inset-0 overflow-hidden hidden z-[10000] bg-black">
+    <div id="screen-desktop" class="absolute inset-0 overflow-hidden hidden z-[10000] bg-transparent">
       
-      <!-- DESKTOP SMART DEPTH WRAPPER -->
-      <div id="desktop-content" class="absolute inset-0 transition-all duration-700 ease-in-out origin-center z-0">
-          <div id="desktop-bg" class="absolute inset-0 bg-cover bg-center"></div>
+      <div id="desktop-content" class="absolute inset-0 transition-all duration-700 ease-in-out origin-center z-[-1]">
+          <div id="desktop-bg" class="absolute inset-0 bg-cover bg-center z-[-2]"></div>
 
-          <div id="desktop-icons" class="absolute inset-0 p-4 flex flex-col flex-wrap gap-4 items-start content-start pt-12"></div>
+          <!-- Desktop Icons Area -->
+          <div id="desktop-icons" class="absolute inset-0 p-4 flex flex-col flex-wrap gap-4 items-start content-start pt-16 z-10"></div>
+          
+          <!-- In-Desktop Welcome Overlay -->
+          <div id="desktop-welcome" class="absolute inset-0 z-[10005] bg-white/10 backdrop-blur-xl flex flex-col items-center justify-center transition-all duration-700 fade-in hidden">
+            <div class="liquid-glass rounded-3xl p-12 flex flex-col items-center text-center transform transition-transform">
+               <i class="ph-fill ph-windows-logo text-[80px] icon-grad grad-blue drop-shadow-md mb-6"></i>
+               <h1 class="text-4xl font-extrabold mb-2 tracking-tight text-slate-900">Welcome to Windows 12</h1>
+               <p class="text-sm text-slate-600 mb-8 font-semibold tracking-wide">Hudson Valley • Core System Initiated</p>
+               <button onclick="dismissWelcome()" class="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold text-sm transition-all shadow-md hover:shadow-lg elastic-bounce">Enter Workspace</button>
+            </div>
+          </div>
       </div>
 
-      <!-- WINDOWS AREA -->
       <div id="windows-area" class="absolute inset-0 z-10 pointer-events-none"></div>
 
-      <!-- CONCEPT 3: Dynamic System Notch/Pill -->
-      <div id="dynamic-pill" class="absolute top-[-50px] left-1/2 -translate-x-1/2 liquid-glass px-5 py-2 rounded-full z-[10001] flex items-center space-x-3 transition-all duration-500 shadow-lg border border-white/50">
-          <img id="pill-icon" src="" class="w-4 h-4 opacity-80">
-          <span id="pill-text" class="text-xs font-bold text-slate-800">System Notification</span>
+      <!-- Dynamic System Notch/Pill -->
+      <div id="dynamic-pill" class="absolute left-1/2 transform -translate-x-1/2 liquid-glass px-5 py-2 pb-2.5 rounded-b-xl z-[10001] flex items-center space-x-2 transition-all duration-300 shadow-sm cursor-pointer hover:bg-white/80 group" style="top: -40px;">
+          <i id="pill-icon" class="ph-fill ph-bell text-base icon-grad grad-slate group-hover:grad-blue transition-all"></i>
+          <span id="pill-text" class="text-xs font-bold text-slate-800 drop-shadow-sm pr-1">System Notification</span>
       </div>
 
-      <!-- Overlays (Liquid Glass) -->
-      <div id="overlay-start" class="absolute bottom-20 left-1/2 -translate-x-1/2 w-[680px] h-[740px] rounded-[28px] liquid-glass flex flex-col p-8 z-[9998] hidden slide-up origin-bottom"></div>
-      <div id="overlay-action" class="absolute bottom-20 right-4 w-[380px] rounded-[28px] liquid-glass p-5 z-[9998] flex flex-col hidden slide-up origin-bottom-right"></div>
-      <div id="overlay-calendar" class="absolute bottom-20 right-4 w-[340px] rounded-[28px] liquid-glass p-5 z-[9998] flex flex-col hidden slide-up origin-bottom-right"></div>
-      <div id="overlay-widgets" class="absolute top-2 bottom-20 left-2 w-[420px] rounded-[28px] liquid-glass p-6 z-[9998] hidden slide-right overflow-y-auto custom-scrollbar"></div>
+      <!-- Overlays -->
+      <!-- Redesigned Authentic Centered Start Menu -->
+      <div id="overlay-start" class="absolute bottom-20 left-1/2 -translate-x-1/2 w-[680px] h-[640px] rounded-3xl liquid-glass flex flex-col p-8 z-[9998] hidden overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.2)]" style="transform-origin: bottom center;"></div>
       
-      <!-- Right-Click Context Menu -->
-      <div id="overlay-context" class="absolute w-64 py-2 rounded-xl liquid-glass shadow-[0_15px_50px_rgba(0,0,0,0.3)] z-[10000] hidden border border-white/60"></div>
+      <div id="overlay-action" class="absolute top-12 right-3 w-[380px] rounded-3xl liquid-glass p-5 z-[9998] flex flex-col hidden shadow-[0_15px_40px_rgba(0,0,0,0.15)]"></div>
+      <div id="overlay-calendar" class="absolute top-12 right-3 w-[340px] rounded-3xl liquid-glass p-5 z-[9998] flex flex-col hidden shadow-[0_15px_40px_rgba(0,0,0,0.15)]"></div>
+      <div id="overlay-widgets" class="absolute top-12 left-3 bottom-20 w-[380px] rounded-3xl liquid-glass p-6 z-[9998] hidden overflow-y-auto custom-scrollbar shadow-[0_15px_40px_rgba(0,0,0,0.15)]"></div>
       
-      <!-- Taskbar (Segmented Floating Concept - Blending User & MS) -->
-      <div class="absolute bottom-3 w-full flex justify-between px-4 z-[9999] pointer-events-none">
+      <div id="overlay-context" class="absolute w-64 py-2 rounded-xl liquid-glass shadow-[0_15px_50px_rgba(0,0,0,0.3)] z-[10000] hidden"></div>
+      
+      <!-- Windows 12 Concept: Floating Top Bar -->
+      <div class="absolute top-2 w-full flex justify-between px-3 z-[9999] pointer-events-none">
         
-        <!-- Left: Widgets Pill -->
-        <div id="taskbar-left" class="pointer-events-auto h-[52px] liquid-glass rounded-[18px] flex items-center px-2 transition-all duration-300 shadow-[0_8px_30px_rgba(0,0,0,0.15)] hover:bg-white/40">
-            <div id="tb-widgets-btn" class="flex items-center hover:bg-black/5 p-1.5 rounded-xl cursor-pointer transition-colors px-3 group elastic-bounce">
-              <img src="https://img.icons8.com/color/96/partly-cloudy-day--v1.png" class="w-6 h-6 drop-shadow-sm group-hover:scale-110 transition-transform" draggable="false">
+        <!-- Top Left: Weather & Widgets -->
+        <div id="taskbar-left" class="pointer-events-auto h-[44px] taskbar-segment rounded-xl flex items-center px-1 transition-all duration-300">
+            <div id="tb-widgets-btn" class="flex items-center hover:bg-white/30 p-1.5 rounded-lg cursor-pointer transition-colors px-3 group elastic-bounce">
+              <i id="tb-weather-icon" class="ph-fill ph-cloud-sun text-xl icon-grad grad-amber drop-shadow-sm group-hover:scale-110 transition-transform"></i>
               <div class="flex flex-col ml-2">
-                <span class="text-[11px] font-semibold leading-tight text-slate-800">72°F</span>
+                <span class="text-[11px] font-bold leading-tight text-slate-800">72°F</span>
               </div>
             </div>
         </div>
 
-        <!-- Center: Apps & Search Pill -->
-        <div id="taskbar-center" class="pointer-events-auto h-[52px] liquid-glass rounded-[20px] flex items-center px-2 transition-all duration-300 shadow-[0_8px_30px_rgba(0,0,0,0.15)]">
-            <button id="tb-start" class="w-10 h-10 flex items-center justify-center rounded-xl hover:bg-white/40 transition-colors elastic-bounce shadow-sm border border-transparent hover:border-white/50">
-              <img src="https://img.icons8.com/fluency/96/windows-11.png" class="w-6 h-6 drop-shadow-md" draggable="false">
-            </button>
-            
-            <!-- Floating Search -->
-            <div id="tb-search" class="flex items-center bg-white/50 rounded-xl px-3 h-9 border border-white/60 w-40 hover:bg-white/70 focus-within:w-56 focus-within:bg-white/90 transition-all shadow-sm cursor-text group mx-1.5">
-              <img src="https://img.icons8.com/fluency-systems-filled/96/0067c0/search.png" class="w-4 h-4 mr-2" draggable="false">
-              <span class="text-xs text-slate-700 font-medium select-none group-focus-within:hidden">Search</span>
-              <input type="text" id="tb-search-input" class="bg-transparent border-none outline-none text-xs text-slate-900 font-medium w-full hidden group-focus-within:block" placeholder="Type here to search" />
+        <!-- Top Right: System Tray & Action Center -->
+        <div id="taskbar-right" class="pointer-events-auto h-[44px] taskbar-segment rounded-xl flex items-center px-1 transition-all duration-300">
+            <div id="tb-action" class="flex items-center hover:bg-white/30 px-3 h-9 rounded-lg cursor-pointer transition-colors space-x-2.5 group text-slate-700">
+              <i id="tb-icon-wifi" class="ph-bold ph-wifi-high text-base icon-grad grad-slate-dark group-hover:grad-blue transition-all"></i>
+              <i id="tb-icon-vol" class="ph-bold ph-speaker-high text-base icon-grad grad-slate-dark group-hover:grad-blue transition-all"></i>
+              <i id="tb-icon-bat" class="ph-bold ph-battery-full text-base icon-grad grad-emerald"></i>
             </div>
-            
-            <div class="w-px h-6 bg-slate-400/50 mx-1 rounded-full"></div>
-            <div id="taskbar-apps" class="flex items-center space-x-1 relative h-full px-1"></div>
-        </div>
-
-        <!-- Right: Unified Tray + Time Pill -->
-        <div id="taskbar-right" class="pointer-events-auto h-[52px] liquid-glass rounded-[18px] flex items-center px-2 transition-all duration-300 shadow-[0_8px_30px_rgba(0,0,0,0.15)] hover:bg-white/40">
-            <!-- Unified Quick Settings Pill -->
-            <div id="tb-action" class="flex items-center hover:bg-black/10 px-3 h-10 rounded-xl cursor-pointer transition-colors space-x-2.5 elastic-bounce">
-              <img id="tb-icon-wifi" src="" class="w-[15px] h-[15px] opacity-80" draggable="false" onerror="window.handleImgError(this)">
-              <img id="tb-icon-vol" src="" class="w-[15px] h-[15px] opacity-80" draggable="false" onerror="window.handleImgError(this)">
-              <img id="tb-icon-bat" src="https://img.icons8.com/fluency-systems-filled/96/1a1b1c/full-battery.png" class="w-[15px] h-[15px] opacity-80" draggable="false">
-            </div>
-
-            <!-- Unified Clock Pill -->
-            <div id="tb-clock-area" class="flex flex-col items-end justify-center hover:bg-black/10 px-3 h-10 rounded-xl cursor-pointer transition-colors ml-1 elastic-bounce">
-              <span id="tb-time" class="text-xs font-bold text-slate-800 tracking-tight"></span>
+            <div id="tb-clock-area" class="flex flex-col items-end justify-center hover:bg-white/30 px-3 h-9 rounded-lg cursor-pointer transition-colors ml-0.5">
+              <span id="tb-time" class="text-xs font-bold text-slate-900 tracking-tight"></span>
               <span id="tb-date" class="text-[10px] text-slate-600 font-semibold"></span>
             </div>
         </div>
 
+      </div>
+
+      <!-- App Dock (Centered Bottom Taskbar) -->
+      <div class="absolute bottom-3 w-full flex justify-center px-4 z-[9999] pointer-events-none">
+        <div id="taskbar-center" class="pointer-events-auto h-[52px] taskbar-segment rounded-2xl flex items-center px-2 transition-all duration-300 shadow-[0_8px_30px_rgba(0,0,0,0.1)]">
+            <button id="tb-start" class="w-10 h-10 flex items-center justify-center rounded-xl hover:bg-white/50 transition-colors elastic-bounce group">
+              <i class="ph-fill ph-windows-logo text-[22px] icon-grad grad-blue transition-transform group-hover:scale-110 drop-shadow-sm"></i>
+            </button>
+            
+            <div id="tb-search" class="flex items-center glass-card rounded-xl px-3 h-9 w-44 hover:bg-white/80 focus-within:w-64 focus-within:bg-white/90 transition-all shadow-sm cursor-text group mx-2">
+              <i id="tb-search-icon" class="ph-bold ph-magnifying-glass mr-2 text-sm icon-grad grad-slate group-hover:grad-blue group-focus-within:grad-blue transition-all"></i>
+              <span class="text-xs text-slate-600 font-semibold select-none group-focus-within:hidden">Search everything</span>
+              <input type="text" id="tb-search-input" class="bg-transparent border-none outline-none text-xs text-slate-900 font-bold w-full hidden group-focus-within:block" placeholder="Type here to search" />
+            </div>
+            
+            <div class="w-px h-6 bg-slate-300/60 mx-1.5 rounded-full"></div>
+            <div id="taskbar-apps" class="flex items-center space-x-1.5 relative h-full px-1"></div>
+        </div>
       </div>
     </div>
   </div>
 
   <script>
     // --- System Constants & Storage ---
-    const STORAGE_KEY = 'win12_data_Core_1H02_HV';
-    const DEFAULT_WALLPAPER = "https://i.redd.it/some-new-wallpapers-i-created-for-my-new-windows-concept-v0-6m3zzxs250891.png?width=2560&format=png&auto=webp&s=312e6a64db5b1d1bab9157f29dbc7763c35bf2be";
+    const STORAGE_KEY = 'win12_data_Core_1H03_HV';
+    // Bright Daylight Liquid Abstract Wallpaper
+    const DEFAULT_WALLPAPER = "https://wallpapercave.com/wp/wp12706207.jpg";
     const SYSTEM_WALLPAPERS = [
       DEFAULT_WALLPAPER,
-      "https://images.unsplash.com/photo-1702539336564-b37d0f3276e7?fm=jpg&q=60&w=3000&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8d2luZG93cyUyMDExJTIwd2FsbHBhcGVyfGVufDB8fDB8fHww"
+      "https://images.unsplash.com/photo-1667171796636-4fd49a5e172c?q=80&w=1632&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      "https://images.unsplash.com/photo-1662560884429-ab43eb250446?q=80&w=1632&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      "https://wallpapercave.com/wp/wp15528786.jpg"
     ];
-    const USER_AVATAR = "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=200&auto=format&fit=crop";
-    let buildVersion = "1H02.hudson_valley";
+    let buildVersion = "1H03.daylight_valley";
 
     const FONTS = {
       'Segoe UI Variable': "'Segoe UI Variable', 'Segoe UI', system-ui, sans-serif",
@@ -369,34 +492,65 @@
       'Roboto': "'Roboto', system-ui, sans-serif"
     };
 
+    // PHOSPHOR ICONS for System UI
     const ICONS = {
-      start: "https://img.icons8.com/fluency/96/windows-11.png", search: "https://img.icons8.com/fluency-systems-filled/96/1a1b1c/search.png",
-      minimize: "https://img.icons8.com/fluency-systems-filled/96/1a1b1c/minus.png", maximize: "https://img.icons8.com/fluency-systems-filled/96/1a1b1c/maximize-button.png", 
-      restore: "https://img.icons8.com/fluency-systems-filled/96/1a1b1c/restore-window.png", close: "https://img.icons8.com/fluency-systems-filled/96/1a1b1c/multiply.png",
-      refresh: "https://img.icons8.com/fluency-systems-filled/96/1a1b1c/refresh.png",
-      wifi: "https://img.icons8.com/fluency-systems-filled/96/ffffff/wifi.png", wifiOff: "https://img.icons8.com/fluency-systems-filled/96/ffffff/no-network.png",
-      wifiTray: "https://img.icons8.com/fluency-systems-filled/96/1a1b1c/wifi.png", wifiOffTray: "https://img.icons8.com/fluency-systems-filled/96/1a1b1c/no-network.png",
-      bluetooth: "https://img.icons8.com/fluency-systems-filled/96/ffffff/bluetooth.png", airplane: "https://img.icons8.com/fluency-systems-filled/96/ffffff/airplane-take-off.png",
-      nightLight: "https://img.icons8.com/fluency-systems-filled/96/ffffff/do-not-disturb.png", moon: "https://img.icons8.com/fluency-systems-filled/96/ffffff/moon-symbol.png",
-      settings: "https://img.icons8.com/fluency/96/settings.png", volume: "https://img.icons8.com/fluency-systems-filled/96/1a1b1c/low-volume.png",
-      volumeOff: "https://img.icons8.com/fluency-systems-filled/96/1a1b1c/mute.png", 
-      volumeTray: "https://img.icons8.com/fluency-systems-filled/96/1a1b1c/low-volume.png", volumeOffTray: "https://img.icons8.com/fluency-systems-filled/96/1a1b1c/mute.png",
-      brightness: "https://img.icons8.com/fluency-systems-filled/96/1a1b1c/sun.png",
-      update: "https://img.icons8.com/fluency-systems-filled/96/1a1b1c/available-updates.png", check: "https://img.icons8.com/fluency-systems-filled/96/10b981/checkmark.png",
-      monitor: "https://img.icons8.com/fluency-systems-filled/96/1a1b1c/monitor.png", paintBrush: "https://img.icons8.com/fluency-systems-filled/96/1a1b1c/paint-brush.png",
-      cloud: "https://img.icons8.com/fluency-systems-filled/96/1a1b1c/cloud.png", globe: "https://img.icons8.com/fluency-systems-filled/96/1a1b1c/globe.png",
-      updateAppIcon: "https://img.icons8.com/fluency/96/update-left-rotation.png",
-      smartHome: "https://img.icons8.com/fluency-systems-filled/96/1a1b1c/home.png",
-      laptop: "https://img.icons8.com/fluency/96/laptop.png"
+      search: "ph-bold ph-magnifying-glass",
+      minimize: "ph-bold ph-minus", 
+      maximize: "ph-bold ph-square", 
+      restore: "ph-bold ph-copy", 
+      close: "ph-bold ph-x",
+      refresh: "ph-bold ph-arrows-clockwise",
+      wifi: "ph-bold ph-wifi-high", 
+      wifiOff: "ph-bold ph-wifi-slash",
+      wifiTray: "ph-bold ph-wifi-high", 
+      wifiOffTray: "ph-bold ph-wifi-slash", 
+      bluetooth: "ph-bold ph-bluetooth-connected", 
+      airplane: "ph-bold ph-airplane-tilt",
+      globe: "ph-bold ph-globe",
+      nightLight: "ph-bold ph-moon", 
+      settings: "ph-bold ph-gear", 
+      volume: "ph-bold ph-speaker-high",
+      volumeOff: "ph-bold ph-speaker-slash", 
+      volumeTray: "ph-bold ph-speaker-high", 
+      volumeOffTray: "ph-bold ph-speaker-slash",
+      brightness: "ph-bold ph-sun",
+      update: "ph-bold ph-arrows-clockwise", 
+      check: "ph-bold ph-check-circle",
+      monitor: "ph-bold ph-desktop", 
+      paintBrush: "ph-bold ph-palette",
+      cloud: "ph-bold ph-cloud", 
+      laptop: "ph-bold ph-laptop",
+      weather: "ph-fill ph-cloud-sun",
+      more: "ph-bold ph-dots-three",
+      stopSign: "ph-bold ph-prohibit",
+      battery: "ph-bold ph-battery-full",
+      power: "ph-bold ph-power",
+      faceId: "ph-bold ph-scan",
+      faceIdFail: "ph-bold ph-warning-circle",
+      forward: "ph-bold ph-arrow-right",
+      folder: "ph-fill ph-folder",
+      image: "ph-bold ph-image",
+      download: "ph-bold ph-download-simple",
+      fileText: "ph-bold ph-file-text"
     };
 
+    // REAL IMAGE URLS FOR APP LOGOS (High Quality PNGs)
+    const APP_IMAGES = {
+        settings: "https://raw.githubusercontent.com/blueedgetechno/win11React/master/public/img/icon/settings.png",
+        updater: "https://raw.githubusercontent.com/blueedgetechno/win11React/master/public/img/icon/defender.png",
+        files: "https://raw.githubusercontent.com/blueedgetechno/win11React/master/public/img/icon/explorer.png"
+    };
+
+    const USER_AVATAR = "https://cdn-icons-png.freepik.com/512/9131/9131478.png";
+
     const APPS = [
-      { id: 'settings', name: 'Settings', icon: ICONS.settings, size: { w: 950, h: 680 } },
-      { id: 'updater', name: 'Update Center', icon: ICONS.updateAppIcon, size: { w: 850, h: 600 } }
+      { id: 'settings', name: 'Settings', icon: APP_IMAGES.settings, size: { w: 900, h: 650 } },
+      { id: 'files', name: 'File Explorer', icon: APP_IMAGES.files, size: { w: 880, h: 620 } },
+      { id: 'updater', name: 'Update Center', icon: APP_IMAGES.updater, size: { w: 850, h: 600 } }
     ];
 
     let osData = {
-        password: '', wallpaper: DEFAULT_WALLPAPER, fontStyle: 'Segoe UI Variable', useLiquidGlass: true, currentNetwork: 'Vision_Fiber_5G',
+        password: '', wallpaper: DEFAULT_WALLPAPER, fontStyle: 'Segoe UI Variable', useLiquidGlass: true, currentNetwork: 'Vision_Fiber_5G', taskbarColor: '#ffffff',
         hwState: { wifi: true, wifiPausedUntil: null, bluetooth: false, airplane: false, nightLight: false, focus: false, vol: 60, brightness: 100 }
     };
 
@@ -407,17 +561,12 @@
     let appStates = {}; let selectedDesktopIcon = null; let pillTimeout = null;
 
     const $ = (s) => document.querySelector(s);
-    const screens = { boot: $('#screen-boot'), login: $('#screen-login'), welcome: $('#screen-welcome'), bsod: $('#screen-bsod'), update: $('#screen-updating'), desktop: $('#screen-desktop') };
-
-    function imgTag(src, cls="", critical=true) {
-      if (!src || src === "undefined" || src.includes('undefined')) return "";
-      return `<img src="${src}" class="${cls}${critical ? '' : ' non-critical'}" draggable="false" onerror="window.handleImgError(this)">`;
-    }
+    const screens = { boot: $('#screen-boot'), login: $('#screen-login'), bsod: $('#screen-bsod'), update: $('#screen-updating'), desktop: $('#screen-desktop') };
 
     function setOsState(state) {
       osState = state; Object.values(screens).forEach(el => { if (el) el.classList.add('hidden'); });
       if(state !== 'off' && screens[state]) screens[state].classList.remove('hidden');
-      if(state === 'boot') setTimeout(() => initLoginSequence(), 2000);
+      if(state === 'boot') setTimeout(() => initLoginSequence(), 2500);
       if(state === 'desktop') { 
         if ($('#desktop-bg')) $('#desktop-bg').style.backgroundImage = `url(${osData.wallpaper})`; 
         applySystemPreferences();
@@ -425,45 +574,91 @@
       }
     }
 
+    function applyTaskbarColor() {
+        const color = osData.taskbarColor || '#ffffff';
+        let rgba = 'rgba(255, 255, 255, 0.2)'; 
+        if (color.startsWith('#')) {
+            const r = parseInt(color.slice(1, 3), 16) || 255;
+            const g = parseInt(color.slice(3, 5), 16) || 255;
+            const b = parseInt(color.slice(5, 7), 16) || 255;
+            rgba = `rgba(${r}, ${g}, ${b}, 0.3)`;
+        }
+        document.documentElement.style.setProperty('--tb-color-tint', rgba);
+    }
+
     function applySystemPreferences() {
         const font = FONTS[osData.fontStyle] || FONTS['Segoe UI Variable'];
         document.documentElement.style.setProperty('--os-font', font);
+        
         if(osData.useLiquidGlass) {
-            document.documentElement.style.setProperty('--liquid-blur', '45px');
+            document.documentElement.style.setProperty('--liquid-blur', '60px');
             document.documentElement.style.setProperty('--liquid-sat', '200%');
         } else {
             document.documentElement.style.setProperty('--liquid-blur', '20px');
             document.documentElement.style.setProperty('--liquid-sat', '120%');
         }
+        
+        if(osData.useNuiar) {
+            document.body.classList.add('nuiar-active');
+        } else {
+            document.body.classList.remove('nuiar-active');
+        }
+        
+        applyTaskbarColor();
     }
 
-    // Dynamic Pill Concept
-    function showDynamicPill(icon, text) {
+    function showDynamicPill(iconCls, text) {
         const pill = $('#dynamic-pill');
         if(!pill) return;
-        $('#pill-icon').src = icon;
+        
+        pill.style.top = '8px';
+        $('#pill-icon').className = `${iconCls} text-lg icon-grad grad-blue`;
         $('#pill-text').innerText = text;
         
-        pill.style.top = '12px';
+        pill.classList.add('pill-active');
         clearTimeout(pillTimeout);
-        pillTimeout = setTimeout(() => { pill.style.top = '-50px'; }, 3000);
+        pillTimeout = setTimeout(() => { pill.style.top = '-40px'; pill.classList.remove('pill-active'); }, 3000);
     }
 
+    function injectStaticIcons() {}
+
+    // --- REFINED LOGIN LOGIC ---
     function initLoginSequence() {
         setOsState('login');
-        if ($('#login-wallpaper')) { $('#login-wallpaper').style.backgroundImage = `url(${osData.wallpaper})`; $('#login-wallpaper').classList.remove('blur-2xl', 'scale-110', 'brightness-50'); }
-        if ($('#login-avatar')) $('#login-avatar').src = USER_AVATAR;
+        
+        if ($('#login-wallpaper')) { 
+            $('#login-wallpaper').style.backgroundImage = `url(${osData.wallpaper})`; 
+            $('#login-wallpaper').classList.remove('blur-2xl', 'scale-110', 'brightness-50'); 
+        }
+        if ($('#login-dimmer')) $('#login-dimmer').classList.remove('bg-black/40');
+        if ($('#login-controls')) $('#login-controls').classList.remove('opacity-0', 'pointer-events-none');
+        if ($('#login-instruction-float')) $('#login-instruction-float').classList.remove('opacity-0');
+        
         applySystemPreferences();
         
-        if ($('#login-time-view')) $('#login-time-view').classList.remove('opacity-0', '-translate-y-20', 'pointer-events-none');
-        if ($('#login-auth-view')) $('#login-auth-view').classList.add('opacity-0', 'pointer-events-none', 'translate-y-20');
+        if ($('#login-time-view')) {
+            $('#login-time-view').classList.remove('opacity-0', '-translate-y-40', 'pointer-events-none');
+            $('#login-time-view').style.transform = "translateX(-50%) scale(1)";
+        }
+        
+        const authView = $('#login-auth-view');
+        if (authView) {
+            authView.classList.add('opacity-0', 'pointer-events-none');
+            authView.style.transform = "translate(-50%, -40%) scale(0.95)";
+        }
+
+        if ($('#login-avatar')) $('#login-avatar').src = USER_AVATAR;
+
+        if ($('#hello-container')) $('#hello-container').classList.remove('hidden');
+        if ($('#login-input-area')) {
+            $('#login-input-area').classList.add('hidden', 'opacity-0');
+            $('#login-input-area').classList.remove('pointer-events-none');
+        }
 
         if (!osData.password) { 
-            if ($('#login-instruction')) $('#login-instruction').innerText = "Create a PIN"; 
-            if ($('#login-pwd')) $('#login-pwd').placeholder = "New PIN"; 
+            if ($('#login-pwd')) $('#login-pwd').placeholder = "Create New PIN"; 
             if ($('#login-reset')) $('#login-reset').classList.add('hidden');
         } else { 
-            if ($('#login-instruction')) $('#login-instruction').innerText = "Enter your PIN"; 
             if ($('#login-pwd')) $('#login-pwd').placeholder = "PIN"; 
             if ($('#login-reset')) $('#login-reset').classList.remove('hidden');
         }
@@ -471,15 +666,39 @@
 
     window.unlockScreen = function() {
         const timeView = $('#login-time-view');
+        const authView = $('#login-auth-view');
+        
         if (timeView && !timeView.classList.contains('opacity-0')) {
-            timeView.classList.add('opacity-0', '-translate-y-20', 'pointer-events-none');
-            if ($('#login-auth-view')) $('#login-auth-view').classList.remove('opacity-0', 'pointer-events-none', 'translate-y-20');
+            timeView.classList.add('opacity-0', 'pointer-events-none');
+            timeView.style.transform = "translateX(-50%) scale(0.9) translateY(-40px)";
+            
+            if ($('#login-controls')) $('#login-controls').classList.add('opacity-0', 'pointer-events-none');
+            if ($('#login-instruction-float')) $('#login-instruction-float').classList.add('opacity-0');
             if ($('#login-wallpaper')) $('#login-wallpaper').classList.add('blur-2xl', 'scale-110', 'brightness-50');
-            setTimeout(() => { if ($('#login-pwd')) $('#login-pwd').focus(); }, 400);
+            if ($('#login-dimmer')) $('#login-dimmer').classList.add('bg-black/40');
+            
+            if (authView) {
+                authView.classList.remove('opacity-0', 'pointer-events-none');
+                authView.style.transform = "translate(-50%, -50%) scale(1)";
+            }
+
+            setTimeout(() => {
+                if ($('#hello-text')) $('#hello-text').innerHTML = `<i class="${ICONS.faceIdFail} text-xl mr-2 icon-grad grad-slate-dark"></i> Couldn't recognize you.`;
+                setTimeout(() => {
+                    if ($('#hello-container')) $('#hello-container').classList.add('hidden');
+                    if ($('#login-input-area')) {
+                        $('#login-input-area').classList.remove('hidden');
+                        setTimeout(() => {
+                            $('#login-input-area').classList.remove('opacity-0');
+                            if ($('#login-pwd')) $('#login-pwd').focus();
+                        }, 50);
+                    }
+                }, 1000);
+            }, 1200);
         }
     };
 
-    if ($('#screen-login')) { $('#screen-login').onclick = (e) => { if(e.target.tagName==='INPUT' || e.target.tagName==='BUTTON' || e.target.closest('button')) return; window.unlockScreen(); }; }
+    if ($('#screen-login')) { $('#screen-login').onclick = (e) => { if(e.target.tagName==='INPUT' || e.target.tagName==='BUTTON' || e.target.closest('button') || e.target.closest('#login-auth-view')) return; window.unlockScreen(); }; }
     document.addEventListener('keydown', (e) => { if (osState === 'login') { window.unlockScreen(); } });
 
     function processLogin() {
@@ -489,8 +708,11 @@
             if (input === osData.password) { loginSuccess(); } 
             else { 
                 if ($('#login-error')) $('#login-error').classList.remove('opacity-0'); 
-                if ($('#login-pwd')) $('#login-pwd').value = ''; 
-                setTimeout(() => { if ($('#login-error')) $('#login-error').classList.add('opacity-0') }, 3000); 
+                if ($('#login-pwd')) { $('#login-pwd').value = ''; $('#login-pwd').classList.add('border-red-500'); }
+                setTimeout(() => { 
+                    if ($('#login-error')) $('#login-error').classList.add('opacity-0');
+                    if ($('#login-pwd')) $('#login-pwd').classList.remove('border-red-500');
+                }, 3000); 
             }
         }
     }
@@ -504,17 +726,36 @@
 
     function loginSuccess() { 
       if ($('#login-input-area')) $('#login-input-area').classList.add('hidden'); 
+      if ($('#hello-container')) $('#hello-container').classList.add('hidden'); 
       if ($('#login-loading-area')) $('#login-loading-area').classList.remove('hidden'); 
-      setTimeout(() => setOsState('welcome'), 1000); 
+      setTimeout(() => {
+          setOsState('desktop'); 
+          const welcomeEl = $('#desktop-welcome');
+          if(welcomeEl) {
+              welcomeEl.classList.remove('hidden');
+              welcomeEl.style.opacity = 1;
+              welcomeEl.style.pointerEvents = 'auto';
+              welcomeEl.classList.add('fade-in');
+          }
+      }, 1500); 
     }
+
+    window.dismissWelcome = function() {
+        const el = $('#desktop-welcome');
+        if(!el) return;
+        el.style.opacity = 0;
+        el.style.pointerEvents = 'none';
+        setTimeout(() => el.classList.add('hidden'), 700);
+    };
 
     function renderDesktopIcons() {
       if (!$('#desktop-icons')) return;
+      
       $('#desktop-icons').innerHTML = APPS.map(app => {
         const isSel = selectedDesktopIcon === app.id;
-        return `<div onclick="event.stopPropagation(); window.selectedDesktopIcon='${app.id}'; window.renderDesktopIcons();" ondblclick="openApp('${app.id}')" class="flex flex-col items-center justify-center w-20 p-2 rounded-xl transition-colors cursor-pointer border border-transparent ${isSel ? 'bg-white/20 border-white/30 backdrop-blur-md' : 'hover:bg-white/10'}">
-          ${imgTag(app.icon, "w-10 h-10 drop-shadow-md")}
-          <span class="text-white text-xs mt-1 text-center font-medium drop-shadow-md px-1 rounded line-clamp-2 leading-tight" style="text-shadow: 0 1px 3px rgba(0,0,0,0.8);">${app.name}</span>
+        return `<div onclick="event.stopPropagation(); window.selectedDesktopIcon='${app.id}'; window.renderDesktopIcons();" ondblclick="openApp('${app.id}')" class="flex flex-col items-center justify-center w-24 p-2 rounded-xl transition-colors cursor-pointer border border-transparent group ${isSel ? 'bg-white/30 border-white/40 backdrop-blur-md shadow-sm' : 'hover:bg-white/20 hover:border-white/20'}">
+          <img src="${app.icon}" class="w-12 h-12 drop-shadow-md mb-2 transition-transform group-hover:scale-105 non-critical elastic-hover" draggable="false" onerror="window.handleImgError(this)" referrerpolicy="no-referrer">
+          <span class="text-white text-[11px] text-center font-semibold drop-shadow-md px-1 rounded line-clamp-2 leading-tight" style="text-shadow: 0 1px 4px rgba(0,0,0,0.8);">${app.name}</span>
         </div>`}).join('');
     }
 
@@ -534,67 +775,39 @@
 
       $('#overlay-widgets').innerHTML = `
         <div class="flex justify-between items-center mb-6 px-2">
-           <h2 class="text-3xl font-bold text-slate-900 tracking-tight">${greeting}</h2>
-           <button class="w-8 h-8 rounded-full hover:bg-black/5 flex items-center justify-center transition-colors"><img src="${ICONS.settings}" class="w-4 h-4 opacity-70"></button>
+           <h2 class="text-2xl font-bold text-slate-900 tracking-tight">${greeting}</h2>
+           <button class="w-8 h-8 rounded-full hover:bg-black/5 flex items-center justify-center transition-colors group">
+              <i class="ph-bold ph-gear text-lg icon-grad grad-slate group-hover:grad-blue transition-all"></i>
+           </button>
         </div>
-        <div class="space-y-5">
-            <!-- Refined Weather Widget -->
-            <div class="bg-gradient-to-br from-blue-400/90 to-indigo-500/90 backdrop-blur-xl border border-white/40 p-6 rounded-[24px] shadow-lg relative overflow-hidden group holographic-hover cursor-default text-white">
+        <div class="space-y-4">
+            <div class="glass-card bg-gradient-to-br from-blue-400/90 to-cyan-400/90 border border-white/60 p-5 rounded-2xl shadow-md relative overflow-hidden group hover:shadow-lg transition-all cursor-default text-white">
                 <div class="absolute -right-10 -top-10 opacity-40 blur-2xl w-40 h-40 bg-yellow-300 rounded-full pointer-events-none transition-transform duration-1000 group-hover:scale-110"></div>
                 <div class="relative z-10">
-                    <div class="flex justify-between items-start mb-4">
-                        <div class="flex items-center space-x-2"><img src="https://img.icons8.com/color/96/partly-cloudy-day--v1.png" class="w-8 h-8 drop-shadow-md"><span class="text-sm font-bold tracking-wide uppercase opacity-90">Weather</span></div>
-                        <button class="opacity-0 group-hover:opacity-100 transition-opacity"><img src="https://img.icons8.com/fluency-systems-filled/96/ffffff/more.png" class="w-5 h-5 opacity-70 hover:opacity-100"></button>
+                    <div class="flex justify-between items-start mb-3">
+                        <div class="flex items-center space-x-2">
+                            <i class="ph-fill ph-cloud-sun text-2xl icon-grad grad-amber drop-shadow-sm"></i>
+                            <span class="text-xs font-bold tracking-wide uppercase opacity-90">Weather</span>
+                        </div>
+                        <button class="opacity-0 group-hover:opacity-100 transition-opacity">
+                            <i class="ph-bold ph-dots-three text-lg icon-grad grad-white"></i>
+                        </button>
                     </div>
                     <div class="flex items-end justify-between mt-2">
                         <div>
-                            <span class="text-6xl font-light tracking-tighter drop-shadow-md">72°</span>
-                            <h3 class="text-lg font-semibold mt-1 drop-shadow-sm">Louisville, KY</h3>
+                            <span class="text-5xl font-bold tracking-tighter drop-shadow-md">72°</span>
+                            <h3 class="text-base font-semibold mt-1 drop-shadow-sm">Louisville, KY</h3>
                         </div>
-                        <div class="text-sm font-medium text-right opacity-90 pb-1">
+                        <div class="text-xs font-bold text-right opacity-90 pb-1">
                             <p>Partly Cloudy</p>
-                            <p class="text-xs opacity-80 mt-0.5">H: 78° L: 61°</p>
+                            <p class="text-[10px] opacity-80 mt-0.5">H: 78° L: 61°</p>
                         </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Smart Connected Home Widget Concept -->
-            <div class="bg-white/60 border border-white/60 p-6 rounded-[24px] shadow-sm relative overflow-hidden group holographic-hover cursor-default">
-                <div class="relative z-10">
-                    <div class="flex justify-between items-start mb-5">
-                        <div class="flex items-center space-x-2"><img src="${ICONS.smartHome}" class="w-5 h-5 opacity-80"><span class="text-sm font-bold text-slate-800 tracking-wide uppercase">Smart Home</span></div>
-                    </div>
-                    <div class="grid grid-cols-2 gap-3">
-                        <div class="bg-blue-50 border border-blue-100 rounded-xl p-3 flex flex-col cursor-pointer hover:bg-blue-100 transition-colors elastic-bounce">
-                           <div class="flex justify-between mb-2"><img src="https://img.icons8.com/fluency-systems-filled/96/0067c0/light.png" class="w-4 h-4"><span class="w-2 h-2 rounded-full bg-blue-500"></span></div>
-                           <span class="font-bold text-xs text-slate-900">Studio Lights</span>
-                           <span class="text-[10px] font-medium text-slate-500">On • 80%</span>
-                        </div>
-                        <div class="bg-white/50 border border-slate-200 rounded-xl p-3 flex flex-col cursor-pointer hover:bg-slate-100 transition-colors elastic-bounce">
-                           <div class="flex justify-between mb-2"><img src="https://img.icons8.com/fluency-systems-filled/96/1a1b1c/thermostat.png" class="w-4 h-4 opacity-70"><span class="w-2 h-2 rounded-full bg-slate-300"></span></div>
-                           <span class="font-bold text-xs text-slate-900">Thermostat</span>
-                           <span class="text-[10px] font-medium text-slate-500">71° • Eco</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Refined Watchlist Widget -->
-            <div class="bg-white/60 border border-white/60 p-6 rounded-[24px] shadow-sm relative overflow-hidden group holographic-hover cursor-default">
-                <div class="relative z-10">
-                    <div class="flex justify-between items-start mb-5">
-                        <div class="flex items-center space-x-2"><img src="https://img.icons8.com/fluency/96/bullish.png" class="w-6 h-6 drop-shadow-sm"><span class="text-sm font-bold text-slate-800 tracking-wide uppercase">Markets</span></div>
-                    </div>
-                    <div class="space-y-4">
-                        <div class="flex justify-between items-center group/item"><div class="flex flex-col"><span class="font-bold text-slate-900">MSFT</span><span class="text-[10px] text-slate-500 font-medium">Microsoft Corp.</span></div><div class="flex flex-col items-end"><span class="text-emerald-600 font-bold bg-emerald-50 border border-emerald-100 px-2 py-0.5 rounded-md">+2.4%</span><span class="text-xs text-slate-600 font-semibold mt-1">420.55</span></div></div>
-                        <div class="flex justify-between items-center group/item"><div class="flex flex-col"><span class="font-bold text-slate-900">AAPL</span><span class="text-[10px] text-slate-500 font-medium">Apple Inc.</span></div><div class="flex flex-col items-end"><span class="text-emerald-600 font-bold bg-emerald-50 border border-emerald-100 px-2 py-0.5 rounded-md">+1.1%</span><span class="text-xs text-slate-600 font-semibold mt-1">189.30</span></div></div>
                     </div>
                 </div>
             </div>
             
-            <div class="mt-6 px-2 text-center">
-                <button class="text-xs font-bold text-slate-600 hover:text-slate-900 bg-white/40 hover:bg-white/80 border border-white/50 px-6 py-2.5 rounded-full transition-all shadow-sm w-full backdrop-blur-md elastic-bounce">
+            <div class="mt-4 px-2 text-center">
+                <button class="text-xs font-bold text-slate-700 hover:text-blue-700 glass-card bg-white/20 hover:bg-white/40 px-6 py-2.5 rounded-lg transition-all shadow-sm w-full elastic-bounce">
                     Manage Widgets
                 </button>
             </div>
@@ -606,17 +819,17 @@
       if (!$('#overlay-calendar')) return;
       $('#overlay-calendar').innerHTML = `
         <div class="px-2">
-            <h2 class="text-3xl font-semibold tracking-tight text-slate-900 mb-1">${d.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</h2>
-            <p class="text-xs text-slate-600 font-medium mb-6">${d.toLocaleDateString(undefined, {weekday:'long', month:'long', day:'numeric'})}</p>
+            <h2 class="text-3xl font-bold tracking-tight text-slate-900 mb-1">${d.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</h2>
+            <p class="text-xs text-slate-600 font-semibold mb-6">${d.toLocaleDateString(undefined, {weekday:'long', month:'long', day:'numeric'})}</p>
         </div>
-        <div class="bg-white/50 rounded-[20px] p-4 border border-white/60 shadow-sm">
-            <div class="grid grid-cols-7 gap-1 text-center mb-3 text-slate-800 font-semibold text-[11px]">${['Su','Mo','Tu','We','Th','Fr','Sa'].map(d=>`<span>${d}</span>`).join('')}</div>
+        <div class="glass-card bg-white/20 rounded-2xl p-4 shadow-sm">
+            <div class="grid grid-cols-7 gap-1 text-center mb-3 text-slate-800 font-bold text-[11px]">${['Su','Mo','Tu','We','Th','Fr','Sa'].map(d=>`<span>${d}</span>`).join('')}</div>
             <div class="grid grid-cols-7 gap-1 text-center">
               ${Array.from({length:35}, (_,i)=>i-2).map(day => {
                 const isToday = day === d.getDate(); 
-                const cls = (day<1||day>31) ? "text-slate-400" : "text-slate-800 font-medium hover:bg-black/5 cursor-pointer"; 
-                const todayCls = (isToday&&day>0&&day<=31) ? "bg-blue-600 text-white hover:bg-blue-700 shadow-sm font-semibold elastic-bounce" : "";
-                return `<div class="w-8 h-8 flex items-center justify-center rounded-full text-xs mx-auto transition-colors ${cls} ${todayCls}">${day>0&&day<=31?day:(day<=0?30+day:day-31)}</div>`;
+                const cls = (day<1||day>31) ? "text-slate-400" : "text-slate-800 font-semibold hover:bg-white/40 cursor-pointer"; 
+                const todayCls = (isToday&&day>0&&day<=31) ? "bg-blue-600 text-white hover:bg-blue-700 shadow-md font-bold elastic-bounce" : "";
+                return `<div class="w-8 h-8 flex items-center justify-center rounded-lg text-xs mx-auto transition-colors ${cls} ${todayCls}">${day>0&&day<=31?day:(day<=0?30+day:day-31)}</div>`;
               }).join('')}
             </div>
         </div>
@@ -629,8 +842,7 @@
         if (menu) {
             menu.classList.toggle('hidden');
             if(!menu.classList.contains('hidden')) {
-                menu.classList.add('slide-down-quick');
-                setTimeout(() => { if(document.getElementById('cloud-sync-st')) document.getElementById('cloud-sync-st').innerText = "Up to date"; }, 1000);
+                menu.classList.add('fluent-slide-down');
             }
         }
     };
@@ -641,85 +853,97 @@
       const filtered = APPS.filter(a => a.name.toLowerCase().includes(searchVal.toLowerCase()));
       
       $('#overlay-start').innerHTML = `
-        <div class="flex flex-col h-full relative">
-          <!-- Refined Search Area -->
-          <div class="relative mb-6 mx-2">
-            <input type="text" id="start-search-input" value="${searchVal}" placeholder="Search for apps, files, and settings" class="w-full bg-white/70 border border-white/60 rounded-[20px] py-4 pl-12 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50 font-medium shadow-md transition-all text-slate-900 placeholder:text-slate-500 backdrop-blur-xl">
-            <img src="${ICONS.search}" class="w-5 h-5 absolute left-4 top-4 opacity-60">
-          </div>
-
-          <div class="flex-grow px-2">
-              <div class="flex justify-between items-center mb-4 px-2">
-                <h3 class="text-[13px] font-bold text-slate-900 tracking-tight">Pinned</h3>
-                <button class="text-xs font-semibold text-slate-600 hover:bg-white/60 px-3 py-1.5 rounded-lg transition-colors border border-transparent hover:border-white/50 shadow-sm backdrop-blur-sm elastic-bounce">All apps ></button>
-              </div>
-              <div class="grid grid-cols-6 gap-x-2 gap-y-6 px-2 mb-8">
-                ${filtered.map(a => `
-                    <div onclick="openApp('${a.id}')" class="flex flex-col items-center cursor-pointer hover:bg-white/50 p-3 rounded-[16px] transition-all holographic-hover border border-transparent hover:border-white/40 elastic-bounce">
-                        <img src="${a.icon}" class="w-9 h-9 mb-3 drop-shadow-md">
-                        <span class="text-[11px] font-semibold text-slate-800 text-center leading-tight tracking-tight">${a.name}</span>
-                    </div>`).join('')}
-              </div>
-
-              <div class="flex justify-between items-center mb-4 px-2">
-                <h3 class="text-[13px] font-bold text-slate-900 tracking-tight">Recommended</h3>
-                <button class="text-xs font-semibold text-slate-600 hover:bg-white/60 px-3 py-1.5 rounded-lg transition-colors border border-transparent hover:border-white/50 shadow-sm backdrop-blur-sm elastic-bounce">More ></button>
-              </div>
-              
-              <!-- Refined List-Style Recommended Items -->
-              <div class="space-y-2">
-                 <div class="flex items-center justify-between p-3 bg-white/40 border border-white/50 rounded-[16px] shadow-sm hover:bg-white/70 cursor-pointer transition-all group holographic-hover" onclick="openApp('settings')">
-                     <div class="flex items-center gap-4">
-                         <div class="w-10 h-10 rounded-[12px] bg-slate-100/80 border border-slate-200/50 flex items-center justify-center group-hover:scale-105 transition-transform shadow-sm"><img src="${ICONS.settings}" class="w-5 h-5 drop-shadow-sm"></div>
-                         <div class="flex flex-col"><span class="text-[13px] font-bold text-slate-900 tracking-tight">Personalize your PC</span><span class="text-[11px] font-medium text-slate-500">Settings • Recently updated</span></div>
-                     </div>
-                     <span class="text-[10px] text-slate-400 font-semibold mr-2 opacity-0 group-hover:opacity-100 transition-opacity">Open</span>
-                 </div>
-                 <div class="flex items-center justify-between p-3 bg-white/40 border border-white/50 rounded-[16px] shadow-sm hover:bg-white/70 cursor-pointer transition-all group holographic-hover" onclick="openApp('updater')">
-                     <div class="flex items-center gap-4">
-                         <div class="w-10 h-10 rounded-[12px] bg-blue-50 border border-blue-100/50 flex items-center justify-center group-hover:scale-105 transition-transform shadow-sm"><img src="${ICONS.updateAppIcon}" class="w-5 h-5 drop-shadow-sm"></div>
-                         <div class="flex flex-col"><span class="text-[13px] font-bold text-slate-900 tracking-tight">Update Center</span><span class="text-[11px] font-medium text-slate-500">App • Check for builds</span></div>
-                     </div>
-                     <span class="text-[10px] text-slate-400 font-semibold mr-2 opacity-0 group-hover:opacity-100 transition-opacity">Open</span>
-                 </div>
-              </div>
-          </div>
-
-          <div class="mt-auto pt-4 flex justify-between items-center border-t border-slate-300/40 relative">
-            <div class="flex items-center space-x-3 hover:bg-white/40 p-2 pr-4 rounded-[12px] cursor-pointer transition-colors elastic-bounce" onclick="window.toggleProfileMenu(event)">
-               <img src="${USER_AVATAR}" class="w-8 h-8 rounded-full border border-white shadow-sm object-cover non-critical">
-               <div class="flex flex-col">
-                 <span class="font-semibold text-slate-900 text-[12px] leading-tight">Administrator</span>
-                 <span class="font-medium text-blue-700 text-[10px] flex items-center"><span class="w-1.5 h-1.5 bg-green-500 rounded-full mr-1.5"></span>Hybrid Active</span>
-               </div>
-            </div>
+        <div class="flex flex-col h-full w-full">
             
-            <div id="start-profile-menu" class="absolute bottom-16 left-0 w-64 liquid-glass border border-white/60 rounded-[20px] shadow-[0_15px_50px_rgba(0,0,0,0.2)] hidden flex-col py-2 z-50 overflow-hidden">
-               <div class="px-5 py-4 border-b border-white/40 bg-white/30">
-                   <p class="text-sm font-bold text-slate-900">Administrator</p>
-                   <p class="text-[11px] text-slate-600 font-medium">admin@local.pc</p>
-               </div>
-               <div class="px-5 py-3 space-y-3 border-b border-white/40">
-                   <div class="flex items-center justify-between">
-                       <span class="text-xs font-semibold text-slate-700 flex items-center">${imgTag(ICONS.laptop, "w-3.5 h-3.5 mr-2 opacity-70")}Local Compute</span>
-                       <span class="text-[10px] font-bold text-emerald-600 bg-emerald-100 px-1.5 py-0.5 rounded">Active</span>
-                   </div>
-                   <div class="flex items-center justify-between">
-                       <span class="text-xs font-semibold text-slate-700 flex items-center">${imgTag(ICONS.cloud, "w-3.5 h-3.5 mr-2 opacity-70")}Cloud PC (Win365)</span>
-                       <span class="text-[10px] font-bold text-slate-500 bg-slate-100 border border-slate-200 px-1.5 py-0.5 rounded">Standby</span>
-                   </div>
-               </div>
-               <div class="py-1">
-                 <button class="text-left px-5 py-2 hover:bg-white/50 text-xs font-semibold text-slate-800 transition-colors w-full flex items-center" onclick="openApp('settings'); window.toggleProfileMenu(event);"><img src="${ICONS.settings}" class="w-4 h-4 mr-3 opacity-70">Account Settings</button>
-                 <button class="text-left px-5 py-2 hover:bg-white/50 text-xs font-semibold text-slate-800 transition-colors w-full flex items-center" onclick="initLoginSequence()"><img src="https://img.icons8.com/fluency-systems-filled/96/1a1b1c/lock.png" class="w-4 h-4 mr-3 opacity-70">Lock</button>
-                 <button class="text-left px-5 py-2 hover:bg-red-50 text-xs font-semibold text-red-600 transition-colors w-full flex items-center" onclick="setOsState('boot')"><img src="https://img.icons8.com/fluency-systems-filled/96/dc2626/shutdown.png" class="w-4 h-4 mr-3">Sign out</button>
-               </div>
+            <!-- Search Bar -->
+            <div class="relative w-full mb-6">
+                <i class="${ICONS.search} absolute left-4 top-3.5 text-slate-400 text-lg group-focus-within:text-blue-500 transition-colors"></i>
+                <input type="text" id="start-search-input" value="${searchVal}" placeholder="Type here to search" class="w-full glass-card bg-white/20 hover:bg-white/40 border border-white/60 rounded-full py-3.5 pl-12 pr-4 text-[13px] focus:outline-none focus:ring-2 focus:ring-blue-500/50 font-semibold shadow-sm transition-all text-slate-900 placeholder:text-slate-500 group">
             </div>
 
-            <button onclick="setOsState('off')" class="hover:bg-red-100 p-2.5 rounded-[12px] transition-colors group border border-transparent hover:border-red-200 elastic-bounce">
-               <img src="https://img.icons8.com/fluency-systems-filled/96/1a1b1c/shutdown.png" class="w-5 h-5 opacity-80 group-hover:opacity-100 group-hover:invert-0 group-hover:sepia group-hover:saturate-[5000%] group-hover:hue-rotate-[340deg]">
-            </button>
-          </div>
+            <!-- Start Menu Main Content -->
+            <div class="flex-grow overflow-y-auto custom-scrollbar px-2 -mx-2">
+                
+                <!-- Pinned Section -->
+                <div class="flex justify-between items-center mb-4 px-2">
+                    <h3 class="text-xs font-bold text-slate-900 tracking-wider uppercase opacity-80">Pinned</h3>
+                    <button class="text-[11px] font-bold text-blue-600 hover:bg-white/40 px-3 py-1.5 rounded-md transition-colors shadow-sm glass-card bg-white/10">All apps ></button>
+                </div>
+                
+                <div class="grid grid-cols-6 gap-x-2 gap-y-6 mb-8 px-1">
+                    ${filtered.map(a => `
+                        <div onclick="openApp('${a.id}')" class="flex flex-col items-center justify-center cursor-pointer glass-card bg-transparent hover:bg-white/30 p-3 rounded-2xl transition-all shadow-sm hover:shadow-md elastic-bounce group">
+                            <img src="${a.icon}" class="w-12 h-12 mb-2 drop-shadow-sm transition-transform group-hover:scale-105 non-critical" onerror="window.handleImgError(this)" referrerpolicy="no-referrer">
+                            <span class="text-[11px] font-semibold text-slate-800 text-center leading-tight tracking-tight">${a.name}</span>
+                        </div>`).join('')}
+                </div>
+
+                <!-- Recommended Section -->
+                <div class="flex justify-between items-center mb-4 px-2 mt-2">
+                    <h3 class="text-xs font-bold text-slate-900 tracking-wider uppercase opacity-80">Recommended</h3>
+                    <button class="text-[11px] font-bold text-blue-600 hover:bg-white/40 px-3 py-1.5 rounded-md transition-colors shadow-sm glass-card bg-white/10">More ></button>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-4 px-1">
+                    <div class="flex items-center gap-4 p-4 glass-card bg-white/20 hover:bg-white/40 rounded-2xl shadow-sm hover:shadow-md cursor-pointer transition-all elastic-bounce group" onclick="openApp('settings')">
+                        <img src="${APP_IMAGES.settings}" class="w-9 h-9 drop-shadow-sm group-hover:scale-105 transition-transform non-critical" onerror="window.handleImgError(this)" referrerpolicy="no-referrer">
+                        <div class="flex flex-col"><span class="text-sm font-bold text-slate-900 tracking-tight">Settings</span><span class="text-xs font-medium text-slate-500">Recently updated</span></div>
+                    </div>
+                    <div class="flex items-center gap-4 p-4 glass-card bg-white/20 hover:bg-white/40 rounded-2xl shadow-sm hover:shadow-md cursor-pointer transition-all elastic-bounce group" onclick="openApp('updater')">
+                        <img src="${APP_IMAGES.updater}" class="w-9 h-9 drop-shadow-sm group-hover:scale-105 transition-transform non-critical" onerror="window.handleImgError(this)" referrerpolicy="no-referrer">
+                        <div class="flex flex-col"><span class="text-sm font-bold text-slate-900 tracking-tight">Update Center</span><span class="text-xs font-medium text-slate-500">Check for builds</span></div>
+                    </div>
+                    <div class="flex items-center gap-4 p-4 glass-card bg-white/20 hover:bg-white/40 rounded-2xl shadow-sm hover:shadow-md cursor-pointer transition-all elastic-bounce group" onclick="openApp('files')">
+                        <img src="${APP_IMAGES.files}" class="w-9 h-9 drop-shadow-sm group-hover:scale-105 transition-transform non-critical" onerror="window.handleImgError(this)" referrerpolicy="no-referrer">
+                        <div class="flex flex-col"><span class="text-sm font-bold text-slate-900 tracking-tight">File Explorer</span><span class="text-xs font-medium text-slate-500">Cloud PC attached</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Footer Area -->
+            <div class="mt-4 pt-4 border-t border-white/30 flex justify-between items-center px-2">
+                <div class="flex items-center gap-3 hover:bg-white/30 p-2 pr-4 rounded-xl cursor-pointer transition-colors shadow-sm border border-transparent hover:border-white/40" onclick="window.toggleProfileMenu(event)">
+                    <img src="${USER_AVATAR}" class="w-9 h-9 rounded-full shadow-sm border-2 border-white/60 object-cover non-critical" onerror="window.handleImgError(this)">
+                    <span class="text-sm font-bold text-slate-800">Administrator</span>
+                </div>
+                <button onclick="setOsState('boot')" class="w-11 h-11 rounded-xl hover:bg-white/40 flex items-center justify-center transition-colors group border border-transparent hover:border-white/60 shadow-sm" title="Power">
+                    <i class="${ICONS.power} text-xl icon-grad grad-slate group-hover:grad-red transition-all"></i>
+                </button>
+            </div>
+
+            <!-- Absolute Positioned Profile Menu inside the split -->
+            <div id="start-profile-menu" class="absolute bottom-20 left-10 w-56 liquid-glass rounded-xl shadow-[0_15px_40px_rgba(0,0,0,0.15)] hidden flex-col py-2 z-50 overflow-hidden">
+                <div class="px-4 py-3 border-b border-white/30 bg-white/10">
+                    <p class="text-xs font-bold text-slate-900">Administrator</p>
+                    <p class="text-[10px] text-slate-600 font-semibold">admin@local.pc</p>
+                </div>
+                <div class="px-4 py-2 space-y-2 border-b border-white/30">
+                    <div class="flex items-center justify-between group cursor-pointer">
+                        <span class="text-[11px] font-bold text-slate-700 flex items-center">
+                            <i class="ph-fill ph-laptop text-slate-400 mr-2 group-hover:text-blue-500 transition-colors text-sm"></i>Local Compute
+                        </span>
+                        <span class="text-[9px] font-bold text-emerald-600 glass-card bg-white/40 border border-emerald-200/50 px-1.5 py-0.5 rounded">Active</span>
+                    </div>
+                    <div class="flex items-center justify-between group cursor-pointer">
+                        <span class="text-[11px] font-bold text-slate-700 flex items-center">
+                            <i class="ph-fill ph-cloud text-slate-400 mr-2 group-hover:text-blue-500 transition-colors text-sm"></i>Cloud PC
+                        </span>
+                        <span class="text-[9px] font-bold text-slate-500 glass-card bg-white/20 border border-slate-200/50 px-1.5 py-0.5 rounded">Standby</span>
+                    </div>
+                </div>
+                <div class="py-1">
+                    <button class="text-left px-4 py-1.5 hover:bg-white/40 text-[11px] font-bold text-slate-800 transition-colors w-full flex items-center group" onclick="openApp('settings'); window.toggleProfileMenu(event);">
+                        <i class="ph-bold ph-gear text-slate-500 mr-2 group-hover:text-blue-500 transition-colors text-sm"></i>Account Settings
+                    </button>
+                    <button class="text-left px-4 py-1.5 hover:bg-white/40 text-[11px] font-bold text-slate-800 transition-colors w-full flex items-center group" onclick="initLoginSequence()">
+                        <i class="ph-bold ph-scan text-slate-500 mr-2 group-hover:text-blue-500 transition-colors text-sm"></i>Lock
+                    </button>
+                    <button class="text-left px-4 py-1.5 hover:bg-red-50/50 text-[11px] font-bold text-red-600 transition-colors w-full flex items-center group" onclick="setOsState('boot')">
+                        <i class="ph-bold ph-power text-red-500 mr-2 transition-colors text-sm"></i>Sign out
+                    </button>
+                </div>
+            </div>
+
         </div>
       `;
       if ($('#start-search-input')) {
@@ -729,55 +953,79 @@
 
     function renderActionCenter() {
       if (!$('#overlay-action')) return;
-      const act = (b) => b ? "bg-blue-600 text-white shadow-md border-blue-500" : "bg-white/50 text-slate-900 hover:bg-white/80 border-white/60 shadow-sm";
-      const actIco = (b) => b ? "brightness-0 invert drop-shadow-sm" : "opacity-80";
+      const act = (b) => b ? "bg-blue-500/80 text-white shadow-md border-blue-400/50" : "glass-card bg-white/20 text-slate-700 hover:bg-white/40 shadow-sm";
+      const actIco = (b) => b ? "grad-white scale-110" : "grad-slate group-hover:grad-blue";
       
       $('#overlay-action').innerHTML = `
-        <div class="bg-white/60 border border-white/60 rounded-[16px] p-4 mb-4 shadow-sm relative overflow-hidden group">
-            <div class="absolute right-0 top-0 w-24 h-full bg-blue-100/50 rounded-l-full blur-xl pointer-events-none"></div>
+        <div class="glass-card bg-white/20 rounded-xl p-4 mb-4 shadow-sm relative overflow-hidden group">
+            <div class="absolute right-0 top-0 w-24 h-full bg-blue-100/30 rounded-l-full blur-xl pointer-events-none"></div>
             <div class="flex items-center justify-between mb-2 relative z-10">
                 <div class="flex items-center space-x-2">
-                    <img src="https://img.icons8.com/fluency-systems-filled/96/0067c0/focus.png" class="w-4 h-4">
+                    <i class="${ICONS.stopSign} text-lg icon-grad grad-red"></i>
                     <span class="font-bold text-sm text-slate-900">Focus Session</span>
                 </div>
-                ${!osData.hwState.wifi ? `<span class="text-[10px] font-bold text-blue-700 bg-blue-100 px-2 py-0.5 rounded-md">Active</span>` : ''}
+                ${!osData.hwState.wifi ? `<span class="text-[10px] font-bold text-blue-700 glass-card bg-white/40 px-2 py-0.5 rounded-md">Active</span>` : ''}
             </div>
-            <p class="text-[11px] text-slate-600 mb-3 font-medium relative z-10">Pause Wi-Fi and block distractions to focus on your work.</p>
+            <p class="text-[11px] text-slate-600 mb-3 font-semibold relative z-10">Pause Wi-Fi and block distractions to focus on your work.</p>
             ${!osData.hwState.wifi ? `
-                <button onclick="window.toggleHW('wifi')" class="w-full bg-blue-50 hover:bg-blue-100 text-blue-800 font-bold py-2 rounded-xl transition-colors border border-blue-200 text-xs shadow-sm elastic-bounce">End Focus & Restore Wi-Fi</button>
+                <button onclick="window.toggleHW('wifi')" class="w-full glass-card bg-blue-50/50 hover:bg-blue-100/50 text-blue-800 font-bold py-2 rounded-lg transition-colors text-xs shadow-sm elastic-bounce">End Focus & Restore Wi-Fi</button>
             ` : `
                 <div class="flex space-x-2 relative z-10">
-                    <button onclick="window.pauseWifi(15, 'min')" class="flex-1 bg-white hover:bg-blue-50 text-slate-800 hover:text-blue-700 font-bold py-1.5 rounded-lg transition-colors border border-white/80 shadow-sm text-xs elastic-bounce">15 Min</button>
-                    <button onclick="window.pauseWifi(1, 'hr')" class="flex-1 bg-white hover:bg-blue-50 text-slate-800 hover:text-blue-700 font-bold py-1.5 rounded-lg transition-colors border border-white/80 shadow-sm text-xs elastic-bounce">1 Hr</button>
-                    <button onclick="window.pauseWifi(4, 'hr')" class="flex-1 bg-white hover:bg-blue-50 text-slate-800 hover:text-blue-700 font-bold py-1.5 rounded-lg transition-colors border border-white/80 shadow-sm text-xs elastic-bounce">4 Hrs</button>
+                    <button onclick="window.pauseWifi(15, 'min')" class="flex-1 glass-card bg-white/30 hover:bg-blue-50/50 text-slate-800 hover:text-blue-700 font-bold py-1.5 rounded-lg transition-colors shadow-sm text-xs elastic-bounce">15 Min</button>
+                    <button onclick="window.pauseWifi(1, 'hr')" class="flex-1 glass-card bg-white/30 hover:bg-blue-50/50 text-slate-800 hover:text-blue-700 font-bold py-1.5 rounded-lg transition-colors shadow-sm text-xs elastic-bounce">1 Hr</button>
+                    <button onclick="window.pauseWifi(4, 'hr')" class="flex-1 glass-card bg-white/30 hover:bg-blue-50/50 text-slate-800 hover:text-blue-700 font-bold py-1.5 rounded-lg transition-colors shadow-sm text-xs elastic-bounce">4 Hrs</button>
                 </div>
             `}
         </div>
 
         <div class="grid grid-cols-3 gap-3 mb-6">
-          <div onclick="window.toggleHW('wifi')" class="flex flex-col items-center cursor-pointer group"><div class="w-full h-12 rounded-[14px] flex items-center justify-center transition-colors border ${act(osData.hwState.wifi)} elastic-bounce"><img src="${osData.hwState.wifi ? ICONS.wifi : ICONS.wifiOff}" class="w-5 h-5 transition-all ${actIco(osData.hwState.wifi)}" draggable="false"></div><span class="text-[11px] font-medium mt-1.5 text-slate-800">Wi-Fi</span></div>
-          <div onclick="window.toggleHW('bluetooth')" class="flex flex-col items-center cursor-pointer group"><div class="w-full h-12 rounded-[14px] flex items-center justify-center transition-colors border ${act(osData.hwState.bluetooth)} elastic-bounce"><img src="${ICONS.bluetooth}" class="w-5 h-5 transition-all ${actIco(osData.hwState.bluetooth)}" draggable="false"></div><span class="text-[11px] font-medium mt-1.5 text-slate-800">Bluetooth</span></div>
-          <div onclick="window.toggleHW('airplane')" class="flex flex-col items-center cursor-pointer group"><div class="w-full h-12 rounded-[14px] flex items-center justify-center transition-colors border ${act(osData.hwState.airplane)} elastic-bounce"><img src="${ICONS.airplane}" class="w-5 h-5 transition-all ${actIco(osData.hwState.airplane)}" draggable="false"></div><span class="text-[11px] font-medium mt-1.5 text-slate-800">Airplane mode</span></div>
-          <div onclick="window.toggleHW('nightLight')" class="flex flex-col items-center cursor-pointer group"><div class="w-full h-12 rounded-[14px] flex items-center justify-center transition-colors border ${act(osData.hwState.nightLight)} elastic-bounce"><img src="${ICONS.nightLight}" class="w-5 h-5 transition-all ${actIco(osData.hwState.nightLight)}" draggable="false"></div><span class="text-[11px] font-medium mt-1.5 text-slate-800">Night light</span></div>
-          <div onclick="window.toggleHW('focus')" class="flex flex-col items-center cursor-pointer group"><div class="w-full h-12 rounded-[14px] flex items-center justify-center transition-colors border ${act(osData.hwState.focus)} elastic-bounce"><img src="${ICONS.moon}" class="w-5 h-5 transition-all ${actIco(osData.hwState.focus)}" draggable="false"></div><span class="text-[11px] font-medium mt-1.5 text-slate-800">Focus</span></div>
+          <div onclick="window.toggleHW('wifi')" class="flex flex-col items-center cursor-pointer group">
+              <div class="w-full h-12 rounded-xl flex items-center justify-center transition-all border ${act(osData.hwState.wifi)} elastic-bounce">
+                  <i class="${osData.hwState.wifi ? 'ph-bold ph-wifi-high' : 'ph-bold ph-wifi-slash'} text-xl transition-all icon-grad ${actIco(osData.hwState.wifi)}"></i>
+              </div>
+              <span class="text-[11px] font-bold mt-1.5 text-slate-800">Wi-Fi</span>
+          </div>
+          <div onclick="window.toggleHW('bluetooth')" class="flex flex-col items-center cursor-pointer group">
+              <div class="w-full h-12 rounded-xl flex items-center justify-center transition-all border ${act(osData.hwState.bluetooth)} elastic-bounce">
+                  <i class="ph-bold ph-bluetooth-connected text-xl transition-all icon-grad ${actIco(osData.hwState.bluetooth)}"></i>
+              </div>
+              <span class="text-[11px] font-bold mt-1.5 text-slate-800">Bluetooth</span>
+          </div>
+          <div onclick="window.toggleHW('airplane')" class="flex flex-col items-center cursor-pointer group">
+              <div class="w-full h-12 rounded-xl flex items-center justify-center transition-all border ${act(osData.hwState.airplane)} elastic-bounce">
+                  <i class="ph-bold ph-airplane-tilt text-xl transition-all icon-grad ${actIco(osData.hwState.airplane)}"></i>
+              </div>
+              <span class="text-[11px] font-bold mt-1.5 text-slate-800">Airplane mode</span>
+          </div>
+          <div onclick="window.toggleHW('nightLight')" class="flex flex-col items-center cursor-pointer group">
+              <div class="w-full h-12 rounded-xl flex items-center justify-center transition-all border ${act(osData.hwState.nightLight)} elastic-bounce">
+                  <i class="ph-bold ph-moon text-xl transition-all icon-grad ${actIco(osData.hwState.nightLight)}"></i>
+              </div>
+              <span class="text-[11px] font-bold mt-1.5 text-slate-800">Night light</span>
+          </div>
         </div>
 
-        <div class="bg-white/50 rounded-[20px] border border-white/60 p-5 space-y-5 shadow-sm">
-          <div class="flex items-center space-x-4">
-              <img src="${osData.hwState.vol>0?ICONS.volume:ICONS.volumeOff}" class="w-5 h-5 opacity-70" draggable="false">
+        <div class="glass-card bg-white/10 rounded-xl p-4 space-y-4 shadow-sm">
+          <div class="flex items-center space-x-3 group">
+              <i class="${osData.hwState.vol>0?'ph-bold ph-speaker-high':'ph-bold ph-speaker-slash'} text-lg icon-grad grad-slate group-hover:grad-blue transition-all"></i>
               <input type="range" class="fluent-slider" value="${osData.hwState.vol}" oninput="osData.hwState.vol=this.value;updateHwUI();saveState()">
-              <span class="text-xs font-semibold text-slate-700 w-6 text-right">${osData.hwState.vol}</span>
+              <span class="text-xs font-bold text-slate-800 w-6 text-right">${osData.hwState.vol}</span>
           </div>
-          <div class="flex items-center space-x-4">
-              <img src="${ICONS.brightness}" class="w-5 h-5 opacity-70" draggable="false">
+          <div class="flex items-center space-x-3 group">
+              <i class="ph-bold ph-sun text-lg icon-grad grad-slate group-hover:grad-amber transition-all"></i>
               <input type="range" class="fluent-slider" value="${osData.hwState.brightness}" oninput="osData.hwState.brightness=this.value;updateHwUI();saveState()">
-              <span class="text-xs font-semibold text-slate-700 w-6 text-right">${osData.hwState.brightness}</span>
+              <span class="text-xs font-bold text-slate-800 w-6 text-right">${osData.hwState.brightness}</span>
           </div>
         </div>
         
-        <div class="mt-4 pt-3 flex justify-between items-center border-t border-slate-300/40">
-           <div class="flex items-center space-x-2 text-xs font-semibold text-slate-700"><img src="https://img.icons8.com/fluency-systems-filled/96/1a1b1c/full-battery.png" class="w-4 h-4 opacity-70"><span>98%</span></div>
-           <button onclick="openApp('settings')" class="hover:bg-white/50 p-2 rounded-xl transition-colors border border-transparent hover:border-white/60 elastic-bounce"><img src="${ICONS.settings}" class="w-4 h-4 opacity-70"></button>
+        <div class="mt-4 pt-3 flex justify-between items-center border-t border-white/30">
+           <div class="flex items-center space-x-2 text-xs font-bold text-slate-800 group">
+               <i class="ph-fill ph-battery-full text-lg icon-grad grad-emerald"></i>
+               <span>98%</span>
+           </div>
+           <button onclick="openApp('settings')" class="hover:bg-white/40 p-2 rounded-lg transition-colors border border-transparent hover:border-white/50 shadow-sm elastic-bounce group">
+               <i class="ph-bold ph-gear text-lg icon-grad grad-slate group-hover:grad-blue transition-all"></i>
+           </button>
         </div>
       `;
     }
@@ -802,15 +1050,61 @@
       });
       if ($('#start-profile-menu')) $('#start-profile-menu').classList.add('hidden');
       if ($('#tb-start')) {
-          $('#tb-start').classList.remove('bg-white/40', 'shadow-sm', 'border-white/50');
+          $('#tb-start').classList.remove('bg-white/60', 'shadow-md', 'border-white/80');
           $('#tb-start').classList.add('border-transparent');
       }
     }
 
     document.body.addEventListener('click', (e) => { 
-        if(!e.target.closest('#taskbar') && !e.target.closest('[id^="overlay-"]') && !e.target.closest('#start-profile-menu')) closeOverlays(); 
+        if(!e.target.closest('#taskbar-center') && !e.target.closest('#taskbar-left') && !e.target.closest('#taskbar-right') && !e.target.closest('[id^="overlay-"]') && !e.target.closest('#start-profile-menu')) closeOverlays(); 
         if(!e.target.closest('#desktop-icons > div')) { window.selectedDesktopIcon = null; renderDesktopIcons(); }
     });
+
+    // --- Desktop Context Menu Logic ---
+    $('#screen-desktop').addEventListener('contextmenu', (e) => {
+        if (e.target.closest('#windows-area') || e.target.closest('[id^="overlay-"]') || e.target.closest('.taskbar-segment') || osState !== 'desktop') return;
+        e.preventDefault();
+        closeOverlays();
+        
+        const ctx = $('#overlay-context');
+        ctx.innerHTML = `
+            <div class="py-1 px-1">
+                <button class="w-full flex items-center px-4 py-2 hover:bg-white/40 rounded-lg transition-colors text-[13px] font-semibold text-slate-800 group"><i class="ph-bold ph-squares-four mr-3 text-base icon-grad grad-slate group-hover:grad-blue transition-all"></i>View</button>
+                <button class="w-full flex items-center px-4 py-2 hover:bg-white/40 rounded-lg transition-colors text-[13px] font-semibold text-slate-800 group"><i class="ph-bold ph-sort-ascending mr-3 text-base icon-grad grad-slate group-hover:grad-blue transition-all"></i>Sort by</button>
+                <button onclick="window.refreshDesktop()" class="w-full flex items-center px-4 py-2 hover:bg-white/40 rounded-lg transition-colors text-[13px] font-semibold text-slate-800 group"><i class="ph-bold ph-arrows-clockwise mr-3 text-base icon-grad grad-slate group-hover:grad-blue transition-all"></i>Refresh</button>
+            </div>
+            <div class="h-px w-full bg-slate-300/40 my-1"></div>
+            <div class="py-1 px-1">
+                <button class="w-full flex items-center px-4 py-2 hover:bg-white/40 rounded-lg transition-colors text-[13px] font-semibold text-slate-800 group"><i class="ph-bold ph-folder-plus mr-3 text-base icon-grad grad-slate group-hover:grad-blue transition-all"></i>New</button>
+            </div>
+            <div class="h-px w-full bg-slate-300/40 my-1"></div>
+            <div class="py-1 px-1">
+                <button onclick="openApp('settings'); setTimeout(() => { if(window.renderSettingsInstance) { appStates['settings'] = 'Personalization'; window.renderSettingsInstance(); } }, 100);" class="w-full flex items-center px-4 py-2 hover:bg-white/40 rounded-lg transition-colors text-[13px] font-semibold text-slate-800 group"><i class="ph-bold ph-palette mr-3 text-base icon-grad grad-slate group-hover:grad-blue transition-all"></i>Personalize</button>
+            </div>
+        `;
+        
+        let x = e.clientX;
+        let y = e.clientY;
+        
+        if (x + 256 > window.innerWidth) x = window.innerWidth - 260;
+        if (y + 240 > window.innerHeight) y = window.innerHeight - 250;
+        
+        ctx.style.left = x + 'px';
+        ctx.style.top = y + 'px';
+        ctx.classList.remove('hidden');
+        ctx.classList.add('fluent-pop');
+    });
+
+    window.refreshDesktop = function() {
+        closeOverlays();
+        const icons = $('#desktop-icons');
+        icons.classList.add('opacity-0');
+        setTimeout(() => {
+            renderDesktopIcons();
+            icons.classList.remove('opacity-0');
+            icons.classList.add('fade-in');
+        }, 200);
+    };
 
     function updateTaskbarApps() {
       const container = $('#taskbar-apps');
@@ -820,12 +1114,12 @@
         const isOpen = Object.values(windows).some(w => w.appId === app.id);
         const isActive = activeWindow === Object.values(windows).find(w => w.appId === app.id)?.id;
         
-        const indicatorCls = isActive ? "w-4 h-[3px] bg-blue-500 rounded-full shadow-[0_0_8px_rgba(59,130,246,0.6)]" : (isOpen ? "w-1.5 h-[3px] bg-slate-400 rounded-full" : "hidden");
-        const activeBg = isActive ? "bg-white/40 shadow-sm border border-white/50" : "hover:bg-white/20 border border-transparent";
+        const indicatorCls = isActive ? "w-3 h-[4px] bg-blue-500 rounded-full shadow-[0_0_5px_rgba(37,99,235,0.6)]" : (isOpen ? "w-1.5 h-[4px] bg-slate-400 rounded-full" : "hidden");
+        const activeBg = isActive ? "glass-card bg-white/40 shadow-sm" : "hover:bg-white/30 border border-transparent";
 
         html += `
-          <button id="tb-btn-${app.id}" onclick="openApp('${app.id}')" class="w-10 h-10 flex flex-col items-center justify-center rounded-xl transition-colors elastic-bounce relative ${activeBg}" title="${app.name}">
-            <img src="${app.icon}" class="w-6 h-6 drop-shadow-sm transition-transform ${isActive?'scale-110':''}" draggable="false">
+          <button id="tb-btn-${app.id}" onclick="openApp('${app.id}')" class="w-11 h-11 flex flex-col items-center justify-center rounded-xl transition-colors elastic-bounce relative group ${activeBg}" title="${app.name}">
+            <img src="${app.icon}" class="w-7 h-7 drop-shadow-md transition-transform group-hover:scale-105 non-critical" draggable="false" onerror="window.handleImgError(this)" referrerpolicy="no-referrer">
             <div class="absolute bottom-[2px] left-1/2 -translate-x-1/2 h-1 flex items-end justify-center pb-[2px]">
                <div class="${indicatorCls} transition-all duration-300"></div>
             </div>
@@ -847,7 +1141,7 @@
         updateHwUI();
         if (window.renderSettingsInstance) window.renderSettingsInstance();
         
-        showDynamicPill('https://img.icons8.com/fluency-systems-filled/96/1a1b1c/stop-sign.png', `Focus Session active for ${time} ${unit}`);
+        showDynamicPill('ph-bold ph-prohibit icon-grad grad-red', `Focus Session active for ${time} ${unit}`);
         
         setTimeout(() => {
             if(osData.hwState.wifiPausedUntil === unpauseTime) {
@@ -856,7 +1150,7 @@
                 saveState();
                 updateHwUI();
                 if (window.renderSettingsInstance) window.renderSettingsInstance();
-                showDynamicPill(ICONS.wifiTray, "Focus Session Complete. Wi-Fi Restored.");
+                showDynamicPill('ph-bold ph-wifi-high icon-grad grad-blue', "Focus Session Complete. Wi-Fi Restored.");
             }
         }, ms);
     };
@@ -886,12 +1180,12 @@
       else { 
           osData.hwState[prop] = !osData.hwState[prop]; 
           if(prop === 'wifi') {
-             if(osData.hwState.wifi) { osData.hwState.wifiPausedUntil = null; showDynamicPill(ICONS.wifiTray, "Wi-Fi Turned On"); }
-             else { showDynamicPill(ICONS.wifiOffTray, "Wi-Fi Turned Off"); }
+             if(osData.hwState.wifi) { osData.hwState.wifiPausedUntil = null; showDynamicPill('ph-bold ph-wifi-high icon-grad grad-blue', "Wi-Fi Turned On"); }
+             else { showDynamicPill('ph-bold ph-wifi-slash icon-grad grad-red', "Wi-Fi Turned Off"); }
              if (osData.hwState.airplane) { osData.hwState.airplane = false; }
           }
           if(prop === 'nightLight') {
-              showDynamicPill(ICONS.nightLight, osData.hwState.nightLight ? "Night Light Enabled" : "Night Light Disabled");
+              showDynamicPill('ph-bold ph-moon icon-grad grad-amber', osData.hwState.nightLight ? "Night Light Enabled" : "Night Light Disabled");
           }
           if(osData.hwState[prop] && (prop==='wifi' || prop==='bluetooth')) osData.hwState.airplane = false; 
       }
@@ -900,8 +1194,9 @@
     };
 
     function updateHwUI() {
-      if ($('#tb-icon-wifi')) $('#tb-icon-wifi').src = osData.hwState.wifi ? ICONS.wifiTray : ICONS.wifiOffTray;
-      if ($('#tb-icon-vol')) $('#tb-icon-vol').src = osData.hwState.vol > 0 ? ICONS.volumeTray : ICONS.volumeOffTray;
+      $('#tb-icon-wifi').className = `${osData.hwState.wifi ? ICONS.wifiTray : ICONS.wifiOffTray} text-base icon-grad grad-slate-dark group-hover:grad-blue transition-all`;
+      $('#tb-icon-vol').className = `${osData.hwState.vol > 0 ? ICONS.volumeTray : ICONS.volumeOffTray} text-base icon-grad grad-slate-dark group-hover:grad-blue transition-all`;
+      
       if ($('#filter-brightness')) $('#filter-brightness').style.opacity = 1 - (osData.hwState.brightness / 100);
       if ($('#filter-nightlight')) $('#filter-nightlight').style.opacity = osData.hwState.nightLight ? '0.35' : '0';
       
@@ -912,11 +1207,10 @@
     if ($('#login-pwd')) $('#login-pwd').onkeydown = (e) => { if(e.key==='Enter') processLogin(); };
     if ($('#login-submit')) $('#login-submit').onclick = processLogin;
     
-    // Toggle logic for overlays with Smart Depth
-    if ($('#tb-start')) $('#tb-start').onclick = (e) => { e.stopPropagation(); const isOpen = !$('#overlay-start').classList.contains('hidden'); closeOverlays(); if(!isOpen){ toggleDesktopDepth(true); renderStartMenu(); $('#overlay-start').classList.remove('hidden'); $('#tb-start').classList.remove('border-transparent'); $('#tb-start').classList.add('bg-white/40', 'shadow-sm', 'border-white/50'); }};
-    if ($('#tb-action')) $('#tb-action').onclick = (e) => { e.stopPropagation(); const isOpen = !$('#overlay-action').classList.contains('hidden'); closeOverlays(); if(!isOpen){ toggleDesktopDepth(true); renderActionCenter(); $('#overlay-action').classList.remove('hidden'); }};
-    if ($('#tb-clock-area')) $('#tb-clock-area').onclick = (e) => { e.stopPropagation(); const isOpen = !$('#overlay-calendar').classList.contains('hidden'); closeOverlays(); if(!isOpen){ toggleDesktopDepth(true); renderCalendar(new Date()); $('#overlay-calendar').classList.remove('hidden'); }};
-    if ($('#tb-widgets-btn')) $('#tb-widgets-btn').onclick = (e) => { e.stopPropagation(); const isOpen = !$('#overlay-widgets').classList.contains('hidden'); closeOverlays(); if(!isOpen){ toggleDesktopDepth(true); renderWidgets(); $('#overlay-widgets').classList.remove('hidden'); }};
+    if ($('#tb-start')) $('#tb-start').onclick = (e) => { e.stopPropagation(); const isOpen = !$('#overlay-start').classList.contains('hidden'); closeOverlays(); if(!isOpen){ toggleDesktopDepth(true); renderStartMenu(); $('#overlay-start').classList.remove('hidden'); $('#overlay-start').classList.add('fluent-pop-center'); $('#tb-start').classList.remove('border-transparent'); $('#tb-start').classList.add('glass-card', 'bg-white/40', 'shadow-md'); }};
+    if ($('#tb-action')) $('#tb-action').onclick = (e) => { e.stopPropagation(); const isOpen = !$('#overlay-action').classList.contains('hidden'); closeOverlays(); if(!isOpen){ toggleDesktopDepth(true); renderActionCenter(); $('#overlay-action').classList.remove('hidden'); $('#overlay-action').classList.add('fluent-slide-down'); }};
+    if ($('#tb-clock-area')) $('#tb-clock-area').onclick = (e) => { e.stopPropagation(); const isOpen = !$('#overlay-calendar').classList.contains('hidden'); closeOverlays(); if(!isOpen){ toggleDesktopDepth(true); renderCalendar(new Date()); $('#overlay-calendar').classList.remove('hidden'); $('#overlay-calendar').classList.add('fluent-slide-down'); }};
+    if ($('#tb-widgets-btn')) $('#tb-widgets-btn').onclick = (e) => { e.stopPropagation(); const isOpen = !$('#overlay-widgets').classList.contains('hidden'); closeOverlays(); if(!isOpen){ toggleDesktopDepth(true); renderWidgets(); $('#overlay-widgets').classList.remove('hidden'); $('#overlay-widgets').classList.add('fluent-slide-down'); }};
 
     // --- Window Manager Core ---
     function openApp(appId, args = null) {
@@ -935,7 +1229,7 @@
       const winEl = document.createElement('div');
       winEl.id = id;
       
-      winEl.className = 'absolute rounded-[20px] border border-white/80 liquid-glass-heavy flex flex-col pointer-events-auto overflow-hidden zoom-in';
+      winEl.className = 'absolute rounded-2xl border border-transparent liquid-glass-heavy flex flex-col pointer-events-auto overflow-hidden fluent-window';
       winEl.style.width = app.size.w + 'px'; winEl.style.height = app.size.h + 'px';
       winEl.style.left = Math.max(10, (window.innerWidth/2)-(app.size.w/2)+((Object.keys(windows).length%5)*30)) + 'px';
       winEl.style.top = Math.max(10, (window.innerHeight/2)-(app.size.h/2)+((Object.keys(windows).length%5)*30)) + 'px';
@@ -943,24 +1237,29 @@
 
       winEl.innerHTML = `
         <div class="win-resize-n absolute top-0 left-0 w-full h-2 cursor-ns-resize z-50"></div><div class="win-resize-s absolute bottom-0 left-0 w-full h-2 cursor-ns-resize z-50"></div><div class="win-resize-w absolute top-0 left-0 w-2 h-full cursor-ew-resize z-50"></div><div class="win-resize-e absolute top-0 right-0 w-2 h-full cursor-ew-resize z-50"></div><div class="win-resize-nw absolute top-0 left-0 w-4 h-4 cursor-nwse-resize z-50"></div><div class="win-resize-ne absolute top-0 right-0 w-4 h-4 cursor-nesw-resize z-50"></div><div class="win-resize-sw absolute bottom-0 left-0 w-4 h-4 cursor-nesw-resize z-50"></div><div class="win-resize-se absolute bottom-0 right-0 w-4 h-4 cursor-nwse-resize z-50"></div>
-        <div class="win-titlebar h-12 flex items-center justify-between pl-5 pr-2 select-none border-b border-white/40 bg-white/30 backdrop-blur-md">
+        <div class="win-titlebar h-11 flex items-center justify-between pl-4 pr-2 select-none border-b border-white/30 bg-white/20">
           <div class="flex items-center space-x-3 pointer-events-none text-slate-900">
-            <img src="${app.icon}" class="w-4 h-4 drop-shadow-sm">
+            <img src="${app.icon}" class="w-5 h-5 drop-shadow-sm non-critical" onerror="window.handleImgError(this)" referrerpolicy="no-referrer">
             <span class="text-xs font-bold tracking-tight">${app.name}</span>
           </div>
           <div class="flex items-center space-x-1" onmousedown="event.stopPropagation()">
-            <button class="win-min w-11 h-8 flex items-center justify-center hover:bg-black/10 rounded-lg transition-colors"><img src="${ICONS.minimize}" class="w-3 h-3 opacity-70"></button>
+            <button class="win-min w-11 h-8 flex items-center justify-center hover:bg-white/30 rounded-lg transition-colors group">
+                <i class="${ICONS.minimize} text-sm icon-grad grad-slate group-hover:grad-blue transition-all"></i>
+            </button>
             
-            <!-- MS Snap Layouts Blended -->
             <div class="snap-menu-wrapper">
-                <button class="win-max w-11 h-8 flex items-center justify-center hover:bg-black/10 rounded-lg transition-colors"><img src="${ICONS.maximize}" class="w-[10px] h-[10px] opacity-70"></button>
+                <button class="win-max w-11 h-8 flex items-center justify-center hover:bg-white/30 rounded-lg transition-colors group">
+                    <i class="${ICONS.maximize} text-sm icon-grad grad-slate group-hover:grad-blue transition-all"></i>
+                </button>
                 <div class="snap-menu">
                     <div class="snap-option half"></div><div class="snap-option half"></div>
                     <div class="snap-option third" style="grid-column: span 1; height: 30px;"></div><div class="snap-option" style="height: 30px;"></div>
                 </div>
             </div>
 
-            <button class="win-close w-11 h-8 flex items-center justify-center hover:bg-red-500 hover:text-white rounded-lg group transition-colors"><img src="${ICONS.close}" class="w-3 h-3 opacity-80 group-hover:invert brightness-0 transition-all"></button>
+            <button class="win-close w-11 h-8 flex items-center justify-center hover:bg-red-500 hover:text-white rounded-lg group transition-colors">
+                <i class="${ICONS.close} text-sm icon-grad grad-slate group-hover:grad-white transition-all"></i>
+            </button>
           </div>
         </div>
         <div class="win-content flex-grow bg-transparent relative overflow-hidden flex flex-col"></div>
@@ -979,7 +1278,6 @@
       Object.values(windows).forEach(w => {
           if (w.el) {
             w.el.classList.remove('ambient-glow');
-            w.el.style.boxShadow = "0 10px 30px rgba(0,0,0,0.1)";
             w.el.style.zIndex = zIndexCounter - 1;
           }
       });
@@ -1000,15 +1298,16 @@
       
       const toggleMax = () => {
         const w = windows[id]; w.max = !w.max;
+        const maxBtn = win.querySelector('.win-max i');
         if(w.max) {
           w.px=w.el.style.left; w.py=w.el.style.top; w.pw=w.el.style.width; w.ph=w.el.style.height;
-          win.style.left='0px'; win.style.top='0px'; win.style.width='100%'; win.style.height='calc(100% - 66px)';
-          win.classList.remove('rounded-[20px]');
-          win.querySelector('.win-max').innerHTML = `<img src="${ICONS.restore}" class="w-[10px] h-[10px] opacity-70">`;
+          win.style.left='0px'; win.style.top='0px'; win.style.width='100%'; win.style.height='calc(100% - 64px)'; /* Adjusted for bottom dock */
+          win.classList.remove('rounded-2xl');
+          maxBtn.className = `${ICONS.restore} text-sm icon-grad grad-slate group-hover:grad-blue transition-all`;
         } else {
-          win.style.left=w.px; win.style.top=w.py; win.style.width=w.pw; win.style.height=w.ph;
-          win.classList.add('rounded-[20px]');
-          win.querySelector('.win-max').innerHTML = `<img src="${ICONS.maximize}" class="w-[10px] h-[10px] opacity-70">`;
+          win.style.left=w.px; w.style.top=w.py; win.style.width=w.pw; win.style.height=w.ph;
+          win.classList.add('rounded-2xl');
+          maxBtn.className = `${ICONS.maximize} text-sm icon-grad grad-slate group-hover:grad-blue transition-all`;
         }
       };
       win.querySelector('.win-max').onclick = toggleMax;
@@ -1022,144 +1321,330 @@
 
     // --- Applications ---
 
-    // 1. UPDATE CENTER APP
-    window.init_updater = (content, id) => {
-        let checking = false;
-        let updateFound = false;
+    const settingCard = (title, desc, controlHtml, iconClass = null) => `
+        <div class="flex items-center justify-between p-4 px-5 glass-card rounded-xl mb-3 group cursor-default">
+            <div class="flex items-center space-x-5">
+                ${iconClass ? `<i class="${iconClass} text-[26px] icon-grad grad-blue transition-transform group-hover:scale-110"></i>` : ''}
+                <div>
+                    <h4 class="font-bold text-sm text-slate-900 tracking-tight">${title}</h4>
+                    ${desc ? `<p class="text-[11px] text-slate-500 font-medium mt-0.5 max-w-sm leading-snug">${desc}</p>` : ''}
+                </div>
+            </div>
+            <div class="flex items-center justify-end pl-4">${controlHtml}</div>
+        </div>
+    `;
+
+    // FILE EXPLORER APP
+    window.init_files = (content, id) => {
+        let currentPath = 'Home';
+        let searchQuery = '';
+
+        const fs = {
+            'Home': [
+                { name: 'Projects', type: 'folder', icon: 'ph-fill ph-folder icon-grad grad-amber text-4xl' },
+                { name: 'Designs', type: 'folder', icon: 'ph-fill ph-folder icon-grad grad-amber text-4xl' },
+                { name: 'Documents', type: 'folder', icon: 'ph-fill ph-folder-open icon-grad grad-blue text-4xl' },
+                { name: 'System', type: 'folder', icon: 'ph-fill ph-folder-lock icon-grad grad-slate text-4xl' },
+                { name: 'Concept_Notes.docx', type: 'file', icon: 'ph-fill ph-file-text icon-grad grad-blue text-2xl', info: '2 mins ago' },
+                { name: 'Render.png', type: 'file', icon: 'ph-fill ph-file-image icon-grad grad-purple text-2xl', info: '1 hour ago' }
+            ],
+            'Projects': [
+                { name: 'Widget_Engine', type: 'folder', icon: 'ph-fill ph-folder icon-grad grad-amber text-4xl' },
+                { name: 'Core_OS_v2.js', type: 'file', icon: 'ph-fill ph-file-text icon-grad grad-amber text-2xl', info: '150 KB' }
+            ],
+            'Designs': [
+                { name: 'Wallpaper_1.jpg', type: 'file', icon: 'ph-fill ph-image icon-grad grad-purple text-2xl', info: '2.4 MB' },
+                { name: 'Wallpaper_2.jpg', type: 'file', icon: 'ph-fill ph-image icon-grad grad-purple text-2xl', info: '1.8 MB' }
+            ],
+            'Documents': [
+                { name: 'Financials.xlsx', type: 'file', icon: 'ph-fill ph-file-text icon-grad grad-emerald text-2xl', info: '12 KB' },
+                { name: 'Resume.pdf', type: 'file', icon: 'ph-fill ph-file-text icon-grad grad-red text-2xl', info: '450 KB' }
+            ],
+            'Gallery': [
+                { name: 'Vacation_1.jpg', type: 'file', icon: 'ph-fill ph-image icon-grad grad-purple text-2xl', info: '3.1 MB' },
+                { name: 'Vacation_2.jpg', type: 'file', icon: 'ph-fill ph-image icon-grad grad-purple text-2xl', info: '2.8 MB' }
+            ]
+        };
 
         const render = () => {
+            let files = fs[currentPath] || [];
+            if (searchQuery) {
+                files = files.filter(f => f.name.toLowerCase().includes(searchQuery.toLowerCase()));
+            }
+
+            const foldersHtml = files.filter(f => f.type === 'folder').map(f => `
+                <div class="folder-item glass-card p-4 rounded-xl flex flex-col items-center gap-2 cursor-pointer transition-all hover:-translate-y-1" data-path="${f.name}">
+                    <i class="${f.icon} drop-shadow-sm"></i>
+                    <span class="text-xs font-bold text-slate-800">${f.name}</span>
+                </div>
+            `).join('');
+
+            const filesHtml = files.filter(f => f.type === 'file').map(f => `
+                <div class="flex items-center gap-4 glass-card p-3 rounded-xl cursor-pointer transition-colors">
+                    <i class="${f.icon}"></i>
+                    <div class="flex flex-col"><span class="text-xs font-bold text-slate-800">${f.name}</span><span class="text-[10px] text-slate-500 font-semibold">${f.info}</span></div>
+                </div>
+            `).join('');
+
             content.innerHTML = `
-              <div class="h-full flex flex-col bg-slate-50/40 font-sans overflow-y-auto custom-scrollbar">
-                  
-                  <!-- Refined Hero Header -->
-                  <div class="w-full relative overflow-hidden bg-slate-900 text-white p-10 pb-16">
-                      <div class="absolute inset-0 bg-gradient-to-br from-blue-600/40 via-indigo-600/40 to-purple-800/40 mix-blend-overlay"></div>
-                      <div class="absolute -right-20 -top-20 w-96 h-96 bg-blue-500/30 rounded-full blur-[80px] pointer-events-none"></div>
-                      
-                      <div class="max-w-4xl mx-auto w-full relative z-10 flex items-center space-x-6">
-                         <div class="w-16 h-16 bg-white/20 border border-white/30 backdrop-blur-md rounded-[18px] flex items-center justify-center shadow-2xl">
-                           <img src="${ICONS.updateAppIcon}" class="w-8 h-8 invert brightness-0 drop-shadow-md">
-                         </div>
-                         <div>
-                            <h1 class="text-4xl font-bold tracking-tight drop-shadow-sm">Windows Update</h1>
-                            <p class="text-sm font-medium text-blue-200 mt-1 drop-shadow">Hudson Valley Experience Center</p>
-                         </div>
-                      </div>
-                  </div>
-
-                  <div class="max-w-4xl mx-auto w-full px-10 -mt-10 relative z-20">
-                      
-                      <!-- Refined Dynamic Update Card -->
-                      <div class="bg-white/80 backdrop-blur-2xl border border-white/80 rounded-[24px] shadow-xl p-8 mb-8 relative overflow-hidden transition-all duration-500">
-                          <div class="absolute inset-0 bg-gradient-to-br from-white/60 to-white/10 pointer-events-none"></div>
-                          
-                          ${checking ? `
-                            <div class="flex items-center space-x-5 z-10 relative">
-                                <div class="w-10 h-10 border-[3px] border-blue-600 border-t-transparent rounded-full animate-spin shadow-sm"></div>
-                                <div>
-                                    <h3 class="font-bold text-2xl text-slate-900 tracking-tight">Checking for updates...</h3>
-                                    <p class="text-sm text-slate-500 mt-1 font-medium">Communicating with Windows Cloud Services</p>
-                                </div>
+                <div class="h-full flex bg-transparent font-sans">
+                    <!-- Sidebar -->
+                    <div class="w-56 border-r border-white/30 bg-white/10 p-4 flex flex-col gap-1 z-10">
+                        <button class="nav-item w-full flex items-center px-4 py-2.5 rounded-lg transition-colors text-[13px] font-bold ${currentPath === 'Home' || currentPath === 'Projects' || currentPath === 'Designs' || currentPath === 'Documents' ? 'glass-card text-blue-700' : 'hover:bg-white/20 text-slate-700'}" data-target="Home"><i class="ph-fill ph-house mr-3 icon-grad grad-blue text-lg"></i>Home</button>
+                        <button class="nav-item w-full flex items-center px-4 py-2.5 rounded-lg transition-colors text-[13px] font-bold ${currentPath === 'Gallery' ? 'glass-card text-blue-700' : 'hover:bg-white/20 text-slate-700'}" data-target="Gallery"><i class="ph-fill ph-image mr-3 icon-grad grad-purple text-lg"></i>Gallery</button>
+                        <div class="my-3 border-t border-white/20"></div>
+                        <button class="nav-item w-full flex items-center px-4 py-2.5 rounded-lg transition-colors text-xs font-semibold hover:bg-white/20 text-slate-700" data-target="Home"><i class="ph-fill ph-desktop mr-3 icon-grad grad-slate text-lg"></i>Desktop</button>
+                        <button class="nav-item w-full flex items-center px-4 py-2.5 rounded-lg transition-colors text-xs font-semibold hover:bg-white/20 text-slate-700" data-target="Home"><i class="ph-fill ph-download-simple mr-3 icon-grad grad-slate text-lg"></i>Downloads</button>
+                        <button class="nav-item w-full flex items-center px-4 py-2.5 rounded-lg transition-colors text-xs font-semibold hover:bg-white/20 text-slate-700" data-target="Documents"><i class="ph-fill ph-file-text mr-3 icon-grad grad-slate text-lg"></i>Documents</button>
+                        <div class="mt-auto">
+                            <div class="glass-card rounded-xl p-4 shadow-sm">
+                                <div class="flex items-center gap-2 mb-3"><i class="ph-fill ph-cloud icon-grad grad-blue text-lg"></i><span class="text-[13px] font-bold text-slate-900">Cloud PC</span></div>
+                                <div class="w-full h-1.5 bg-white/40 rounded-full overflow-hidden shadow-inner"><div class="w-2/3 h-full bg-blue-500 rounded-full"></div></div>
+                                <p class="text-[10px] font-bold text-slate-600 mt-2">15 GB of 50 GB used</p>
                             </div>
-                          ` : updateFound ? `
-                            <div class="flex flex-col z-10 relative fade-in">
-                                <div class="flex items-center space-x-4 mb-5">
-                                    <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center shadow-sm">
-                                        <img src="${ICONS.start}" class="w-6 h-6">
-                                    </div>
-                                    <div>
-                                        <h3 class="font-bold text-2xl text-slate-900 tracking-tight">Feature Drop Available</h3>
-                                        <p class="text-sm text-slate-500 font-medium">Pending Download</p>
-                                    </div>
-                                </div>
-                                <div class="bg-blue-50/80 border border-blue-200/60 p-5 rounded-[16px] mb-6 flex justify-between items-center shadow-sm">
-                                    <div>
-                                        <h4 class="text-sm font-bold text-slate-900">Windows 12 Feature Experience Pack (1H02)</h4>
-                                        <p class="text-[11px] text-slate-600 mt-1 font-medium max-w-lg">Includes new Liquid Glass architectural improvements, advanced kernel security patches, and localized UI enhancements.</p>
-                                    </div>
-                                    <span class="text-xs font-bold text-blue-700 bg-blue-100 px-3 py-1 rounded-full">2.4 GB</span>
-                                </div>
-                                <button id="btn-dl-${id}" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-xl shadow-[0_8px_20px_rgba(37,99,235,0.3)] transition-all elastic-bounce w-fit">Download and Install</button>
+                        </div>
+                    </div>
+                    <!-- Main Content -->
+                    <div class="flex-1 flex flex-col bg-transparent relative">
+                        <!-- Glassy Header -->
+                        <div class="h-16 border-b border-white/30 flex items-center px-5 gap-5 bg-white/20 z-10">
+                            <div class="flex gap-3 group">
+                                <i class="ph-bold ph-arrow-left text-xl icon-grad ${currentPath !== 'Home' ? 'grad-slate-dark group-hover:grad-blue cursor-pointer transition-all' : 'grad-slate cursor-not-allowed'}" id="btn-back"></i>
+                                <i class="ph-bold ph-arrow-right text-xl icon-grad grad-slate cursor-not-allowed"></i>
+                                <i class="ph-bold ph-arrow-up text-xl icon-grad ${currentPath !== 'Home' ? 'grad-slate-dark group-hover:grad-blue cursor-pointer transition-all' : 'grad-slate cursor-not-allowed'}" id="btn-up"></i>
                             </div>
-                          ` : `
-                            <div class="flex items-center justify-between z-10 relative fade-in">
-                                <div class="flex items-center space-x-5">
-                                    <div class="w-12 h-12 bg-emerald-100 rounded-full flex items-center justify-center shadow-sm border border-emerald-200">
-                                        <img src="${ICONS.check}" class="w-6 h-6">
-                                    </div>
-                                    <div>
-                                        <h3 class="font-bold text-2xl text-slate-900 tracking-tight">You're completely up to date</h3>
-                                        <p class="text-sm text-slate-500 mt-1 font-medium">Last checked: Just now</p>
-                                    </div>
-                                </div>
-                                <button id="btn-chk-${id}" class="bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold py-3 px-6 rounded-xl shadow-sm transition-colors border border-slate-200 text-sm elastic-bounce">Check for updates</button>
+                            <div class="flex-1 glass-card rounded-lg h-9 flex items-center px-4 transition-all cursor-pointer">
+                                <i class="ph-fill ph-desktop icon-grad grad-blue text-sm mr-2"></i>
+                                <span class="text-[13px] font-bold text-slate-800">This PC > ${currentPath}</span>
                             </div>
-                          `}
-                      </div>
+                            <div class="w-56 glass-card rounded-lg h-9 flex items-center px-4 transition-all group">
+                                <i class="ph-bold ph-magnifying-glass icon-grad grad-slate text-sm mr-2 group-focus-within:grad-blue"></i>
+                                <input type="text" id="search-explorer" value="${searchQuery}" class="bg-transparent border-none outline-none text-[13px] font-medium w-full text-slate-900 placeholder-slate-500" placeholder="Search ${currentPath}">
+                            </div>
+                        </div>
+                        <!-- Body -->
+                        <div class="p-8 flex-1 overflow-y-auto custom-scrollbar relative z-0">
+                            ${foldersHtml ? `
+                            <h2 class="text-sm font-bold text-slate-900 mb-4 tracking-wide">Folders</h2>
+                            <div class="grid grid-cols-4 gap-5 mb-10">
+                                ${foldersHtml}
+                            </div>` : ''}
+                            
+                            ${filesHtml ? `
+                            <h2 class="text-sm font-bold text-slate-900 mb-4 tracking-wide">Files</h2>
+                            <div class="flex flex-col gap-3">
+                                ${filesHtml}
+                            </div>` : ''}
 
-                      <div class="grid grid-cols-2 gap-6 pb-10">
-                          <div class="bg-white/60 backdrop-blur-xl border border-white/60 rounded-[20px] p-6 shadow-sm">
-                              <h4 class="font-bold text-slate-900 mb-4 tracking-tight text-lg">Update History</h4>
-                              <div class="space-y-4">
-                                  <div class="border-b border-slate-200/60 pb-3 group cursor-pointer">
-                                      <p class="text-sm font-bold text-slate-800 group-hover:text-blue-600 transition-colors">Security Update for Windows 12</p>
-                                      <p class="text-[11px] text-slate-500 font-medium mt-0.5">Successfully installed yesterday</p>
-                                  </div>
-                                  <div class="border-b border-slate-200/60 pb-3 group cursor-pointer">
-                                      <p class="text-sm font-bold text-slate-800 group-hover:text-blue-600 transition-colors">Cumulative Update Preview</p>
-                                      <p class="text-[11px] text-slate-500 font-medium mt-0.5">Successfully installed last week</p>
-                                  </div>
-                              </div>
-                          </div>
-                          
-                          <div class="bg-white/60 backdrop-blur-xl border border-white/60 rounded-[20px] p-6 shadow-sm">
-                              <h4 class="font-bold text-slate-900 mb-4 tracking-tight text-lg">Advanced Options</h4>
-                              <div class="space-y-2">
-                                  <button class="w-full flex items-center justify-between p-3.5 bg-white/40 hover:bg-white/80 border border-transparent hover:border-slate-200 rounded-[14px] transition-all shadow-sm">
-                                      <span class="text-xs font-bold text-slate-800">Receive updates for other MS products</span>
-                                      <div class="w-10 h-5 bg-blue-600 rounded-full relative shadow-inner"><div class="absolute right-1 top-[2px] w-4 h-4 bg-white rounded-full shadow-sm"></div></div>
-                                  </button>
-                                  <button class="w-full flex items-center justify-between p-3.5 bg-white/40 hover:bg-white/80 border border-transparent hover:border-slate-200 rounded-[14px] transition-all shadow-sm">
-                                      <span class="text-xs font-bold text-slate-800">Get latest updates immediately</span>
-                                      <div class="w-10 h-5 bg-blue-600 rounded-full relative shadow-inner"><div class="absolute right-1 top-[2px] w-4 h-4 bg-white rounded-full shadow-sm"></div></div>
-                                  </button>
-                              </div>
-                          </div>
-                      </div>
-
-                  </div>
-              </div>
+                            ${!foldersHtml && !filesHtml ? `
+                            <div class="flex flex-col items-center justify-center h-full opacity-60 mt-10">
+                                <i class="ph-fill ph-folder-dashed text-6xl icon-grad grad-slate mb-4"></i>
+                                <p class="text-base font-bold text-slate-600">This folder is empty.</p>
+                            </div>` : ''}
+                        </div>
+                    </div>
+                </div>
             `;
 
-            if(document.getElementById(`btn-chk-${id}`)) {
-                document.getElementById(`btn-chk-${id}`).onclick = async () => {
-                    checking = true; render();
-                    try {
-                        let res = await fetch('update/index.html', { method: 'HEAD' });
-                        checking = false;
-                        if (res.ok) {
-                            updateFound = true;
-                        } else {
-                            updateFound = false;
-                        }
-                        render();
-                    } catch (e) {
-                        checking = false;
-                        updateFound = false;
+            // Attach event listeners
+            content.querySelectorAll('.folder-item').forEach(el => {
+                el.onclick = () => {
+                    currentPath = el.getAttribute('data-path');
+                    searchQuery = '';
+                    render();
+                };
+            });
+
+            content.querySelectorAll('.nav-item').forEach(el => {
+                el.onclick = () => {
+                    currentPath = el.getAttribute('data-target');
+                    searchQuery = '';
+                    render();
+                };
+            });
+
+            if (document.getElementById('btn-back')) {
+                document.getElementById('btn-back').onclick = () => {
+                    if (currentPath !== 'Home') {
+                        currentPath = 'Home';
+                        searchQuery = '';
                         render();
                     }
                 };
             }
-            if(document.getElementById(`btn-dl-${id}`)) {
-                document.getElementById(`btn-dl-${id}`).onclick = () => {
-                    window.triggerSystemUpdate();
+            if (document.getElementById('btn-up')) {
+                document.getElementById('btn-up').onclick = () => {
+                    if (currentPath !== 'Home') {
+                        currentPath = 'Home';
+                        searchQuery = '';
+                        render();
+                    }
+                };
+            }
+
+            const searchInput = document.getElementById('search-explorer');
+            if (searchInput) {
+                searchInput.focus();
+                const val = searchInput.value;
+                searchInput.value = '';
+                searchInput.value = val;
+                
+                searchInput.oninput = (e) => {
+                    searchQuery = e.target.value;
+                    render();
                 };
             }
         };
         render();
     };
 
-    // Global state and handler for Wi-Fi simulation
+    window.init_updater = (content, id) => {
+        let checking = false;
+        let updateFound = false;
+        let downloading = false;
+        let downloadProgress = 0;
+        let readyToRestart = false;
+
+        const render = () => {
+            content.innerHTML = `
+              <div class="h-full flex flex-col bg-transparent font-sans overflow-y-auto custom-scrollbar p-10">
+                  <div class="max-w-4xl mx-auto w-full">
+                      <!-- Header -->
+                      <div class="flex items-center gap-5 mb-12">
+                          <img src="${APP_IMAGES.updater}" class="w-12 h-12 drop-shadow-md non-critical" onerror="window.handleImgError(this)" referrerpolicy="no-referrer">
+                          <h1 class="text-4xl font-extrabold text-slate-900 tracking-tight">Windows Update</h1>
+                      </div>
+                      
+                      <!-- Status Card -->
+                      <div class="glass-card rounded-3xl p-10 mb-10 flex justify-between items-start relative overflow-hidden">
+                          <!-- Decorative background glow -->
+                          <div class="absolute -right-20 -top-20 w-80 h-80 bg-blue-400/20 rounded-full blur-[80px] pointer-events-none"></div>
+                          <div class="flex gap-8 items-start relative z-10 w-full">
+                              <div class="mt-1 flex-shrink-0">
+                                  ${checking ? `<div class="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin shadow-sm"></div>` : 
+                                    readyToRestart ? `<i class="ph-fill ph-check-circle text-[56px] icon-grad grad-emerald drop-shadow-sm"></i>` :
+                                    updateFound ? `<i class="ph-fill ph-arrows-clockwise text-[56px] icon-grad grad-blue drop-shadow-sm"></i>` :
+                                    `<i class="ph-fill ph-check-circle text-[56px] icon-grad grad-emerald drop-shadow-sm"></i>`}
+                              </div>
+                              <div class="flex flex-col flex-grow">
+                                  <h2 class="text-3xl font-bold text-slate-900 tracking-tight mb-2">
+                                      ${checking ? 'Checking for updates...' : 
+                                        readyToRestart ? 'Restart required' : 
+                                        updateFound ? 'Updates available to download' : 
+                                        'You\'re up to date'}
+                                  </h2>
+                                  <p class="text-base text-slate-600 font-medium mb-8">
+                                      ${checking ? 'Please wait while we check your device.' : 
+                                        readyToRestart ? 'Your device will restart outside of active hours.' : 
+                                        updateFound ? 'Feature Drop 1H03 is ready for your compute.' : 
+                                        'Last checked: Today'}
+                                  </p>
+                                  
+                                  ${downloading ? `
+                                      <div class="w-full max-w-lg mb-6 glass-card p-5 rounded-2xl">
+                                          <div class="flex justify-between text-sm font-bold text-slate-800 mb-3">
+                                              <span>Downloading updates...</span>
+                                              <span class="text-blue-600">${downloadProgress}%</span>
+                                          </div>
+                                          <div class="w-full h-3 bg-white/40 rounded-full overflow-hidden shadow-inner border border-white/30">
+                                              <div class="h-full bg-blue-600 rounded-full transition-all duration-300 relative overflow-hidden" style="width: ${downloadProgress}%">
+                                                  <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent w-full h-full animate-[slideRight_1.5s_infinite]"></div>
+                                              </div>
+                                          </div>
+                                      </div>
+                                  ` : ``}
+
+                                  ${readyToRestart ? `
+                                      <button id="btn-restart-${id}" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-10 rounded-xl shadow-lg transition-all elastic-bounce text-sm w-fit mt-2">Restart now</button>
+                                  ` : updateFound && !downloading ? `
+                                      <div class="glass-card p-5 rounded-2xl mb-6 w-full max-w-xl">
+                                          <h4 class="text-base font-bold text-slate-900">Windows 12 Update 1H04</h4>
+                                          <p class="text-xs text-slate-600 mt-1 font-medium">Includes new Liquid Glass architectural improvements and core system patches.</p>
+                                      </div>
+                                      <button id="btn-dl-${id}" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-10 rounded-xl shadow-lg transition-all elastic-bounce text-sm w-fit">Download & install</button>
+                                  ` : !checking && !downloading ? `
+                                      <button id="btn-chk-${id}" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-10 rounded-xl shadow-lg transition-all elastic-bounce text-sm w-fit">Check for updates</button>
+                                  ` : ``}
+                              </div>
+                          </div>
+                      </div>
+
+                      <!-- More Options -->
+                      <h3 class="text-xl font-bold text-slate-900 tracking-tight mb-4 px-2">More options</h3>
+                      <div class="glass-card rounded-3xl flex flex-col overflow-hidden !p-0">
+                          <div class="flex items-center justify-between p-5 px-8 border-b border-white/30 hover:bg-white/30 cursor-pointer transition-colors group">
+                              <div class="flex items-center gap-6">
+                                  <div class="w-12 h-12 rounded-full glass-card flex items-center justify-center text-slate-600 group-hover:text-blue-600 transition-colors">
+                                      <i class="ph-bold ph-clock-counter-clockwise text-2xl icon-grad grad-slate group-hover:grad-blue transition-all"></i>
+                                  </div>
+                                  <div>
+                                      <p class="text-base font-bold text-slate-900">Update history</p>
+                                      <p class="text-xs text-slate-500 font-semibold mt-0.5">See the updates installed on your device</p>
+                                  </div>
+                              </div>
+                              <i class="ph-bold ph-caret-right text-lg icon-grad grad-slate group-hover:grad-blue transition-all"></i>
+                          </div>
+                          <div class="flex items-center justify-between p-5 px-8 hover:bg-white/30 cursor-pointer transition-colors group">
+                              <div class="flex items-center gap-6">
+                                  <div class="w-12 h-12 rounded-full glass-card flex items-center justify-center text-slate-600 group-hover:text-blue-600 transition-colors">
+                                      <i class="ph-bold ph-sliders-horizontal text-2xl icon-grad grad-slate group-hover:grad-blue transition-all"></i>
+                                  </div>
+                                  <div>
+                                      <p class="text-base font-bold text-slate-900">Advanced options</p>
+                                      <p class="text-xs text-slate-500 font-semibold mt-0.5">Delivery optimization, optional updates, active hours</p>
+                                  </div>
+                              </div>
+                              <i class="ph-bold ph-caret-right text-lg icon-grad grad-slate group-hover:grad-blue transition-all"></i>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+            `;
+
+            // Check for Updates logic
+            if(document.getElementById(`btn-chk-${id}`)) {
+                document.getElementById(`btn-chk-${id}`).onclick = async () => {
+                    checking = true; render();
+                    try {
+                        let res = await fetch('update/index.html', { method: 'HEAD' });
+                        checking = false;
+                        if (res.ok) { updateFound = true; } else { updateFound = false; }
+                        render();
+                    } catch (e) {
+                        checking = false; updateFound = false; render();
+                    }
+                };
+            }
+            
+            // Download logic (starts progress bar instead of immediate restart)
+            if(document.getElementById(`btn-dl-${id}`)) {
+                document.getElementById(`btn-dl-${id}`).onclick = () => { 
+                    downloading = true;
+                    render();
+                    
+                    let progressInterval = setInterval(() => {
+                        downloadProgress += Math.floor(Math.random() * 12) + 3; // jump by 3-15%
+                        if(downloadProgress >= 100) {
+                            downloadProgress = 100;
+                            downloading = false;
+                            readyToRestart = true;
+                            clearInterval(progressInterval);
+                        }
+                        render();
+                    }, 600);
+                };
+            }
+            
+            // Restart trigger
+            if(document.getElementById(`btn-restart-${id}`)) {
+                document.getElementById(`btn-restart-${id}`).onclick = () => {
+                    window.triggerSystemUpdate();
+                }
+            }
+        };
+        render();
+    };
+
     window._settingsState = { connectingTo: null };
     window.connectToNetwork = function(net) {
         window._settingsState.connectingTo = net;
@@ -1171,11 +1656,10 @@
             saveState();
             if(window.renderSettingsInstance) window.renderSettingsInstance();
             updateHwUI();
-            showDynamicPill(ICONS.wifiTray, `Connected to ${net}`);
+            showDynamicPill('ph-bold ph-check-circle icon-grad grad-emerald', `Connected to ${net}`);
         }, 1500);
     };
 
-    // 2. SETTINGS APP
     window.init_settings = (content, id) => {
       appStates[id] = appStates[id] || 'System';
       const availableNetworks = ['Vision_Fiber_5G', 'NETGEAR-Guest', 'Starbucks_WiFi', 'iPhone_Hotspot'];
@@ -1185,152 +1669,141 @@
         
         if(tab === 'System') {
             main = `
-            <div class="flex items-center gap-6 mb-8">
-               ${imgTag(ICONS.laptop, "w-20 h-20 drop-shadow-sm")}
+            <div class="flex items-center gap-6 mb-10 px-2 group">
+               <i class="ph-fill ph-laptop text-7xl icon-grad grad-blue transition-transform group-hover:scale-105"></i>
                <div>
-                 <h1 class="text-3xl font-bold text-slate-900 tracking-tight">Vision-PC</h1>
-                 <p class="text-slate-600 font-medium text-sm mt-1">Windows 12 Pro (Core)</p>
+                 <h1 class="text-4xl font-bold text-slate-900 tracking-tight">Vision-PC</h1>
+                 <p class="text-blue-700 font-bold text-sm mt-1 glass-card w-fit px-3 py-1 rounded-md">Windows 12 Pro (Core)</p>
                </div>
             </div>
             
-            <div class="bg-white/60 border border-white/60 rounded-[16px] shadow-sm mb-6 overflow-hidden">
-               <div class="px-6 py-4 border-b border-white/40 bg-white/40"><h3 class="font-bold text-sm text-slate-900">Compute Specifications</h3></div>
-               <div class="px-6 py-5 grid grid-cols-3 gap-y-4 text-xs">
-                 <div class="font-semibold text-slate-600">CPU</div><div class="col-span-2 text-slate-900 font-semibold">Snapdragon® X Elite X1E-80-100 @ 3.40 GHz</div>
-                 <div class="font-semibold text-slate-600">RAM</div><div class="col-span-2 text-slate-900 font-semibold">32.0 GB LPDDR5x</div>
-               </div>
-            </div>
+            <h3 class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-3 px-3">Device Info</h3>
+            ${settingCard("Processor", "Snapdragon® X Elite X1E-80-100 @ 3.40 GHz", `<span class="text-[11px] font-bold text-slate-600 glass-card px-3 py-1 rounded-md">ARM64</span>`, 'ph-fill ph-desktop')}
+            ${settingCard("Installed RAM", "32.0 GB LPDDR5x (31.7 GB usable)", "", 'ph-fill ph-cloud')}
             
-            <div class="bg-white/60 border border-white/60 rounded-[16px] shadow-sm overflow-hidden mb-6">
-               <div class="px-6 py-4 border-b border-white/40 bg-white/40"><h3 class="font-bold text-sm text-slate-900">Windows specifications</h3></div>
-               <div class="px-6 py-5 grid grid-cols-3 gap-y-4 text-xs">
-                 <div class="font-semibold text-slate-600">Edition</div><div class="col-span-2 text-slate-900 font-semibold">Windows 12 Pro</div>
-                 <div class="font-semibold text-slate-600">Version</div><div class="col-span-2 text-slate-900 font-semibold">1H02 (Hudson Valley)</div>
-                 <div class="font-semibold text-slate-600">OS build</div><div class="col-span-2 text-slate-900 font-semibold">${buildVersion}</div>
-               </div>
-            </div>
-
-            <!-- Display Controls -->
-            <div class="bg-white/60 border border-white/60 rounded-[16px] shadow-sm p-6 mb-6">
-                <h3 class="font-bold text-base mb-4 text-slate-900 flex items-center"><img src="${ICONS.brightness}" class="w-5 h-5 mr-2 opacity-80">Display</h3>
-                
-                <div class="flex items-center justify-between mb-6">
-                    <div>
-                        <h4 class="font-bold text-sm text-slate-900">Night light</h4>
-                        <p class="text-xs text-slate-500 mt-1 font-medium">Use warmer colors to help block blue light and aid sleep</p>
-                    </div>
-                    <label class="relative inline-flex items-center cursor-pointer">
-                      <input type="checkbox" ${osData.hwState.nightLight ? 'checked' : ''} onchange="window.toggleHW('nightLight');" class="sr-only peer">
-                      <div class="w-12 h-7 bg-slate-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-blue-600"></div>
-                    </label>
-                </div>
-                
-                <div class="flex items-center space-x-4">
-                    <img src="${ICONS.brightness}" class="w-5 h-5 opacity-70">
+            <h3 class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-3 mt-8 px-3">Windows Specifications</h3>
+            ${settingCard("Edition", "Windows 12 Pro", "", 'ph-fill ph-windows-logo')}
+            ${settingCard("Version", "1H03 (Hudson Valley)", "", 'ph-fill ph-windows-logo')}
+            ${settingCard("OS Build", buildVersion, "", 'ph-fill ph-windows-logo')}
+            
+            <h3 class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-3 mt-8 px-3">Display</h3>
+            ${settingCard(
+                "Night light", 
+                "Use warmer colors to help block blue light and aid sleep", 
+                `<label class="relative inline-flex items-center cursor-pointer">
+                  <input type="checkbox" ${osData.hwState.nightLight ? 'checked' : ''} onchange="window.toggleHW('nightLight');" class="sr-only peer">
+                  <div class="w-12 h-7 bg-white/40 border border-white/60 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-blue-500"></div>
+                </label>`,
+                'ph-fill ph-moon'
+            )}
+            ${settingCard(
+                "Brightness", 
+                "Adjust display brightness", 
+                `<div class="flex items-center space-x-4 w-56">
                     <input type="range" class="fluent-slider flex-grow" value="${osData.hwState.brightness}" oninput="osData.hwState.brightness=this.value;updateHwUI();saveState()">
-                    <span class="text-xs font-semibold text-slate-700 w-10 text-right">${osData.hwState.brightness}%</span>
-                </div>
-            </div>
+                    <span class="text-xs font-bold text-slate-700 w-10 text-right">${osData.hwState.brightness}%</span>
+                </div>`,
+                'ph-fill ph-sun'
+            )}
 
-            <!-- Manually Trigger BSOD -->
-            <div class="mt-6 flex justify-end">
-                <button onclick="window.triggerBSOD('MANUALLY_INITIATED_CRASH')" class="bg-red-50 hover:bg-red-100 text-red-600 font-bold py-2.5 px-5 rounded-xl border border-red-200 transition-colors text-xs shadow-sm elastic-bounce">Simulate System Crash</button>
+            <div class="mt-10 pt-6 border-t border-white/30 flex justify-between items-center px-3">
+                <span class="text-xs font-bold text-slate-500 uppercase tracking-widest">Developer Options</span>
+                <button onclick="window.triggerBSOD('MANUALLY_INITIATED_CRASH')" class="glass-card bg-red-50/50 hover:bg-red-100/50 text-red-600 font-bold py-2.5 px-5 rounded-md transition-colors text-xs elastic-bounce">Simulate System Crash</button>
             </div>
             `;
         }
         else if(tab === 'Network') {
             main = `
-            <h2 class="text-3xl font-bold mb-8 text-slate-900 tracking-tight">Network & Internet</h2>
+            <div class="px-2 mb-8">
+                <h2 class="text-4xl font-bold text-slate-900 tracking-tight">Network & Internet</h2>
+            </div>
             
-            <!-- Hudson Valley Concept: Dynamic Status Banner -->
             ${osData.hwState.wifi 
-                ? `<div class="bg-gradient-to-br from-blue-500 to-indigo-600 rounded-[20px] p-6 text-white shadow-md relative overflow-hidden mb-6 transition-all duration-500">
-                     <div class="absolute right-0 top-0 opacity-10 transform translate-x-4 -translate-y-4"><img src="${ICONS.globe}" class="w-48 h-48 invert"></div>
-                     <div class="relative z-10 flex items-center space-x-5">
-                         <div class="w-14 h-14 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm border border-white/30 shadow-inner">
-                            <img src="${ICONS.wifi}" class="w-7 h-7 brightness-0 invert">
+                ? `<div class="glass-card rounded-[24px] p-8 text-slate-900 relative overflow-hidden mb-8 transition-all duration-500 mx-2 group">
+                     <i class="ph-bold ph-globe text-[200px] absolute right-0 top-0 opacity-10 transform translate-x-4 -translate-y-4 group-hover:scale-110 transition-transform icon-grad grad-blue"></i>
+                     <div class="relative z-10 flex items-center space-x-6">
+                         <div class="w-20 h-20 bg-blue-50/60 rounded-xl flex items-center justify-center border border-blue-200/50 shadow-sm backdrop-blur-md">
+                            <i class="ph-bold ph-wifi-high text-4xl drop-shadow-md icon-grad grad-blue"></i>
                          </div>
                          <div>
-                             <h3 class="text-2xl font-bold tracking-tight">${osData.currentNetwork}</h3>
-                             <p class="text-blue-100 font-medium text-sm mt-0.5">Connected, secured. Excellent signal.</p>
+                             <h3 class="text-3xl font-bold tracking-tight mb-1">${osData.currentNetwork}</h3>
+                             <p class="text-blue-700 font-bold text-sm">Connected, secured. Excellent signal.</p>
                          </div>
                      </div>
                    </div>`
-                : `<div class="bg-gradient-to-br from-slate-600 to-slate-800 rounded-[20px] p-6 text-white shadow-md relative overflow-hidden mb-6 transition-all duration-500">
-                     <div class="absolute right-0 top-0 opacity-10 transform translate-x-4 -translate-y-4"><img src="${ICONS.globe}" class="w-48 h-48 invert"></div>
-                     <div class="relative z-10 flex items-center space-x-5">
-                         <div class="w-14 h-14 bg-white/10 rounded-full flex items-center justify-center backdrop-blur-sm border border-white/20 shadow-inner">
-                            <img src="${ICONS.wifiOff}" class="w-7 h-7 brightness-0 invert">
+                : `<div class="glass-card rounded-[24px] p-8 text-slate-900 relative overflow-hidden mb-8 transition-all duration-500 mx-2 group">
+                     <i class="ph-bold ph-globe text-[200px] absolute right-0 top-0 opacity-10 transform translate-x-4 -translate-y-4 group-hover:scale-110 transition-transform icon-grad grad-slate"></i>
+                     <div class="relative z-10 flex items-center space-x-6">
+                         <div class="w-20 h-20 bg-white/40 rounded-xl flex items-center justify-center border border-white/60 shadow-sm backdrop-blur-md">
+                            <i class="ph-bold ph-wifi-slash text-4xl drop-shadow-md icon-grad grad-slate"></i>
                          </div>
                          <div>
-                             <h3 class="text-2xl font-bold tracking-tight">Not connected</h3>
-                             <p class="text-slate-300 font-medium text-sm mt-0.5">Wi-Fi is currently paused or turned off.</p>
+                             <h3 class="text-3xl font-bold tracking-tight mb-1">Not connected</h3>
+                             <p class="text-slate-600 font-bold text-sm">Wi-Fi is currently paused or turned off.</p>
                          </div>
                      </div>
                    </div>`
             }
 
-            <div class="bg-white/60 border border-white/60 rounded-[16px] shadow-sm p-6 mb-6 transition-all">
-                <div class="flex items-center justify-between ${osData.hwState.wifi ? 'mb-4' : 'mb-0'}">
-                    <div>
-                        <h3 class="font-bold text-base text-slate-900 flex items-center"><img src="${ICONS.wifiTray}" class="w-5 h-5 mr-3 opacity-80">Wi-Fi</h3>
-                        ${!osData.hwState.wifi ? '<p class="text-xs text-slate-500 font-medium mt-1 ml-8">Turn on Wi-Fi to view available networks.</p>' : ''}
-                    </div>
-                    <label class="relative inline-flex items-center cursor-pointer">
-                      <input type="checkbox" ${osData.hwState.wifi ? 'checked' : ''} onchange="window.toggleHW('wifi')" class="sr-only peer">
-                      <div class="w-12 h-7 bg-slate-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-blue-600"></div>
-                    </label>
-                </div>
-                
-                ${osData.hwState.wifi ? `
-                    <div class="border-t border-slate-300/50 pt-4 mt-2 fade-in">
-                        <p class="text-[11px] font-bold text-slate-500 mb-3 uppercase tracking-wider ml-1">Available Networks</p>
-                        <div class="space-y-2">
-                            ${availableNetworks.map(net => `
-                                <div onclick="${net !== osData.currentNetwork && window._settingsState.connectingTo !== net ? `window.connectToNetwork('${net}')` : ''}" class="flex items-center justify-between p-3.5 rounded-xl transition-colors border ${net === osData.currentNetwork ? 'bg-blue-50/90 border-blue-200 shadow-sm' : 'bg-white/40 border-transparent hover:bg-white/80 hover:border-slate-300 cursor-pointer'}">
-                                    <div class="flex items-center space-x-3">
-                                        <img src="${ICONS.wifiTray}" class="w-5 h-5 opacity-80 ${net === osData.currentNetwork ? 'opacity-100' : ''}">
-                                        <div class="flex flex-col">
-                                            <span class="text-sm font-semibold ${net === osData.currentNetwork ? 'text-blue-900' : 'text-slate-800'}">${net}</span>
-                                            ${net === osData.currentNetwork ? `<span class="text-[10px] text-blue-600 font-medium">Secured</span>` : `<span class="text-[10px] text-slate-500 font-medium">Secured</span>`}
-                                        </div>
-                                    </div>
-                                    <div>
-                                        ${net === osData.currentNetwork 
-                                            ? `<span class="text-xs font-bold text-white bg-blue-600 px-3 py-1.5 rounded-lg shadow-sm">Connected</span>` 
-                                            : window._settingsState.connectingTo === net 
-                                                ? `<div class="flex items-center text-xs font-bold text-blue-600 bg-blue-50 px-3 py-1.5 rounded-lg"><div class="w-3 h-3 border-2 border-blue-500 border-t-transparent rounded-full animate-spin mr-2"></div>Connecting</div>`
-                                                : `<span class="text-xs font-bold text-slate-600 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 px-3 py-1.5 rounded-lg transition-colors">Connect</span>`
-                                        }
+            <h3 class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-3 px-3">Connection Adapters</h3>
+            ${settingCard(
+                "Wi-Fi", 
+                !osData.hwState.wifi ? 'Turn on Wi-Fi to view available networks.' : 'Manage known networks and adapters',
+                `<label class="relative inline-flex items-center cursor-pointer">
+                  <input type="checkbox" ${osData.hwState.wifi ? 'checked' : ''} onchange="window.toggleHW('wifi')" class="sr-only peer">
+                  <div class="w-12 h-7 bg-white/40 border border-white/60 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-blue-500"></div>
+                </label>`,
+                'ph-bold ph-wifi-high'
+            )}
+            
+            ${osData.hwState.wifi ? `
+                <div class="px-2 mt-4 fade-in mb-8">
+                    <div class="space-y-2 pl-12 pr-2">
+                        ${availableNetworks.map(net => `
+                            <div onclick="${net !== osData.currentNetwork && window._settingsState.connectingTo !== net ? `window.connectToNetwork('${net}')` : ''}" class="flex items-center justify-between p-4 rounded-xl transition-all border ${net === osData.currentNetwork ? 'bg-blue-50/60 border-blue-200/60 shadow-sm' : 'glass-card hover:bg-white/40 cursor-pointer group'}">
+                                <div class="flex items-center space-x-4">
+                                    <i class="ph-bold ph-wifi-high text-2xl icon-grad ${net === osData.currentNetwork ? 'grad-blue' : 'grad-slate group-hover:grad-blue transition-all'}"></i>
+                                    <div class="flex flex-col">
+                                        <span class="text-sm font-bold ${net === osData.currentNetwork ? 'text-blue-900' : 'text-slate-800'}">${net}</span>
+                                        ${net === osData.currentNetwork ? `<span class="text-[11px] text-blue-700 font-semibold mt-0.5">Secured</span>` : `<span class="text-[11px] text-slate-500 font-medium mt-0.5">Secured</span>`}
                                     </div>
                                 </div>
-                            `).join('')}
-                        </div>
+                                <div>
+                                    ${net === osData.currentNetwork 
+                                        ? `<span class="text-xs font-bold text-white bg-blue-500 px-4 py-2 rounded-md shadow-sm">Connected</span>` 
+                                        : window._settingsState.connectingTo === net 
+                                            ? `<div class="flex items-center text-xs font-bold text-blue-700 glass-card bg-blue-50/50 px-4 py-2 rounded-md"><div class="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin mr-2"></div>Connecting</div>`
+                                            : `<span class="text-xs font-bold text-slate-700 hover:text-slate-900 glass-card bg-white/20 px-4 py-2 rounded-md transition-colors">Connect</span>`
+                                    }
+                                </div>
+                            </div>
+                        `).join('')}
                     </div>
-                ` : ``}
-            </div>
-
-            <!-- Windows 12 Concept: Pause Internet / Focus Session -->
-            <div class="bg-white/50 border border-white/50 rounded-[20px] shadow-sm p-6 relative overflow-hidden">
-                <div class="flex items-center space-x-3 mb-2 relative z-10">
-                    <img src="https://img.icons8.com/fluency-systems-filled/96/0067c0/stop-sign.png" class="w-5 h-5">
-                    <h3 class="font-bold text-base text-slate-900">Focus Session (Pause Wi-Fi)</h3>
                 </div>
-                <p class="text-xs text-slate-600 mb-6 font-medium max-w-lg relative z-10">Temporarily disable your Wi-Fi adapter to block out distractions and focus. Your network will automatically turn back on when the timer expires.</p>
+            ` : ``}
+
+            <h3 class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-3 mt-8 px-3">Focus & Wellbeing</h3>
+            
+            <div class="glass-card rounded-2xl p-6 relative overflow-hidden mx-2 group">
+                <div class="flex items-center space-x-3 mb-2 relative z-10">
+                    <i class="ph-bold ph-prohibit text-2xl icon-grad grad-red drop-shadow-sm"></i>
+                    <h4 class="font-bold text-base text-slate-900">Focus Session (Pause Wi-Fi)</h4>
+                </div>
+                <p class="text-[12px] text-slate-600 mb-6 font-medium max-w-lg relative z-10 leading-relaxed">Temporarily disable your Wi-Fi adapter to block out distractions and focus. Your network will automatically turn back on when the timer expires.</p>
                 
                 ${!osData.hwState.wifi ? `
-                    <div class="flex items-center justify-between bg-yellow-50/80 border border-yellow-200 p-4 rounded-xl relative z-10 fade-in">
+                    <div class="flex items-center justify-between glass-card bg-amber-50/60 border-amber-200/50 p-5 rounded-[16px] relative z-10 fade-in">
                         <div>
-                            <span class="font-bold text-yellow-800 text-sm">Internet is currently paused</span>
-                            <p class="text-xs text-yellow-700 mt-1">Focus mode is active. Distractions are blocked.</p>
+                            <span class="font-bold text-amber-900 text-sm">Internet is currently paused</span>
+                            <p class="text-[11px] text-amber-700 mt-1 font-semibold">Focus mode is active. Distractions are blocked.</p>
                         </div>
-                        <button onclick="window.toggleHW('wifi')" class="bg-white hover:bg-yellow-100 text-yellow-900 font-bold py-2 px-5 rounded-lg border border-yellow-300 transition-colors shadow-sm text-xs elastic-bounce">Resume Now</button>
+                        <button onclick="window.toggleHW('wifi')" class="glass-card hover:bg-white/80 text-amber-900 font-bold py-2.5 px-6 rounded-md transition-colors text-sm elastic-bounce">Resume Now</button>
                     </div>
                 ` : `
                     <div class="flex items-center space-x-3 relative z-10 fade-in">
-                        <button onclick="window.pauseWifi(1, 'min')" class="bg-white/80 hover:bg-white text-slate-800 hover:text-blue-700 font-bold py-2.5 px-5 rounded-xl transition-all border border-white/80 shadow-sm text-xs flex items-center hover:border-blue-300 elastic-bounce">1 Min (Demo)</button>
-                        <button onclick="window.pauseWifi(60, 'min')" class="bg-white/80 hover:bg-white text-slate-800 hover:text-blue-700 font-bold py-2.5 px-5 rounded-xl transition-all border border-white/80 shadow-sm text-xs flex items-center hover:border-blue-300 elastic-bounce">1 Hour</button>
-                        <button onclick="window.pauseWifi(240, 'min')" class="bg-white/80 hover:bg-white text-slate-800 hover:text-blue-700 font-bold py-2.5 px-5 rounded-xl transition-all border border-white/80 shadow-sm text-xs flex items-center hover:border-blue-300 elastic-bounce">4 Hours</button>
+                        <button onclick="window.pauseWifi(1, 'min')" class="glass-card hover:bg-white/80 text-slate-800 hover:text-blue-700 font-bold py-2.5 px-5 rounded-md transition-all text-xs elastic-bounce">1 Min (Demo)</button>
+                        <button onclick="window.pauseWifi(60, 'min')" class="glass-card hover:bg-white/80 text-slate-800 hover:text-blue-700 font-bold py-2.5 px-5 rounded-md transition-all text-xs elastic-bounce">1 Hour</button>
+                        <button onclick="window.pauseWifi(240, 'min')" class="glass-card hover:bg-white/80 text-slate-800 hover:text-blue-700 font-bold py-2.5 px-5 rounded-md transition-all text-xs elastic-bounce">4 Hours</button>
                     </div>
                 `}
             </div>
@@ -1338,74 +1811,91 @@
         }
         else if(tab === 'Personalization') {
             main = `
-            <h2 class="text-3xl font-bold mb-8 text-slate-900 tracking-tight">Personalization</h2>
+            <div class="px-2 mb-8">
+                <h2 class="text-4xl font-bold text-slate-900 tracking-tight">Personalization</h2>
+            </div>
             
-            <div class="bg-white/60 border border-white/60 rounded-[16px] shadow-sm p-6 mb-6">
-                <h3 class="font-bold text-base mb-1 text-slate-900">Background</h3>
-                <p class="text-xs text-slate-500 mb-6">Personalize your desktop background</p>
-                <div class="grid grid-cols-2 gap-4 mb-6" id="s-wp-${id}"></div>
-                <div class="pt-6 border-t border-slate-300/40 flex items-center justify-between">
-                    <p class="text-sm font-semibold text-slate-900">Choose a photo</p>
+            <h3 class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-3 px-3">Background</h3>
+            <div class="glass-card rounded-2xl p-6 mb-8 mx-2">
+                <div class="grid grid-cols-2 gap-5 mb-6" id="s-wp-${id}"></div>
+                <div class="pt-5 border-t border-white/30 flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-bold text-slate-900">Custom image</p>
+                        <p class="text-xs text-slate-500 font-medium mt-0.5">Choose a file from your PC</p>
+                    </div>
                     <input type="file" id="s-upload-${id}" accept="image/*" class="hidden">
-                    <button onclick="document.getElementById('s-upload-${id}').click()" class="bg-white/80 hover:bg-white text-slate-900 font-semibold py-2 px-4 rounded-xl transition-colors border border-white/60 shadow-sm text-xs elastic-bounce">Browse photos</button>
+                    <button onclick="document.getElementById('s-upload-${id}').click()" class="glass-card hover:bg-white/60 text-slate-800 font-bold py-2.5 px-6 rounded-md transition-colors text-xs elastic-bounce">Browse photos</button>
                 </div>
             </div>
 
-            <div class="bg-white/60 border border-white/60 rounded-[16px] shadow-sm p-6 mb-6">
-                <h3 class="font-bold text-base mb-1 text-slate-900">System Typography</h3>
-                <p class="text-xs text-slate-500 mb-6">Change the default typeface across Windows</p>
-                <div class="flex items-center justify-between">
-                    <div class="text-sm font-semibold text-slate-800">Select Typeface</div>
-                    <select id="s-font-${id}" class="bg-white/80 border border-white/60 text-slate-900 font-medium text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block p-2 px-3 outline-none cursor-pointer shadow-sm w-48">
+            <h3 class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-3 px-3">Colors & Materials</h3>
+            ${settingCard(
+                "Taskbar Color Tint", 
+                "Customize the ambient glass color of the taskbar",
+                `<input type="color" id="s-color-${id}" value="${osData.taskbarColor || '#ffffff'}" class="w-10 h-10 rounded-lg cursor-pointer bg-transparent border-2 border-white/50 shadow-sm" onchange="osData.taskbarColor=this.value; saveState(); applySystemPreferences();">`,
+                'ph-fill ph-palette'
+            )}
+            ${settingCard(
+                "Liquid Glass Material", 
+                "Enable advanced refractive blur on OS surfaces", 
+                `<label class="relative inline-flex items-center cursor-pointer">
+                  <input type="checkbox" id="s-liquid-${id}" ${osData.useLiquidGlass ? 'checked' : ''} class="sr-only peer">
+                  <div class="w-12 h-7 bg-white/40 border border-white/60 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-blue-500"></div>
+                </label>`,
+                'ph-fill ph-drop'
+            )}
+
+            <h3 class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-3 mt-8 px-3">Typography</h3>
+            <div class="glass-card rounded-2xl p-6 mb-6 mx-2">
+                <div class="flex items-center justify-between mb-5">
+                    <div>
+                        <h4 class="font-bold text-sm text-slate-900">System Typeface</h4>
+                        <p class="text-[11px] text-slate-500 font-medium mt-0.5">Change the default font across Windows</p>
+                    </div>
+                    <select id="s-font-${id}" class="glass-card bg-white/40 text-slate-900 font-bold text-xs rounded-md focus:outline-none block py-2.5 px-4 cursor-pointer w-48">
                         ${Object.keys(FONTS).map(f => `<option value="${f}" ${osData.fontStyle === f ? 'selected' : ''}>${f}</option>`).join('')}
                     </select>
                 </div>
-                <div class="mt-5 p-5 bg-white/40 rounded-xl border border-white/60">
-                    <p class="text-lg text-slate-800" style="font-family: var(--os-font);">The quick brown fox jumps over the lazy dog.</p>
-                </div>
-            </div>
-
-            <div class="bg-white/60 border border-white/60 rounded-[16px] shadow-sm p-6 mb-6">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <h3 class="font-bold text-base mb-1 text-slate-900">Liquid Glass Material</h3>
-                        <p class="text-xs text-slate-500 max-w-sm mt-1">Enable advanced refractive blur on surfaces.</p>
-                    </div>
-                    <label class="relative inline-flex items-center cursor-pointer">
-                      <input type="checkbox" id="s-liquid-${id}" ${osData.useLiquidGlass ? 'checked' : ''} class="sr-only peer">
-                      <div class="w-12 h-7 bg-slate-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-blue-600"></div>
-                    </label>
+                <div class="p-5 glass-card bg-white/20 rounded-xl">
+                    <p class="text-base font-medium text-slate-800 tracking-wide" style="font-family: var(--os-font);">The quick brown fox jumps over the lazy dog.</p>
                 </div>
             </div>
             `;
         }
 
-        const navItem = (name, icon, key) => `
-            <div id="s-tab-${id}-${key}" class="flex items-center space-x-3 px-4 py-3 rounded-xl text-[13px] cursor-pointer transition-colors ${tab===key?'settings-nav-active text-slate-900 bg-white/40 border border-white/50 shadow-sm':'text-slate-700 hover:bg-white/40'}">
-                <img src="${icon}" class="w-5 h-5 opacity-80" draggable="false">
-                <span class="font-bold">${name}</span>
+        const navItem = (name, iconClass, key) => `
+            <div id="s-tab-${id}-${key}" class="flex items-center space-x-4 px-5 py-3 rounded-lg text-[13px] cursor-pointer transition-all group ${tab===key?'glass-card bg-white/40':'hover:bg-white/20 font-medium'}">
+                <i class="${iconClass} text-xl icon-grad ${tab===key?'grad-blue':'grad-slate group-hover:grad-blue'} transition-all"></i>
+                <span class="font-bold text-slate-800">${name}</span>
             </div>
         `;
 
         content.innerHTML = `
-          <div class="h-full flex font-sans bg-slate-50/30">
-            <!-- Sidebar -->
-            <div class="w-80 p-6 flex flex-col z-10">
-                <div class="bg-white/40 border border-white/50 rounded-[20px] shadow-sm p-4 mb-6 backdrop-blur-md">
-                    <div class="flex items-center gap-3">
-                       <img src="${USER_AVATAR}" class="w-12 h-12 rounded-full border border-white shadow-sm object-cover non-critical">
-                       <div><p class="font-bold text-slate-900 text-sm">Administrator</p><p class="text-[11px] text-slate-500 font-semibold">Local Account</p></div>
+          <div class="h-full flex font-sans bg-transparent relative">
+            <!-- Refined Windows 11/12 Settings Sidebar Layout -->
+            <div class="w-80 pt-8 px-5 flex flex-col z-10 border-r border-white/30 bg-white/10">
+                <div class="flex items-center gap-4 mb-8 px-3 group">
+                   <img src="${USER_AVATAR}" class="w-14 h-14 rounded-full shadow-md object-cover non-critical group-hover:scale-105 transition-transform" draggable="false" onerror="window.handleImgError(this)" referrerpolicy="no-referrer">
+                   <div class="flex flex-col justify-center">
+                       <p class="font-bold text-slate-900 text-sm tracking-tight">Administrator</p>
+                       <p class="text-[10px] text-slate-500 font-bold uppercase tracking-wider mt-1">Local Account</p>
+                   </div>
+                </div>
+                <div class="px-2 mb-6">
+                    <div class="relative group">
+                        <input type="text" placeholder="Find a setting" class="w-full glass-card bg-white/20 hover:bg-white/40 rounded-md py-2.5 pl-10 pr-4 text-xs focus:outline-none transition-all text-slate-900 placeholder:text-slate-500">
+                        <i class="ph-bold ph-magnifying-glass text-base absolute left-3 top-2.5 icon-grad grad-slate group-focus-within:grad-blue transition-all"></i>
                     </div>
                 </div>
-                <div class="space-y-2">
-                    ${navItem('System', ICONS.monitor, 'System')}
-                    ${navItem('Network & Internet', ICONS.globe, 'Network')}
-                    ${navItem('Personalization', ICONS.paintBrush, 'Personalization')}
+                <div class="space-y-1 px-1">
+                    ${navItem('System', 'ph-bold ph-desktop', 'System')}
+                    ${navItem('Network & Internet', 'ph-bold ph-globe', 'Network')}
+                    ${navItem('Personalization', 'ph-bold ph-palette', 'Personalization')}
                 </div>
             </div>
             <!-- Main Content Area -->
-            <div class="flex-grow py-8 pr-8 overflow-y-auto custom-scrollbar">
-                <div class="max-w-4xl w-full mx-auto pb-10">${main}</div>
+            <div class="flex-grow py-8 px-12 overflow-y-auto custom-scrollbar">
+                <div class="max-w-4xl w-full mx-auto pb-12">${main}</div>
             </div>
           </div>
         `;
@@ -1415,7 +1905,7 @@
         if(tab==='Personalization'){
           const wpc=$(`#s-wp-${id}`); 
           if (wpc) SYSTEM_WALLPAPERS.forEach(wp=>{
-            const el=document.createElement('div'); el.className=`aspect-video rounded-xl bg-cover bg-center cursor-pointer transition-all border-2 ${osData.wallpaper===wp?'border-blue-500 shadow-md scale-105':'border-transparent hover:border-slate-300/50'}`; el.style.backgroundImage=`url(${wp})`;
+            const el=document.createElement('div'); el.className=`aspect-video rounded-xl bg-cover bg-center cursor-pointer transition-all border-[3px] ${osData.wallpaper===wp?'border-blue-500 shadow-lg scale-105':'border-transparent hover:border-white shadow-sm'}`; el.style.backgroundImage=`url(${wp})`;
             el.onclick=()=>{ 
               osData.wallpaper=wp; saveState(); 
               if ($('#desktop-bg')) $('#desktop-bg').style.backgroundImage=`url(${wp})`; 
@@ -1457,6 +1947,14 @@
                  applySystemPreferences();
              }
           }
+          const nuiarToggle = $(`#s-nuiar-${id}`);
+          if (nuiarToggle) {
+             nuiarToggle.onchange = (e) => {
+                 osData.useNuiar = e.target.checked;
+                 saveState();
+                 applySystemPreferences();
+             }
+          }
         }
       }; 
       
@@ -1464,9 +1962,9 @@
       render();
     };
 
-    // --- Main Initializer ---
     function initOS() {
       loadState();
+      injectStaticIcons();
       if ($('#desktop-bg')) $('#desktop-bg').style.backgroundImage = `url(${osData.wallpaper})`;
       applySystemPreferences();
       updateHwUI(); 
