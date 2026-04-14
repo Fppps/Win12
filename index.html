@@ -1536,7 +1536,7 @@
                                   <p class="text-base text-slate-600 font-medium mb-8">
                                       ${checking ? 'Please wait while we check your device.' : 
                                         readyToRestart ? 'Your device will restart outside of active hours.' : 
-                                        updateFound ? 'Feature Drop 1H03 is ready for your compute.' : 
+                                        updateFound ? '1H04 is ready for your compute.' : 
                                         'Last checked: Today'}
                                   </p>
                                   
@@ -1559,7 +1559,7 @@
                                   ` : updateFound && !downloading ? `
                                       <div class="glass-card p-5 rounded-2xl mb-6 w-full max-w-xl">
                                           <h4 class="text-base font-bold text-slate-900">Windows 12 Update 1H04</h4>
-                                          <p class="text-xs text-slate-600 mt-1 font-medium">Includes new Liquid Glass architectural improvements and core system patches.</p>
+                                          <p class="text-xs text-slate-600 mt-1 font-medium">The 1H04 update includes a dynamic Taskbar, Widget Combos, and an improved Liuqid glass with a new Mica blur (replacing Nuiar)</p>
                                       </div>
                                       <button id="btn-dl-${id}" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-10 rounded-xl shadow-lg transition-all elastic-bounce text-sm w-fit">Download & install</button>
                                   ` : !checking && !downloading ? `
