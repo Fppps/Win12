@@ -12,34 +12,34 @@
 
   <style>
     /* ============================================================================
-       1H04 "THE DESTROYER" - AUTHENTIC WINDOWS FLUENT UI
+       1H04 "THE DESTROYER" - TRUE 3D REFRACTIVE GLASS ENGINE
        ============================================================================ */
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Segoe+UI:wght@300;400;500;600;700;900&display=swap');
     
     :root {
-        /* Standard Fluent Animation Curves */
-        --spring-easing: cubic-bezier(0.0, 0.0, 0.2, 1);
-        --destroy-easing: cubic-bezier(0.2, 0.0, 0, 1); 
+        --spring-easing: cubic-bezier(0.1, 0.9, 0.2, 1.0);
+        --destroy-easing: cubic-bezier(0.8, 0, 0.2, 1.0); 
         
         /* ----------------------------------------------------------------------
-           STANDARD MICA / ACRYLIC MATERIAL ENGINE
+           3D GLASS ENGINE VARIABLES
            ---------------------------------------------------------------------- */
         
-        /* STATE 1: Default Light Mode */
-        --blur-taskbar: blur(30px);
-        --blur-card: blur(25px);
+        /* ZERO-TINT: Relying almost entirely on pure blur and refraction */
+        --bg-taskbar: rgba(255, 255, 255, 0.03);
+        --bg-card: rgba(255, 255, 255, 0.02);
+        --bg-card-hover: rgba(255, 255, 255, 0.08);
         
-        --bg-taskbar: rgba(243, 243, 243, 0.85);
-        --bg-card: rgba(255, 255, 255, 0.7);
-        --bg-card-hover: rgba(255, 255, 255, 0.95);
+        /* Extremely deep, color-rich blurs */
+        --blur-taskbar: blur(45px) saturate(220%);
+        --blur-card: blur(40px) saturate(200%);
         
-        /* Subtle Fluent Borders */
-        --border-all: rgba(0, 0, 0, 0.1);
-        --border-t: rgba(255, 255, 255, 0.6);
-        
-        /* Standard Drop Shadows */
-        --shadow-glass-heavy: rgba(0, 0, 0, 0.12);
-        --shadow-glass-light: rgba(0, 0, 0, 0.04);
+        /* 3D Highlight & Shadow Insets (Light direction simulation) */
+        --inset-light: inset 0 1px 1px rgba(255, 255, 255, 0.5), inset 0 -1px 2px rgba(0, 0, 0, 0.15), inset 1px 0 1px rgba(255, 255, 255, 0.2), inset -1px 0 1px rgba(0, 0, 0, 0.1);
+        --shadow-outer: 0 15px 35px -5px rgba(0, 0, 0, 0.3);
+        --shadow-outer-hover: 0 20px 45px -5px rgba(0, 0, 0, 0.4);
+
+        /* The "Reversed Blur" Refractive Border */
+        --refraction-border: blur(15px) invert(0.15) brightness(1.3) saturate(180%);
     }
 
     body { 
@@ -53,83 +53,143 @@
 
     /* --- Dark Theme overrides --- */
     .dark-theme {
-        --bg-taskbar: rgba(32, 32, 32, 0.85);
-        --bg-card: rgba(45, 45, 45, 0.65);
-        --bg-card-hover: rgba(60, 60, 60, 0.8);
+        --bg-taskbar: rgba(0, 0, 0, 0.15);
+        --bg-card: rgba(0, 0, 0, 0.15);
+        --bg-card-hover: rgba(255, 255, 255, 0.05);
         
-        --border-all: rgba(255, 255, 255, 0.1);
-        --border-t: rgba(255, 255, 255, 0.15);
-        
-        --shadow-glass-heavy: rgba(0, 0, 0, 0.35);
-        --shadow-glass-light: rgba(0, 0, 0, 0.15);
-    }
+        --inset-light: inset 0 1px 1px rgba(255, 255, 255, 0.15), inset 0 -1px 2px rgba(0, 0, 0, 0.5), inset 1px 0 1px rgba(255, 255, 255, 0.08), inset -1px 0 1px rgba(0, 0, 0, 0.3);
+        --shadow-outer: 0 20px 50px rgba(0, 0, 0, 0.6);
+        --shadow-outer-hover: 0 25px 60px rgba(0, 0, 0, 0.8);
 
-    /* --------------------------------------------------------------------------
-       STATE 2: BOTH OFF (Solid Basic Colors for Maximum Performance)
-       -------------------------------------------------------------------------- */
-    body.disable-liquid-glass.disable-mica-texture {
-        --blur-taskbar: none;
-        --blur-card: none;
-        
-        --bg-taskbar: #f3f4f6;
-        --bg-card: #ffffff;
-        --bg-card-hover: #f8fafc;
-    }
-
-    body.disable-liquid-glass.disable-mica-texture.dark-theme {
-        --bg-taskbar: #202020;
-        --bg-card: #2d2d2d;
-        --bg-card-hover: #3a3a3a;
+        --refraction-border: blur(15px) invert(0.1) brightness(1.5) saturate(200%);
     }
 
     /* ==========================================================================
-       BASE COMPONENT CLASSES 
+       BASE COMPONENT CLASSES: REFRACTIVE GLASS
        ========================================================================== */
-    .taskbar-flat {
-        background: var(--bg-taskbar); 
-        backdrop-filter: var(--blur-taskbar);
-        -webkit-backdrop-filter: var(--blur-taskbar);
-        border: 1px solid var(--border-all);
-        border-top: 1px solid var(--border-t);
-        box-shadow: 0 8px 24px var(--shadow-glass-heavy), 0 2px 8px var(--shadow-glass-light);
-        transition: background 0.3s ease, backdrop-filter 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, border-radius 0.3s ease;
-    }
     
-    .glass-card {
+    /* 1. Main Wrappers (Restoring direct blur for guaranteed visibility) */
+    .taskbar-flat, .glass-card {
+        position: relative;
         background: var(--bg-card);
         backdrop-filter: var(--blur-card);
         -webkit-backdrop-filter: var(--blur-card);
-        border: 1px solid var(--border-all);
-        box-shadow: 0 4px 12px var(--shadow-glass-heavy);
-        transition: background 0.2s ease, backdrop-filter 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s var(--spring-easing);
+        border: none !important;
+        box-shadow: var(--shadow-outer);
+        transition: transform 0.2s var(--spring-easing), box-shadow 0.2s ease, background 0.3s ease;
+    }
+    
+    .taskbar-flat {
+        background: var(--bg-taskbar);
+        backdrop-filter: var(--blur-taskbar);
+        -webkit-backdrop-filter: var(--blur-taskbar);
     }
 
-    .glass-card:hover {
+    .glass-card:hover { 
+        transform: translateY(-1px); 
+        box-shadow: var(--shadow-outer-hover); 
         background: var(--bg-card-hover);
-        box-shadow: 0 6px 16px var(--shadow-glass-heavy);
     }
 
-    /* Standard Windows Inputs */
+    /* 2. Inner 3D Lighting (Bevel highlights & shadows) */
+    .taskbar-flat::before, .glass-card::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        box-shadow: var(--inset-light);
+        pointer-events: none;
+        z-index: 1;
+    }
+
+    /* 3. The "Flipped Blur" Refractive Border */
+    .taskbar-flat::after, .glass-card::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        padding: 1.5px; /* Border thickness */
+        -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+        -webkit-mask-composite: xor;
+        mask-composite: exclude;
+        
+        /* The magical inverted edge blur */
+        backdrop-filter: var(--refraction-border);
+        -webkit-backdrop-filter: var(--refraction-border);
+        background: rgba(255,255,255,0.05); /* Slight physical rim */
+        pointer-events: none;
+        z-index: 2;
+    }
+
+    .dark-theme .taskbar-flat::after, .dark-theme .glass-card::after {
+        background: rgba(255,255,255,0.02);
+    }
+
+    /* Seamless Taskbar Connection Geometry Fixes for the Border Mask */
+    .taskbar-segment.rounded-none::after { padding: 1.5px 0 !important; }
+    .taskbar-segment.rounded-l-\[8px\]::after { padding: 1.5px 0 1.5px 1.5px !important; }
+    .taskbar-segment.rounded-r-\[8px\]::after { padding: 1.5px 1.5px 1.5px 0 !important; }
+
+    /* --- Interactivity Additions --- */
+    .app-maximized {
+        top: 0 !important;
+        left: 0 !important;
+        width: 100vw !important;
+        height: calc(100vh - 60px) !important;
+        border-radius: 0 !important;
+        transform: none !important;
+    }
+    .app-minimized {
+        opacity: 0 !important;
+        transform: translateY(40px) scale(0.95) !important;
+        pointer-events: none !important;
+    }
+
+    /* --------------------------------------------------------------------------
+       STATE 2/3 FALLBACKS
+       -------------------------------------------------------------------------- */
+    body.disable-liquid-glass.disable-mica-texture .glass-card, 
+    body.disable-liquid-glass.disable-mica-texture .taskbar-flat {
+        background: #ffffff; backdrop-filter: none; -webkit-backdrop-filter: none; box-shadow: none; border: 1px solid rgba(0,0,0,0.1) !important;
+    }
+    body.disable-liquid-glass.disable-mica-texture.dark-theme .glass-card, 
+    body.disable-liquid-glass.disable-mica-texture.dark-theme .taskbar-flat {
+        background: #202020; border: 1px solid rgba(255,255,255,0.1) !important;
+    }
+    body.disable-liquid-glass.disable-mica-texture .glass-card::before, 
+    body.disable-liquid-glass.disable-mica-texture .taskbar-flat::before,
+    body.disable-liquid-glass.disable-mica-texture .glass-card::after, 
+    body.disable-liquid-glass.disable-mica-texture .taskbar-flat::after { display: none; }
+
+    /* ==========================================================================
+       3D TEXT & INPUT CLASSES
+       ========================================================================== */
+    .text-3d-float { text-shadow: 0 4px 15px rgba(0,0,0,0.4); }
+
     .win-input {
-        background: rgba(255, 255, 255, 0.7);
-        border: 1px solid var(--border-all);
-        border-bottom: 1px solid rgba(0, 0, 0, 0.4);
+        background: rgba(0, 0, 0, 0.05);
+        border: 1px solid transparent;
+        border-top: 1px solid rgba(0, 0, 0, 0.15);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.6);
+        box-shadow: inset 0 2px 5px rgba(0,0,0,0.1);
         transition: all 0.2s ease;
     }
     .win-input:focus {
-        background: #ffffff;
+        background: rgba(255, 255, 255, 0.15);
         border-color: #3b82f6;
         border-bottom: 2px solid #3b82f6;
-        padding-bottom: calc(0.5rem - 1px); /* Prevent layout shift */
+        padding-bottom: calc(0.5rem - 1px);
+        box-shadow: inset 0 2px 5px rgba(0,0,0,0.05), 0 0 0 3px rgba(59,130,246,0.15);
     }
     .dark-theme .win-input {
-        background: rgba(0, 0, 0, 0.4);
-        border-color: var(--border-all);
-        border-bottom: 1px solid rgba(255, 255, 255, 0.6);
+        background: rgba(0, 0, 0, 0.3);
+        border-top: 1px solid rgba(0, 0, 0, 0.5);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: inset 0 2px 6px rgba(0,0,0,0.3);
         color: white;
     }
     .dark-theme .win-input:focus {
-        background: rgba(0, 0, 0, 0.6);
+        background: rgba(0, 0, 0, 0.5);
         border-color: #3b82f6;
         border-bottom: 2px solid #3b82f6;
     }
@@ -163,59 +223,32 @@
     /* ==========================================================================
        LOGIN & LOCK SCREEN LOGIC
        ========================================================================== */
-    #login-overlay {
-        transition: opacity 0.8s ease, transform 0.8s var(--spring-easing), filter 0.8s ease;
-    }
-    .lock-screen-hide {
-        opacity: 0;
-        transform: scale(1.05);
-        pointer-events: none;
-    }
+    #login-overlay { transition: opacity 0.8s ease, transform 0.8s var(--spring-easing), filter 0.8s ease; }
+    .lock-screen-hide { opacity: 0; transform: scale(1.05); pointer-events: none; }
     
     .login-pin-input {
-        background: rgba(0, 0, 0, 0.4);
-        border: 1px solid rgba(255, 255, 255, 0.15);
-        border-bottom: 2px solid rgba(255, 255, 255, 0.8);
+        background: rgba(0, 0, 0, 0.2);
+        border-top: 1px solid rgba(0, 0, 0, 0.4);
+        border-left: 1px solid rgba(0, 0, 0, 0.3);
+        border-right: 1px solid rgba(255, 255, 255, 0.15);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        box-shadow: inset 0 3px 10px rgba(0,0,0,0.4);
         transition: all 0.2s ease;
     }
     .login-pin-input:focus {
-        background: rgba(0, 0, 0, 0.6);
-        border-color: rgba(255, 255, 255, 0.3);
+        background: rgba(0, 0, 0, 0.4);
+        border-color: rgba(255, 255, 255, 0.2);
         border-bottom: 2px solid #3b82f6;
+        box-shadow: inset 0 3px 10px rgba(0,0,0,0.6);
     }
 
     /* ==========================================================================
        WINDOWS DOTTED SPINNER
        ========================================================================== */
-    .win-spinner {
-        width: 40px;
-        height: 40px;
-        position: relative;
-    }
-    .win-spinner .circle {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        opacity: 0;
-        transform: rotate(225deg);
-        animation: win-orbit 4s infinite;
-    }
-    .win-spinner .circle::after {
-        content: '';
-        position: absolute;
-        width: 5px;
-        height: 5px;
-        border-radius: 50%;
-        background: white;
-        box-shadow: 0 0 4px rgba(255,255,255,0.8);
-        left: 50%;
-        top: 0px;
-        transform: translateX(-50%);
-    }
-    .win-spinner-blue .circle::after {
-        background: #2563eb;
-        box-shadow: 0 0 4px rgba(37,99,235,0.8);
-    }
+    .win-spinner { width: 40px; height: 40px; position: relative; }
+    .win-spinner .circle { position: absolute; width: 100%; height: 100%; opacity: 0; transform: rotate(225deg); animation: win-orbit 4s infinite; }
+    .win-spinner .circle::after { content: ''; position: absolute; width: 5px; height: 5px; border-radius: 50%; background: white; box-shadow: 0 0 4px rgba(255,255,255,0.8); left: 50%; top: 0px; transform: translateX(-50%); }
+    .win-spinner-blue .circle::after { background: #2563eb; box-shadow: 0 0 4px rgba(37,99,235,0.8); }
     .win-spinner .circle:nth-child(2) { animation-delay: 150ms; }
     .win-spinner .circle:nth-child(3) { animation-delay: 300ms; }
     .win-spinner .circle:nth-child(4) { animation-delay: 450ms; }
@@ -235,26 +268,11 @@
     /* ==========================================================================
        REVERSE 3-STEP ANIMATIONS (Closing States)
        ========================================================================== */
-    @keyframes stepContentHide {
-        from { opacity: 1; filter: blur(0); transform: scale(1); }
-        to { opacity: 0; filter: blur(4px); transform: scale(0.98); }
-    }
-    @keyframes stepHide {
-        from { opacity: 1; transform: translateY(0) scale(1); }
-        to { opacity: 0; transform: translateY(10px) scale(0.98); }
-    }
-    @keyframes panelCollapse {
-        from { transform: scale(1) translateY(0); opacity: 1; }
-        to { transform: scale(0.98) translateY(15px); opacity: 0; }
-    }
-    @keyframes itemCollapse {
-        from { transform: scale(1); opacity: 1; }
-        to { transform: scale(0.96); opacity: 0; }
-    }
-    @keyframes contentCollapse {
-        from { transform: scale(1); opacity: 1; filter: blur(0); }
-        to { transform: scale(0.98); opacity: 0; filter: blur(3px); }
-    }
+    @keyframes stepContentHide { from { opacity: 1; filter: blur(0); transform: scale(1); } to { opacity: 0; filter: blur(4px); transform: scale(0.98); } }
+    @keyframes stepHide { from { opacity: 1; transform: translateY(0) scale(1); } to { opacity: 0; transform: translateY(10px) scale(0.98); } }
+    @keyframes panelCollapse { from { transform: scale(1) translateY(0); opacity: 1; } to { transform: scale(0.98) translateY(15px); opacity: 0; } }
+    @keyframes itemCollapse { from { transform: scale(1); opacity: 1; } to { transform: scale(0.96); opacity: 0; } }
+    @keyframes contentCollapse { from { transform: scale(1); opacity: 1; filter: blur(0); } to { transform: scale(0.98); opacity: 0; filter: blur(3px); } }
 
     .start-overlay-closing .start-content { animation: contentCollapse 0.2s var(--destroy-easing) forwards !important; }
     .start-overlay-closing .start-item { animation: itemCollapse 0.15s var(--destroy-easing) forwards 0.05s !important; }
@@ -271,31 +289,11 @@
        UNIVERSAL DESTROYER PHYSICS & 3-STEP ANIMATIONS
        ========================================================================== */
     
-    #overlay-search-results {
-        opacity: 0;
-        transform: translate(-50%, 20px) scale(0.98);
-        pointer-events: none;
-        transition: opacity 0.2s ease, transform 0.3s var(--destroy-easing);
-    }
-    #overlay-search-results.results-visible {
-        opacity: 1;
-        transform: translate(-50%, 0) scale(1);
-        pointer-events: auto;
-        transition: opacity 0.2s ease, transform 0.4s var(--spring-easing);
-    }
+    #overlay-search-results { opacity: 0; transform: translate(-50%, 20px) scale(0.98); pointer-events: none; transition: opacity 0.2s ease, transform 0.3s var(--destroy-easing); }
+    #overlay-search-results.results-visible { opacity: 1; transform: translate(-50%, 0) scale(1); pointer-events: auto; transition: opacity 0.2s ease, transform 0.4s var(--spring-easing); }
 
-    .overlay-right-hidden {
-        opacity: 0;
-        transform: translateY(20px) scale(0.98);
-        pointer-events: none;
-        transition: opacity 0.2s ease, transform 0.3s var(--destroy-easing);
-    }
-    .overlay-right-visible {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-        pointer-events: auto;
-        transition: opacity 0.2s ease, transform 0.4s var(--spring-easing);
-    }
+    .overlay-right-hidden { opacity: 0; transform: translateY(20px) scale(0.98); pointer-events: none; transition: opacity 0.2s ease, transform 0.3s var(--destroy-easing); }
+    .overlay-right-visible { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; transition: opacity 0.2s ease, transform 0.4s var(--spring-easing); }
     
     .qs-step-1 { opacity: 0; transform: translateY(15px) scale(0.98); }
     .qs-step-2 { opacity: 0; transform: translateY(15px) scale(0.98); }
@@ -305,47 +303,26 @@
     .overlay-right-visible .qs-step-2 { animation: stepReveal 0.35s var(--spring-easing) forwards 0.05s; }
     .overlay-right-visible .qs-step-3 { animation: stepContentReveal 0.35s var(--spring-easing) forwards 0.1s; }
 
-    .start-overlay-hidden {
-        opacity: 0;
-        pointer-events: none;
-        transform: translate(-50%, 20px) scale(0.98);
-        transition: opacity 0.2s ease, transform 0.3s var(--destroy-easing);
-    }
-    .start-overlay-visible {
-        opacity: 1;
-        pointer-events: auto;
-        transform: translate(-50%, 0) scale(1);
-        transition: opacity 0.2s ease, transform 0.4s var(--spring-easing);
-    }
+    .start-overlay-hidden { opacity: 0; pointer-events: none; transform: translate(-50%, 20px) scale(0.98); transition: opacity 0.2s ease, transform 0.3s var(--destroy-easing); }
+    .start-overlay-visible { opacity: 1; pointer-events: auto; transform: translate(-50%, 0) scale(1); transition: opacity 0.2s ease, transform 0.4s var(--spring-easing); }
 
     .start-panel { opacity: 0; transform: scale(0.98) translateY(15px); }
     .start-overlay-visible .start-panel { animation: panelExpand 0.4s var(--spring-easing) forwards; }
-    @keyframes panelExpand {
-        0% { transform: scale(0.98) translateY(15px); opacity: 0; }
-        100% { transform: scale(1) translateY(0); opacity: 1; }
-    }
+    @keyframes panelExpand { 0% { transform: scale(0.98) translateY(15px); opacity: 0; } 100% { transform: scale(1) translateY(0); opacity: 1; } }
 
     .start-item { opacity: 0; transform: scale(0.95); }
     .start-overlay-visible .start-item { animation: itemExpand 0.35s var(--spring-easing) forwards 0.05s; }
-    @keyframes itemExpand {
-        0% { transform: scale(0.95); opacity: 0; }
-        100% { transform: scale(1); opacity: 1; }
-    }
+    @keyframes itemExpand { 0% { transform: scale(0.95); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
 
     .start-content { opacity: 0; transform: scale(0.97); filter: blur(3px); }
     .start-overlay-visible .start-content { animation: contentExpand 0.35s var(--spring-easing) forwards 0.1s; }
-    @keyframes contentExpand {
-        0% { transform: scale(0.97); opacity: 0; filter: blur(3px); }
-        100% { transform: scale(1); opacity: 1; filter: blur(0); }
-    }
+    @keyframes contentExpand { 0% { transform: scale(0.97); opacity: 0; filter: blur(3px); } 100% { transform: scale(1); opacity: 1; filter: blur(0); } }
 
     /* Flat Elastic Hover FX */
-    .elastic-hover { transition: transform 0.2s var(--spring-easing), opacity 0.2s ease, background 0.2s ease; }
-    .elastic-hover:hover { transform: scale(1.02); z-index: 10; background: rgba(255,255,255,0.4); }
-    .elastic-hover:active { transform: scale(0.98); background: rgba(255,255,255,0.6); }
-    
-    .dark-theme .elastic-hover:hover { background: rgba(255,255,255,0.1); }
-    .dark-theme .elastic-hover:active { background: rgba(255,255,255,0.15); }
+    .elastic-hover { transition: transform 0.2s var(--spring-easing), opacity 0.2s ease; }
+    .elastic-hover::before { transition: background 0.2s ease; }
+    .elastic-hover:hover { transform: scale(1.02); z-index: 10; }
+    .elastic-hover:active { transform: scale(0.98); }
 
     /* Standard Sliders */
     .win-slider { -webkit-appearance: none; appearance: none; width: 100%; height: 4px; border-radius: 999px; background: rgba(0,0,0,0.2); outline: none; }
@@ -356,7 +333,7 @@
     /* Standard Checkboxes */
     .win-toggle { appearance: none; width: 40px; height: 20px; background: rgba(0,0,0,0.25); border-radius: 20px; position: relative; cursor: pointer; outline: none; transition: background 0.2s; border: 1px solid rgba(255,255,255,0.2); }
     .dark-theme .win-toggle { background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); }
-    .win-toggle::after { content: ''; position: absolute; top: 2px; left: 2px; width: 14px; height: 14px; background: white; border-radius: 50%; transition: transform 0.3s var(--spring-easing); box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
+    .win-toggle::after { content: ''; position: absolute; top: 1.5px; left: 2px; width: 14px; height: 14px; background: white; border-radius: 50%; transition: transform 0.3s var(--spring-easing); box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
     .win-toggle:checked { background: #2563eb; border-color: transparent; }
     .win-toggle:checked::after { transform: translateX(20px); }
 
@@ -371,21 +348,10 @@
     /* ==========================================================================
        3-STEP EXPANDING SEARCH BAR ANIMATION
        ========================================================================== */
-    .search-base {
-        width: 56px;
-        opacity: 0;
-        transform: translate(-50%, 15px) scale(0.98);
-        pointer-events: none;
-        transition: width 0.4s var(--spring-easing), transform 0.3s var(--spring-easing), opacity 0.2s ease;
-    }
-    
+    .search-base { width: 56px; opacity: 0; transform: translate(-50%, 15px) scale(0.98); pointer-events: none; transition: width 0.4s var(--spring-easing), transform 0.3s var(--spring-easing), opacity 0.2s ease; }
     .search-base.step-1 { opacity: 1; transform: translate(-50%, 0) scale(1); pointer-events: auto; }
     
-    #search-icon-img {
-        opacity: 0;
-        transform: scale(0.8) translateY(2px);
-        transition: opacity 0.2s ease, transform 0.3s var(--spring-easing);
-    }
+    #search-icon-img { opacity: 0; transform: scale(0.8) translateY(2px); transition: opacity 0.2s ease, transform 0.3s var(--spring-easing); }
     .step-2 #search-icon-img { opacity: 0.85; transform: scale(1) translateY(0); }
     
     .search-base.step-3 { width: 560px; cursor: default; }
@@ -413,7 +379,6 @@
        THE DESTROYER APP WINDOW PHYSICS & 3-STEP ANIMATIONS
        ========================================================================== */
     .app-window-container { opacity: 0; pointer-events: none; border-radius: 12px; }
-    
     .app-window-visible { animation: appSpawn 0.35s var(--spring-easing) forwards; pointer-events: auto; }
     .app-window-hidden { animation: appDestroy 0.25s var(--destroy-easing) forwards; pointer-events: none; }
     
@@ -435,11 +400,12 @@
         100% { transform: scale(0.97) translateY(10px); opacity: 0; filter: blur(4px); }
     }
 
-    .settings-tab-active {
-        background: rgba(0, 0, 0, 0.05);
-        border: 1px solid var(--border-all);
+    .settings-tab-active { position: relative; }
+    .settings-tab-active::before {
+        content: ''; position: absolute; inset: 0; z-index: -1; border-radius: inherit;
+        background: rgba(0, 0, 0, 0.05); box-shadow: inset 0 2px 5px rgba(0,0,0,0.1);
     }
-    .dark-theme .settings-tab-active { background: rgba(255, 255, 255, 0.1); border-color: var(--border-all); }
+    .dark-theme .settings-tab-active::before { background: rgba(0, 0, 0, 0.3); box-shadow: inset 0 2px 5px rgba(0,0,0,0.4); }
     .settings-tab-active i { color: #2563eb !important; }
 
     /* ==========================================================================
@@ -482,15 +448,15 @@
 
         <!-- State 1: Lock Screen -->
         <div id="lock-state" onclick="window.dismissLockScreen()" class="absolute inset-0 flex flex-col items-center pt-[12vh] transition-all duration-500 cursor-pointer z-20">
-            <h1 id="lock-time" class="text-[90px] font-semibold text-white drop-shadow-md tracking-tight leading-none"></h1>
-            <p id="lock-date" class="text-[20px] font-medium text-white/95 drop-shadow-sm tracking-wide mt-2"></p>
+            <h1 id="lock-time" class="text-[90px] font-semibold text-white drop-shadow-md tracking-tight leading-none text-3d-float"></h1>
+            <p id="lock-date" class="text-[20px] font-medium text-white/95 drop-shadow-sm tracking-wide mt-2 text-3d-float"></p>
             <p class="absolute bottom-12 text-[14px] text-white/80 animate-pulse font-medium">Swipe up or click to unlock</p>
         </div>
 
-        <!-- State 2: Login Prompt (Authentic Windows Style) -->
+        <!-- State 2: Login Prompt -->
         <div id="login-state" class="flex flex-col items-center opacity-0 translate-y-10 transition-all duration-500 pointer-events-none z-10 w-full h-full justify-center pb-[10vh]">
             <div class="flex flex-col items-center">
-                <img src="https://cdn-icons-png.freepik.com/512/9131/9131478.png" class="w-32 h-32 rounded-full border-2 border-white/20 shadow-md object-cover mb-4">
+                <img src="https://cdn-icons-png.freepik.com/512/9131/9131478.png" class="w-32 h-32 rounded-full border-2 border-white/20 shadow-xl object-cover mb-4">
                 <h2 class="text-[26px] font-semibold text-white drop-shadow-md mb-8">Administrator</h2>
                 
                 <div id="login-input-area" class="flex items-center gap-2">
@@ -528,8 +494,8 @@
 
       <!-- Top-Centered Standard Desktop Clock Widget -->
       <div id="desktop-clock-widget" class="absolute top-20 left-1/2 -translate-x-1/2 z-0 pointer-events-none opacity-0 scale-95 origin-top flex flex-col items-center justify-center transition-all duration-700 ease-[cubic-bezier(0.0,0.0,0.2,1)]" style="font-family: 'Segoe UI Variable Display', 'Segoe UI', sans-serif;">
-          <h1 id="dc-time" class="text-[100px] font-semibold leading-none tracking-tight text-white drop-shadow-md"></h1>
-          <h2 id="dc-date" class="text-[24px] font-medium mt-1 tracking-wide text-white drop-shadow-md"></h2>
+          <h1 id="dc-time" class="text-[100px] font-semibold leading-none tracking-tight text-white text-3d-float"></h1>
+          <h2 id="dc-date" class="text-[24px] font-medium mt-1 tracking-wide text-white text-3d-float"></h2>
       </div>
 
       <!-- Desktop Icons Container -->
@@ -538,7 +504,7 @@
       <!-- APP WINDOWS AREA -->
       
       <!-- 1. SETTINGS APP -->
-      <div id="app-settings" class="absolute w-[860px] h-[580px] taskbar-flat rounded-[12px] z-[20000] flex-col overflow-hidden app-window-container" style="left: calc(50% - 430px); top: calc(50% - 290px); display: none;">
+      <div id="app-settings" class="absolute w-[860px] h-[580px] glass-card rounded-[12px] z-[20000] flex-col overflow-hidden app-window-container" style="left: calc(50% - 430px); top: calc(50% - 290px); display: none;">
           <!-- Header -->
           <div class="h-10 flex justify-between items-center pl-4 pr-2 bg-transparent select-none generic-drag-area cursor-move shrink-0 app-step-2" data-target="app-settings">
              <div class="flex items-center gap-2 pointer-events-none app-step-3">
@@ -585,7 +551,7 @@
                   </button>
               </div>
               <!-- Content Area -->
-              <div class="flex-1 p-10 overflow-y-auto custom-scrollbar relative z-0 bg-white/50 dark-theme:bg-black/20 rounded-tl-[8px] border-t border-l border-white/30 dark-theme:border-white/10 app-step-2">
+              <div class="flex-1 p-10 overflow-y-auto custom-scrollbar relative z-0 bg-white/50 dark-theme:bg-black/20 rounded-tl-[12px] border-t border-l border-white/30 dark-theme:border-white/10 app-step-2 shadow-[inset_2px_2px_10px_rgba(0,0,0,0.05)]">
                   <!-- System Tab -->
                   <div id="settings-tab-system" class="settings-panel app-step-3">
                       <h1 class="text-[28px] font-semibold text-slate-900 tracking-tight mb-8">System</h1>
@@ -705,24 +671,24 @@
                           <h1 class="text-[28px] font-semibold text-slate-900 tracking-tight">Windows Update</h1>
                       </div>
                       
-                      <div class="glass-card p-6 rounded-[8px] flex items-center justify-between shadow-sm relative">
+                      <div class="glass-card p-6 rounded-[8px] flex items-center justify-between mb-8 shadow-sm">
                           <div class="flex items-center gap-4 z-10">
                               <div id="update-icon-container" class="flex items-center justify-center w-12 h-12 shrink-0">
-                                  <i id="update-icon" class="ph-fill ph-check-circle text-[48px] text-emerald-600"></i>
+                                  <i id="update-icon" class="ph-fill ph-check-circle text-[48px] text-emerald-600 drop-shadow-sm"></i>
                               </div>
                               <div>
                                   <h3 id="update-title" class="text-[16px] font-semibold text-slate-900">You're up to date</h3>
                                   <p id="update-subtitle" class="text-[12px] text-slate-500 mt-0.5">Last checked: Today</p>
                               </div>
                           </div>
-                          <button id="btn-check-updates" onclick="window.simulateUpdateCheck()" class="bg-[#0067c0] hover:bg-[#005a9e] text-white px-5 py-2 rounded-[6px] text-[13px] transition-colors z-10">Check for updates</button>
+                          <button id="btn-check-updates" onclick="window.simulateUpdateCheck()" class="bg-[#0067c0] hover:bg-[#005a9e] text-white px-5 py-2 rounded-[6px] text-[13px] transition-colors z-10 shadow-md">Check for updates</button>
                       </div>
 
                       <!-- 1H04 Pro Plan Update Banner -->
-                      <div class="mt-6 p-5 glass-card rounded-[8px] shadow-sm flex flex-col md:flex-row gap-5">
+                      <div class="p-5 glass-card rounded-[8px] shadow-sm flex flex-col md:flex-row gap-5">
                           <div class="w-full md:w-[200px] shrink-0">
                               <!-- Authentic fallback image for Windows 1H04 Pro context (PC Laptop UI) -->
-                              <img src="image.png" alt="1H04 Pro Plan Preview" class="w-full h-full min-h-[140px] object-cover rounded-[6px] shadow-sm border border-slate-200 dark-theme:border-slate-700" onerror="this.src='https://images.unsplash.com/photo-1593640408182-31c70c8268f5?q=80&w=1000&auto=format&fit=crop';">
+                              <img src="image.png" alt="1H04 Pro Plan Preview" class="w-full h-full min-h-[140px] object-cover rounded-[6px] shadow-sm" onerror="this.src='https://images.unsplash.com/photo-1593640408182-31c70c8268f5?q=80&w=1000&auto=format&fit=crop';">
                           </div>
                           <div class="flex flex-col flex-1">
                               <h3 class="text-[15px] font-semibold text-slate-900 tracking-tight mb-2">
@@ -736,8 +702,8 @@
                                   <li><strong class="font-semibold text-slate-800">Taskbar Edits:</strong> Enjoy more taskbar editing capabilities.</li>
                                   <li><strong class="font-semibold text-slate-800">System Fixes:</strong> A lot of Start Menu and Settings improvements.</li>
                               </ul>
-                              <div class="mt-auto pt-2">
-                                  <p class="text-[11px] text-slate-500">
+                              <div class="mt-auto pt-2 border-t border-slate-200 dark-theme:border-slate-700">
+                                  <p class="text-[11px] text-slate-500 font-medium">
                                       Note: As I said, this won't be a COPY of 1H04, it will be a thoughtfully changed version.
                                   </p>
                               </div>
@@ -763,8 +729,8 @@
       </div>
 
       <!-- 2. CALCULATOR APP -->
-      <div id="app-calculator" class="absolute w-[320px] h-[480px] taskbar-flat rounded-[12px] z-[20000] flex-col overflow-hidden app-window-container" style="left: calc(50% - 160px); top: calc(50% - 240px); display: none;">
-          <div class="h-10 border-b border-white/20 flex justify-between items-center pl-4 pr-2 bg-transparent select-none generic-drag-area cursor-move shrink-0 app-step-2" data-target="app-calculator">
+      <div id="app-calculator" class="absolute w-[320px] h-[480px] glass-card rounded-[12px] z-[20000] flex-col overflow-hidden app-window-container" style="left: calc(50% - 160px); top: calc(50% - 240px); display: none;">
+          <div class="h-10 flex justify-between items-center pl-4 pr-2 bg-transparent select-none generic-drag-area cursor-move shrink-0 app-step-2" data-target="app-calculator">
              <div class="flex items-center gap-2 pointer-events-none app-step-3">
                  <img src="https://img.icons8.com/?size=100&id=RNsqmCP8joVQ&format=png&color=000000" class="w-[16px] h-[16px]">
                  <span class="text-[12px] font-medium text-slate-800 tracking-tight">Calculator</span>
@@ -775,8 +741,8 @@
                  <button class="w-11 h-8 rounded-[6px] flex items-center justify-center transition-colors hover:bg-red-500 hover:text-white group" onclick="window.closeApp('calculator')"><i class="ph-bold ph-x text-slate-600 group-hover:text-white text-[10px]"></i></button>
              </div>
           </div>
-          <div class="flex-1 flex flex-col p-5 bg-white/50 dark-theme:bg-black/20 relative z-0 app-step-2">
-             <input type="text" id="calc-display" class="w-full text-right text-[40px] font-semibold text-slate-900 bg-transparent border-none outline-none mb-4 mt-2 app-step-3 tracking-tighter" value="0" readonly>
+          <div class="flex-1 flex flex-col p-5 bg-white/50 dark-theme:bg-black/20 relative z-0 app-step-2 shadow-[inset_2px_2px_10px_rgba(0,0,0,0.05)] rounded-tl-[12px]">
+             <input type="text" id="calc-display" class="w-full text-right text-[40px] font-semibold text-slate-900 bg-transparent border-none outline-none mb-4 mt-2 app-step-3 tracking-tighter text-3d-float" value="0" readonly>
              
              <div class="grid grid-cols-4 gap-2 flex-1 app-step-3">
                  <button onclick="window.calcPress('C')" class="col-span-2 glass-card rounded-[6px] font-medium text-[15px] text-slate-800 hover:bg-black/5">C</button>
@@ -800,14 +766,14 @@
                  
                  <button onclick="window.calcPress('0')" class="col-span-2 glass-card rounded-[6px] font-semibold text-[16px] text-slate-900 hover:bg-black/5">0</button>
                  <button onclick="window.calcPress('.')" class="glass-card rounded-[6px] font-semibold text-[16px] text-slate-900 hover:bg-black/5">.</button>
-                 <button onclick="window.calcPress('=')" class="bg-[#0067c0] hover:bg-[#005a9e] text-white rounded-[6px] font-medium text-[16px] transition-colors shadow-sm">=</button>
+                 <button onclick="window.calcPress('=')" class="bg-[#0067c0] hover:bg-[#005a9e] text-white rounded-[6px] font-medium text-[16px] transition-colors shadow-sm border border-[#005a9e]">=</button>
              </div>
           </div>
       </div>
 
       <!-- 3. NOTEPAD APP -->
-      <div id="app-notepad" class="absolute w-[600px] h-[400px] taskbar-flat rounded-[12px] z-[20000] flex-col overflow-hidden app-window-container" style="left: calc(50% - 300px); top: calc(50% - 200px); display: none;">
-          <div class="h-10 border-b border-white/20 flex justify-between items-center pl-4 pr-2 bg-transparent select-none generic-drag-area cursor-move shrink-0 app-step-2" data-target="app-notepad">
+      <div id="app-notepad" class="absolute w-[600px] h-[400px] glass-card rounded-[12px] z-[20000] flex-col overflow-hidden app-window-container" style="left: calc(50% - 300px); top: calc(50% - 200px); display: none;">
+          <div class="h-10 flex justify-between items-center pl-4 pr-2 bg-transparent select-none generic-drag-area cursor-move shrink-0 app-step-2" data-target="app-notepad">
              <div class="flex items-center gap-2 pointer-events-none app-step-3">
                  <img src="https://img.icons8.com/?size=100&id=6VwxladcAlxL&format=png&color=000000" class="w-[16px] h-[16px]">
                  <span class="text-[12px] font-medium text-slate-800 tracking-tight">Notepad</span>
@@ -818,14 +784,14 @@
                  <button class="w-11 h-8 rounded-[6px] flex items-center justify-center transition-colors hover:bg-red-500 hover:text-white group" onclick="window.closeApp('notepad')"><i class="ph-bold ph-x text-slate-600 group-hover:text-white text-[10px]"></i></button>
              </div>
           </div>
-          <div class="flex-1 flex flex-col bg-white/50 dark-theme:bg-black/20 relative z-0 p-3 app-step-2">
-             <textarea class="flex-1 w-full h-full bg-white/60 dark-theme:bg-black/30 rounded-[6px] p-4 text-[14px] font-medium text-slate-900 outline-none resize-none placeholder-slate-500 transition-colors custom-scrollbar app-step-3" placeholder="Type your notes here..."></textarea>
+          <div class="flex-1 flex flex-col bg-white/50 dark-theme:bg-black/20 relative z-0 p-3 app-step-2 shadow-[inset_2px_2px_10px_rgba(0,0,0,0.05)] rounded-tl-[12px]">
+             <textarea class="flex-1 w-full h-full win-input rounded-[6px] p-4 text-[14px] font-medium text-slate-900 outline-none resize-none placeholder-slate-500 transition-colors custom-scrollbar app-step-3" placeholder="Type your notes here..."></textarea>
           </div>
       </div>
 
       <!-- 4. PHOTOS APP -->
-      <div id="app-photos" class="absolute w-[720px] h-[500px] taskbar-flat rounded-[12px] z-[20000] flex-col overflow-hidden app-window-container" style="left: calc(50% - 360px); top: calc(50% - 250px); display: none;">
-          <div class="h-10 border-b border-white/20 flex justify-between items-center pl-4 pr-2 bg-transparent select-none generic-drag-area cursor-move shrink-0 app-step-2" data-target="app-photos">
+      <div id="app-photos" class="absolute w-[720px] h-[500px] glass-card rounded-[12px] z-[20000] flex-col overflow-hidden app-window-container" style="left: calc(50% - 360px); top: calc(50% - 250px); display: none;">
+          <div class="h-10 flex justify-between items-center pl-4 pr-2 bg-transparent select-none generic-drag-area cursor-move shrink-0 app-step-2" data-target="app-photos">
              <div class="flex items-center gap-2 pointer-events-none app-step-3">
                  <img src="https://raw.githubusercontent.com/blueedgetechno/win11React/master/public/img/icon/photos.png" class="w-[16px] h-[16px]" onerror="this.src='https://img.icons8.com/?size=100&id=118979&format=png&color=000000';">
                  <span class="text-[12px] font-medium text-slate-800 tracking-tight">Photos</span>
@@ -836,7 +802,7 @@
                  <button class="w-11 h-8 rounded-[6px] flex items-center justify-center transition-colors hover:bg-red-500 hover:text-white group" onclick="window.closeApp('photos')"><i class="ph-bold ph-x text-slate-600 group-hover:text-white text-[10px]"></i></button>
              </div>
           </div>
-          <div class="flex-1 flex flex-col bg-white/50 dark-theme:bg-black/20 relative z-0 p-6 overflow-y-auto custom-scrollbar app-step-2">
+          <div class="flex-1 flex flex-col bg-white/50 dark-theme:bg-black/20 relative z-0 p-6 overflow-y-auto custom-scrollbar app-step-2 shadow-[inset_2px_2px_10px_rgba(0,0,0,0.05)] rounded-tl-[12px]">
              <h2 class="text-[20px] font-semibold text-slate-900 mb-4 app-step-3 tracking-tight">Gallery</h2>
              <div class="grid grid-cols-3 gap-3 app-step-3">
                  <img src="https://4kwallpapers.com/images/wallpapers/windows-11-bloom-3840x2160-14423.jpg" class="w-full h-32 object-cover rounded-[6px] shadow-sm hover:opacity-90 transition-opacity cursor-pointer border border-slate-200 dark-theme:border-slate-700">
@@ -848,8 +814,8 @@
       </div>
       
       <!-- 5. WELCOME APP -->
-      <div id="app-welcome" class="absolute w-[800px] h-[560px] taskbar-flat rounded-[12px] z-[20000] flex-col overflow-hidden app-window-container" style="left: calc(50% - 400px); top: calc(50% - 280px); display: none;">
-          <div class="h-10 border-b border-white/20 flex justify-between items-center pl-4 pr-2 bg-transparent select-none generic-drag-area cursor-move shrink-0 app-step-2" data-target="app-welcome">
+      <div id="app-welcome" class="absolute w-[800px] h-[560px] glass-card rounded-[12px] z-[20000] flex-col overflow-hidden app-window-container" style="left: calc(50% - 400px); top: calc(50% - 280px); display: none;">
+          <div class="h-10 flex justify-between items-center pl-4 pr-2 bg-transparent select-none generic-drag-area cursor-move shrink-0 app-step-2" data-target="app-welcome">
              <div class="flex items-center gap-2 pointer-events-none app-step-3">
                  <img src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/d524f23f-503e-4d1d-8ee0-96e655258add/dhb97eu-3b00bbaf-f050-4657-83da-0b1664d7c022.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiIvZi9kNTI0ZjIzZi01MDNlLTRkMWQtOGVlMC05NmU2NTUyNThhZGQvZGhiOTdldS0zYjAwYmJhZi1mMDUwLTQ2NTctODNkYS0wYjE2NjRkN2MwMjIucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.o1jDig1STxxan1lSgwa6kt9pAnjG080eji1BbENBT3k" class="w-[16px] h-[16px]" onerror="this.src='https://img.icons8.com/?size=100&id=12140&format=png&color=000000';">
                  <span class="text-[12px] font-medium text-slate-800 tracking-tight">Welcome</span>
@@ -876,7 +842,7 @@
                       <span class="text-[13px] font-medium text-slate-600 group-hover:text-slate-900">Tips & Tricks</span>
                   </button>
               </div>
-              <div class="flex-1 overflow-y-auto custom-scrollbar relative z-0 bg-white/50 dark-theme:bg-black/20 rounded-tl-[8px] border-t border-l border-white/30 dark-theme:border-white/10 app-step-2">
+              <div class="flex-1 overflow-y-auto custom-scrollbar relative z-0 bg-white/50 dark-theme:bg-black/20 rounded-tl-[8px] border-t border-l border-white/30 dark-theme:border-white/10 app-step-2 shadow-[inset_2px_2px_10px_rgba(0,0,0,0.05)]">
                   <!-- What's New Tab -->
                   <div id="welcome-content-new" class="flex flex-col h-full fade-in app-step-3 p-8">
                       <div class="flex items-center gap-5 mb-8">
@@ -953,8 +919,8 @@
       </div>
 
       <!-- 6. WEATHER APP -->
-      <div id="app-weather" class="absolute w-[680px] h-[440px] taskbar-flat rounded-[12px] z-[20000] flex-col overflow-hidden app-window-container" style="left: calc(50% - 340px); top: calc(50% - 220px); display: none;">
-          <div class="h-10 border-b border-white/20 flex justify-between items-center pl-4 pr-2 bg-transparent select-none generic-drag-area cursor-move shrink-0 app-step-2" data-target="app-weather">
+      <div id="app-weather" class="absolute w-[680px] h-[440px] glass-card rounded-[12px] z-[20000] flex-col overflow-hidden app-window-container" style="left: calc(50% - 340px); top: calc(50% - 220px); display: none;">
+          <div class="h-10 flex justify-between items-center pl-4 pr-2 bg-transparent select-none generic-drag-area cursor-move shrink-0 app-step-2" data-target="app-weather">
              <div class="flex items-center gap-2 pointer-events-none app-step-3">
                  <img id="window-weather-icon" src="https://img.icons8.com/?size=100&id=8EUmYhfLPTCF&format=png&color=000000" class="w-[16px] h-[16px]">
                  <span class="text-[12px] font-medium text-slate-800 tracking-tight">Weather</span>
@@ -965,12 +931,12 @@
                  <button class="w-11 h-8 rounded-[6px] flex items-center justify-center transition-colors hover:bg-red-500 hover:text-white group" onclick="window.closeApp('weather')"><i class="ph-bold ph-x text-slate-600 group-hover:text-white text-[10px]"></i></button>
              </div>
           </div>
-          <div class="flex-1 flex flex-col p-8 bg-white/50 dark-theme:bg-black/20 relative z-0 app-step-2">
+          <div class="flex-1 flex flex-col p-8 bg-white/50 dark-theme:bg-black/20 relative z-0 app-step-2 shadow-[inset_2px_2px_10px_rgba(0,0,0,0.05)] rounded-tl-[12px]">
              <div class="flex justify-between items-start app-step-3">
                  <div>
                      <h2 class="text-[26px] font-semibold text-slate-900 tracking-tight">Louisville, KY</h2>
                      <p id="app-weather-desc" class="text-[14px] text-slate-600 mt-1">Sunny</p>
-                     <h1 id="app-weather-main-temp" class="text-[80px] font-light text-slate-900 tracking-tighter leading-none mt-2">72°</h1>
+                     <h1 id="app-weather-main-temp" class="text-[80px] font-light text-slate-900 tracking-tighter leading-none mt-2 text-3d-float">72°</h1>
                  </div>
                  <img id="app-weather-main-icon" src="https://img.icons8.com/?size=100&id=8EUmYhfLPTCF&format=png&color=000000" class="w-40 h-40 animate-pulse" style="animation-duration: 4s;" draggable="false">
              </div>
@@ -1143,36 +1109,36 @@
       </div>
       
       <!-- 4. Quick Settings Overlay (Triggered by System Tray click) -->
-      <div id="overlay-quick" class="absolute bottom-[76px] w-[340px] z-[9998] overlay-right-hidden flex flex-col gap-2" style="transform-origin: bottom center;">
+      <div id="overlay-quick" class="absolute bottom-[76px] w-[320px] z-[9998] overlay-right-hidden flex flex-col gap-2" style="transform-origin: bottom center;">
           
-          <!-- Action Grid -->
-          <div class="taskbar-flat rounded-[12px] p-4 qs-step-1">
-              <div class="grid grid-cols-3 gap-2 qs-step-3">
-                  <button class="h-[46px] rounded-[6px] flex items-center justify-center bg-[#0067c0] text-white transition-colors hover:bg-[#005a9e]">
-                      <i class="ph-bold ph-wifi-high text-lg"></i>
+          <!-- Action Grid (Horizontal Tight Format) -->
+          <div class="taskbar-flat rounded-[12px] p-3 qs-step-1">
+              <div class="flex justify-between items-center qs-step-3">
+                  <button class="w-[36px] h-[36px] shrink-0 rounded-[8px] flex items-center justify-center bg-[#0067c0] text-white transition-colors hover:bg-[#005a9e]">
+                      <i class="ph-bold ph-wifi-high text-[16px]"></i>
                   </button>
-                  <button class="h-[46px] rounded-[6px] flex items-center justify-center glass-card transition-colors hover:bg-white/50 group">
-                      <i class="ph-bold ph-bluetooth-connected text-lg text-slate-700 transition-colors"></i>
+                  <button class="w-[36px] h-[36px] shrink-0 rounded-[8px] flex items-center justify-center glass-card transition-colors hover:bg-white/50 group">
+                      <i class="ph-bold ph-bluetooth-connected text-[16px] text-slate-700 transition-colors"></i>
                   </button>
-                  <button class="h-[46px] rounded-[6px] flex items-center justify-center glass-card transition-colors hover:bg-white/50 group">
-                      <i class="ph-bold ph-airplane-tilt text-lg text-slate-700 transition-colors"></i>
+                  <button class="w-[36px] h-[36px] shrink-0 rounded-[8px] flex items-center justify-center glass-card transition-colors hover:bg-white/50 group">
+                      <i class="ph-bold ph-airplane-tilt text-[16px] text-slate-700 transition-colors"></i>
                   </button>
-                  <button class="h-[46px] rounded-[6px] flex items-center justify-center glass-card transition-colors hover:bg-white/50 group">
-                      <i class="ph-bold ph-moon text-lg text-slate-700 transition-colors"></i>
+                  <button class="w-[36px] h-[36px] shrink-0 rounded-[8px] flex items-center justify-center glass-card transition-colors hover:bg-white/50 group">
+                      <i class="ph-bold ph-moon text-[16px] text-slate-700 transition-colors"></i>
                   </button>
-                  <button class="h-[46px] rounded-[6px] flex items-center justify-center glass-card transition-colors hover:bg-white/50 group">
-                      <i class="ph-bold ph-prohibit text-lg text-slate-700 transition-colors"></i>
+                  <button class="w-[36px] h-[36px] shrink-0 rounded-[8px] flex items-center justify-center glass-card transition-colors hover:bg-white/50 group">
+                      <i class="ph-bold ph-prohibit text-[16px] text-slate-700 transition-colors"></i>
                   </button>
-                  <button class="h-[46px] rounded-[6px] flex items-center justify-center glass-card transition-colors hover:bg-white/50 group">
-                      <i class="ph-bold ph-battery-plus text-lg text-slate-700 transition-colors"></i>
+                  <button class="w-[36px] h-[36px] shrink-0 rounded-[8px] flex items-center justify-center glass-card transition-colors hover:bg-white/50 group">
+                      <i class="ph-bold ph-battery-plus text-[16px] text-slate-700 transition-colors"></i>
                   </button>
               </div>
           </div>
           
           <!-- Brightness Slider -->
-          <div class="taskbar-flat rounded-[12px] py-3.5 px-5 flex items-center gap-4 qs-step-2">
-              <div class="flex items-center w-full gap-4 qs-step-3">
-                  <i class="ph-bold ph-sun text-slate-700 text-[18px] w-5 text-center"></i>
+          <div class="taskbar-flat rounded-[12px] py-2.5 px-4 flex items-center gap-3 qs-step-2">
+              <div class="flex items-center w-full gap-3 qs-step-3">
+                  <i class="ph-bold ph-sun text-slate-700 text-[16px] w-5 text-center"></i>
                   <input type="range" id="qs-brightness" class="win-slider flex-grow" value="100" min="10" max="100" oninput="window.updateBrightness(this.value)">
               </div>
           </div>
@@ -1187,7 +1153,7 @@
                 <button id="tb-app-btn-weather" onclick="window.openApp('weather')" draggable="true" ondragstart="window.dragExtractedApp(event, 'weather')" class="flex items-center hover:bg-black/5 dark-theme:hover:bg-white/10 px-3 h-[36px] rounded-[6px] transition-colors group cursor-grab active:cursor-grabbing mx-0.5 shrink-0">
                   <img id="tb-weather-icon" src="" class="w-[20px] h-[20px] transition-all pointer-events-none opacity-90" draggable="false" alt="Weather">
                   <div class="flex flex-col ml-2.5 text-left pointer-events-none">
-                    <span id="tb-weather-temp" class="text-[12px] font-semibold leading-none text-slate-900">${window.currentTemp}</span>
+                    <span id="tb-weather-temp" class="text-[12px] font-semibold leading-none text-slate-900 text-3d-float">${window.currentTemp}</span>
                   </div>
                 </button>
             </div>
@@ -1204,9 +1170,9 @@
                 <button id="tb-app-btn-tray" draggable="true" ondragstart="window.dragExtractedApp(event, 'tray')" class="flex items-center justify-center hover:bg-black/5 dark-theme:hover:bg-white/10 px-3 h-[36px] rounded-[6px] transition-colors gap-2 group cursor-grab active:cursor-grabbing mx-0.5 shrink-0">
                   <img src="https://img.icons8.com/?size=100&id=50nJymaeC8CY&format=png&color=000000" class="h-[16px] w-auto opacity-80 group-hover:opacity-100 transition-opacity pointer-events-none" draggable="false" alt="System Tray">
                 </button>
-                <div class="w-[1px] h-5 bg-slate-300 dark-theme:bg-slate-600 mx-1 rounded-full pointer-events-none tb-divider shrink-0"></div>
+                <div class="w-[1px] h-5 bg-slate-300 dark-theme:bg-slate-600 mx-1 rounded-full pointer-events-none tb-divider shrink-0 z-10 relative"></div>
                 <button id="tb-app-btn-clock" draggable="true" ondragstart="window.dragExtractedApp(event, 'clock')" class="flex flex-col items-end justify-center hover:bg-black/5 dark-theme:hover:bg-white/10 px-3 h-[36px] rounded-[6px] transition-colors cursor-grab active:cursor-grabbing mx-0.5 shrink-0">
-                  <span id="tb-time" class="text-[12px] font-medium text-slate-900 pointer-events-none leading-none"></span>
+                  <span id="tb-time" class="text-[12px] font-medium text-slate-900 pointer-events-none leading-none text-3d-float"></span>
                   <span id="tb-date" class="text-[10px] text-slate-600 mt-0.5 pointer-events-none leading-none"></span>
                 </button>
             </div>
@@ -1217,118 +1183,64 @@
   </div>
 
   <script>
-    // Global Bindings explicitly bound to window to prevent any scope loss across duplicated UI testing
+    // Explicit bindings
     window.dismissLockScreen = dismissLockScreen;
     window.triggerWelcome = triggerWelcome;
     window.openApp = openApp;
     window.closeApp = closeApp;
-    window.switchWelcomeTab = switchWelcomeTab;
-    window.calcPress = calcPress;
+    window.minimizeApp = minimizeApp;
+    window.maximizeApp = maximizeApp;
     window.switchSettingsTab = switchSettingsTab;
-    window.changeWallpaper = changeWallpaper;
-    window.toggleLiquidGlass = toggleLiquidGlass;
-    window.toggleMicaLayer = toggleMicaLayer;
-    window.simulateUpdateCheck = simulateUpdateCheck;
-    window.triggerUpdateRestart = triggerUpdateRestart;
-    window.closeAllOverlays = closeAllOverlays;
-    window.showAllApps = showAllApps;
-    window.showPinnedApps = showPinnedApps;
-    window.toggleQuickSettings = toggleQuickSettings;
     window.updateBrightness = updateBrightness;
     window.toggleDesktopClock = toggleDesktopClock;
     window.toggleTaskbarAlignment = toggleTaskbarAlignment;
+    window.dragTaskbarSegment = dragTaskbarSegment;
+    window.simulateUpdateCheck = simulateUpdateCheck;
+    window.switchWelcomeTab = switchWelcomeTab;
+    window.calcPress = calcPress;
+    window.toggleLiquidGlass = toggleLiquidGlass;
+    window.toggleMicaLayer = toggleMicaLayer;
+    
+    window.closeAllOverlays = closeAllOverlays;
+    window.showAllApps = showAllApps;
+    window.showPinnedApps = showPinnedApps;
+
+    // Drag and Drop bindings
+    window.allowTaskbarDragOver = allowTaskbarDragOver;
+    window.allowDrop = allowDrop;
+    window.dropToTaskbar = dropToTaskbar;
+    window.dropWidget = dropWidget;
+    window.removeWidget = removeWidget;
     window.dragAppFromStart = dragAppFromStart;
     window.dragExtractedApp = dragExtractedApp;
     window.dragWidget = dragWidget;
-    window.allowTaskbarDragOver = allowTaskbarDragOver;
-    window.dragTaskbarSegment = dragTaskbarSegment;
-    window.allowDrop = allowDrop;
-    window.removeWidget = removeWidget;
-    window.dropWidget = dropWidget;
-    window.dropToTaskbar = dropToTaskbar;
 
-    // Global State for UI
+    // Add explicitly missing functions
+    window.toggleQuickSettings = toggleQuickSettings;
+    window.updateWeatherDisplay = updateWeatherDisplay;
+
+    let calcStr = "0";
     window.currentTemp = '72°F';
     window.currentTempNum = '72°';
     window.currentWeatherDesc = 'Sunny';
     window.currentWmoCode = 0;
     window.currentWindSpeed = 0;
-    window.forecastData = null;
-
-    // App Database Array populated for lookups across the system
-    const appDatabase = [
-        { id: 'settings', name: 'Settings', icon: 'https://raw.githubusercontent.com/blueedgetechno/win11React/master/public/img/icon/settings.png', action: "window.openApp('settings')" },
-        { id: 'calculator', name: 'Calculator', icon: 'https://img.icons8.com/?size=100&id=RNsqmCP8joVQ&format=png&color=000000', action: "window.openApp('calculator')" },
-        { id: 'notepad', name: 'Notepad', icon: 'https://img.icons8.com/?size=100&id=6VwxladcAlxL&format=png&color=000000', action: "window.openApp('notepad')" },
-        { id: 'photos', name: 'Photos', icon: 'https://raw.githubusercontent.com/blueedgetechno/win11React/master/public/img/icon/photos.png', action: "window.openApp('photos')" },
-        { id: 'weather', name: 'Weather', icon: 'https://img.icons8.com/?size=100&id=8EUmYhfLPTCF&format=png&color=000000', action: "window.openApp('weather')" }
-    ];
-
-    function getTaskbarItemHTML(id) {
-        if (id === 'weather') return `
-            <button id="tb-app-btn-weather" onclick="window.openApp('weather')" draggable="true" ondragstart="window.dragExtractedApp(event, 'weather')" class="flex items-center hover:bg-black/5 dark-theme:hover:bg-white/10 px-3 h-[36px] rounded-[6px] transition-colors group cursor-grab active:cursor-grabbing mx-0.5 shrink-0">
-              <img id="tb-weather-icon" src="" class="w-[20px] h-[20px] transition-all pointer-events-none opacity-90" draggable="false" alt="Weather">
-              <div class="flex flex-col ml-2.5 text-left pointer-events-none">
-                <span id="tb-weather-temp" class="text-[12px] font-semibold leading-none text-slate-900">${window.currentTemp}</span>
-              </div>
-            </button>
-        `;
-        if (id === 'tray') return `
-            <button id="tb-app-btn-tray" draggable="true" ondragstart="window.dragExtractedApp(event, 'tray')" class="flex items-center justify-center hover:bg-black/5 dark-theme:hover:bg-white/10 px-3 h-[36px] rounded-[6px] transition-colors gap-2 group cursor-grab active:cursor-grabbing mx-0.5 shrink-0">
-              <img src="https://img.icons8.com/?size=100&id=50nJymaeC8CY&format=png&color=000000" class="h-[16px] w-auto opacity-80 group-hover:opacity-100 transition-opacity pointer-events-none" draggable="false" alt="System Tray">
-            </button>
-        `;
-        if (id === 'clock') return `
-            <button id="tb-app-btn-clock" draggable="true" ondragstart="window.dragExtractedApp(event, 'clock')" class="flex flex-col items-end justify-center hover:bg-black/5 dark-theme:hover:bg-white/10 px-3 h-[36px] rounded-[6px] transition-colors cursor-grab active:cursor-grabbing mx-0.5 shrink-0">
-              <span id="tb-time" class="text-[12px] font-medium text-slate-900 pointer-events-none leading-none"></span>
-              <span id="tb-date" class="text-[10px] text-slate-600 mt-0.5 pointer-events-none leading-none"></span>
-            </button>
-        `;
-        const app = appDatabase.find(a => a.id === id);
-        if (app) return `
-            <button id="tb-app-btn-${id}" onclick="${app.action}" draggable="true" ondragstart="window.dragExtractedApp(event, '${id}')" class="w-[38px] h-[38px] flex flex-col items-center justify-center rounded-[6px] transition-colors hover:bg-black/5 dark-theme:hover:bg-white/10 relative group pointer-events-auto shrink-0 mx-0.5">
-              <img src="${app.icon}" class="w-[22px] h-[22px] pointer-events-none opacity-90" draggable="false">
-              <div id="indicator-${id}" class="absolute bottom-0 w-0 h-[3px] bg-blue-500 rounded-full transition-all duration-300 opacity-0 pointer-events-none"></div>
-            </button>
-        `;
-        return '';
-    }
-
-    function rebindTaskbarItem(id) {
-        if (id === 'weather') updateWeatherDisplay(true);
-        if (id === 'clock') updateClock();
-        if (id === 'tray') {
-            const btn = document.getElementById('tb-app-btn-tray');
-            if (btn) btn.addEventListener('click', toggleQuickSettings);
-        }
-    }
 
     function initSystem() {
         updateClock(); 
         updateLockClock();
         updateTaskbarCorners();
         initWeatherAPI();
-
         setInterval(updateClock, 1000);
         setInterval(updateLockClock, 1000);
         
-        document.addEventListener('keydown', (e) => {
-            const loginScreen = document.getElementById('login-overlay');
-            if (loginScreen && loginScreen.style.display !== 'none' && e.key === 'Enter') {
-                const pinInput = document.getElementById('login-pin');
-                if(document.activeElement !== pinInput) {
-                    dismissLockScreen();
-                }
-            }
-        });
-
         const trayBtn = document.getElementById('tb-app-btn-tray');
         if(trayBtn) trayBtn.addEventListener('click', toggleQuickSettings);
     }
 
     async function initWeatherAPI() {
         try {
-            const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=38.2527&longitude=-85.7585&current_weather=true&daily=weathercode,temperature_2m_max,temperature_2m_min&temperature_unit=fahrenheit&timezone=auto');
+            const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=38.2527&longitude=-85.7585&current_weather=true&temperature_unit=fahrenheit&timezone=auto');
             const data = await res.json();
             const temp = Math.round(data.current_weather.temperature);
             const code = data.current_weather.weathercode;
@@ -1337,10 +1249,6 @@
             window.currentTempNum = temp + '°';
             window.currentWmoCode = code;
             window.currentWindSpeed = data.current_weather.windspeed;
-            
-            if (data.daily) {
-                window.forecastData = data.daily;
-            }
             
             if(code === 0) window.currentWeatherDesc = 'Clear';
             else if(code <= 3) window.currentWeatherDesc = 'Partly Cloudy';
@@ -1352,102 +1260,9 @@
             
             updateWeatherDisplay(true);
         } catch(e) { 
-            console.log('Weather API error, using fallback state.', e); 
+            console.log('Weather fallback'); 
             updateWeatherDisplay(true); 
         }
-    }
-
-    function updateClock() {
-      const d = new Date();
-      const timeStr = d.toLocaleTimeString([], {hour: 'numeric', minute:'2-digit'});
-      const dateStr = d.toLocaleDateString(undefined, {month:'numeric', day:'numeric', year:'numeric'});
-      const fullDateStr = d.toLocaleDateString(undefined, {weekday: 'long', month:'long', day:'numeric'});
-      
-      const timeEls = document.querySelectorAll('#tb-time');
-      const dateEls = document.querySelectorAll('#tb-date');
-      timeEls.forEach(el => el.innerText = timeStr);
-      dateEls.forEach(el => el.innerText = dateStr);
-      
-      const dcTime = document.getElementById('dc-time');
-      const dcDate = document.getElementById('dc-date');
-      if (dcTime) dcTime.innerText = timeStr;
-      if (dcDate) dcDate.innerText = fullDateStr;
-
-      const hr = d.getHours();
-      let greeting = "Good evening";
-      if (hr >= 5 && hr < 12) greeting = "Good morning";
-      else if (hr >= 12 && hr < 17) greeting = "Good afternoon";
-      
-      const grEl = document.getElementById('start-greeting');
-      if (grEl && grEl.innerText !== greeting + ",") grEl.innerText = greeting + ",";
-      
-      if (d.getMinutes() === 0 && d.getSeconds() === 0) {
-          updateWeatherDisplay();
-      }
-    }
-
-    function updateLockClock() {
-        const d = new Date();
-        const lTime = document.getElementById('lock-time');
-        const lDate = document.getElementById('lock-date');
-        if(lTime) lTime.innerText = d.toLocaleTimeString([], {hour: 'numeric', minute:'2-digit'});
-        if(lDate) lDate.innerText = d.toLocaleDateString(undefined, {weekday: 'long', month:'long', day:'numeric'});
-    }
-
-    function dismissLockScreen() {
-        const lockState = document.getElementById('lock-state');
-        const loginState = document.getElementById('login-state');
-        const loginBg = document.getElementById('login-bg');
-        const loginDimmer = document.getElementById('login-dimmer');
-        
-        if(lockState.classList.contains('opacity-0')) return; 
-        
-        lockState.classList.add('opacity-0', '-translate-y-10', 'pointer-events-none');
-        
-        loginBg.style.filter = 'blur(30px) brightness(0.7)';
-        loginDimmer.classList.remove('bg-black/10');
-        loginDimmer.classList.add('bg-black/30');
-        
-        setTimeout(() => {
-            loginState.classList.remove('opacity-0', 'translate-y-10', 'pointer-events-none');
-            loginState.classList.add('opacity-100', 'translate-y-0');
-            setTimeout(() => {
-                const pin = document.getElementById('login-pin');
-                if(pin) pin.focus();
-            }, 200);
-        }, 200);
-    }
-
-    function triggerWelcome() {
-        const pinInput = document.getElementById('login-pin');
-        if(!pinInput.value) return; 
-
-        const loginInputArea = document.getElementById('login-input-area');
-        const optionsText = document.getElementById('login-options-text');
-        const welcomeState = document.getElementById('welcome-state');
-        const loginOverlay = document.getElementById('login-overlay');
-
-        loginInputArea.style.opacity = '0';
-        optionsText.style.opacity = '0';
-        setTimeout(() => {
-            loginInputArea.style.display = 'none';
-            optionsText.style.display = 'none';
-            welcomeState.classList.remove('hidden');
-            welcomeState.classList.add('flex');
-            setTimeout(() => { welcomeState.classList.remove('opacity-0'); }, 50);
-        }, 300);
-
-        setTimeout(() => {
-            loginOverlay.classList.add('lock-screen-hide');
-            setTimeout(() => {
-                loginOverlay.style.display = 'none';
-                
-                setTimeout(() => {
-                    window.openApp('welcome');
-                }, 500);
-                
-            }, 1000);
-        }, 1500);
     }
 
     function updateWeatherDisplay(force = false) {
@@ -1455,7 +1270,6 @@
         const hr = d.getHours();
         
         let iconUrl = '';
-        
         const isDay = hr >= 6 && hr < 19;
         const code = window.currentWmoCode || 0;
         const wind = window.currentWindSpeed || 0;
@@ -1512,80 +1326,118 @@
         applyToElement('start-weather-icon-2', 'start-weather-desc-2', (d) => d);
         applyToElement('window-weather-icon', null, (d) => d);
         applyToElement('app-weather-main-icon', 'app-weather-desc', (d) => d);
+    }
 
-        if (window.forecastData) {
-            const forecastContainer = document.querySelector('#app-weather .grid-cols-5');
-            if (forecastContainer) {
-                let html = '';
-                for (let i = 1; i <= 5; i++) {
-                    const dateStr = window.forecastData.time[i];
-                    const [y, m, d_val] = dateStr.split('-');
-                    const dateObj = new Date(y, m - 1, d_val);
-                    const dayName = dateObj.toLocaleDateString('en-US', {weekday: 'short'});
-                    
-                    const max = Math.round(window.forecastData.temperature_2m_max[i]);
-                    const min = Math.round(window.forecastData.temperature_2m_min[i]);
-                    const wcode = window.forecastData.weathercode[i];
-                    
-                    let dIcon = "https://img.icons8.com/?size=100&id=8EUmYhfLPTCF&format=png&color=000000"; 
-                    if (wcode === 1 || wcode === 2) dIcon = "https://img.icons8.com/?size=100&id=zIVmoh4T8wh7&format=png&color=000000";
-                    else if (wcode === 3 || wcode === 45 || wcode === 48) dIcon = "https://img.icons8.com/?size=100&id=W8fUZZSmXssu&format=png&color=000000";
-                    else if (wcode === 51 || wcode === 53 || wcode === 55 || wcode === 56 || wcode === 57 || wcode === 61 || wcode === 66 || wcode === 80) dIcon = "https://img.icons8.com/?size=100&id=QZJFPE7TNi5Q&format=png&color=000000";
-                    else if (wcode === 63 || wcode === 81) dIcon = "https://img.icons8.com/?size=100&id=kKxyuLXD4w0n&format=png&color=000000";
-                    else if (wcode === 65 || wcode === 67 || wcode === 82 || wcode >= 95) dIcon = "https://img.icons8.com/?size=100&id=7Dcax1eBasEf&format=png&color=000000";
+    function toggleQuickSettings(e) {
+        if (e) e.stopPropagation();
+        
+        const overlayQuick = document.getElementById('overlay-quick');
+        const trayBtnTarget = document.getElementById('tb-app-btn-tray') || document.getElementById('tb-segment-tray');
+        if(!trayBtnTarget || !overlayQuick) return;
 
-                    html += `
-                     <div class="glass-card p-3 rounded-[8px] flex flex-col items-center gap-1.5">
-                         <span class="text-[11px] font-medium text-slate-600 uppercase tracking-widest">${dayName}</span>
-                         <img src="${dIcon}" class="w-8 h-8 my-1">
-                         <span class="text-[13px] font-semibold text-slate-900">${max}° <span class="text-slate-500 font-normal ml-1">${min}°</span></span>
-                     </div>
-                    `;
-                }
-                forecastContainer.innerHTML = html;
+        if (overlayQuick.classList.contains('overlay-right-visible')) {
+            closeAllOverlays();
+        } else {
+            closeAllOverlays();
+            
+            const rect = trayBtnTarget.getBoundingClientRect();
+            const overlayWidth = 320; 
+            let leftPos = rect.left + (rect.width / 2) - (overlayWidth / 2);
+            
+            if (leftPos + overlayWidth > window.innerWidth - 20) {
+                leftPos = window.innerWidth - overlayWidth - 20;
             }
+            
+            overlayQuick.style.left = `${leftPos}px`;
+            
+            overlayQuick.classList.remove('overlay-right-hidden');
+            overlayQuick.classList.add('overlay-right-visible');
         }
     }
-    
+
+    function updateClock() {
+      const d = new Date();
+      const timeStr = d.toLocaleTimeString([], {hour: 'numeric', minute:'2-digit'});
+      const dateStr = d.toLocaleDateString(undefined, {month:'numeric', day:'numeric'});
+      document.querySelectorAll('#tb-time').forEach(el => el.innerText = timeStr);
+      document.querySelectorAll('#tb-date').forEach(el => el.innerText = dateStr);
+      const dcTime = document.getElementById('dc-time');
+      const dcDate = document.getElementById('dc-date');
+      if (dcTime) dcTime.innerText = timeStr;
+      if (dcDate) dcDate.innerText = d.toLocaleDateString(undefined, {weekday: 'long', month:'long', day:'numeric'});
+      
+      // Auto-update weather exactly on the hour
+      if (d.getMinutes() === 0 && d.getSeconds() === 0) {
+          updateWeatherDisplay();
+      }
+    }
+
+    function updateLockClock() {
+        const d = new Date();
+        const lTime = document.getElementById('lock-time');
+        const lDate = document.getElementById('lock-date');
+        if(lTime) lTime.innerText = d.toLocaleTimeString([], {hour: 'numeric', minute:'2-digit'});
+        if(lDate) lDate.innerText = d.toLocaleDateString(undefined, {weekday: 'long', month:'long', day:'numeric'});
+    }
+
+    function dismissLockScreen() {
+        const lockState = document.getElementById('lock-state');
+        const loginState = document.getElementById('login-state');
+        const loginBg = document.getElementById('login-bg');
+        const loginDimmer = document.getElementById('login-dimmer');
+        
+        lockState.classList.add('opacity-0', '-translate-y-10', 'pointer-events-none');
+        loginBg.style.filter = 'blur(20px) brightness(0.6)';
+        loginDimmer.classList.add('bg-black/30');
+        
+        setTimeout(() => {
+            loginState.classList.remove('opacity-0', 'translate-y-10', 'pointer-events-none');
+            loginState.classList.add('opacity-100', 'translate-y-0');
+        }, 200);
+    }
+
+    function triggerWelcome() {
+        const pinInput = document.getElementById('login-pin');
+        if(!pinInput.value) return; 
+
+        document.getElementById('login-input-area').style.opacity = '0';
+        document.getElementById('login-options-text').style.opacity = '0';
+        
+        setTimeout(() => {
+            const welcomeState = document.getElementById('welcome-state');
+            welcomeState.classList.remove('hidden');
+            welcomeState.classList.add('flex');
+            setTimeout(() => welcomeState.classList.remove('opacity-0'), 50);
+        }, 300);
+
+        setTimeout(() => {
+            document.getElementById('login-overlay').classList.add('lock-screen-hide');
+            setTimeout(() => {
+                document.getElementById('login-overlay').style.display = 'none';
+                openApp('welcome');
+            }, 1000);
+        }, 1500);
+    }
+
     function updateBrightness(val) {
         document.getElementById('filter-brightness').style.opacity = 1 - (val / 100);
-        const qsSlider = document.getElementById('qs-brightness');
-        const setSlider = document.getElementById('set-brightness');
-        if (qsSlider && qsSlider.value !== val) qsSlider.value = val;
-        if (setSlider && setSlider.value !== val) setSlider.value = val;
     }
-
-    function toggleDesktopClock(checkbox) {
-        const cw = document.getElementById('desktop-clock-widget');
-        if (checkbox.checked) {
-            cw.classList.add('clock-visible');
-        } else {
-            cw.classList.remove('clock-visible');
-        }
-    }
-    
-    function toggleTaskbarAlignment(checkbox) {
-        const tbWrapper = document.getElementById('taskbar-wrapper');
-        if (checkbox.checked) {
-            tbWrapper.classList.remove('justify-center');
-            tbWrapper.classList.add('justify-start');
-        } else {
-            tbWrapper.classList.remove('justify-start');
-            tbWrapper.classList.add('justify-center');
-        }
-    }
-
-    const dragAreas = document.querySelectorAll('.generic-drag-area');
-    let isWinDragging = false, winStartX, winStartY, initialLeft, initialTop, currentDraggedApp = null;
 
     function openApp(appId) {
-        closeAllOverlays();
         const appWindow = document.getElementById('app-' + appId);
         if(appWindow) {
+            // Act as a toggle if it's already open
+            if(appWindow.classList.contains('app-window-visible') && !appWindow.classList.contains('app-minimized')) {
+                minimizeApp(appId);
+                return;
+            }
+            
+            closeAllOverlays();
             document.querySelectorAll('.app-window-container').forEach(w => w.style.zIndex = 20000);
             appWindow.style.zIndex = 20001;
 
             appWindow.style.display = 'flex';
+            appWindow.classList.remove('app-minimized');
             void appWindow.offsetWidth;
             
             appWindow.classList.remove('app-window-hidden', 'app-window-closing');
@@ -1593,32 +1445,133 @@
             
             const indicator = document.getElementById('indicator-' + appId);
             if(indicator) {
+                indicator.style.width = ''; 
+                indicator.style.borderRadius = '';
                 indicator.classList.remove('w-0', 'opacity-0');
                 indicator.classList.add('w-3', 'opacity-100'); 
             }
         }
     }
 
-    function closeApp(appId) {
+    function minimizeApp(appId) {
         const appWindow = document.getElementById('app-' + appId);
-        if(appWindow && appWindow.classList.contains('app-window-visible') && !appWindow.classList.contains('app-window-closing')) {
-            appWindow.classList.add('app-window-closing');
-            
+        if(appWindow) {
+            appWindow.classList.add('app-minimized');
             const indicator = document.getElementById('indicator-' + appId);
             if(indicator) {
-                indicator.classList.remove('w-3', 'opacity-100');
-                indicator.classList.add('w-0', 'opacity-0');
+                indicator.style.width = '6px';
+                indicator.style.borderRadius = '50%';
             }
+        }
+    }
+
+    function maximizeApp(appId) {
+        const appWindow = document.getElementById('app-' + appId);
+        if(appWindow) {
+            appWindow.classList.toggle('app-maximized');
+        }
+    }
+
+    function closeAllOverlays() {
+        const overlaySearch = document.getElementById('overlay-search');
+        const searchResultsOverlay = document.getElementById('overlay-search-results');
+        const searchInput = document.getElementById('search-input');
+        const overlayStart = document.getElementById('overlay-start');
+        const overlayQuick = document.getElementById('overlay-quick');
+
+        if(overlaySearch && overlaySearch.classList.contains('step-1') && !overlaySearch.classList.contains('closing')) {
+            overlaySearch.classList.add('closing');
+            if(searchResultsOverlay) searchResultsOverlay.classList.remove('results-visible');
+            
+            overlaySearch.classList.remove('step-3'); 
+            setTimeout(() => {
+                 overlaySearch.classList.remove('step-2'); 
+                 setTimeout(() => {
+                     overlaySearch.classList.remove('step-1'); 
+                     overlaySearch.classList.remove('closing');
+                     if (searchInput) searchInput.value = '';
+                 }, 150); 
+            }, 150); 
+        }
+        
+        if(overlayStart && overlayStart.classList.contains('start-overlay-visible') && !overlayStart.classList.contains('start-overlay-closing')) {
+            overlayStart.classList.add('start-overlay-closing');
+            setTimeout(() => {
+                overlayStart.classList.remove('start-overlay-visible');
+                overlayStart.classList.add('start-overlay-hidden');
+                setTimeout(() => {
+                    overlayStart.classList.remove('start-overlay-closing');
+                    if(typeof showPinnedApps === 'function') showPinnedApps(false);
+                }, 250);
+            }, 200); 
+        }
+        
+        if(overlayQuick && overlayQuick.classList.contains('overlay-right-visible') && !overlayQuick.classList.contains('overlay-right-closing')) {
+            overlayQuick.classList.add('overlay-right-closing');
+            setTimeout(() => {
+                overlayQuick.classList.remove('overlay-right-visible');
+                overlayQuick.classList.add('overlay-right-hidden');
+                setTimeout(() => {
+                    overlayQuick.classList.remove('overlay-right-closing');
+                }, 250);
+            }, 150); 
+        }
+    }
+
+    function showAllApps() {
+        const pinnedView = document.getElementById('pinned-apps-view');
+        const allAppsView = document.getElementById('all-apps-view');
+        
+        if(pinnedView) pinnedView.classList.add('view-slide-out');
+        
+        if(allAppsView) {
+            allAppsView.classList.remove('all-apps-step-1', 'all-apps-step-2', 'all-apps-step-3');
+            void allAppsView.offsetWidth; 
+            
+            allAppsView.classList.add('all-apps-step-1');
             
             setTimeout(() => {
-                appWindow.classList.remove('app-window-visible');
-                appWindow.classList.add('app-window-hidden');
-                
-                setTimeout(() => {
-                    appWindow.style.display = 'none';
-                    appWindow.classList.remove('app-window-closing', 'app-window-hidden');
-                }, 250); 
-            }, 200); 
+                if (allAppsView.classList.contains('all-apps-step-1')) {
+                    allAppsView.classList.add('all-apps-step-2');
+                }
+            }, 100);
+
+            setTimeout(() => {
+                if (allAppsView.classList.contains('all-apps-step-2')) {
+                    allAppsView.classList.add('all-apps-step-3');
+                }
+            }, 250);
+        }
+    }
+
+    function showPinnedApps(animate = true) {
+        const pinnedView = document.getElementById('pinned-apps-view');
+        const allAppsView = document.getElementById('all-apps-view');
+        
+        if (!animate) {
+             if(pinnedView) pinnedView.style.transition = 'none';
+             if(allAppsView) allAppsView.style.transition = 'none';
+        }
+        
+        if(allAppsView) allAppsView.classList.remove('all-apps-step-1', 'all-apps-step-2', 'all-apps-step-3');
+        if(pinnedView) pinnedView.classList.remove('view-slide-out');
+        
+        if (!animate) {
+            setTimeout(() => {
+                if(pinnedView) pinnedView.style.transition = '';
+                if(allAppsView) allAppsView.style.transition = '';
+            }, 50);
+        }
+    }
+
+    function closeApp(appId) {
+        const appWindow = document.getElementById('app-' + appId);
+        if(appWindow) {
+            appWindow.classList.add('app-window-hidden');
+            setTimeout(() => {
+                appWindow.style.display = 'none';
+                appWindow.classList.remove('app-window-visible', 'app-window-hidden');
+            }, 300);
         }
     }
 
@@ -1657,7 +1610,7 @@
             contentGuide.classList.add('block');
         }
     }
-    
+
     function calcPress(val) {
         const display = document.getElementById('calc-display');
         if(val === 'C') {
@@ -1678,48 +1631,43 @@
     }
 
     function switchSettingsTab(tabId) {
-        document.querySelectorAll('.settings-tab-btn').forEach(btn => {
-            btn.classList.remove('settings-tab-active', 'bg-black/5', 'dark-theme:bg-white/10');
-            btn.querySelector('i').classList.remove('text-blue-600');
-            btn.querySelector('span').classList.remove('text-slate-800');
-        });
-        
-        document.querySelectorAll('.settings-panel').forEach(panel => {
-            panel.classList.add('hidden');
-        });
+        document.querySelectorAll('.settings-tab-btn').forEach(btn => btn.classList.remove('settings-tab-active'));
+        document.querySelectorAll('.settings-panel').forEach(panel => panel.classList.add('hidden'));
+        document.getElementById('tab-btn-' + tabId).classList.add('settings-tab-active');
+        document.getElementById('settings-tab-' + tabId).classList.remove('hidden');
+    }
 
-        const activeBtn = document.getElementById('tab-btn-' + tabId);
-        if (activeBtn) {
-            activeBtn.classList.add('settings-tab-active', 'bg-black/5', 'dark-theme:bg-white/10');
-            activeBtn.querySelector('i').classList.add('text-blue-600');
-            activeBtn.querySelector('span').classList.add('text-slate-800');
-        }
+    function updateTaskbarCorners() {
+        const segments = [...document.querySelectorAll('.taskbar-segment')];
+        segments.forEach((seg, index) => {
+            seg.classList.remove('rounded-[8px]', 'rounded-l-[8px]', 'rounded-r-[8px]', 'rounded-none');
+            if (segments.length === 1) seg.classList.add('rounded-[8px]');
+            else if (index === 0) seg.classList.add('rounded-l-[8px]', 'rounded-r-none');
+            else if (index === segments.length - 1) seg.classList.add('rounded-r-[8px]', 'rounded-l-none');
+            else seg.classList.add('rounded-none');
+        });
+    }
 
-        const activePanel = document.getElementById('settings-tab-' + tabId);
-        if (activePanel) {
-            activePanel.classList.remove('hidden');
+    function toggleDesktopClock(checkbox) {
+        const cw = document.getElementById('desktop-clock-widget');
+        if (checkbox.checked) {
+            cw.classList.add('clock-visible');
+            cw.style.opacity = '1';
+        } else {
+            cw.classList.remove('clock-visible');
+            cw.style.opacity = '0';
         }
     }
 
-    function changeWallpaper(element, url, isDark = false) {
-        document.getElementById('desktop-bg').style.backgroundImage = `url('${url}')`;
-        const loginBgEl = document.getElementById('login-bg');
-        if(loginBgEl) loginBgEl.style.backgroundImage = `url('${url}')`; 
-
-        const osRoot = document.getElementById('os-root');
-        if (isDark) {
-            osRoot.classList.add('dark-theme');
+    function toggleTaskbarAlignment(checkbox) {
+        const tbWrapper = document.getElementById('taskbar-wrapper');
+        if (checkbox.checked) {
+            tbWrapper.classList.remove('justify-center');
+            tbWrapper.classList.add('justify-start');
         } else {
-            osRoot.classList.remove('dark-theme');
+            tbWrapper.classList.remove('justify-start');
+            tbWrapper.classList.add('justify-center');
         }
-
-        const siblings = element.parentElement.children;
-        for(let i=0; i<siblings.length; i++) {
-            siblings[i].classList.remove('border-blue-500');
-            siblings[i].classList.add('border-transparent', 'hover:border-slate-300', 'dark-theme:hover:border-slate-600');
-        }
-        element.classList.add('border-blue-500');
-        element.classList.remove('border-transparent', 'hover:border-slate-300', 'dark-theme:hover:border-slate-600');
     }
 
     function toggleLiquidGlass(checkbox) {
@@ -1739,397 +1687,107 @@
     }
 
     async function simulateUpdateCheck() {
-        const btn = document.getElementById('btn-check-updates');
-        const iconContainer = document.getElementById('update-icon-container');
-        const title = document.getElementById('update-title');
-        const subtitle = document.getElementById('update-subtitle');
-        
-        btn.disabled = true;
+        const btn = event.target;
         btn.innerText = "Checking...";
-        
-        iconContainer.innerHTML = `
-            <div class="win-spinner win-spinner-blue">
-                <div class="circle"></div><div class="circle"></div><div class="circle"></div><div class="circle"></div><div class="circle"></div>
-            </div>
-        `;
-        
-        title.innerText = "Checking for updates...";
-        subtitle.innerText = "Please wait a moment.";
-
-        try {
-            const res = await fetch('update/index.html', { method: 'HEAD' });
-            
-            if (res.ok) {
-                setTimeout(() => {
-                    iconContainer.innerHTML = '<i id="update-icon" class="ph-fill ph-download-simple text-[48px] text-blue-600"></i>';
-                    title.innerText = "Windows 12 changer Update";
-                    subtitle.innerText = "1H05";
-                    btn.innerText = "Restart";
-                    btn.onclick = window.triggerUpdateRestart;
-                    btn.disabled = false;
-                }, 2000);
-                return;
-            }
-        } catch(e) {
-            console.log("No custom update file found, falling back to up-to-date state.");
-        }
-
+        btn.disabled = true;
         setTimeout(() => {
-            iconContainer.innerHTML = '<i id="update-icon" class="ph-fill ph-check-circle text-[48px] text-emerald-600"></i>';
-            title.innerText = "You're up to date";
-            subtitle.innerText = "Last checked: Just now";
             btn.innerText = "Check for updates";
-            btn.onclick = window.simulateUpdateCheck; 
             btn.disabled = false;
         }, 2000);
     }
 
-    function triggerUpdateRestart() {
-        window.closeAllOverlays();
-        
-        document.querySelectorAll('.app-window-container, #taskbar-wrapper, #desktop-clock-widget').forEach(el => {
-            el.style.opacity = '0';
-            el.style.transition = 'opacity 0.4s ease';
-            el.style.pointerEvents = 'none';
-        });
-
-        const restartOverlay = document.getElementById('update-restart-overlay');
-        if(restartOverlay) {
-            restartOverlay.classList.remove('hidden');
-            setTimeout(() => {
-                restartOverlay.classList.remove('opacity-0', 'pointer-events-none');
-                restartOverlay.classList.add('opacity-100', 'pointer-events-auto');
-            }, 50);
-        }
-
-        setTimeout(() => {
-            window.location.href = 'update/index.html';
-        }, 4000);
+    function dragTaskbarSegment(ev, type) {
+        ev.dataTransfer.setData("widgetType", type);
     }
+    
+    function changeWallpaper(element, url, isDark = false) {
+        document.getElementById('desktop-bg').style.backgroundImage = `url('${url}')`;
+        const loginBgEl = document.getElementById('login-bg');
+        if(loginBgEl) loginBgEl.style.backgroundImage = `url('${url}')`; 
+        
+        // This variable is required for the Flipped Blur border engine to track what to render!
+        document.documentElement.style.setProperty('--current-wallpaper', `url('${url}')`);
 
-    dragAreas.forEach(area => {
-        area.addEventListener('mousedown', (e) => {
-            if (e.target.tagName.toLowerCase() === 'button' || e.target.closest('button')) return;
-            
-            isWinDragging = true;
-            winStartX = e.clientX;
-            winStartY = e.clientY;
-            
-            const targetId = area.getAttribute('data-target');
-            currentDraggedApp = document.getElementById(targetId);
-            
-            document.querySelectorAll('.app-window-container').forEach(w => w.style.zIndex = 20000);
-            if(currentDraggedApp) currentDraggedApp.style.zIndex = 20001;
-            
-            if(currentDraggedApp) {
-                initialLeft = parseFloat(currentDraggedApp.style.left) || 0;
-                initialTop = parseFloat(currentDraggedApp.style.top) || 0;
-                currentDraggedApp.style.transition = 'none'; 
-            }
-        });
-    });
-
-    document.addEventListener('mousemove', (e) => {
-        if (!isWinDragging || !currentDraggedApp) return;
-        const dx = e.clientX - winStartX;
-        const dy = e.clientY - winStartY;
-        currentDraggedApp.style.left = (initialLeft + dx) + 'px';
-        currentDraggedApp.style.top = (initialTop + dy) + 'px';
-    });
-
-    document.addEventListener('mouseup', () => { 
-        if (isWinDragging) {
-            isWinDragging = false; 
-            if(currentDraggedApp) currentDraggedApp.style.transition = ''; 
-            currentDraggedApp = null;
+        const osRoot = document.getElementById('os-root');
+        if (isDark) {
+            osRoot.classList.add('dark-theme');
+        } else {
+            osRoot.classList.remove('dark-theme');
         }
-    });
+
+        const siblings = element.parentElement.children;
+        for(let i=0; i<siblings.length; i++) {
+            siblings[i].classList.remove('border-blue-500');
+            siblings[i].classList.add('border-transparent', 'hover:border-slate-300', 'dark-theme:hover:border-slate-600');
+        }
+        element.classList.add('border-blue-500');
+        element.classList.remove('border-transparent', 'hover:border-slate-300', 'dark-theme:hover:border-slate-600');
+    }
 
     const startBtn = document.getElementById('tb-start');
     const overlaySearch = document.getElementById('overlay-search');
-    const searchResultsOverlay = document.getElementById('overlay-search-results');
-    const searchResultsContent = document.getElementById('search-results-content');
-    const searchInput = document.getElementById('search-input');
     const overlayStart = document.getElementById('overlay-start');
-    const overlayQuick = document.getElementById('overlay-quick');
     let startClickTimer = null;
 
-    function closeAllOverlays() {
-        if(overlaySearch && overlaySearch.classList.contains('step-1') && !overlaySearch.classList.contains('closing')) {
-            overlaySearch.classList.add('closing');
-            if(searchResultsOverlay) searchResultsOverlay.classList.remove('results-visible');
-            
-            overlaySearch.classList.remove('step-3'); 
-            setTimeout(() => {
-                 overlaySearch.classList.remove('step-2'); 
-                 setTimeout(() => {
-                     overlaySearch.classList.remove('step-1'); 
-                     overlaySearch.classList.remove('closing');
-                     if (searchInput) searchInput.value = '';
-                 }, 150); 
-            }, 150); 
-        }
-        
-        if(overlayStart && overlayStart.classList.contains('start-overlay-visible') && !overlayStart.classList.contains('start-overlay-closing')) {
-            overlayStart.classList.add('start-overlay-closing');
-            setTimeout(() => {
-                overlayStart.classList.remove('start-overlay-visible');
-                overlayStart.classList.add('start-overlay-hidden');
-                setTimeout(() => {
-                    overlayStart.classList.remove('start-overlay-closing');
-                    showPinnedApps(false);
-                }, 250);
-            }, 200); 
-        }
-        
-        if(overlayQuick && overlayQuick.classList.contains('overlay-right-visible') && !overlayQuick.classList.contains('overlay-right-closing')) {
-            overlayQuick.classList.add('overlay-right-closing');
-            setTimeout(() => {
-                overlayQuick.classList.remove('overlay-right-visible');
-                overlayQuick.classList.add('overlay-right-hidden');
-                setTimeout(() => {
-                    overlayQuick.classList.remove('overlay-right-closing');
-                }, 250);
-            }, 150); 
-        }
-    }
-
-    const appsSegment = document.getElementById('tb-apps-segment');
-    if (appsSegment) {
-        appsSegment.addEventListener('click', (e) => {
-            if(!e.target.closest('#tb-start')) return;
-            
-            e.stopPropagation();
-            if (startClickTimer) {
-                clearTimeout(startClickTimer);
-                startClickTimer = null;
-                
-                if (overlayStart.classList.contains('start-overlay-visible')) {
+    startBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (startClickTimer) {
+            clearTimeout(startClickTimer);
+            startClickTimer = null;
+            if (overlayStart.classList.contains('start-overlay-visible')) {
+                closeAllOverlays();
+            } else {
+                closeAllOverlays();
+                overlayStart.classList.remove('start-overlay-hidden');
+                overlayStart.classList.add('start-overlay-visible');
+            }
+        } else {
+            startClickTimer = setTimeout(() => {
+                if (overlaySearch.classList.contains('step-1')) {
                     closeAllOverlays();
                 } else {
                     closeAllOverlays();
-                    overlayStart.classList.remove('start-overlay-hidden');
-                    overlayStart.classList.add('start-overlay-visible');
+                    overlaySearch.classList.add('step-1');
+                    setTimeout(() => {
+                        if (overlaySearch.classList.contains('step-1')) overlaySearch.classList.add('step-2');
+                    }, 150);
+                    setTimeout(() => {
+                        if (overlaySearch.classList.contains('step-2')) {
+                            overlaySearch.classList.add('step-3');
+                            const searchInput = document.getElementById('search-input');
+                            if(searchInput) searchInput.focus();
+                        }
+                    }, 400);
                 }
-            } else {
-                startClickTimer = setTimeout(() => {
-                    if (overlaySearch.classList.contains('step-1')) {
-                        closeAllOverlays();
-                    } else {
-                        closeAllOverlays();
-                        
-                        overlaySearch.classList.add('step-1');
-                        
-                        setTimeout(() => {
-                            if(overlaySearch.classList.contains('step-1')) {
-                                overlaySearch.classList.add('step-2');
-                            }
-                        }, 150);
-                        
-                        setTimeout(() => {
-                            if(overlaySearch.classList.contains('step-2')) {
-                                overlaySearch.classList.add('step-3');
-                                setTimeout(() => {
-                                    if (searchInput) searchInput.focus();
-                                }, 200);
-                            }
-                        }, 400);
-                    }
-                    startClickTimer = null;
-                }, 220); 
-            }
-        });
-    }
-
-    function showAllApps() {
-        const pinnedView = document.getElementById('pinned-apps-view');
-        const allAppsView = document.getElementById('all-apps-view');
-        
-        pinnedView.classList.add('view-slide-out');
-        
-        allAppsView.classList.remove('all-apps-step-1', 'all-apps-step-2', 'all-apps-step-3');
-        void allAppsView.offsetWidth; 
-        
-        allAppsView.classList.add('all-apps-step-1');
-        
-        setTimeout(() => {
-            if (allAppsView.classList.contains('all-apps-step-1')) {
-                allAppsView.classList.add('all-apps-step-2');
-            }
-        }, 100);
-
-        setTimeout(() => {
-            if (allAppsView.classList.contains('all-apps-step-2')) {
-                allAppsView.classList.add('all-apps-step-3');
-            }
-        }, 250);
-    }
-
-    function showPinnedApps(animate = true) {
-        const pinnedView = document.getElementById('pinned-apps-view');
-        const allAppsView = document.getElementById('all-apps-view');
-        
-        if (!animate) {
-             pinnedView.style.transition = 'none';
-             allAppsView.style.transition = 'none';
+                startClickTimer = null;
+            }, 250);
         }
-        
-        allAppsView.classList.remove('all-apps-step-1', 'all-apps-step-2', 'all-apps-step-3');
-        pinnedView.classList.remove('view-slide-out');
-        
-        if (!animate) {
-            setTimeout(() => {
-                pinnedView.style.transition = '';
-                allAppsView.style.transition = '';
-            }, 50);
-        }
-    }
-
-    if(searchInput) {
-        searchInput.addEventListener('input', (e) => {
-            const query = e.target.value.toLowerCase().trim();
-            if (query.length > 0) {
-                searchResultsOverlay.classList.add('results-visible');
-                renderSearchResults(query);
-            } else {
-                searchResultsOverlay.classList.remove('results-visible');
-            }
-        });
-    }
-    
-    function renderSearchResults(query) {
-        let html = '';
-
-        if ('time'.includes(query) || 'clock'.includes(query) || 'date'.includes(query)) {
-            const d = new Date();
-            html += `
-                <div class="glass-card p-4 rounded-[12px] flex items-center justify-between shadow-sm cursor-pointer hover:bg-black/5 dark-theme:hover:bg-white/10 transition-colors">
-                    <div class="flex items-center gap-4">
-                        <i class="ph-fill ph-clock text-[32px] text-blue-500"></i>
-                        <div class="flex flex-col gap-0.5">
-                            <span class="text-[18px] font-semibold text-slate-900 tracking-tight">${d.toLocaleTimeString([], {hour: 'numeric', minute:'2-digit'})}</span>
-                            <span class="text-[11px] font-medium text-slate-500 uppercase tracking-widest mt-0.5">${d.toLocaleDateString(undefined, {weekday: 'long', month:'long', day:'numeric'})}</span>
-                        </div>
-                    </div>
-                </div>
-            `;
-        }
-
-        if ('weather'.includes(query) || 'temperature'.includes(query)) {
-             const hr = new Date().getHours();
-             let iconUrl = '';
-             let desc = '';
-             if (hr >= 5 && hr < 10) { iconUrl = "https://img.icons8.com/?size=100&id=eB996llrCC83&format=png&color=000000"; desc = "Morning"; }
-             else if (hr >= 10 && hr < 18) { iconUrl = "https://img.icons8.com/?size=100&id=8EUmYhfLPTCF&format=png&color=000000"; desc = "Sunny"; }
-             else if (hr >= 18 && hr < 21) { iconUrl = "https://img.icons8.com/?size=100&id=9XlIvJuZ1DEv&format=png&color=000000"; desc = "Sunset"; }
-             else { iconUrl = "https://img.icons8.com/?size=100&id=Opvt5B6x4fI4&format=png&color=000000"; desc = "Clear"; }
-
-             html += `
-                <div class="glass-card p-4 rounded-[12px] flex items-center justify-between shadow-sm cursor-pointer hover:bg-black/5 dark-theme:hover:bg-white/10 transition-colors">
-                    <div class="flex items-center gap-4">
-                        <img src="${iconUrl}" class="w-8 h-8 drop-shadow-sm">
-                        <div class="flex flex-col gap-0.5">
-                            <span class="text-[18px] font-semibold text-slate-900 tracking-tight">${currentTempNum}</span>
-                            <span class="text-[11px] font-medium text-slate-500 uppercase tracking-widest mt-0.5">${currentWeatherDesc} • Louisville, KY</span>
-                        </div>
-                    </div>
-                </div>
-            `;
-        }
-
-        const matchedApps = appDatabase.filter(app => app.name.toLowerCase().includes(query));
-        if (matchedApps.length > 0) {
-            html += `<h3 class="text-[11px] font-semibold text-slate-800 uppercase tracking-widest pl-1 mt-2 mb-1">Apps</h3>`;
-            matchedApps.forEach(app => {
-                html += `
-                    <div onclick="${app.action}; document.getElementById('search-input').value=''; document.getElementById('overlay-search-results').classList.remove('results-visible');" class="flex items-center gap-3 p-3 glass-card rounded-[8px] shadow-sm cursor-pointer transition-colors hover:bg-black/5 dark-theme:hover:bg-white/10">
-                        <img src="${app.icon}" class="w-7 h-7 drop-shadow-sm" onerror="this.src='https://img.icons8.com/?size=100&id=2969&format=png&color=000000';">
-                        <div class="flex flex-col gap-0.5">
-                            <span class="text-[13px] font-medium text-slate-900 tracking-tight">${app.name}</span>
-                            <span class="text-[10px] text-slate-500 mt-0.5">System App</span>
-                        </div>
-                    </div>
-                `;
-            });
-        }
-
-        if (html === '') {
-            html = `
-                <div class="flex items-center gap-3 p-3 glass-card rounded-[8px] shadow-sm cursor-pointer transition-colors hover:bg-black/5 dark-theme:hover:bg-white/10">
-                    <i class="ph-bold ph-magnifying-glass text-[24px] text-blue-600"></i>
-                    <div class="flex flex-col gap-0.5">
-                        <span class="text-[13px] font-medium text-slate-900 tracking-tight">Search web for "${query}"</span>
-                        <span class="text-[10px] text-slate-500 mt-0.5">Microsoft Bing</span>
-                    </div>
-                </div>
-            `;
-        }
-
-        if(searchResultsContent) searchResultsContent.innerHTML = html;
-    }
-
-    if (overlaySearch) {
-        overlaySearch.addEventListener('click', (e) => {
-            e.stopPropagation();
-            if (overlaySearch.classList.contains('step-2') && !overlaySearch.classList.contains('step-3')) {
-                overlaySearch.classList.add('step-3');
-                setTimeout(() => {
-                    if (searchInput) searchInput.focus();
-                }, 200);
-            }
-        });
-    }
-
-    function toggleQuickSettings(e) {
-        e.stopPropagation();
-        
-        const trayBtnTarget = document.getElementById('tb-app-btn-tray') || document.getElementById('tb-segment-tray');
-        if(!trayBtnTarget) return;
-
-        if (overlayQuick.classList.contains('overlay-right-visible')) {
-            closeAllOverlays();
-        } else {
-            closeAllOverlays();
-            
-            const rect = trayBtnTarget.getBoundingClientRect();
-            const overlayWidth = 340; 
-            let leftPos = rect.left + (rect.width / 2) - (overlayWidth / 2);
-            
-            if (leftPos + overlayWidth > window.innerWidth - 20) {
-                leftPos = window.innerWidth - overlayWidth - 20;
-            }
-            
-            overlayQuick.style.left = `${leftPos}px`;
-            
-            overlayQuick.classList.remove('overlay-right-hidden');
-            overlayQuick.classList.add('overlay-right-visible');
-        }
-    }
-
-    if(overlaySearch) overlaySearch.addEventListener('click', e => e.stopPropagation());
-    if(searchResultsOverlay) searchResultsOverlay.addEventListener('click', e => e.stopPropagation());
-    if(overlayStart) overlayStart.addEventListener('click', e => {
-        if(e.target === overlayStart) closeAllOverlays();
-        else e.stopPropagation();
     });
-    if(overlayQuick) overlayQuick.addEventListener('click', e => e.stopPropagation());
-    document.querySelectorAll('.app-window-container').forEach(w => w.addEventListener('click', e => e.stopPropagation()));
 
     const deskBg = document.getElementById('desktop-bg');
     if(deskBg) deskBg.addEventListener('click', closeAllOverlays);
-
-    // ==========================================
-    // BIDIRECTIONAL DRAG AND DROP WIDGET LOGIC
-    // ==========================================
     
+    if(overlayStart) overlayStart.addEventListener('click', e => {
+        if(e.target === overlayStart) closeAllOverlays();
+    });
+
+    // --- RESTORED DRAG AND DROP & ADVANCED INTERACTIVITY ---
+    
+    // Attach minimize/maximize events dynamically to avoid massive HTML rewrites
+    document.querySelectorAll('.app-window-container').forEach(app => {
+        const appId = app.id.replace('app-', '');
+        const btnMin = app.querySelector('.ph-minus');
+        const btnMax = app.querySelector('.ph-square');
+        if (btnMin) btnMin.parentElement.onclick = () => minimizeApp(appId);
+        if (btnMax) btnMax.parentElement.onclick = () => maximizeApp(appId);
+    });
+
     function checkPlaceholder() {
         const container = document.getElementById('start-widget-area');
         if(!container) return;
         const widgets = container.querySelectorAll('[id^="widget-"]');
         const placeholder = document.getElementById('widget-placeholder');
-        if (widgets.length === 0 && placeholder) {
-            placeholder.style.display = 'flex';
-        }
+        if (widgets.length === 0 && placeholder) placeholder.style.display = 'flex';
     }
 
     function dragAppFromStart(ev, appId) {
@@ -2144,7 +1802,7 @@
         ev.dataTransfer.setData("sourceBtnId", ev.currentTarget.id);
         ev.currentTarget.classList.add('opacity-40'); 
         
-        if (!overlayStart.classList.contains('start-overlay-visible')) {
+        if (overlayStart.classList.contains('start-overlay-hidden')) {
             closeAllOverlays();
             overlayStart.classList.remove('start-overlay-hidden');
             overlayStart.classList.add('start-overlay-visible');
@@ -2152,7 +1810,7 @@
     }
 
     function dragWidget(ev, type) {
-        if (!overlayStart.classList.contains('start-overlay-visible')) {
+        if (overlayStart.classList.contains('start-overlay-hidden')) {
             closeAllOverlays();
             overlayStart.classList.remove('start-overlay-hidden');
             overlayStart.classList.add('start-overlay-visible');
@@ -2160,7 +1818,7 @@
         ev.dataTransfer.setData("widgetType", type);
         ev.target.classList.add('dragging');
     }
-    
+
     function allowTaskbarDragOver(e) {
         e.preventDefault();
         const container = document.getElementById('taskbar-container');
@@ -2175,7 +1833,6 @@
         if (hoveredSegment && draggable && hoveredSegment !== draggable) {
             const box = hoveredSegment.getBoundingClientRect();
             const offset = e.clientX - box.left - box.width / 2;
-            
             if (Math.abs(offset) < box.width * 0.2) {
                 hoveredSegment.style.boxShadow = '0 0 0 2px rgba(59,130,246,0.8) inset';
                 hoveredSegment.style.backgroundColor = 'rgba(255,255,255,0.1)';
@@ -2185,71 +1842,20 @@
 
         if (draggable) {
             const afterElement = getDragAfterElement(container, e.clientX);
-            if (afterElement == null) {
-                container.appendChild(draggable);
-            } else {
-                container.insertBefore(draggable, afterElement);
-            }
+            if (afterElement == null) container.appendChild(draggable);
+            else container.insertBefore(draggable, afterElement);
             updateTaskbarCorners();
         }
     }
-
-    function dragTaskbarSegment(ev, type) {
-        ev.dataTransfer.setData("widgetType", type); 
-        ev.dataTransfer.setData("draggingTaskbarId", ev.target.id);
-        ev.target.classList.add('is-taskbar-dragging');
-        
-        if (!overlayStart.classList.contains('start-overlay-visible')) {
-            closeAllOverlays();
-            overlayStart.classList.remove('start-overlay-hidden');
-            overlayStart.classList.add('start-overlay-visible');
-        }
-    }
-
-    document.addEventListener('dragend', (ev) => {
-        if(ev.target.classList) {
-            ev.target.classList.remove('is-taskbar-dragging', 'opacity-40', 'dragging');
-        }
-        
-        document.querySelectorAll('.taskbar-segment').forEach(s => {
-            s.style.boxShadow = '';
-            s.style.backgroundColor = '';
-        });
-        
-        updateTaskbarCorners();
-    });
 
     function getDragAfterElement(container, x) {
         const draggableElements = [...container.querySelectorAll('.taskbar-segment:not(.is-taskbar-dragging)')].filter(el => el.style.display !== 'none');
         return draggableElements.reduce((closest, child) => {
             const box = child.getBoundingClientRect();
             const offset = x - box.left - box.width / 2;
-            if (offset < 0 && offset > closest.offset) {
-                return { offset: offset, element: child };
-            } else {
-                return closest;
-            }
+            if (offset < 0 && offset > closest.offset) return { offset: offset, element: child };
+            else return closest;
         }, { offset: Number.NEGATIVE_INFINITY }).element;
-    }
-
-    function updateTaskbarCorners() {
-        const container = document.getElementById('taskbar-container');
-        if(!container) return;
-        const segments = [...container.querySelectorAll('.taskbar-segment')].filter(el => el.style.display !== 'none');
-        
-        segments.forEach((seg, index) => {
-            seg.classList.remove('rounded-[8px]', 'rounded-l-[8px]', 'rounded-r-[8px]', 'rounded-none', 'rounded-l-none', 'rounded-r-none');
-            
-            if (segments.length === 1) {
-                seg.classList.add('rounded-[8px]');
-            } else if (index === 0) {
-                seg.classList.add('rounded-l-[8px]', 'rounded-r-none');
-            } else if (index === segments.length - 1) {
-                seg.classList.add('rounded-r-[8px]', 'rounded-l-none');
-            } else {
-                seg.classList.add('rounded-none');
-            }
-        });
     }
 
     function allowDrop(ev) {
@@ -2273,11 +1879,7 @@
     }
 
     function removeWidget(type) {
-        const ev = { 
-            preventDefault: () => {}, 
-            clientX: window.innerWidth / 2, 
-            dataTransfer: { getData: () => type + '_back' } 
-        };
+        const ev = { preventDefault: () => {}, clientX: window.innerWidth / 2, dataTransfer: { getData: () => type + '_back' } };
         dropToTaskbar(ev);
     }
 
@@ -2289,30 +1891,23 @@
             const appId = ev.dataTransfer.getData("appId");
             const sourceBtnId = ev.dataTransfer.getData("sourceBtnId");
             const sourceBtn = document.getElementById(sourceBtnId);
-            
             if (sourceBtn) {
                 const prev = sourceBtn.previousElementSibling;
                 const next = sourceBtn.nextElementSibling;
                 if (prev && prev.classList.contains('tb-divider')) prev.remove();
                 else if (next && next.classList.contains('tb-divider')) next.remove();
-                
                 const parentSeg = sourceBtn.closest('.taskbar-segment');
                 sourceBtn.remove();
-                
                 if (parentSeg) {
                     const remaining = Array.from(parentSeg.children).filter(c => !c.classList.contains('tb-divider') && c.id !== 'tb-start');
-                    if (remaining.length === 0 && parentSeg.id !== 'tb-apps-segment') {
-                        parentSeg.remove();
-                    }
+                    if (remaining.length === 0 && parentSeg.id !== 'tb-apps-segment') parentSeg.remove();
                 }
                 updateTaskbarCorners();
             }
-            
             type = appId + "_back"; 
         }
 
         if (!type || !type.includes('_back')) return;
-        
         const rawType = type.replace('_back', '');
 
         if (['calculator', 'notepad', 'photos', 'settings'].includes(rawType)) {
@@ -2341,18 +1936,14 @@
                  </button>
                  <div class="start-content flex justify-between items-start relative z-10 pointer-events-none w-full">
                      <div class="flex items-center gap-2">
-                         <img id="start-weather-icon-1" src="" class="w-5 h-5">
+                         <img id="start-weather-icon-1" src="https://img.icons8.com/?size=100&id=8EUmYhfLPTCF&format=png&color=000000" class="w-5 h-5">
                          <span class="text-[11px] font-semibold text-slate-900">Weather</span>
                      </div>
                  </div>
                  <div class="start-content flex justify-between items-end relative z-10 mt-2 pointer-events-none w-full">
                      <div>
                         <p class="text-[36px] font-light text-slate-900 leading-none">${currentTempNum}</p>
-                        <p id="start-weather-desc-1" class="text-[11px] text-slate-600 mt-1"></p>
-                     </div>
-                     <div class="flex flex-col items-end">
-                        <img id="start-weather-icon-2" src="" class="w-10 h-10 mb-1">
-                        <p id="start-weather-desc-2" class="text-[11px] font-medium text-slate-800"></p>
+                        <p id="start-weather-desc-1" class="text-[11px] text-slate-600 mt-1">${currentWeatherDesc}</p>
                      </div>
                  </div>
             `;
@@ -2370,10 +1961,6 @@
                         <div class="flex items-center gap-2.5"><i class="ph-bold ph-wifi-high text-blue-600 text-sm"></i><span class="text-[12px] text-slate-900">Vision_5G</span></div>
                         <span class="text-[9px] font-medium text-slate-600">Connected</span>
                      </div>
-                     <div class="flex items-center justify-between">
-                        <div class="flex items-center gap-2.5"><i class="ph-fill ph-battery-full text-emerald-500 text-sm"></i><span class="text-[12px] text-slate-900">Battery</span></div>
-                        <span class="text-[9px] font-medium text-slate-600">98%</span>
-                     </div>
                  </div>
             `;
         } else if (rawType === 'clock') {
@@ -2387,20 +1974,12 @@
                  </div>
                  <div class="start-content bg-white/50 dark-theme:bg-black/20 rounded-[6px] p-4 flex flex-col items-center justify-center pointer-events-none">
                      <h2 id="start-clock-time" class="text-[24px] font-medium text-slate-900 tracking-tight"></h2>
-                     <p id="start-clock-date" class="text-[11px] text-slate-500 mt-1 uppercase tracking-wider"></p>
                  </div>
             `;
-            setTimeout(() => {
-                const d = new Date();
-                const startClockTime = document.getElementById('start-clock-time');
-                const startClockDate = document.getElementById('start-clock-date');
-                if(startClockTime) startClockTime.innerText = d.toLocaleTimeString([], {hour: 'numeric', minute:'2-digit'});
-                if(startClockDate) startClockDate.innerText = d.toLocaleDateString(undefined, {weekday: 'long', month:'long', day:'numeric'});
-            }, 50);
+            setTimeout(updateClock, 50);
         }
         
         container.appendChild(widget);
-
         if (rawType === 'weather') updateWeatherDisplay(true); 
     }
     
@@ -2422,18 +2001,14 @@
             if (sourceBtn) {
                 const prev = sourceBtn.previousElementSibling;
                 const next = sourceBtn.nextElementSibling;
-                
                 if (prev && prev.classList.contains('tb-divider')) prev.remove();
                 else if (next && next.classList.contains('tb-divider')) next.remove();
                 
                 const parentSeg = sourceBtn.closest('.taskbar-segment');
                 sourceBtn.remove();
-                
                 if (parentSeg) {
                     const remaining = Array.from(parentSeg.children).filter(c => !c.classList.contains('tb-divider') && c.id !== 'tb-start');
-                    if (remaining.length === 0 && parentSeg.id !== 'tb-apps-segment') {
-                        parentSeg.remove();
-                    }
+                    if (remaining.length === 0 && parentSeg.id !== 'tb-apps-segment') parentSeg.remove();
                 }
             }
             type = 'new_app'; 
@@ -2454,9 +2029,7 @@
                 targetSegment.appendChild(divider);
 
                 const children = Array.from(draggable.children);
-                children.forEach(child => {
-                    targetSegment.appendChild(child);
-                });
+                children.forEach(child => targetSegment.appendChild(child));
 
                 draggable.remove();
                 updateTaskbarCorners();
@@ -2504,18 +2077,21 @@
             
             segment.innerHTML = btnHtml;
 
-            if (afterElement == null) {
-                container.appendChild(segment);
-            } else {
-                container.insertBefore(segment, afterElement);
-            }
+            if (afterElement == null) container.appendChild(segment);
+            else container.insertBefore(segment, afterElement);
             
             updateTaskbarCorners();
             rebindTaskbarItem(appId);
             return;
         }
     }
-    
+
+    document.addEventListener('dragend', (ev) => {
+        if(ev.target.classList) ev.target.classList.remove('is-taskbar-dragging', 'opacity-40', 'dragging');
+        document.querySelectorAll('.taskbar-segment').forEach(s => { s.style.boxShadow = ''; s.style.backgroundColor = ''; });
+        updateTaskbarCorners();
+    });
+
     initSystem();
   </script>
 </body>
