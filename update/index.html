@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Windows 12</title>
+  <title>Windows 12 Preview (1H04 The Destroyer)</title>
   
   <!-- System Libraries -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -871,7 +871,34 @@
                           <button id="btn-check-updates" onclick="window.simulateUpdateCheck()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg text-sm font-bold shadow-lg transition-all active:scale-[0.98] z-10 border border-blue-500 elastic-hover">Check for updates</button>
                       </div>
 
-                      <div class="mt-10 flex flex-col gap-3">
+                      <!-- 1H04 Pro Plan Update Banner with image -->
+                      <div class="mt-8 p-6 glass-card rounded-[12px] shadow-sm flex flex-col md:flex-row gap-6 relative overflow-hidden group">
+                          <div class="w-full md:w-[220px] shrink-0">
+                              <!-- Image included here, with an abstract fallback just in case the file isn't physically present in the local preview -->
+                              <img src="image.png" alt="1H04 Pro Plan Preview" class="w-full h-full min-h-[140px] object-cover rounded-lg shadow-md border border-white/20" onerror="this.src='https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1000&auto=format&fit=crop';">
+                          </div>
+                          <div class="flex flex-col flex-1">
+                              <h3 class="text-[18px] font-extrabold text-slate-900 tracking-tight mb-2 flex items-center gap-2">
+                                  <i class="ph-fill ph-rocket-launch text-blue-600"></i>
+                                  Welcome to a plan of 1H04 Pro
+                              </h3>
+                              <p class="text-[13px] text-slate-700 leading-relaxed font-medium mb-3">
+                                  If you want to move back to a 1H04 update when 1H05 is released, then 1H04 Pro will give you a memory of 1H04 BUT with some exciting changes. But not too much!
+                              </p>
+                              <ul class="text-[12px] text-slate-600 font-medium space-y-1.5 list-disc list-inside mb-4 pl-1">
+                                  <li><strong class="text-slate-800">New Widgets:</strong> Add brand new widgets to your ecosystem.</li>
+                                  <li><strong class="text-slate-800">Taskbar Edits:</strong> Enjoy more taskbar editing capabilities.</li>
+                                  <li><strong class="text-slate-800">System Fixes:</strong> A lot of Start Menu and Settings improvements.</li>
+                              </ul>
+                              <div class="mt-auto p-3 bg-blue-500/10 border border-blue-400/30 rounded-lg">
+                                  <p class="text-[11px] font-bold text-blue-800">
+                                      <i class="ph-bold ph-info"></i> Note: As I said, this won't be a COPY of 1H04, it will be a thoughtfully changed version.
+                                  </p>
+                              </div>
+                          </div>
+                      </div>
+
+                      <div class="mt-8 flex flex-col gap-3">
                           <h3 class="text-xs font-extrabold text-slate-900 uppercase tracking-widest opacity-80 mb-2">More Options</h3>
                           <div class="flex items-center justify-between p-5 glass-card rounded-[12px] cursor-pointer transition-colors shadow-sm group hover:shadow-md">
                               <div class="flex items-center gap-5">
@@ -1347,7 +1374,7 @@
             <!-- Tray Segment -->
             <div id="tb-segment-tray" class="taskbar-segment pointer-events-auto h-[60px] taskbar-flat rounded-r-[12px] rounded-l-none flex items-center px-2 cursor-grab active:cursor-grabbing transition-all duration-300 origin-center hover:scale-[1.02] hover:-translate-y-1 z-10 scale-in" draggable="true" ondragstart="window.dragTaskbarSegment(event, 'segment')">
                 <button id="tb-app-btn-tray" draggable="true" ondragstart="window.dragExtractedApp(event, 'tray')" class="flex items-center justify-center hover:bg-white/20 px-4 h-[44px] rounded-[8px] transition-colors gap-4 group cursor-grab active:cursor-grabbing mx-1 shrink-0">
-                  <img src="https://img.icons8.com/?size=100&id=VXpZtycqaGqG&format=png&color=000000" class="h-6 w-auto opacity-80 group-hover:opacity-100 transition-opacity drop-shadow-sm pointer-events-none" draggable="false" alt="System Tray">
+                  <img src="https://img.icons8.com/?size=100&id=50nJymaeC8CY&format=png&color=000000" class="h-6 w-auto opacity-80 group-hover:opacity-100 transition-opacity drop-shadow-sm pointer-events-none" draggable="false" alt="System Tray">
                 </button>
                 <div class="w-px h-8 bg-white/30 mx-2 rounded-full pointer-events-none tb-divider shrink-0"></div>
                 <button id="tb-app-btn-clock" draggable="true" ondragstart="window.dragExtractedApp(event, 'clock')" class="flex flex-col items-end justify-center hover:bg-white/20 px-4 h-[44px] rounded-[8px] transition-colors cursor-grab active:cursor-grabbing mx-1 shrink-0">
@@ -1422,7 +1449,7 @@
         `;
         if (id === 'tray') return `
             <button id="tb-app-btn-tray" draggable="true" ondragstart="window.dragExtractedApp(event, 'tray')" class="flex items-center justify-center hover:bg-white/20 px-4 h-[44px] rounded-[8px] transition-colors gap-4 group cursor-grab active:cursor-grabbing mx-1 shrink-0">
-              <img src="https://img.icons8.com/?size=100&id=VXpZtycqaGqG&format=png&color=000000" class="h-6 w-auto opacity-80 group-hover:opacity-100 transition-opacity drop-shadow-sm pointer-events-none" draggable="false" alt="System Tray">
+              <img src="https://img.icons8.com/?size=100&id=50nJymaeC8CY&format=png&color=000000" class="h-6 w-auto opacity-80 group-hover:opacity-100 transition-opacity drop-shadow-sm pointer-events-none" draggable="false" alt="System Tray">
             </button>
         `;
         if (id === 'clock') return `
@@ -2621,7 +2648,7 @@
                      <i class="ph-bold ph-x text-xs text-white"></i>
                  </button>
                  <div class="start-content flex items-center gap-3 mb-3 pointer-events-none">
-                     <img src="https://img.icons8.com/?size=100&id=VXpZtycqaGqG&format=png&color=000000" class="w-6 h-6 opacity-90 drop-shadow-sm">
+                     <img src="https://img.icons8.com/?size=100&id=50nJymaeC8CY&format=png&color=000000" class="w-6 h-6 opacity-90 drop-shadow-sm">
                      <span class="text-[12px] font-extrabold tracking-wider uppercase text-slate-800">System Status</span>
                  </div>
                  <div class="start-content glass-card rounded-[12px] p-4 flex flex-col gap-4 pointer-events-none shadow-sm">
