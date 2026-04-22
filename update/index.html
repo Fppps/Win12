@@ -684,25 +684,23 @@
                           <button id="btn-check-updates" onclick="window.simulateUpdateCheck()" class="bg-[#0067c0] hover:bg-[#005a9e] text-white px-5 py-2 rounded-[6px] text-[13px] transition-colors z-10 shadow-md">Check for updates</button>
                       </div>
 
-                      <!-- 1H05 Preview Update Banner -->
+                      <!-- 1H04 Pro Plan Update Banner -->
                       <div class="p-5 glass-card rounded-[8px] shadow-sm flex flex-col md:flex-row gap-5">
                           <div class="w-full md:w-[200px] shrink-0">
-                              <!-- Authentic fallback image for Windows 1H05 Preview context (PC Laptop UI) -->
-                              <img src="image.png" alt="1H05 Preview" class="w-full h-full min-h-[140px] object-cover rounded-[6px] shadow-sm" onerror="this.src='https://images.unsplash.com/photo-1593640408182-31c70c8268f5?q=80&w=1000&auto=format&fit=crop';">
+                              <!-- Authentic fallback image for Windows 1H04 Pro context (PC Laptop UI) -->
+                              <img src="image.png" alt="1H04 Pro Plan Preview" class="w-full h-full min-h-[140px] object-cover rounded-[6px] border border-slate-200" onerror="this.src='https://images.unsplash.com/photo-1593640408182-31c70c8268f5?q=80&w=1000&auto=format&fit=crop';">
                           </div>
                           <div class="flex flex-col flex-1">
-                              <h3 class="text-[15px] font-semibold text-slate-900 tracking-tight mb-2">
-                                  Welcome to 1H05 Preview
-                              </h3>
-                              <p class="text-[12px] text-slate-600 leading-relaxed mb-3">
-                                  This new update introduces a stunning zero shadow desktop concept featuring pure glassy reflections and highly saturated mica blur effects. 
+                              <h3 class="text-[15px] font-semibold text-slate-900 mb-2">Welcome to a plan of 1H04 Pro</h3>
+                              <p class="text-[12px] text-slate-600 mb-3 leading-relaxed">
+                                  If you want to move back to a 1H04 update when 1H05 is released, then 1H04 Pro will give you a memory of 1H04 BUT with some changes. 
                               </p>
-                              <ul class="text-[12px] text-slate-600 space-y-1.5 list-disc list-inside mb-1">
-                                  <li><strong class="font-semibold text-slate-800">Interactive Prototypes:</strong> Experience a fully functional word processor and a responsive file explorer system.</li>
-                                  <li><strong class="font-semibold text-slate-800">Advanced Personalization:</strong> Complete control over your taskbar appearance through live transparency adjustments and custom color palettes.</li>
-                                  <li><strong class="font-semibold text-slate-800">Redesigned Weather Widget:</strong> A dynamic parallax sky that perfectly adapts its beautiful lighting using precise astronomical sunrise data.</li>
-                                  <li><strong class="font-semibold text-slate-800">Immersive Task View:</strong> Seamless virtual desktop management alongside beautifully animated glowing icons.</li>
+                              <ul class="text-[11px] text-slate-500 space-y-1 list-disc list-inside">
+                                  <li><strong class="font-semibold text-slate-800">New Widgets:</strong> Advanced 3D modules.</li>
+                                  <li><strong class="font-semibold text-slate-800">Taskbar Edits:</strong> Fragmented and movable.</li>
+                                  <li><strong class="font-semibold text-slate-800">System Fixes:</strong> Optimized Start and Settings.</li>
                               </ul>
+                              <p class="text-[10px] text-slate-400 mt-4 italic">Note: As I said, this wont be a COPY of 1H04, it will be a changed version.</p>
                           </div>
                       </div>
 
@@ -2067,7 +2065,7 @@
             
             const segment = document.createElement('div');
             segment.id = 'tb-segment-' + appId + '-' + Date.now(); 
-            segment.className = "taskbar-segment pointer-events-auto h-[48px] taskbar-flat flex items-center px-1 cursor-grab active:cursor-grabbing transition-all duration-300 origin-center z-10 scale-in";
+            segment.className = "taskbar-segment pointer-events-auto h-[48px] taskbar-flat flex items-center px-1 cursor-grab active:cursor-grabbing transition-all duration-300 origin-center z-10 scale-in border border-white/30";
             segment.draggable = true;
             segment.ondragstart = (e) => dragTaskbarSegment(e, 'segment');
             
