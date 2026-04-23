@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Windows 12 Preview (1H05 The Destroyer)</title>
+  <title>Windows 12 Preview (1H04 The Destroyer)</title>
   
   <!-- System Libraries -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -12,7 +12,7 @@
 
   <style>
     /* ============================================================================
-       1H05 "THE DESTROYER" - GLOBAL POLISH & MATERIAL ENGINE
+       1H04 "THE DESTROYER" - GLOBAL POLISH & MATERIAL ENGINE
        ============================================================================ */
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Segoe+UI:wght@300;400;500;600;700;900&display=swap');
     
@@ -21,25 +21,15 @@
         --destroy-easing: cubic-bezier(0.8, 0, 0.2, 1.0); 
         
         --current-wallpaper: url('https://4kwallpapers.com/images/wallpapers/windows-11-bloom-3840x2160-14423.jpg');
-        
-        /* ----------------------------------------------------------------------
-           LIQUID GLASS ENGINE (Acrylic) - Taskbar, Menus, Transient Overlays
-           ---------------------------------------------------------------------- */
-        --lg-bg: rgba(255, 255, 255, 0.03);
-        --lg-blur: blur(60px) saturate(250%);
-        --lg-inset: inset 0 1px 0 rgba(255, 255, 255, 0.7), inset 0 -1px 1px rgba(0, 0, 0, 0.15), inset 1px 0 0 rgba(255, 255, 255, 0.3), inset -1px 0 0 rgba(255, 255, 255, 0.3);
-        --lg-shadow: 0 15px 35px -5px rgba(0, 0, 0, 0.25);
-        --lg-refraction: blur(20px) brightness(1.4) saturate(250%) contrast(1.2);
 
         /* ----------------------------------------------------------------------
-           MICA ENGINE - App Windows, Content Cards, Solid Backgrounds
+           UNIFIED MICA ENGINE - Applied to entire OS (Taskbar, Windows, Cards)
            ---------------------------------------------------------------------- */
-        --mica-bg: transparent; /* Pure transparency, NO white backgrounds */
-        --mica-blur: blur(50px) saturate(350%); /* JUST a high saturation blur */
-        --mica-border: rgba(255, 255, 255, 0.1);  /* Flat single color border */
-        --mica-shadow: 0 12px 30px rgba(0, 0, 0, 0.15); /* No inset white glows */
+        --mica-bg: transparent; /* Pure transparency */
+        --mica-blur: blur(50px) saturate(250%); /* High saturation blur */
+        --mica-border: transparent;  /* Purely transparent, no reflection */
+        --mica-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
         --mica-shadow-hover: 0 16px 40px rgba(0, 0, 0, 0.2);
-        --mica-noise: url('data:image/svg+xml,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)" opacity="0.05"/%3E%3C/svg%3E');
     }
 
     body { 
@@ -53,77 +43,34 @@
 
     /* --- Dark Theme overrides --- */
     .dark-theme {
-        --lg-bg: rgba(15, 15, 15, 0.25);
-        --lg-inset: inset 0 1px 0 rgba(255, 255, 255, 0.2), inset 0 -1px 1px rgba(0, 0, 0, 0.7), inset 1px 0 0 rgba(255, 255, 255, 0.08), inset -1px 0 0 rgba(255, 255, 255, 0.08);
-        --lg-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
-        --lg-refraction: blur(20px) brightness(1.6) saturate(300%) contrast(1.3);
-
         --mica-bg: transparent; 
-        --mica-border: rgba(255, 255, 255, 0.05);
+        --mica-border: transparent; /* Purely transparent, no reflection */
         --mica-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
         --mica-shadow-hover: 0 20px 50px rgba(0, 0, 0, 0.5);
     }
 
     /* ==========================================================================
-       LIQUID GLASS ENGINE (Acrylic) - Taskbar, Menus, Overlays
+       UNIFIED MICA DYNAMIC MATERIAL
        ========================================================================== */
-    .taskbar-flat {
-        position: relative;
-        background: var(--lg-bg);
-        backdrop-filter: var(--lg-blur);
-        -webkit-backdrop-filter: var(--lg-blur);
-        border: none !important;
-        box-shadow: var(--lg-shadow);
-        transition: transform 0.2s var(--spring-easing), box-shadow 0.2s ease, background 0.3s ease;
-    }
-    
-    .taskbar-flat::before {
-        content: ''; position: absolute; inset: 0; border-radius: inherit;
-        box-shadow: var(--lg-inset); pointer-events: none; z-index: 1;
-    }
-
-    .taskbar-flat::after {
-        content: ''; position: absolute; inset: 0; border-radius: inherit; padding: 1px;
-        -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-        -webkit-mask-composite: xor; mask-composite: exclude;
-        backdrop-filter: var(--lg-refraction); -webkit-backdrop-filter: var(--lg-refraction);
-        background: rgba(255,255,255,0.1); pointer-events: none; z-index: 2;
-    }
-
-    .dark-theme .taskbar-flat::after { background: rgba(255,255,255,0.03); }
-
-    .taskbar-segment.rounded-none::after { padding: 1px 0 !important; }
-    .taskbar-segment.rounded-l-\[8px\]::after { padding: 1px 0 1px 1px !important; }
-    .taskbar-segment.rounded-r-\[8px\]::after { padding: 1px 1px 1px 0 !important; }
-
-    /* ==========================================================================
-       MICA DYNAMIC MATERIAL - App Backgrounds & Content Cards
-       ========================================================================== */
-    .glass-card {
+    .taskbar-flat, .glass-card {
         position: relative;
         background: var(--mica-bg);
         backdrop-filter: var(--mica-blur);
         -webkit-backdrop-filter: var(--mica-blur);
-        border: 1px solid var(--mica-border) !important; /* Flat standard border, no gradient mask */
+        border: 1px solid var(--mica-border) !important;
         box-shadow: var(--mica-shadow);
-        transition: transform 0.2s var(--spring-easing), box-shadow 0.2s ease, border-color 0.3s ease;
-    }
-
-    .glass-card::before {
-        content: ''; position: absolute; inset: 0; border-radius: inherit;
-        background-image: var(--mica-noise); background-blend-mode: overlay;
-        pointer-events: none; z-index: -1;
+        transition: transform 0.2s var(--spring-easing), box-shadow 0.2s ease;
     }
 
     .glass-card:hover { 
         transform: translateY(-1px); 
         box-shadow: var(--mica-shadow-hover); 
-        border-color: rgba(255, 255, 255, 0.2) !important;
     }
-    
-    .dark-theme .glass-card:hover {
-        border-color: rgba(255, 255, 255, 0.15) !important;
-    }
+
+    /* Seamless Taskbar Connection Geometry Fixes */
+    .taskbar-segment.rounded-none { border-left-color: transparent !important; border-right-color: transparent !important; }
+    .taskbar-segment.rounded-l-\[8px\] { border-right-color: transparent !important; }
+    .taskbar-segment.rounded-r-\[8px\] { border-left-color: transparent !important; }
 
     /* --- Interactivity Additions --- */
     .app-maximized {
@@ -137,12 +84,8 @@
     /* --------------------------------------------------------------------------
        STATE 2/3 FALLBACKS
        -------------------------------------------------------------------------- */
-    body.disable-liquid-glass .taskbar-flat { background: #ffffff; backdrop-filter: none; -webkit-backdrop-filter: none; box-shadow: none; border: 1px solid rgba(0,0,0,0.1) !important; }
-    body.disable-liquid-glass.dark-theme .taskbar-flat { background: #202020; border: 1px solid rgba(255,255,255,0.1) !important; }
-    body.disable-liquid-glass .taskbar-flat::before, body.disable-liquid-glass .taskbar-flat::after { display: none; }
-    body.disable-mica-texture .glass-card { background: #f3f4f6; backdrop-filter: none; -webkit-backdrop-filter: none; }
-    body.disable-mica-texture.dark-theme .glass-card { background: #2d2d2d; }
-    body.disable-mica-texture .glass-card::before, body.disable-mica-texture .glass-card::after { display: none; }
+    body.disable-mica-texture .glass-card, body.disable-mica-texture .taskbar-flat { background: #f3f4f6; backdrop-filter: none; -webkit-backdrop-filter: none; }
+    body.disable-mica-texture.dark-theme .glass-card, body.disable-mica-texture.dark-theme .taskbar-flat { background: #2d2d2d; }
 
     /* ==========================================================================
        3D TEXT & INPUT CLASSES
@@ -485,7 +428,7 @@
           <div class="h-10 flex justify-between items-center pl-4 pr-2 bg-transparent select-none generic-drag-area cursor-move shrink-0 app-step-2" data-target="app-settings">
              <div class="flex items-center gap-2.5 pointer-events-none app-step-3">
                  <img src="https://raw.githubusercontent.com/blueedgeno/win11React/master/public/img/icon/settings.png" class="w-[16px] h-[16px] drop-shadow-sm" onerror="this.src='https://img.icons8.com/?size=100&id=2969&format=png&color=000000';">
-                 <span class="text-[12px] font-medium text-slate-900 tracking-tight">Settings <span class="text-[9px] font-bold text-blue-700 uppercase ml-2 bg-blue-100/50 px-1.5 py-0.5 rounded border border-blue-200/50">Canary 1H05</span></span>
+                 <span class="text-[12px] font-medium text-slate-900 tracking-tight">Settings <span class="text-[9px] font-bold text-blue-700 uppercase ml-2 bg-blue-100/50 px-1.5 py-0.5 rounded border border-blue-200/50">Canary 1H04</span></span>
              </div>
              <div class="flex gap-0.5 app-step-3">
                  <button class="w-11 h-8 rounded-[6px] flex items-center justify-center transition-colors hover:bg-black/5 dark-theme:hover:bg-white/10 group"><i class="ph-bold ph-minus text-slate-600 text-[10px]"></i></button>
@@ -604,16 +547,6 @@
                       <div class="flex flex-col gap-2">
                           <div class="flex items-center justify-between px-5 py-4 glass-card rounded-[8px] transition-colors">
                               <div class="flex items-center gap-4">
-                                  <i class="ph-fill ph-drop text-[20px] text-slate-700"></i>
-                                  <div class="flex flex-col">
-                                      <span class="text-[13px] font-medium text-slate-900">Liquid Glass Engine</span>
-                                      <span class="text-[11px] text-slate-500">Advanced refractive blur on UI surfaces.</span>
-                                  </div>
-                              </div>
-                              <input type="checkbox" class="win-toggle" checked onchange="window.toggleLiquidGlass(this)">
-                          </div>
-                          <div class="flex items-center justify-between px-5 py-4 glass-card rounded-[8px] transition-colors">
-                              <div class="flex items-center gap-4">
                                   <i class="ph-fill ph-sparkle text-[20px] text-slate-700"></i>
                                   <div class="flex flex-col">
                                       <span class="text-[13px] font-medium text-slate-900">Mica Dynamic Material</span>
@@ -676,10 +609,10 @@
                       <!-- 1H05 Preview Update Banner -->
                       <div class="glass-card p-5 rounded-[8px] shadow-sm flex flex-col gap-5">
                           <div class="w-full shrink-0 flex justify-center">
-                              <img src="image.png" alt="1H05 Preview" class="w-full aspect-video object-cover rounded-[6px] shadow-sm border border-slate-200 dark-theme:border-slate-700" onerror="this.src='https://images.unsplash.com/photo-1593640408182-31c70c8268f5?q=80&w=1000&auto=format&fit=crop';">
+                              <img src="image.png" alt="1H04 Preview" class="w-full aspect-video object-cover rounded-[6px] shadow-sm border border-slate-200 dark-theme:border-slate-700" onerror="this.src='https://images.unsplash.com/photo-1593640408182-31c70c8268f5?q=80&w=1000&auto=format&fit=crop';">
                           </div>
                           <div class="flex flex-col flex-1 px-1">
-                              <h3 class="text-[16px] font-semibold text-slate-900 tracking-tight mb-2">Welcome to 1H05 Preview</h3>
+                              <h3 class="text-[16px] font-semibold text-slate-900 tracking-tight mb-2">Welcome to 1H04 Preview</h3>
                               <p class="text-[12px] text-slate-600 mb-3 leading-relaxed">
                                   This new update introduces a stunning zero shadow desktop concept featuring pure glassy reflections and highly saturated mica blur effects.
                               </p>
@@ -833,7 +766,7 @@
                           </div>
                           <div>
                               <h1 class="text-[24px] font-semibold text-slate-900 tracking-tight">Experience Windows 12</h1>
-                              <p class="text-[13px] text-slate-600 mt-1">Build 1H05 is here. Let's see what's changed.</p>
+                              <p class="text-[13px] text-slate-600 mt-1">Build 1H04 is here. Let's see what's changed.</p>
                           </div>
                       </div>
                       
@@ -856,8 +789,8 @@
                               <div class="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center mb-3">
                                   <i class="ph-fill ph-drop text-emerald-600 text-[16px]"></i>
                               </div>
-                              <h3 class="text-[14px] font-semibold text-slate-900 mb-1">Liquid Glass & Mica Materials</h3>
-                              <p class="text-[12px] text-slate-600 leading-relaxed">Experience our new rendering engine. True background-filtering blurs the desktop behind UI elements, while Mica provides an elegant opaque texture.</p>
+                              <h3 class="text-[14px] font-semibold text-slate-900 mb-1">Mica Materials Everywhere</h3>
+                              <p class="text-[12px] text-slate-600 leading-relaxed">Experience our new unified rendering engine. A beautiful, pure Mica blur with high saturation creates incredible depth across the entire desktop.</p>
                           </div>
                       </div>
                   </div>
@@ -1195,7 +1128,6 @@
     window.simulateUpdateCheck = simulateUpdateCheck;
     window.switchWelcomeTab = switchWelcomeTab;
     window.calcPress = calcPress;
-    window.toggleLiquidGlass = toggleLiquidGlass;
     window.toggleMicaLayer = toggleMicaLayer;
     window.handleCustomWallpaper = handleCustomWallpaper;
     window.changeWallpaper = changeWallpaper;
@@ -1722,14 +1654,6 @@
         }
     }
 
-    function toggleLiquidGlass(checkbox) {
-        if (checkbox.checked) {
-            document.body.classList.remove('disable-liquid-glass');
-        } else {
-            document.body.classList.add('disable-liquid-glass');
-        }
-    }
-
     function toggleMicaLayer(checkbox) {
         if (checkbox.checked) {
             document.body.classList.remove('disable-mica-texture');
@@ -2135,7 +2059,7 @@
             
             const segment = document.createElement('div');
             segment.id = 'tb-segment-' + appId + '-' + Date.now(); 
-            segment.className = "taskbar-segment pointer-events-auto h-[48px] taskbar-flat flex items-center px-1 cursor-grab active:cursor-grabbing transition-all duration-300 origin-center z-10 scale-in border border-white/30";
+            segment.className = "taskbar-segment pointer-events-auto h-[48px] taskbar-flat flex items-center px-1 cursor-grab active:cursor-grabbing transition-all duration-300 origin-center z-10 scale-in";
             segment.draggable = true;
             segment.ondragstart = (e) => dragTaskbarSegment(e, 'segment');
             
