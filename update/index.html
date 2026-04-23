@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Windows 12 Preview (1H04 The Destroyer)</title>
+  <title>Windows 12 Preview (1H05 The Destroyer)</title>
   
   <!-- System Libraries -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -12,7 +12,7 @@
 
   <style>
     /* ============================================================================
-       1H04 "THE DESTROYER" - TRUE 3D REFRACTIVE GLASS ENGINE
+       1H05 "THE DESTROYER" - GLOBAL POLISH & MATERIAL ENGINE
        ============================================================================ */
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Segoe+UI:wght@300;400;500;600;700;900&display=swap');
     
@@ -20,26 +20,26 @@
         --spring-easing: cubic-bezier(0.1, 0.9, 0.2, 1.0);
         --destroy-easing: cubic-bezier(0.8, 0, 0.2, 1.0); 
         
+        --current-wallpaper: url('https://4kwallpapers.com/images/wallpapers/windows-11-bloom-3840x2160-14423.jpg');
+        
         /* ----------------------------------------------------------------------
-           3D GLASS ENGINE VARIABLES
+           LIQUID GLASS ENGINE (Acrylic) - Taskbar, Menus, Transient Overlays
            ---------------------------------------------------------------------- */
-        
-        /* ZERO-TINT: Relying almost entirely on pure blur and refraction */
-        --bg-taskbar: rgba(255, 255, 255, 0.03);
-        --bg-card: rgba(255, 255, 255, 0.02);
-        --bg-card-hover: rgba(255, 255, 255, 0.08);
-        
-        /* Extremely deep, color-rich blurs */
-        --blur-taskbar: blur(45px) saturate(220%);
-        --blur-card: blur(40px) saturate(200%);
-        
-        /* 3D Highlight & Shadow Insets (Light direction simulation) */
-        --inset-light: inset 0 1px 1px rgba(255, 255, 255, 0.5), inset 0 -1px 2px rgba(0, 0, 0, 0.15), inset 1px 0 1px rgba(255, 255, 255, 0.2), inset -1px 0 1px rgba(0, 0, 0, 0.1);
-        --shadow-outer: 0 15px 35px -5px rgba(0, 0, 0, 0.3);
-        --shadow-outer-hover: 0 20px 45px -5px rgba(0, 0, 0, 0.4);
+        --lg-bg: rgba(255, 255, 255, 0.03);
+        --lg-blur: blur(60px) saturate(250%);
+        --lg-inset: inset 0 1px 0 rgba(255, 255, 255, 0.7), inset 0 -1px 1px rgba(0, 0, 0, 0.15), inset 1px 0 0 rgba(255, 255, 255, 0.3), inset -1px 0 0 rgba(255, 255, 255, 0.3);
+        --lg-shadow: 0 15px 35px -5px rgba(0, 0, 0, 0.25);
+        --lg-refraction: blur(20px) brightness(1.4) saturate(250%) contrast(1.2);
 
-        /* The "Reversed Blur" Refractive Border */
-        --refraction-border: blur(15px) invert(0.15) brightness(1.3) saturate(180%);
+        /* ----------------------------------------------------------------------
+           MICA ENGINE - App Windows, Content Cards, Solid Backgrounds
+           ---------------------------------------------------------------------- */
+        --mica-bg: transparent; /* Pure transparency, NO white backgrounds */
+        --mica-blur: blur(50px) saturate(350%); /* JUST a high saturation blur */
+        --mica-border: rgba(255, 255, 255, 0.1);  /* Flat single color border */
+        --mica-shadow: 0 12px 30px rgba(0, 0, 0, 0.15); /* No inset white glows */
+        --mica-shadow-hover: 0 16px 40px rgba(0, 0, 0, 0.2);
+        --mica-noise: url('data:image/svg+xml,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)" opacity="0.05"/%3E%3C/svg%3E');
     }
 
     body { 
@@ -53,172 +53,157 @@
 
     /* --- Dark Theme overrides --- */
     .dark-theme {
-        --bg-taskbar: rgba(0, 0, 0, 0.15);
-        --bg-card: rgba(0, 0, 0, 0.15);
-        --bg-card-hover: rgba(255, 255, 255, 0.05);
-        
-        --inset-light: inset 0 1px 1px rgba(255, 255, 255, 0.15), inset 0 -1px 2px rgba(0, 0, 0, 0.5), inset 1px 0 1px rgba(255, 255, 255, 0.08), inset -1px 0 1px rgba(0, 0, 0, 0.3);
-        --shadow-outer: 0 20px 50px rgba(0, 0, 0, 0.6);
-        --shadow-outer-hover: 0 25px 60px rgba(0, 0, 0, 0.8);
+        --lg-bg: rgba(15, 15, 15, 0.25);
+        --lg-inset: inset 0 1px 0 rgba(255, 255, 255, 0.2), inset 0 -1px 1px rgba(0, 0, 0, 0.7), inset 1px 0 0 rgba(255, 255, 255, 0.08), inset -1px 0 0 rgba(255, 255, 255, 0.08);
+        --lg-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+        --lg-refraction: blur(20px) brightness(1.6) saturate(300%) contrast(1.3);
 
-        --refraction-border: blur(15px) invert(0.1) brightness(1.5) saturate(200%);
+        --mica-bg: transparent; 
+        --mica-border: rgba(255, 255, 255, 0.05);
+        --mica-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+        --mica-shadow-hover: 0 20px 50px rgba(0, 0, 0, 0.5);
     }
 
     /* ==========================================================================
-       BASE COMPONENT CLASSES: REFRACTIVE GLASS
+       LIQUID GLASS ENGINE (Acrylic) - Taskbar, Menus, Overlays
        ========================================================================== */
-    
-    /* 1. Main Wrappers (Restoring direct blur for guaranteed visibility) */
-    .taskbar-flat, .glass-card {
+    .taskbar-flat {
         position: relative;
-        background: var(--bg-card);
-        backdrop-filter: var(--blur-card);
-        -webkit-backdrop-filter: var(--blur-card);
+        background: var(--lg-bg);
+        backdrop-filter: var(--lg-blur);
+        -webkit-backdrop-filter: var(--lg-blur);
         border: none !important;
-        box-shadow: var(--shadow-outer);
+        box-shadow: var(--lg-shadow);
         transition: transform 0.2s var(--spring-easing), box-shadow 0.2s ease, background 0.3s ease;
     }
     
-    .taskbar-flat {
-        background: var(--bg-taskbar);
-        backdrop-filter: var(--blur-taskbar);
-        -webkit-backdrop-filter: var(--blur-taskbar);
+    .taskbar-flat::before {
+        content: ''; position: absolute; inset: 0; border-radius: inherit;
+        box-shadow: var(--lg-inset); pointer-events: none; z-index: 1;
+    }
+
+    .taskbar-flat::after {
+        content: ''; position: absolute; inset: 0; border-radius: inherit; padding: 1px;
+        -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+        -webkit-mask-composite: xor; mask-composite: exclude;
+        backdrop-filter: var(--lg-refraction); -webkit-backdrop-filter: var(--lg-refraction);
+        background: rgba(255,255,255,0.1); pointer-events: none; z-index: 2;
+    }
+
+    .dark-theme .taskbar-flat::after { background: rgba(255,255,255,0.03); }
+
+    .taskbar-segment.rounded-none::after { padding: 1px 0 !important; }
+    .taskbar-segment.rounded-l-\[8px\]::after { padding: 1px 0 1px 1px !important; }
+    .taskbar-segment.rounded-r-\[8px\]::after { padding: 1px 1px 1px 0 !important; }
+
+    /* ==========================================================================
+       MICA DYNAMIC MATERIAL - App Backgrounds & Content Cards
+       ========================================================================== */
+    .glass-card {
+        position: relative;
+        background: var(--mica-bg);
+        backdrop-filter: var(--mica-blur);
+        -webkit-backdrop-filter: var(--mica-blur);
+        border: 1px solid var(--mica-border) !important; /* Flat standard border, no gradient mask */
+        box-shadow: var(--mica-shadow);
+        transition: transform 0.2s var(--spring-easing), box-shadow 0.2s ease, border-color 0.3s ease;
+    }
+
+    .glass-card::before {
+        content: ''; position: absolute; inset: 0; border-radius: inherit;
+        background-image: var(--mica-noise); background-blend-mode: overlay;
+        pointer-events: none; z-index: -1;
     }
 
     .glass-card:hover { 
         transform: translateY(-1px); 
-        box-shadow: var(--shadow-outer-hover); 
-        background: var(--bg-card-hover);
+        box-shadow: var(--mica-shadow-hover); 
+        border-color: rgba(255, 255, 255, 0.2) !important;
     }
-
-    /* 2. Inner 3D Lighting (Bevel highlights & shadows) */
-    .taskbar-flat::before, .glass-card::before {
-        content: '';
-        position: absolute;
-        inset: 0;
-        border-radius: inherit;
-        box-shadow: var(--inset-light);
-        pointer-events: none;
-        z-index: 1;
+    
+    .dark-theme .glass-card:hover {
+        border-color: rgba(255, 255, 255, 0.15) !important;
     }
-
-    /* 3. The "Flipped Blur" Refractive Border */
-    .taskbar-flat::after, .glass-card::after {
-        content: '';
-        position: absolute;
-        inset: 0;
-        border-radius: inherit;
-        padding: 1.5px; /* Border thickness */
-        -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-        -webkit-mask-composite: xor;
-        mask-composite: exclude;
-        
-        /* The magical inverted edge blur */
-        backdrop-filter: var(--refraction-border);
-        -webkit-backdrop-filter: var(--refraction-border);
-        background: rgba(255,255,255,0.05); /* Slight physical rim */
-        pointer-events: none;
-        z-index: 2;
-    }
-
-    .dark-theme .taskbar-flat::after, .dark-theme .glass-card::after {
-        background: rgba(255,255,255,0.02);
-    }
-
-    /* Seamless Taskbar Connection Geometry Fixes for the Border Mask */
-    .taskbar-segment.rounded-none::after { padding: 1.5px 0 !important; }
-    .taskbar-segment.rounded-l-\[8px\]::after { padding: 1.5px 0 1.5px 1.5px !important; }
-    .taskbar-segment.rounded-r-\[8px\]::after { padding: 1.5px 1.5px 1.5px 0 !important; }
 
     /* --- Interactivity Additions --- */
     .app-maximized {
-        top: 0 !important;
-        left: 0 !important;
-        width: 100vw !important;
-        height: calc(100vh - 60px) !important;
-        border-radius: 0 !important;
-        transform: none !important;
+        top: 0 !important; left: 0 !important; width: 100vw !important; height: calc(100vh - 60px) !important;
+        border-radius: 0 !important; transform: none !important;
     }
     .app-minimized {
-        opacity: 0 !important;
-        transform: translateY(40px) scale(0.95) !important;
-        pointer-events: none !important;
+        opacity: 0 !important; transform: translateY(40px) scale(0.95) !important; pointer-events: none !important;
     }
 
     /* --------------------------------------------------------------------------
        STATE 2/3 FALLBACKS
        -------------------------------------------------------------------------- */
-    body.disable-liquid-glass.disable-mica-texture .glass-card, 
-    body.disable-liquid-glass.disable-mica-texture .taskbar-flat {
-        background: #ffffff; backdrop-filter: none; -webkit-backdrop-filter: none; box-shadow: none; border: 1px solid rgba(0,0,0,0.1) !important;
-    }
-    body.disable-liquid-glass.disable-mica-texture.dark-theme .glass-card, 
-    body.disable-liquid-glass.disable-mica-texture.dark-theme .taskbar-flat {
-        background: #202020; border: 1px solid rgba(255,255,255,0.1) !important;
-    }
-    body.disable-liquid-glass.disable-mica-texture .glass-card::before, 
-    body.disable-liquid-glass.disable-mica-texture .taskbar-flat::before,
-    body.disable-liquid-glass.disable-mica-texture .glass-card::after, 
-    body.disable-liquid-glass.disable-mica-texture .taskbar-flat::after { display: none; }
+    body.disable-liquid-glass .taskbar-flat { background: #ffffff; backdrop-filter: none; -webkit-backdrop-filter: none; box-shadow: none; border: 1px solid rgba(0,0,0,0.1) !important; }
+    body.disable-liquid-glass.dark-theme .taskbar-flat { background: #202020; border: 1px solid rgba(255,255,255,0.1) !important; }
+    body.disable-liquid-glass .taskbar-flat::before, body.disable-liquid-glass .taskbar-flat::after { display: none; }
+    body.disable-mica-texture .glass-card { background: #f3f4f6; backdrop-filter: none; -webkit-backdrop-filter: none; }
+    body.disable-mica-texture.dark-theme .glass-card { background: #2d2d2d; }
+    body.disable-mica-texture .glass-card::before, body.disable-mica-texture .glass-card::after { display: none; }
 
     /* ==========================================================================
        3D TEXT & INPUT CLASSES
        ========================================================================== */
-    .text-3d-float { text-shadow: 0 4px 15px rgba(0,0,0,0.4); }
+    .text-3d-float { text-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+    .dark-theme .text-3d-float { text-shadow: 0 4px 15px rgba(0,0,0,0.8); }
 
     .win-input {
-        background: rgba(0, 0, 0, 0.05);
+        background: rgba(0, 0, 0, 0.03);
         border: 1px solid transparent;
-        border-top: 1px solid rgba(0, 0, 0, 0.15);
-        border-bottom: 1px solid rgba(255, 255, 255, 0.6);
-        box-shadow: inset 0 2px 5px rgba(0,0,0,0.1);
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+        box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
         transition: all 0.2s ease;
     }
     .win-input:focus {
-        background: rgba(255, 255, 255, 0.15);
-        border-color: #3b82f6;
-        border-bottom: 2px solid #3b82f6;
-        padding-bottom: calc(0.5rem - 1px);
-        box-shadow: inset 0 2px 5px rgba(0,0,0,0.05), 0 0 0 3px rgba(59,130,246,0.15);
+        background: rgba(255, 255, 255, 0.2);
+        border-color: #3b82f6; border-bottom: 2px solid #3b82f6; padding-bottom: calc(0.5rem - 1px);
+        box-shadow: inset 0 2px 5px rgba(0,0,0,0.02), 0 0 0 3px rgba(59,130,246,0.15);
     }
     .dark-theme .win-input {
         background: rgba(0, 0, 0, 0.3);
-        border-top: 1px solid rgba(0, 0, 0, 0.5);
-        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-        box-shadow: inset 0 2px 6px rgba(0,0,0,0.3);
-        color: white;
+        border-top: 1px solid rgba(0, 0, 0, 0.5); border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: inset 0 2px 6px rgba(0,0,0,0.3); color: white;
     }
     .dark-theme .win-input:focus {
-        background: rgba(0, 0, 0, 0.5);
-        border-color: #3b82f6;
-        border-bottom: 2px solid #3b82f6;
+        background: rgba(0, 0, 0, 0.5); border-color: #3b82f6; border-bottom: 2px solid #3b82f6;
     }
+
+    /* Polished Standard Buttons */
+    .win-btn {
+        background: rgba(255, 255, 255, 0.5); border: 1px solid rgba(255, 255, 255, 0.4);
+        box-shadow: 0 1px 2px rgba(0,0,0,0.05), inset 0 1px 0 rgba(255,255,255,0.8); transition: all 0.2s ease;
+    }
+    .win-btn:hover { background: rgba(255, 255, 255, 0.7); box-shadow: 0 2px 4px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.9); }
+    .win-btn:active { background: rgba(255, 255, 255, 0.4); transform: scale(0.98); }
+    .dark-theme .win-btn {
+        background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 1px 3px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.05); color: white;
+    }
+    .dark-theme .win-btn:hover { background: rgba(255, 255, 255, 0.1); box-shadow: 0 2px 5px rgba(0,0,0,0.4); }
 
     /* ==========================================================================
        DYNAMIC DARK THEME UTILITIES
        ========================================================================== */
     .text-slate-900, .text-slate-800, .text-slate-700, .text-slate-600, .text-slate-500, .bg-slate-100 {
         transition-property: color, background-color, border-color, box-shadow, filter;
-        transition-timing-function: ease;
-        transition-duration: 0.3s;
+        transition-timing-function: ease; transition-duration: 0.3s;
     }   
-       
     .dark-theme .text-slate-900 { color: rgba(255, 255, 255, 0.95) !important; }
     .dark-theme .text-slate-800 { color: rgba(255, 255, 255, 0.85) !important; }
     .dark-theme .text-slate-700 { color: rgba(255, 255, 255, 0.70) !important; }
     .dark-theme .text-slate-600 { color: rgba(255, 255, 255, 0.55) !important; }
     .dark-theme .text-slate-500 { color: rgba(255, 255, 255, 0.40) !important; }
-    
     .dark-theme .text-blue-700 { color: #60a5fa !important; }
     .dark-theme .text-blue-600 { color: #3b82f6 !important; }
     .dark-theme .bg-blue-100\/80 { background-color: rgba(59, 130, 246, 0.15) !important; color: #93c5fd !important; border-color: rgba(59, 130, 246, 0.3) !important;}
     .dark-theme .bg-blue-100\/50 { background-color: rgba(59, 130, 246, 0.1) !important; }
     .dark-theme .bg-purple-100\/90 { background-color: rgba(168, 85, 247, 0.15) !important; color: #d8b4fe !important; border-color: rgba(168, 85, 247, 0.3) !important;}
     .dark-theme .bg-emerald-100\/50 { background-color: rgba(16, 185, 129, 0.15) !important; color: #6ee7b7 !important; border-color: rgba(16, 185, 129, 0.3) !important;}
-
-    .dark-theme img[src*="color=000000"] { 
-        filter: invert(1) drop-shadow(0 1px 2px rgba(0,0,0,0.5)) !important; 
-    }
+    .dark-theme img[src*="color=000000"] { filter: invert(1) drop-shadow(0 1px 2px rgba(0,0,0,0.5)) !important; }
 
     /* ==========================================================================
        LOGIN & LOCK SCREEN LOGIC
@@ -227,20 +212,11 @@
     .lock-screen-hide { opacity: 0; transform: scale(1.05); pointer-events: none; }
     
     .login-pin-input {
-        background: rgba(0, 0, 0, 0.2);
-        border-top: 1px solid rgba(0, 0, 0, 0.4);
-        border-left: 1px solid rgba(0, 0, 0, 0.3);
-        border-right: 1px solid rgba(255, 255, 255, 0.15);
-        border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-        box-shadow: inset 0 3px 10px rgba(0,0,0,0.4);
-        transition: all 0.2s ease;
+        background: rgba(0, 0, 0, 0.2); border-top: 1px solid rgba(0, 0, 0, 0.4); border-left: 1px solid rgba(0, 0, 0, 0.3);
+        border-right: 1px solid rgba(255, 255, 255, 0.15); border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        box-shadow: inset 0 3px 10px rgba(0,0,0,0.4); transition: all 0.2s ease;
     }
-    .login-pin-input:focus {
-        background: rgba(0, 0, 0, 0.4);
-        border-color: rgba(255, 255, 255, 0.2);
-        border-bottom: 2px solid #3b82f6;
-        box-shadow: inset 0 3px 10px rgba(0,0,0,0.6);
-    }
+    .login-pin-input:focus { background: rgba(0, 0, 0, 0.4); border-color: rgba(255, 255, 255, 0.2); border-bottom: 2px solid #3b82f6; box-shadow: inset 0 3px 10px rgba(0,0,0,0.6); }
 
     /* ==========================================================================
        WINDOWS DOTTED SPINNER
@@ -320,7 +296,6 @@
 
     /* Flat Elastic Hover FX */
     .elastic-hover { transition: transform 0.2s var(--spring-easing), opacity 0.2s ease; }
-    .elastic-hover::before { transition: background 0.2s ease; }
     .elastic-hover:hover { transform: scale(1.02); z-index: 10; }
     .elastic-hover:active { transform: scale(0.98); }
 
@@ -407,6 +382,7 @@
     }
     .dark-theme .settings-tab-active::before { background: rgba(0, 0, 0, 0.3); box-shadow: inset 0 2px 5px rgba(0,0,0,0.4); }
     .settings-tab-active i { color: #2563eb !important; }
+    .settings-tab-active span { font-weight: 600 !important; }
 
     /* ==========================================================================
        START MENU "ALL APPS" 3-STEP ANIMATIONS
@@ -437,7 +413,7 @@
         <div class="win-spinner mb-10 scale-[1.2]">
             <div class="circle"></div><div class="circle"></div><div class="circle"></div><div class="circle"></div><div class="circle"></div>
         </div>
-        <p class="text-[22px] font-medium tracking-tight mt-6">Updating Windows</p>
+        <p class="text-[22px] font-semibold tracking-tight mt-6">Updating Windows</p>
         <p class="text-[14px] mt-2 text-white/70">Please keep your computer on.</p>
     </div>
 
@@ -448,16 +424,16 @@
 
         <!-- State 1: Lock Screen -->
         <div id="lock-state" onclick="window.dismissLockScreen()" class="absolute inset-0 flex flex-col items-center pt-[12vh] transition-all duration-500 cursor-pointer z-20">
-            <h1 id="lock-time" class="text-[90px] font-semibold text-white drop-shadow-md tracking-tight leading-none text-3d-float"></h1>
-            <p id="lock-date" class="text-[20px] font-medium text-white/95 drop-shadow-sm tracking-wide mt-2 text-3d-float"></p>
-            <p class="absolute bottom-12 text-[14px] text-white/80 animate-pulse font-medium">Swipe up or click to unlock</p>
+            <h1 id="lock-time" class="text-[96px] font-bold text-white drop-shadow-md tracking-tighter leading-none text-3d-float"></h1>
+            <p id="lock-date" class="text-[22px] font-semibold text-white/95 drop-shadow-sm tracking-wide mt-2 text-3d-float"></p>
+            <p class="absolute bottom-12 text-[14px] text-white/80 animate-pulse font-medium tracking-wide">Swipe up or click to unlock</p>
         </div>
 
         <!-- State 2: Login Prompt -->
         <div id="login-state" class="flex flex-col items-center opacity-0 translate-y-10 transition-all duration-500 pointer-events-none z-10 w-full h-full justify-center pb-[10vh]">
             <div class="flex flex-col items-center">
                 <img src="https://cdn-icons-png.freepik.com/512/9131/9131478.png" class="w-32 h-32 rounded-full border-2 border-white/20 shadow-xl object-cover mb-4">
-                <h2 class="text-[26px] font-semibold text-white drop-shadow-md mb-8">Administrator</h2>
+                <h2 class="text-[28px] font-bold text-white drop-shadow-md mb-8 tracking-tight">Administrator</h2>
                 
                 <div id="login-input-area" class="flex items-center gap-2">
                     <input type="password" id="login-pin" placeholder="PIN" class="login-pin-input rounded-[8px] px-5 py-2.5 text-white placeholder-white/60 outline-none w-64 text-center tracking-[0.3em] text-lg font-medium" onkeypress="if(event.key === 'Enter') window.triggerWelcome()">
@@ -479,10 +455,10 @@
         </div>
 
         <!-- Lock Screen Bottom Icons -->
-        <div id="lock-bottom-icons" class="absolute bottom-10 right-12 flex gap-5 transition-opacity duration-500 z-30">
-            <i class="ph-fill ph-wifi-high text-[20px] text-white/90 drop-shadow-md hover:text-white cursor-pointer transition-colors"></i>
-            <i class="ph-fill ph-wheelchair text-[20px] text-white/90 drop-shadow-md hover:text-white cursor-pointer transition-colors"></i>
-            <i class="ph-fill ph-power text-[20px] text-white/90 drop-shadow-md hover:text-white cursor-pointer transition-colors" onclick="document.body.innerHTML='<div style=\'background:#000;width:100vw;height:100vh;\'></div>'"></i>
+        <div id="lock-bottom-icons" class="absolute bottom-10 right-12 flex gap-6 transition-opacity duration-500 z-30">
+            <i class="ph-fill ph-wifi-high text-[22px] text-white/90 drop-shadow-md hover:text-white cursor-pointer transition-colors"></i>
+            <i class="ph-fill ph-wheelchair text-[22px] text-white/90 drop-shadow-md hover:text-white cursor-pointer transition-colors"></i>
+            <i class="ph-fill ph-power text-[22px] text-white/90 drop-shadow-md hover:text-white cursor-pointer transition-colors" onclick="document.body.innerHTML='<div style=\'background:#000;width:100vw;height:100vh;\'></div>'"></i>
         </div>
     </div>
 
@@ -494,8 +470,8 @@
 
       <!-- Top-Centered Standard Desktop Clock Widget -->
       <div id="desktop-clock-widget" class="absolute top-20 left-1/2 -translate-x-1/2 z-0 pointer-events-none opacity-0 scale-95 origin-top flex flex-col items-center justify-center transition-all duration-700 ease-[cubic-bezier(0.0,0.0,0.2,1)]" style="font-family: 'Segoe UI Variable Display', 'Segoe UI', sans-serif;">
-          <h1 id="dc-time" class="text-[100px] font-semibold leading-none tracking-tight text-white text-3d-float"></h1>
-          <h2 id="dc-date" class="text-[24px] font-medium mt-1 tracking-wide text-white text-3d-float"></h2>
+          <h1 id="dc-time" class="text-[110px] font-bold leading-none tracking-tighter text-white text-3d-float"></h1>
+          <h2 id="dc-date" class="text-[26px] font-semibold mt-1 tracking-wide text-white text-3d-float"></h2>
       </div>
 
       <!-- Desktop Icons Container -->
@@ -507,9 +483,9 @@
       <div id="app-settings" class="absolute w-[860px] h-[580px] glass-card rounded-[12px] z-[20000] flex-col overflow-hidden app-window-container" style="left: calc(50% - 430px); top: calc(50% - 290px); display: none;">
           <!-- Header -->
           <div class="h-10 flex justify-between items-center pl-4 pr-2 bg-transparent select-none generic-drag-area cursor-move shrink-0 app-step-2" data-target="app-settings">
-             <div class="flex items-center gap-2 pointer-events-none app-step-3">
+             <div class="flex items-center gap-2.5 pointer-events-none app-step-3">
                  <img src="https://raw.githubusercontent.com/blueedgeno/win11React/master/public/img/icon/settings.png" class="w-[16px] h-[16px] drop-shadow-sm" onerror="this.src='https://img.icons8.com/?size=100&id=2969&format=png&color=000000';">
-                 <span class="text-[12px] font-medium text-slate-800 tracking-tight">Settings <span class="text-[9px] font-semibold text-blue-700 uppercase ml-2 bg-blue-100/50 px-1.5 py-0.5 rounded border border-blue-200/50">Canary 1H04</span></span>
+                 <span class="text-[12px] font-medium text-slate-900 tracking-tight">Settings <span class="text-[9px] font-bold text-blue-700 uppercase ml-2 bg-blue-100/50 px-1.5 py-0.5 rounded border border-blue-200/50">Canary 1H05</span></span>
              </div>
              <div class="flex gap-0.5 app-step-3">
                  <button class="w-11 h-8 rounded-[6px] flex items-center justify-center transition-colors hover:bg-black/5 dark-theme:hover:bg-white/10 group"><i class="ph-bold ph-minus text-slate-600 text-[10px]"></i></button>
@@ -522,10 +498,10 @@
               <!-- Sidebar -->
               <div class="w-[240px] p-4 flex flex-col gap-1 bg-transparent z-10 overflow-y-auto custom-scrollbar app-step-2">
                   <div class="flex items-center gap-3 mb-5 mt-2 px-2 app-step-3">
-                      <img src="https://cdn-icons-png.freepik.com/512/9131/9131478.png" class="w-[48px] h-[48px] rounded-full border border-slate-300 dark-theme:border-slate-600 object-cover">
+                      <img src="https://cdn-icons-png.freepik.com/512/9131/9131478.png" class="w-[48px] h-[48px] rounded-full border border-slate-300 dark-theme:border-slate-600 object-cover shadow-sm">
                       <div class="flex flex-col">
                           <span class="text-[14px] font-semibold text-slate-900 tracking-tight">Admin</span>
-                          <span class="text-[11px] text-slate-500 mt-0.5">Local Account</span>
+                          <span class="text-[11px] text-slate-500 mt-0.5 font-medium">Local Account</span>
                       </div>
                   </div>
                   <div class="relative mb-4 px-1 app-step-3">
@@ -534,24 +510,24 @@
                   </div>
                   <!-- Tabs -->
                   <button id="tab-btn-system" onclick="window.switchSettingsTab('system')" class="settings-tab-btn settings-tab-active w-full flex items-center gap-3 px-3 py-2.5 rounded-[6px] text-left transition-colors group app-step-3">
-                      <i class="ph-fill ph-desktop text-[18px]"></i>
+                      <i class="ph-fill ph-desktop text-[18px] group-hover:text-blue-600 transition-colors"></i>
                       <span class="text-[13px] font-medium text-slate-800">System</span>
                   </button>
                   <button id="tab-btn-personalization" onclick="window.switchSettingsTab('personalization')" class="settings-tab-btn w-full flex items-center gap-3 px-3 py-2.5 hover:bg-black/5 dark-theme:hover:bg-white/10 rounded-[6px] text-left transition-colors group border border-transparent app-step-3">
-                      <i class="ph-fill ph-palette text-slate-500 group-hover:text-purple-500 text-[18px]"></i>
+                      <i class="ph-fill ph-palette text-slate-500 group-hover:text-blue-600 transition-colors text-[18px]"></i>
                       <span class="text-[13px] font-medium text-slate-600 group-hover:text-slate-900">Personalization</span>
                   </button>
                   <button id="tab-btn-taskbar" onclick="window.switchSettingsTab('taskbar')" class="settings-tab-btn w-full flex items-center gap-3 px-3 py-2.5 hover:bg-black/5 dark-theme:hover:bg-white/10 rounded-[6px] text-left transition-colors group border border-transparent app-step-3">
-                      <i class="ph-fill ph-rows text-slate-500 group-hover:text-blue-500 text-[18px]"></i>
+                      <i class="ph-fill ph-rows text-slate-500 group-hover:text-blue-600 transition-colors text-[18px]"></i>
                       <span class="text-[13px] font-medium text-slate-600 group-hover:text-slate-900">Taskbar & Desktop</span>
                   </button>
                   <button id="tab-btn-update" onclick="window.switchSettingsTab('update')" class="settings-tab-btn w-full flex items-center gap-3 px-3 py-2.5 hover:bg-black/5 dark-theme:hover:bg-white/10 rounded-[6px] text-left transition-colors group border border-transparent app-step-3">
-                      <i class="ph-fill ph-windows-logo text-slate-500 group-hover:text-blue-500 text-[18px]"></i>
+                      <i class="ph-fill ph-windows-logo text-slate-500 group-hover:text-blue-600 transition-colors text-[18px]"></i>
                       <span class="text-[13px] font-medium text-slate-600 group-hover:text-slate-900">Windows Update</span>
                   </button>
               </div>
               <!-- Content Area -->
-              <div class="flex-1 p-10 overflow-y-auto custom-scrollbar relative z-0 bg-white/50 dark-theme:bg-black/20 rounded-tl-[12px] border-t border-l border-white/30 dark-theme:border-white/10 app-step-2 shadow-[inset_2px_2px_10px_rgba(0,0,0,0.05)]">
+              <div class="flex-1 p-10 overflow-y-auto custom-scrollbar relative z-0 bg-transparent rounded-tl-[12px] border-t border-l border-white/20 dark-theme:border-white/5 app-step-2">
                   <!-- System Tab -->
                   <div id="settings-tab-system" class="settings-panel app-step-3">
                       <h1 class="text-[28px] font-semibold text-slate-900 tracking-tight mb-8">System</h1>
@@ -600,17 +576,33 @@
                   <div id="settings-tab-personalization" class="settings-panel hidden fade-in app-step-3">
                       <h1 class="text-[28px] font-semibold text-slate-900 tracking-tight mb-8">Personalization</h1>
                       
-                      <h3 class="text-[13px] font-semibold text-slate-800 mb-3">Background Image</h3>
+                      <!-- Custom Upload Section -->
+                      <h3 class="text-[13px] font-semibold text-slate-800 mb-3">Custom Background</h3>
+                      <div class="glass-card p-5 rounded-[8px] flex items-center justify-between mb-8 shadow-sm transition-colors">
+                          <div class="flex items-center gap-4">
+                              <div class="w-10 h-10 rounded-full bg-blue-100 dark-theme:bg-blue-900/50 flex items-center justify-center">
+                                  <i class="ph-fill ph-image text-blue-600 dark-theme:text-blue-400 text-[18px]"></i>
+                              </div>
+                              <div class="flex flex-col">
+                                  <span class="text-[14px] font-semibold text-slate-900 tracking-tight">Upload an Image</span>
+                                  <span class="text-[11px] text-slate-500 mt-0.5">Supported formats: JPG, PNG</span>
+                              </div>
+                          </div>
+                          <button onclick="document.getElementById('custom-wallpaper-input').click()" class="win-btn px-5 py-2 rounded-[6px] text-[12px] font-medium">Browse</button>
+                          <input type="file" id="custom-wallpaper-input" accept="image/*" class="hidden" onchange="window.handleCustomWallpaper(event)">
+                      </div>
+
+                      <h3 class="text-[13px] font-semibold text-slate-800 mb-3">Preset Wallpapers</h3>
                       <div class="grid grid-cols-2 gap-3 mb-8">
                           <div class="h-28 rounded-[8px] bg-cover bg-center cursor-pointer border-[2px] border-blue-500 shadow-sm" style="background-image: url('https://4kwallpapers.com/images/wallpapers/windows-11-bloom-3840x2160-14423.jpg');" onclick="window.changeWallpaper(this, 'https://4kwallpapers.com/images/wallpapers/windows-11-bloom-3840x2160-14423.jpg', false)"></div>
-                          <div class="h-28 rounded-[8px] bg-cover bg-center cursor-pointer border-[2px] border-transparent hover:border-slate-300 dark-theme:hover:border-slate-600 shadow-sm" style="background-image: url('https://i.redd.it/some-new-wallpapers-i-created-for-my-new-windows-concept-v0-ne41dxd350891.png?width=2560&format=png&auto=webp&s=a2e31eff7a43bca51f04727c86b54df8cb2a5fc0');" onclick="window.changeWallpaper(this, 'https://i.redd.it/some-new-wallpapers-i-created-for-my-new-windows-concept-v0-ne41dxd350891.png?width=2560&format=png&auto=webp&s=a2e31eff7a43bca51f04727c86b54df8cb2a5fc0', true)"></div>
-                          <div class="h-28 rounded-[8px] bg-cover bg-center cursor-pointer border-[2px] border-transparent hover:border-slate-300 dark-theme:hover:border-slate-600 shadow-sm" style="background-image: url('https://wallpapercave.com/wp/wp15528786.jpg');" onclick="window.changeWallpaper(this, 'https://wallpapercave.com/wp/wp15528786.jpg', false)"></div>
-                          <div class="h-28 rounded-[8px] bg-cover bg-center cursor-pointer border-[2px] border-transparent hover:border-slate-300 dark-theme:hover:border-slate-600 shadow-sm" style="background-image: url('https://wallpapercave.com/wp/wp12264738.png');" onclick="window.changeWallpaper(this, 'https://wallpapercave.com/wp/wp12264738.png', true)"></div>
+                          <div class="h-28 rounded-[8px] bg-cover bg-center cursor-pointer border-[2px] border-transparent hover:border-slate-300 dark-theme:hover:border-slate-600 shadow-sm transition-colors" style="background-image: url('https://i.redd.it/some-new-wallpapers-i-created-for-my-new-windows-concept-v0-ne41dxd350891.png?width=2560&format=png&auto=webp&s=a2e31eff7a43bca51f04727c86b54df8cb2a5fc0');" onclick="window.changeWallpaper(this, 'https://i.redd.it/some-new-wallpapers-i-created-for-my-new-windows-concept-v0-ne41dxd350891.png?width=2560&format=png&auto=webp&s=a2e31eff7a43bca51f04727c86b54df8cb2a5fc0', true)"></div>
+                          <div class="h-28 rounded-[8px] bg-cover bg-center cursor-pointer border-[2px] border-transparent hover:border-slate-300 dark-theme:hover:border-slate-600 shadow-sm transition-colors" style="background-image: url('https://wallpapercave.com/wp/wp15528786.jpg');" onclick="window.changeWallpaper(this, 'https://wallpapercave.com/wp/wp15528786.jpg', false)"></div>
+                          <div class="h-28 rounded-[8px] bg-cover bg-center cursor-pointer border-[2px] border-transparent hover:border-slate-300 dark-theme:hover:border-slate-600 shadow-sm transition-colors" style="background-image: url('https://wallpapercave.com/wp/wp12264738.png');" onclick="window.changeWallpaper(this, 'https://wallpapercave.com/wp/wp12264738.png', true)"></div>
                       </div>
 
                       <h3 class="text-[13px] font-semibold text-slate-800 mb-3">Visual Materials</h3>
                       <div class="flex flex-col gap-2">
-                          <div class="flex items-center justify-between px-5 py-4 glass-card rounded-[8px]">
+                          <div class="flex items-center justify-between px-5 py-4 glass-card rounded-[8px] transition-colors">
                               <div class="flex items-center gap-4">
                                   <i class="ph-fill ph-drop text-[20px] text-slate-700"></i>
                                   <div class="flex flex-col">
@@ -620,7 +612,7 @@
                               </div>
                               <input type="checkbox" class="win-toggle" checked onchange="window.toggleLiquidGlass(this)">
                           </div>
-                          <div class="flex items-center justify-between px-5 py-4 glass-card rounded-[8px]">
+                          <div class="flex items-center justify-between px-5 py-4 glass-card rounded-[8px] transition-colors">
                               <div class="flex items-center gap-4">
                                   <i class="ph-fill ph-sparkle text-[20px] text-slate-700"></i>
                                   <div class="flex flex-col">
@@ -638,7 +630,7 @@
                       <h1 class="text-[28px] font-semibold text-slate-900 tracking-tight mb-8">Taskbar & Desktop</h1>
                       
                       <div class="flex flex-col gap-2 mb-8">
-                          <div class="flex items-center justify-between px-5 py-4 glass-card rounded-[8px]">
+                          <div class="flex items-center justify-between px-5 py-4 glass-card rounded-[8px] transition-colors">
                               <div class="flex items-center gap-4">
                                   <i class="ph-fill ph-clock text-[20px] text-slate-700"></i>
                                   <div class="flex flex-col">
@@ -651,7 +643,7 @@
                       </div>
 
                       <div class="flex flex-col gap-2">
-                          <div class="flex items-center justify-between px-5 py-4 glass-card rounded-[8px]">
+                          <div class="flex items-center justify-between px-5 py-4 glass-card rounded-[8px] transition-colors">
                               <div class="flex items-center gap-4">
                                   <i class="ph-fill ph-align-left text-[20px] text-slate-700"></i>
                                   <div class="flex flex-col">
@@ -667,6 +659,7 @@
                   <!-- Windows Update Tab -->
                   <div id="settings-tab-update" class="settings-panel hidden fade-in app-step-3">
                       <h1 class="text-[28px] font-semibold text-slate-900 tracking-tight mb-8">Windows Update</h1>
+                      
                       <div class="glass-card p-6 rounded-[8px] flex items-center justify-between mb-8 shadow-sm">
                           <div class="flex items-center gap-4 z-10">
                               <div id="update-icon-container" class="flex items-center justify-center w-12 h-12 shrink-0">
@@ -677,30 +670,30 @@
                                   <p id="update-subtitle" class="text-[12px] text-slate-500 mt-0.5">Last checked: Today</p>
                               </div>
                           </div>
-                          <button id="btn-check-updates" onclick="window.simulateUpdateCheck()" class="bg-[#0067c0] hover:bg-[#005a9e] text-white px-5 py-2 rounded-[6px] text-[13px] transition-colors z-10">Check for updates</button>
+                          <button id="btn-check-updates" onclick="window.simulateUpdateCheck()" class="bg-[#0067c0] hover:bg-[#005a9e] text-white px-5 py-2 rounded-[6px] text-[13px] transition-colors z-10 font-medium shadow-sm">Check for updates</button>
                       </div>
 
                       <!-- 1H05 Preview Update Banner -->
-                      <div class="glass-card p-5 rounded-[8px] shadow-sm flex flex-col gap-5 border border-white/20">
+                      <div class="glass-card p-5 rounded-[8px] shadow-sm flex flex-col gap-5">
                           <div class="w-full shrink-0 flex justify-center">
-                              <img src="image.png" alt="1H05 Preview" class="w-full h-auto max-h-[280px] object-contain rounded-[6px] shadow-sm border border-slate-200 dark-theme:border-slate-700" onerror="this.src='https://images.unsplash.com/photo-1593640408182-31c70c8268f5?q=80&w=1000&auto=format&fit=crop';">
+                              <img src="image.png" alt="1H05 Preview" class="w-full aspect-video object-cover rounded-[6px] shadow-sm border border-slate-200 dark-theme:border-slate-700" onerror="this.src='https://images.unsplash.com/photo-1593640408182-31c70c8268f5?q=80&w=1000&auto=format&fit=crop';">
                           </div>
                           <div class="flex flex-col flex-1 px-1">
-                              <h3 class="text-[16px] font-semibold text-slate-900 tracking-tight mb-2.5">Welcome to 1H05 Preview</h3>
-                              <p class="text-[12.5px] text-slate-600 mb-4 leading-relaxed">
+                              <h3 class="text-[16px] font-semibold text-slate-900 tracking-tight mb-2">Welcome to 1H05 Preview</h3>
+                              <p class="text-[12px] text-slate-600 mb-3 leading-relaxed">
                                   This new update introduces a stunning zero shadow desktop concept featuring pure glassy reflections and highly saturated mica blur effects.
                               </p>
-                              <ul class="text-[11.5px] text-slate-500 space-y-2.5 list-disc list-inside">
+                              <ul class="text-[11.5px] text-slate-500 space-y-2 list-disc list-inside">
                                   <li><strong class="font-semibold text-slate-800">Interactive Prototypes:</strong> Users can now experience interactive application prototypes which include a fully functional word processor and a responsive file explorer system.</li>
-                                  <li><strong class="font-semibold text-slate-800">Advanced Personalization:</strong> Advanced personalization options grant you complete control over your taskbar appearance through live transparency adjustments and custom color palette selections.</li>
+                                  <li><strong class="font-semibold text-slate-800">Advanced Personalization:</strong> Complete control over your taskbar appearance through live transparency adjustments and custom color palette selections.</li>
                                   <li><strong class="font-semibold text-slate-800">Dynamic Weather:</strong> The redesigned weather widget delivers a dynamic parallax sky that perfectly adapts its beautiful lighting using precise astronomical sunrise data.</li>
-                                  <li><strong class="font-semibold text-slate-800">Immersive Task View:</strong> Finally, an immersive task view overlay provides seamless virtual desktop management alongside beautifully animated glowing icons across the bottom edge.</li>
+                                  <li><strong class="font-semibold text-slate-800">Immersive Task View:</strong> An immersive task view overlay provides seamless virtual desktop management alongside beautifully animated glowing icons across the bottom edge.</li>
                               </ul>
                           </div>
                       </div>
 
                       <div class="mt-6 flex flex-col gap-2">
-                          <div class="flex items-center justify-between px-5 py-4 glass-card rounded-[8px] cursor-pointer transition-colors hover:bg-black/5 dark-theme:hover:bg-white/10">
+                          <div class="flex items-center justify-between px-5 py-4 glass-card rounded-[8px] cursor-pointer transition-colors">
                               <div class="flex items-center gap-4">
                                   <i class="ph-bold ph-clock-counter-clockwise text-[20px] text-slate-600"></i>
                                   <div class="flex flex-col">
@@ -730,31 +723,31 @@
                  <button class="w-11 h-8 rounded-[6px] flex items-center justify-center transition-colors hover:bg-red-500 hover:text-white group" onclick="window.closeApp('calculator')"><i class="ph-bold ph-x text-slate-600 group-hover:text-white text-[10px]"></i></button>
              </div>
           </div>
-          <div class="flex-1 flex flex-col p-5 bg-white/50 dark-theme:bg-black/20 relative z-0 app-step-2 shadow-[inset_2px_2px_10px_rgba(0,0,0,0.05)] rounded-tl-[12px]">
+          <div class="flex-1 flex flex-col p-5 bg-transparent relative z-0 app-step-2 shadow-[inset_2px_2px_10px_rgba(0,0,0,0.05)] rounded-tl-[12px] border-t border-l border-white/20 dark-theme:border-white/5">
              <input type="text" id="calc-display" class="w-full text-right text-[40px] font-semibold text-slate-900 bg-transparent border-none outline-none mb-4 mt-2 app-step-3 tracking-tighter text-3d-float" value="0" readonly>
              
              <div class="grid grid-cols-4 gap-2 flex-1 app-step-3">
-                 <button onclick="window.calcPress('C')" class="col-span-2 glass-card rounded-[6px] font-medium text-[15px] text-slate-800 hover:bg-black/5">C</button>
-                 <button onclick="window.calcPress('Del')" class="glass-card rounded-[6px] font-medium text-[15px] text-slate-800 hover:bg-black/5"><i class="ph-bold ph-backspace"></i></button>
-                 <button onclick="window.calcPress('/')" class="glass-card bg-slate-100 dark-theme:bg-slate-800 rounded-[6px] font-medium text-[15px] text-slate-800 hover:bg-black/10">÷</button>
+                 <button onclick="window.calcPress('C')" class="col-span-2 glass-card rounded-[6px] font-medium text-[15px] text-slate-800">C</button>
+                 <button onclick="window.calcPress('Del')" class="glass-card rounded-[6px] font-medium text-[15px] text-slate-800"><i class="ph-bold ph-backspace"></i></button>
+                 <button onclick="window.calcPress('/')" class="glass-card bg-slate-100 dark-theme:bg-slate-800 rounded-[6px] font-medium text-[15px] text-slate-800">÷</button>
                  
-                 <button onclick="window.calcPress('7')" class="glass-card rounded-[6px] font-semibold text-[16px] text-slate-900 hover:bg-black/5">7</button>
-                 <button onclick="window.calcPress('8')" class="glass-card rounded-[6px] font-semibold text-[16px] text-slate-900 hover:bg-black/5">8</button>
-                 <button onclick="window.calcPress('9')" class="glass-card rounded-[6px] font-semibold text-[16px] text-slate-900 hover:bg-black/5">9</button>
-                 <button onclick="window.calcPress('*')" class="glass-card bg-slate-100 dark-theme:bg-slate-800 rounded-[6px] font-medium text-[15px] text-slate-800 hover:bg-black/10">×</button>
+                 <button onclick="window.calcPress('7')" class="glass-card rounded-[6px] font-semibold text-[16px] text-slate-900">7</button>
+                 <button onclick="window.calcPress('8')" class="glass-card rounded-[6px] font-semibold text-[16px] text-slate-900">8</button>
+                 <button onclick="window.calcPress('9')" class="glass-card rounded-[6px] font-semibold text-[16px] text-slate-900">9</button>
+                 <button onclick="window.calcPress('*')" class="glass-card bg-slate-100 dark-theme:bg-slate-800 rounded-[6px] font-medium text-[15px] text-slate-800">×</button>
                  
-                 <button onclick="window.calcPress('4')" class="glass-card rounded-[6px] font-semibold text-[16px] text-slate-900 hover:bg-black/5">4</button>
-                 <button onclick="window.calcPress('5')" class="glass-card rounded-[6px] font-semibold text-[16px] text-slate-900 hover:bg-black/5">5</button>
-                 <button onclick="window.calcPress('6')" class="glass-card rounded-[6px] font-semibold text-[16px] text-slate-900 hover:bg-black/5">6</button>
-                 <button onclick="window.calcPress('-')" class="glass-card bg-slate-100 dark-theme:bg-slate-800 rounded-[6px] font-medium text-[15px] text-slate-800 hover:bg-black/10">−</button>
+                 <button onclick="window.calcPress('4')" class="glass-card rounded-[6px] font-semibold text-[16px] text-slate-900">4</button>
+                 <button onclick="window.calcPress('5')" class="glass-card rounded-[6px] font-semibold text-[16px] text-slate-900">5</button>
+                 <button onclick="window.calcPress('6')" class="glass-card rounded-[6px] font-semibold text-[16px] text-slate-900">6</button>
+                 <button onclick="window.calcPress('-')" class="glass-card bg-slate-100 dark-theme:bg-slate-800 rounded-[6px] font-medium text-[15px] text-slate-800">−</button>
                  
-                 <button onclick="window.calcPress('1')" class="glass-card rounded-[6px] font-semibold text-[16px] text-slate-900 hover:bg-black/5">1</button>
-                 <button onclick="window.calcPress('2')" class="glass-card rounded-[6px] font-semibold text-[16px] text-slate-900 hover:bg-black/5">2</button>
-                 <button onclick="window.calcPress('3')" class="glass-card rounded-[6px] font-semibold text-[16px] text-slate-900 hover:bg-black/5">3</button>
-                 <button onclick="window.calcPress('+')" class="glass-card bg-slate-100 dark-theme:bg-slate-800 rounded-[6px] font-medium text-[15px] text-slate-800 hover:bg-black/10">+</button>
+                 <button onclick="window.calcPress('1')" class="glass-card rounded-[6px] font-semibold text-[16px] text-slate-900">1</button>
+                 <button onclick="window.calcPress('2')" class="glass-card rounded-[6px] font-semibold text-[16px] text-slate-900">2</button>
+                 <button onclick="window.calcPress('3')" class="glass-card rounded-[6px] font-semibold text-[16px] text-slate-900">3</button>
+                 <button onclick="window.calcPress('+')" class="glass-card bg-slate-100 dark-theme:bg-slate-800 rounded-[6px] font-medium text-[15px] text-slate-800">+</button>
                  
-                 <button onclick="window.calcPress('0')" class="col-span-2 glass-card rounded-[6px] font-semibold text-[16px] text-slate-900 hover:bg-black/5">0</button>
-                 <button onclick="window.calcPress('.')" class="glass-card rounded-[6px] font-semibold text-[16px] text-slate-900 hover:bg-black/5">.</button>
+                 <button onclick="window.calcPress('0')" class="col-span-2 glass-card rounded-[6px] font-semibold text-[16px] text-slate-900">0</button>
+                 <button onclick="window.calcPress('.')" class="glass-card rounded-[6px] font-semibold text-[16px] text-slate-900">.</button>
                  <button onclick="window.calcPress('=')" class="bg-[#0067c0] hover:bg-[#005a9e] text-white rounded-[6px] font-medium text-[16px] transition-colors shadow-sm border border-[#005a9e]">=</button>
              </div>
           </div>
@@ -773,7 +766,7 @@
                  <button class="w-11 h-8 rounded-[6px] flex items-center justify-center transition-colors hover:bg-red-500 hover:text-white group" onclick="window.closeApp('notepad')"><i class="ph-bold ph-x text-slate-600 group-hover:text-white text-[10px]"></i></button>
              </div>
           </div>
-          <div class="flex-1 flex flex-col bg-white/50 dark-theme:bg-black/20 relative z-0 p-3 app-step-2 shadow-[inset_2px_2px_10px_rgba(0,0,0,0.05)] rounded-tl-[12px]">
+          <div class="flex-1 flex flex-col bg-transparent relative z-0 p-3 app-step-2 shadow-[inset_2px_2px_10px_rgba(0,0,0,0.05)] rounded-tl-[12px] border-t border-l border-white/20 dark-theme:border-white/5">
              <textarea class="flex-1 w-full h-full win-input rounded-[6px] p-4 text-[14px] font-medium text-slate-900 outline-none resize-none placeholder-slate-500 transition-colors custom-scrollbar app-step-3" placeholder="Type your notes here..."></textarea>
           </div>
       </div>
@@ -791,9 +784,9 @@
                  <button class="w-11 h-8 rounded-[6px] flex items-center justify-center transition-colors hover:bg-red-500 hover:text-white group" onclick="window.closeApp('photos')"><i class="ph-bold ph-x text-slate-600 group-hover:text-white text-[10px]"></i></button>
              </div>
           </div>
-          <div class="flex-1 flex flex-col bg-white/50 dark-theme:bg-black/20 relative z-0 p-6 overflow-y-auto custom-scrollbar app-step-2 shadow-[inset_2px_2px_10px_rgba(0,0,0,0.05)] rounded-tl-[12px]">
+          <div class="flex-1 flex flex-col bg-transparent relative z-0 p-6 overflow-y-auto custom-scrollbar app-step-2 shadow-[inset_2px_2px_10px_rgba(0,0,0,0.05)] rounded-tl-[12px] border-t border-l border-white/20 dark-theme:border-white/5">
              <h2 class="text-[20px] font-semibold text-slate-900 mb-4 app-step-3 tracking-tight">Gallery</h2>
-             <div class="grid grid-cols-3 gap-3 app-step-3">
+             <div class="grid grid-cols-3 gap-4 app-step-3">
                  <img src="https://4kwallpapers.com/images/wallpapers/windows-11-bloom-3840x2160-14423.jpg" class="w-full h-32 object-cover rounded-[6px] shadow-sm hover:opacity-90 transition-opacity cursor-pointer border border-slate-200 dark-theme:border-slate-700">
                  <img src="https://i.redd.it/some-new-wallpapers-i-created-for-my-new-windows-concept-v0-ne41dxd350891.png?width=2560&format=png&auto=webp&s=a2e31eff7a43bca51f04727c86b54df8cb2a5fc0" class="w-full h-32 object-cover rounded-[6px] shadow-sm hover:opacity-90 transition-opacity cursor-pointer border border-slate-200 dark-theme:border-slate-700">
                  <img src="https://wallpapercave.com/wp/wp15528786.jpg" class="w-full h-32 object-cover rounded-[6px] shadow-sm hover:opacity-90 transition-opacity cursor-pointer border border-slate-200 dark-theme:border-slate-700">
@@ -831,7 +824,7 @@
                       <span class="text-[13px] font-medium text-slate-600 group-hover:text-slate-900">Tips & Tricks</span>
                   </button>
               </div>
-              <div class="flex-1 overflow-y-auto custom-scrollbar relative z-0 bg-white/50 dark-theme:bg-black/20 rounded-tl-[8px] border-t border-l border-white/30 dark-theme:border-white/10 app-step-2 shadow-[inset_2px_2px_10px_rgba(0,0,0,0.05)]">
+              <div class="flex-1 overflow-y-auto custom-scrollbar relative z-0 bg-transparent rounded-tl-[8px] border-t border-l border-white/30 dark-theme:border-white/10 app-step-2 shadow-[inset_2px_2px_10px_rgba(0,0,0,0.05)]">
                   <!-- What's New Tab -->
                   <div id="welcome-content-new" class="flex flex-col h-full fade-in app-step-3 p-8">
                       <div class="flex items-center gap-5 mb-8">
@@ -840,7 +833,7 @@
                           </div>
                           <div>
                               <h1 class="text-[24px] font-semibold text-slate-900 tracking-tight">Experience Windows 12</h1>
-                              <p class="text-[13px] text-slate-600 mt-1">Build 1H04 is here. Let's see what's changed.</p>
+                              <p class="text-[13px] text-slate-600 mt-1">Build 1H05 is here. Let's see what's changed.</p>
                           </div>
                       </div>
                       
@@ -920,7 +913,7 @@
                  <button class="w-11 h-8 rounded-[6px] flex items-center justify-center transition-colors hover:bg-red-500 hover:text-white group" onclick="window.closeApp('weather')"><i class="ph-bold ph-x text-slate-600 group-hover:text-white text-[10px]"></i></button>
              </div>
           </div>
-          <div class="flex-1 flex flex-col p-8 bg-white/50 dark-theme:bg-black/20 relative z-0 app-step-2 shadow-[inset_2px_2px_10px_rgba(0,0,0,0.05)] rounded-tl-[12px]">
+          <div class="flex-1 flex flex-col p-8 bg-transparent relative z-0 app-step-2 shadow-[inset_2px_2px_10px_rgba(0,0,0,0.05)] rounded-tl-[12px] border-t border-l border-white/20 dark-theme:border-white/5">
              <div class="flex justify-between items-start app-step-3">
                  <div>
                      <h2 class="text-[26px] font-semibold text-slate-900 tracking-tight">Louisville, KY</h2>
@@ -976,110 +969,123 @@
           <input type="text" id="search-input" placeholder="Search apps, files, and the web..." class="bg-transparent border-none outline-none w-full text-[14px] font-medium text-slate-800 placeholder-slate-500 pr-4 whitespace-nowrap">
       </div>
 
-      <!-- 3. Start Menu UI -->
-      <div id="overlay-start" class="absolute bottom-[84px] left-1/2 w-[900px] h-[500px] flex z-[9998] start-overlay-hidden gap-4">
+      <!-- 3. Start Menu UI (Concept-Inspired, Segmented) -->
+      <div id="overlay-start" class="absolute bottom-[84px] left-1/2 w-[760px] h-[400px] flex z-[9998] start-overlay-hidden gap-3">
           
           <!-- SECTION 1: Admin & Power (Left) -->
-          <div class="start-panel w-[160px] taskbar-flat rounded-[12px] flex flex-col justify-between p-4 h-full pointer-events-auto relative">
+          <div class="start-panel w-[130px] taskbar-flat rounded-[12px] flex flex-col justify-between p-3 h-full pointer-events-auto relative">
               <div class="start-item flex flex-col items-center gap-3 mt-4">
-                  <img src="https://cdn-icons-png.freepik.com/512/9131/9131478.png" class="start-content w-20 h-20 rounded-full border border-slate-300 dark-theme:border-slate-600 object-cover">
-                  <div class="start-content text-center mt-1">
-                      <h2 id="start-greeting" class="text-[12px] text-slate-600 tracking-tight leading-tight">Good morning,</h2>
-                      <h3 class="text-[14px] font-semibold text-slate-900 tracking-tight leading-tight mt-0.5">Admin</h3>
+                  <div class="relative">
+                      <img src="https://cdn-icons-png.freepik.com/512/9131/9131478.png" class="start-content w-12 h-12 rounded-full object-cover shadow-md ring-2 ring-white/30 dark-theme:ring-white/10">
+                      <div class="absolute bottom-0 right-0 w-3 h-3 bg-emerald-500 border-2 border-[#1a1a1a] rounded-full shadow-sm"></div>
+                  </div>
+                  <div class="start-content text-center">
+                      <h2 id="start-greeting" class="text-[11px] font-medium text-slate-500 tracking-wide">Good morning,</h2>
+                      <h3 class="text-[14px] font-bold text-slate-900 tracking-tight mt-0.5">Admin</h3>
                   </div>
               </div>
-              <div class="flex flex-col gap-1.5">
-                  <button onclick="location.reload()" class="start-item flex items-center justify-center gap-2.5 px-3 py-2.5 glass-card rounded-[8px] transition-colors text-slate-800 text-[13px] font-medium hover:bg-black/5">
-                      <img src="https://img.icons8.com/?size=100&id=pNLv62T1zTuV&format=png&color=000000" class="start-content w-4 h-4 opacity-70"> <span class="start-content">Restart</span>
+              <div class="flex flex-col gap-1.5 w-full">
+                  <button onclick="location.reload()" class="start-item flex items-center justify-start gap-2.5 px-3 py-2.5 glass-card rounded-[8px] transition-all text-slate-800 text-[12px] font-semibold hover:translate-x-1 group">
+                      <i class="ph-bold ph-arrows-clockwise text-[16px] text-blue-600 group-hover:rotate-180 transition-transform duration-500"></i> <span class="start-content">Restart</span>
                   </button>
-                  <button onclick="window.location.reload()" class="start-item flex items-center justify-center gap-2.5 px-3 py-2.5 glass-card rounded-[8px] transition-colors text-slate-800 text-[13px] font-medium hover:bg-black/5">
-                      <img src="https://img.icons8.com/?size=100&id=hEuzTB4NweS1&format=png&color=000000" class="start-content w-4 h-4 opacity-70"> <span class="start-content">Shut down</span>
+                  <button onclick="window.location.reload()" class="start-item flex items-center justify-start gap-2.5 px-3 py-2.5 glass-card rounded-[8px] transition-all text-slate-800 text-[12px] font-semibold hover:translate-x-1 group">
+                      <i class="ph-bold ph-power text-[16px] text-red-500"></i> <span class="start-content">Shut down</span>
                   </button>
               </div>
           </div>
 
           <!-- SECTION 2: Interactive Apps Area (Center) -->
-          <div class="start-panel flex-1 taskbar-flat rounded-[12px] flex flex-col p-6 h-full pointer-events-auto relative overflow-hidden">
+          <div class="start-panel flex-1 taskbar-flat rounded-[12px] flex flex-col p-5 h-full pointer-events-auto relative overflow-hidden">
               
               <!-- Pinned Apps View -->
               <div id="pinned-apps-view" class="flex flex-col h-full w-full transition-all duration-500">
-                  <div class="start-content flex justify-between items-center mb-5">
-                      <h3 class="text-[12px] font-semibold text-slate-900 pl-1">Pinned</h3>
-                      <button onclick="window.showAllApps()" class="text-[11px] font-medium text-slate-600 hover:text-slate-900 bg-white/50 dark-theme:bg-black/10 hover:bg-white/80 px-3 py-1.5 rounded-[6px] transition-colors z-10 border border-slate-200 dark-theme:border-slate-700">All apps <i class="ph-bold ph-caret-right ml-1"></i></button>
+                  <div class="start-content flex justify-between items-center mb-4">
+                      <h3 class="text-[14px] font-bold text-slate-900 tracking-tight">Pinned Apps</h3>
+                      <button onclick="window.showAllApps()" class="text-[11px] font-semibold text-slate-600 hover:text-slate-900 bg-white/40 dark-theme:bg-black/30 hover:bg-white/70 px-3 py-1.5 rounded-[6px] transition-all border border-slate-200 dark-theme:border-slate-700 shadow-sm flex items-center gap-1 group">All apps <i class="ph-bold ph-caret-right group-hover:translate-x-0.5 transition-transform"></i></button>
                   </div>
-                  <div class="grid grid-cols-4 gap-y-4 gap-x-2 custom-scrollbar overflow-y-auto pr-1 pb-2 flex-1">
-                      <div draggable="true" ondragstart="window.dragAppFromStart(event, 'settings')" onclick="window.openApp('settings')" class="start-item flex flex-col items-center justify-center cursor-pointer p-3 rounded-[8px] transition-colors hover:bg-black/5 dark-theme:hover:bg-white/10 group">
-                          <img src="https://raw.githubusercontent.com/blueedgetechno/win11React/master/public/img/icon/settings.png" class="start-content w-9 h-9 mb-2" draggable="false" onerror="this.src='https://img.icons8.com/?size=100&id=2969&format=png&color=000000';">
-                          <span class="start-content text-[12px] text-slate-800 text-center pointer-events-none">Settings</span>
+                  <div class="grid grid-cols-4 gap-y-4 gap-x-2 custom-scrollbar overflow-y-auto pr-2 flex-1">
+                      <div draggable="true" ondragstart="window.dragAppFromStart(event, 'settings')" onclick="window.openApp('settings')" class="start-item flex flex-col items-center justify-center cursor-pointer py-3 px-2 glass-card rounded-[8px] transition-all group hover:shadow-sm">
+                          <img src="https://raw.githubusercontent.com/blueedgetechno/win11React/master/public/img/icon/settings.png" class="start-content w-8 h-8 mb-2 group-hover:scale-110 transition-transform" draggable="false" onerror="this.src='https://img.icons8.com/?size=100&id=2969&format=png&color=000000';">
+                          <span class="start-content text-[11px] font-semibold text-slate-800 text-center pointer-events-none">Settings</span>
                       </div>
-                      <div draggable="true" ondragstart="window.dragAppFromStart(event, 'calculator')" onclick="window.openApp('calculator')" class="start-item flex flex-col items-center justify-center cursor-pointer p-3 rounded-[8px] transition-colors hover:bg-black/5 dark-theme:hover:bg-white/10 group">
-                          <img src="https://img.icons8.com/?size=100&id=RNsqmCP8joVQ&format=png&color=000000" class="start-content w-9 h-9 mb-2" draggable="false">
-                          <span class="start-content text-[12px] text-slate-800 text-center pointer-events-none">Calculator</span>
+                      <div draggable="true" ondragstart="window.dragAppFromStart(event, 'calculator')" onclick="window.openApp('calculator')" class="start-item flex flex-col items-center justify-center cursor-pointer py-3 px-2 glass-card rounded-[8px] transition-all group hover:shadow-sm">
+                          <img src="https://img.icons8.com/?size=100&id=RNsqmCP8joVQ&format=png&color=000000" class="start-content w-8 h-8 mb-2 group-hover:scale-110 transition-transform" draggable="false">
+                          <span class="start-content text-[11px] font-semibold text-slate-800 text-center pointer-events-none">Calculator</span>
                       </div>
-                      <div draggable="true" ondragstart="window.dragAppFromStart(event, 'notepad')" onclick="window.openApp('notepad')" class="start-item flex flex-col items-center justify-center cursor-pointer p-3 rounded-[8px] transition-colors hover:bg-black/5 dark-theme:hover:bg-white/10 group">
-                          <img src="https://img.icons8.com/?size=100&id=6VwxladcAlxL&format=png&color=000000" class="start-content w-9 h-9 mb-2" draggable="false">
-                          <span class="start-content text-[12px] text-slate-800 text-center pointer-events-none">Notepad</span>
+                      <div draggable="true" ondragstart="window.dragAppFromStart(event, 'notepad')" onclick="window.openApp('notepad')" class="start-item flex flex-col items-center justify-center cursor-pointer py-3 px-2 glass-card rounded-[8px] transition-all group hover:shadow-sm">
+                          <img src="https://img.icons8.com/?size=100&id=6VwxladcAlxL&format=png&color=000000" class="start-content w-8 h-8 mb-2 group-hover:scale-110 transition-transform" draggable="false">
+                          <span class="start-content text-[11px] font-semibold text-slate-800 text-center pointer-events-none">Notepad</span>
                       </div>
-                      <div draggable="true" ondragstart="window.dragAppFromStart(event, 'photos')" onclick="window.openApp('photos')" class="start-item flex flex-col items-center justify-center cursor-pointer p-3 rounded-[8px] transition-colors hover:bg-black/5 dark-theme:hover:bg-white/10 group">
-                          <img src="https://raw.githubusercontent.com/blueedgetechno/win11React/master/public/img/icon/photos.png" class="start-content w-9 h-9 mb-2" draggable="false" onerror="this.src='https://img.icons8.com/?size=100&id=118979&format=png&color=000000';">
-                          <span class="start-content text-[12px] text-slate-800 text-center pointer-events-none">Photos</span>
+                      <div draggable="true" ondragstart="window.dragAppFromStart(event, 'photos')" onclick="window.openApp('photos')" class="start-item flex flex-col items-center justify-center cursor-pointer py-3 px-2 glass-card rounded-[8px] transition-all group hover:shadow-sm">
+                          <img src="https://raw.githubusercontent.com/blueedgetechno/win11React/master/public/img/icon/photos.png" class="start-content w-8 h-8 mb-2 group-hover:scale-110 transition-transform" draggable="false" onerror="this.src='https://img.icons8.com/?size=100&id=118979&format=png&color=000000';">
+                          <span class="start-content text-[11px] font-semibold text-slate-800 text-center pointer-events-none">Photos</span>
                       </div>
                   </div>
                   
-                  <div class="start-content flex justify-between items-center mt-auto mb-3 pt-4 pl-1">
-                      <h3 class="text-[12px] font-semibold text-slate-900">Recommended</h3>
-                      <button class="text-[11px] text-slate-600 hover:text-slate-900 transition-colors z-10 bg-white/50 dark-theme:bg-black/10 px-3 py-1.5 rounded-[6px] border border-slate-200 dark-theme:border-slate-700">More <i class="ph-bold ph-caret-right"></i></button>
+                  <div class="start-content flex justify-between items-center mt-auto mb-3 pt-3 border-t border-slate-200/50 dark-theme:border-slate-700/50">
+                      <h3 class="text-[14px] font-bold text-slate-900 tracking-tight">Recommended</h3>
+                      <button class="text-[11px] font-semibold text-slate-600 hover:text-slate-900 transition-all z-10 bg-white/40 dark-theme:bg-black/30 px-3 py-1.5 rounded-[6px] border border-slate-200 dark-theme:border-slate-700 shadow-sm flex items-center gap-1 group">More <i class="ph-bold ph-caret-right group-hover:translate-x-0.5 transition-transform"></i></button>
                   </div>
                   <div class="grid grid-cols-2 gap-3 shrink-0">
-                      <div draggable="true" ondragstart="window.dragAppFromStart(event, 'settings')" onclick="window.openApp('settings')" class="start-item flex items-center gap-3 p-2.5 rounded-[8px] hover:bg-black/5 dark-theme:hover:bg-white/10 cursor-pointer transition-colors group">
-                          <img src="https://raw.githubusercontent.com/blueedgetechno/win11React/master/public/img/icon/settings.png" class="start-content w-8 h-8" draggable="false" onerror="this.src='https://img.icons8.com/?size=100&id=2969&format=png&color=000000';">
-                          <div class="start-content flex flex-col pointer-events-none"><span class="text-[13px] text-slate-900 tracking-tight">Settings</span><span class="text-[11px] text-slate-500">Recently updated</span></div>
+                      <div draggable="true" ondragstart="window.dragAppFromStart(event, 'settings')" onclick="window.openApp('settings')" class="start-item glass-card flex items-center gap-3 p-2.5 rounded-[8px] cursor-pointer transition-all group">
+                          <div class="w-9 h-9 rounded-[6px] bg-white/60 dark-theme:bg-black/50 flex items-center justify-center shadow-sm shrink-0 border border-white/40 dark-theme:border-white/10">
+                              <img src="https://raw.githubusercontent.com/blueedgetechno/win11React/master/public/img/icon/settings.png" class="start-content w-5 h-5" draggable="false" onerror="this.src='https://img.icons8.com/?size=100&id=2969&format=png&color=000000';">
+                          </div>
+                          <div class="start-content flex flex-col pointer-events-none">
+                              <span class="text-[13px] font-bold text-slate-900 tracking-tight leading-tight">Settings</span>
+                              <span class="text-[10px] text-slate-500 font-medium mt-0.5">Recently updated</span>
+                          </div>
                       </div>
-                      <div draggable="true" ondragstart="window.dragAppFromStart(event, 'notepad')" onclick="window.openApp('notepad')" class="start-item flex items-center gap-3 p-2.5 rounded-[8px] hover:bg-black/5 dark-theme:hover:bg-white/10 cursor-pointer transition-colors group">
-                          <img src="https://img.icons8.com/?size=100&id=6VwxladcAlxL&format=png&color=000000" class="start-content w-8 h-8" draggable="false">
-                          <div class="start-content flex flex-col pointer-events-none"><span class="text-[13px] text-slate-900 tracking-tight">Notepad</span><span class="text-[11px] text-slate-500">Recently opened</span></div>
+                      <div draggable="true" ondragstart="window.dragAppFromStart(event, 'notepad')" onclick="window.openApp('notepad')" class="start-item glass-card flex items-center gap-3 p-2.5 rounded-[8px] cursor-pointer transition-all group">
+                          <div class="w-9 h-9 rounded-[6px] bg-white/60 dark-theme:bg-black/50 flex items-center justify-center shadow-sm shrink-0 border border-white/40 dark-theme:border-white/10">
+                              <img src="https://img.icons8.com/?size=100&id=6VwxladcAlxL&format=png&color=000000" class="start-content w-5 h-5" draggable="false">
+                          </div>
+                          <div class="start-content flex flex-col pointer-events-none">
+                              <span class="text-[13px] font-bold text-slate-900 tracking-tight leading-tight">Notepad</span>
+                              <span class="text-[10px] text-slate-500 font-medium mt-0.5">Recently opened</span>
+                          </div>
                       </div>
                   </div>
               </div>
 
               <!-- All Apps View -->
-              <div id="all-apps-view" class="absolute inset-0 p-6 flex flex-col h-full w-full bg-transparent opacity-0 pointer-events-none translate-x-[30px] transition-all duration-400 z-20">
+              <div id="all-apps-view" class="absolute inset-0 p-5 flex flex-col h-full w-full bg-transparent opacity-0 pointer-events-none translate-x-[30px] transition-all duration-400 z-20">
                   <div id="all-apps-header" class="flex justify-between items-center mb-4 pl-1 pr-1">
-                      <button onclick="window.showPinnedApps()" class="flex items-center gap-1.5 text-[12px] font-medium text-slate-700 bg-white/50 dark:bg-black/10 hover:bg-white/80 hover:text-slate-900 px-3 py-1.5 rounded-[6px] transition-colors border border-slate-200 dark-theme:border-slate-700">
+                      <button onclick="window.showPinnedApps()" class="flex items-center gap-1.5 text-[12px] font-semibold text-slate-700 bg-white/50 dark-theme:bg-black/30 hover:bg-white/80 hover:text-slate-900 px-3 py-1.5 rounded-[6px] transition-colors border border-slate-200 dark-theme:border-slate-700 shadow-sm">
                           <i class="ph-bold ph-caret-left"></i> Back
                       </button>
-                      <h3 class="text-[12px] font-semibold text-slate-900">All Apps</h3>
+                      <h3 class="text-[13px] font-bold text-slate-900">All Apps</h3>
                   </div>
                   <div class="flex-1 overflow-y-auto custom-scrollbar pr-2 flex flex-col gap-1 pb-4">
                       <!-- List Items -->
-                      <div class="all-app-item text-[12px] font-semibold text-slate-900 px-3 mt-1" style="animation-delay: 0.05s;">C</div>
-                      <div draggable="true" ondragstart="window.dragAppFromStart(event, 'calculator')" onclick="window.openApp('calculator')" class="all-app-item flex items-center gap-3 p-2 hover:bg-black/5 dark-theme:hover:bg-white/10 rounded-[6px] cursor-pointer transition-colors" style="animation-delay: 0.1s;">
-                          <img src="https://img.icons8.com/?size=100&id=RNsqmCP8joVQ&format=png&color=000000" class="w-7 h-7" draggable="false">
-                          <span class="text-[13px] text-slate-800 pointer-events-none">Calculator</span>
+                      <div class="all-app-item text-[12px] font-bold text-slate-900 px-3 mt-1 border-b border-slate-200/50 dark-theme:border-slate-700/50 pb-1 mb-1" style="animation-delay: 0.05s;">C</div>
+                      <div draggable="true" ondragstart="window.dragAppFromStart(event, 'calculator')" onclick="window.openApp('calculator')" class="all-app-item glass-card flex items-center gap-3 p-2 rounded-[6px] cursor-pointer transition-all" style="animation-delay: 0.1s;">
+                          <img src="https://img.icons8.com/?size=100&id=RNsqmCP8joVQ&format=png&color=000000" class="w-6 h-6" draggable="false">
+                          <span class="text-[13px] font-semibold text-slate-800 pointer-events-none">Calculator</span>
                       </div>
                       
-                      <div class="all-app-item text-[12px] font-semibold text-slate-900 px-3 mt-2" style="animation-delay: 0.15s;">N</div>
-                      <div draggable="true" ondragstart="window.dragAppFromStart(event, 'notepad')" onclick="window.openApp('notepad')" class="all-app-item flex items-center gap-3 p-2 hover:bg-black/5 dark-theme:hover:bg-white/10 rounded-[6px] cursor-pointer transition-colors" style="animation-delay: 0.2s;">
-                          <img src="https://img.icons8.com/?size=100&id=6VwxladcAlxL&format=png&color=000000" class="w-7 h-7" draggable="false">
-                          <span class="text-[13px] text-slate-800 pointer-events-none">Notepad</span>
+                      <div class="all-app-item text-[12px] font-bold text-slate-900 px-3 mt-2 border-b border-slate-200/50 dark-theme:border-slate-700/50 pb-1 mb-1" style="animation-delay: 0.15s;">N</div>
+                      <div draggable="true" ondragstart="window.dragAppFromStart(event, 'notepad')" onclick="window.openApp('notepad')" class="all-app-item glass-card flex items-center gap-3 p-2 rounded-[6px] cursor-pointer transition-all" style="animation-delay: 0.2s;">
+                          <img src="https://img.icons8.com/?size=100&id=6VwxladcAlxL&format=png&color=000000" class="w-6 h-6" draggable="false">
+                          <span class="text-[13px] font-semibold text-slate-800 pointer-events-none">Notepad</span>
                       </div>
                       
-                      <div class="all-app-item text-[12px] font-semibold text-slate-900 px-3 mt-2" style="animation-delay: 0.25s;">P</div>
-                      <div draggable="true" ondragstart="window.dragAppFromStart(event, 'photos')" onclick="window.openApp('photos')" class="all-app-item flex items-center gap-3 p-2 hover:bg-black/5 dark-theme:hover:bg-white/10 rounded-[6px] cursor-pointer transition-colors" style="animation-delay: 0.3s;">
-                          <img src="https://raw.githubusercontent.com/blueedgetechno/win11React/master/public/img/icon/photos.png" class="w-7 h-7" draggable="false" onerror="this.src='https://img.icons8.com/?size=100&id=118979&format=png&color=000000';">
-                          <span class="text-[13px] text-slate-800 pointer-events-none">Photos</span>
+                      <div class="all-app-item text-[12px] font-bold text-slate-900 px-3 mt-2 border-b border-slate-200/50 dark-theme:border-slate-700/50 pb-1 mb-1" style="animation-delay: 0.25s;">P</div>
+                      <div draggable="true" ondragstart="window.dragAppFromStart(event, 'photos')" onclick="window.openApp('photos')" class="all-app-item glass-card flex items-center gap-3 p-2 rounded-[6px] cursor-pointer transition-all" style="animation-delay: 0.3s;">
+                          <img src="https://raw.githubusercontent.com/blueedgetechno/win11React/master/public/img/icon/photos.png" class="w-6 h-6" draggable="false" onerror="this.src='https://img.icons8.com/?size=100&id=118979&format=png&color=000000';">
+                          <span class="text-[13px] font-semibold text-slate-800 pointer-events-none">Photos</span>
                       </div>
                       
-                      <div class="all-app-item text-[12px] font-semibold text-slate-900 px-3 mt-2" style="animation-delay: 0.35s;">S</div>
-                      <div draggable="true" ondragstart="window.dragAppFromStart(event, 'settings')" onclick="window.openApp('settings')" class="all-app-item flex items-center gap-3 p-2 hover:bg-black/5 dark-theme:hover:bg-white/10 rounded-[6px] cursor-pointer transition-colors" style="animation-delay: 0.4s;">
-                          <img src="https://raw.githubusercontent.com/blueedgetechno/win11React/master/public/img/icon/settings.png" class="w-7 h-7" draggable="false" onerror="this.src='https://img.icons8.com/?size=100&id=2969&format=png&color=000000';">
-                          <span class="text-[13px] text-slate-800 pointer-events-none">Settings</span>
+                      <div class="all-app-item text-[12px] font-bold text-slate-900 px-3 mt-2 border-b border-slate-200/50 dark-theme:border-slate-700/50 pb-1 mb-1" style="animation-delay: 0.35s;">S</div>
+                      <div draggable="true" ondragstart="window.dragAppFromStart(event, 'settings')" onclick="window.openApp('settings')" class="all-app-item glass-card flex items-center gap-3 p-2 rounded-[6px] cursor-pointer transition-all" style="animation-delay: 0.4s;">
+                          <img src="https://raw.githubusercontent.com/blueedgetechno/win11React/master/public/img/icon/settings.png" class="w-6 h-6" draggable="false" onerror="this.src='https://img.icons8.com/?size=100&id=2969&format=png&color=000000';">
+                          <span class="text-[13px] font-semibold text-slate-800 pointer-events-none">Settings</span>
                       </div>
                       
-                      <div class="all-app-item text-[12px] font-semibold text-slate-900 px-3 mt-2" style="animation-delay: 0.45s;">W</div>
-                      <div draggable="true" ondragstart="window.dragAppFromStart(event, 'weather')" onclick="window.openApp('weather')" class="all-app-item flex items-center gap-3 p-2 hover:bg-black/5 dark-theme:hover:bg-white/10 rounded-[6px] cursor-pointer transition-colors" style="animation-delay: 0.5s;">
-                          <img src="https://img.icons8.com/?size=100&id=8EUmYhfLPTCF&format=png&color=000000" class="w-7 h-7" draggable="false">
-                          <span class="text-[13px] text-slate-800 pointer-events-none">Weather</span>
+                      <div class="all-app-item text-[12px] font-bold text-slate-900 px-3 mt-2 border-b border-slate-200/50 dark-theme:border-slate-700/50 pb-1 mb-1" style="animation-delay: 0.45s;">W</div>
+                      <div draggable="true" ondragstart="window.dragAppFromStart(event, 'weather')" onclick="window.openApp('weather')" class="all-app-item glass-card flex items-center gap-3 p-2 rounded-[6px] cursor-pointer transition-all" style="animation-delay: 0.5s;">
+                          <img src="https://img.icons8.com/?size=100&id=8EUmYhfLPTCF&format=png&color=000000" class="w-6 h-6" draggable="false">
+                          <span class="text-[13px] font-semibold text-slate-800 pointer-events-none">Weather</span>
                       </div>
                   </div>
               </div>
@@ -1087,12 +1093,17 @@
           </div>
 
           <!-- SECTION 3: Taskbar Widgets Drop Zone (Right) -->
-          <div class="start-panel w-[260px] taskbar-flat rounded-[12px] flex flex-col p-5 h-full pointer-events-auto relative" id="start-widget-area" ondragover="window.allowDrop(event)" ondrop="window.dropWidget(event)">
-              <h3 class="start-content text-[12px] font-semibold text-slate-900 mb-4 pl-1">Active Widgets</h3>
+          <div class="start-panel w-[200px] taskbar-flat rounded-[12px] flex flex-col p-4 h-full pointer-events-auto relative" id="start-widget-area" ondragover="window.allowDrop(event)" ondrop="window.dropWidget(event)">
+              <div class="flex items-center gap-2 mb-3 pl-1">
+                  <i class="ph-fill ph-squares-four text-[16px] text-blue-600"></i>
+                  <h3 class="start-content text-[14px] font-bold text-slate-900 tracking-tight">Dashboard</h3>
+              </div>
               
-              <div id="widget-placeholder" class="start-item border border-dashed border-slate-300 dark-theme:border-slate-600 rounded-[8px] h-32 flex flex-col items-center justify-center text-slate-500 text-[12px] font-medium text-center px-4 gap-2 transition-colors bg-black/5">
-                  <img src="https://img.icons8.com/?size=100&id=gHq6VYkHfRDo&format=png&color=000000" class="start-content w-8 h-8 opacity-40">
-                  <span class="start-content">Drag taskbar modules here to pin</span>
+              <div id="widget-placeholder" class="start-item border-2 border-dashed border-slate-300/80 dark-theme:border-slate-600/80 rounded-[8px] h-24 flex flex-col items-center justify-center text-slate-500 text-[12px] font-semibold text-center px-4 gap-2 transition-colors bg-white/20 dark-theme:bg-black/10 hover:bg-white/40 dark-theme:hover:bg-black/20 mt-1">
+                  <div class="w-8 h-8 rounded-full bg-slate-200/50 dark-theme:bg-slate-700/50 flex items-center justify-center border border-slate-300/50 dark-theme:border-slate-600/50">
+                      <i class="ph-bold ph-plus text-[16px] text-slate-400"></i>
+                  </div>
+                  <span class="start-content leading-tight">Drag modules here</span>
               </div>
           </div>
       </div>
@@ -1100,25 +1111,25 @@
       <!-- 4. Quick Settings Overlay (Triggered by System Tray click) -->
       <div id="overlay-quick" class="absolute bottom-[76px] w-[320px] z-[9998] overlay-right-hidden flex flex-col gap-2" style="transform-origin: bottom center;">
           
-          <!-- Action Grid (Horizontal Tight Format) -->
+          <!-- Action Grid -->
           <div class="taskbar-flat rounded-[12px] p-3 qs-step-1">
               <div class="flex justify-between items-center qs-step-3">
                   <button class="w-[36px] h-[36px] shrink-0 rounded-[8px] flex items-center justify-center bg-[#0067c0] text-white transition-colors hover:bg-[#005a9e]">
                       <i class="ph-bold ph-wifi-high text-[16px]"></i>
                   </button>
-                  <button class="w-[36px] h-[36px] shrink-0 rounded-[8px] flex items-center justify-center glass-card transition-colors hover:bg-white/50 group">
+                  <button class="w-[36px] h-[36px] shrink-0 rounded-[8px] flex items-center justify-center glass-card transition-colors group">
                       <i class="ph-bold ph-bluetooth-connected text-[16px] text-slate-700 transition-colors"></i>
                   </button>
-                  <button class="w-[36px] h-[36px] shrink-0 rounded-[8px] flex items-center justify-center glass-card transition-colors hover:bg-white/50 group">
+                  <button class="w-[36px] h-[36px] shrink-0 rounded-[8px] flex items-center justify-center glass-card transition-colors group">
                       <i class="ph-bold ph-airplane-tilt text-[16px] text-slate-700 transition-colors"></i>
                   </button>
-                  <button class="w-[36px] h-[36px] shrink-0 rounded-[8px] flex items-center justify-center glass-card transition-colors hover:bg-white/50 group">
+                  <button class="w-[36px] h-[36px] shrink-0 rounded-[8px] flex items-center justify-center glass-card transition-colors group">
                       <i class="ph-bold ph-moon text-[16px] text-slate-700 transition-colors"></i>
                   </button>
-                  <button class="w-[36px] h-[36px] shrink-0 rounded-[8px] flex items-center justify-center glass-card transition-colors hover:bg-white/50 group">
+                  <button class="w-[36px] h-[36px] shrink-0 rounded-[8px] flex items-center justify-center glass-card transition-colors group">
                       <i class="ph-bold ph-prohibit text-[16px] text-slate-700 transition-colors"></i>
                   </button>
-                  <button class="w-[36px] h-[36px] shrink-0 rounded-[8px] flex items-center justify-center glass-card transition-colors hover:bg-white/50 group">
+                  <button class="w-[36px] h-[36px] shrink-0 rounded-[8px] flex items-center justify-center glass-card transition-colors group">
                       <i class="ph-bold ph-battery-plus text-[16px] text-slate-700 transition-colors"></i>
                   </button>
               </div>
@@ -1133,11 +1144,10 @@
           </div>
       </div>
       
-      <!-- TASKBAR (Connected Fragmented Container with Drag & Drop Sorting) -->
+      <!-- TASKBAR -->
       <div id="taskbar-wrapper" class="absolute bottom-3 left-0 w-full flex justify-center items-center px-4 z-[9999] pointer-events-none transition-all duration-500">
         <div id="taskbar-container" class="flex items-center gap-1.5 transition-all duration-300" ondragover="window.allowTaskbarDragOver(event)" ondrop="window.dropToTaskbar(event)">
             
-            <!-- Weather Segment -->
             <div id="tb-segment-weather" class="taskbar-segment pointer-events-auto h-[48px] taskbar-flat rounded-l-[8px] rounded-r-none flex items-center px-1 cursor-grab active:cursor-grabbing transition-all duration-300 origin-center z-10 scale-in" draggable="true" ondragstart="window.dragTaskbarSegment(event, 'segment')">
                 <button id="tb-app-btn-weather" onclick="window.openApp('weather')" draggable="true" ondragstart="window.dragExtractedApp(event, 'weather')" class="flex items-center hover:bg-black/5 dark-theme:hover:bg-white/10 px-3 h-[36px] rounded-[6px] transition-colors group cursor-grab active:cursor-grabbing mx-0.5 shrink-0">
                   <img id="tb-weather-icon" src="" class="w-[20px] h-[20px] transition-all pointer-events-none opacity-90" draggable="false" alt="Weather">
@@ -1147,14 +1157,12 @@
                 </button>
             </div>
 
-            <!-- Apps Segment (Non-Draggable) -->
             <div id="tb-apps-segment" class="taskbar-segment pointer-events-auto h-[48px] taskbar-flat rounded-none flex items-center px-2 gap-1 transition-all duration-300 origin-center z-10 border-l-0 border-r-0">
                 <button id="tb-start" class="w-[38px] h-[38px] flex items-center justify-center rounded-[6px] hover:bg-black/5 dark-theme:hover:bg-white/10 transition-colors group shrink-0">
                   <img src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/d524f23f-503e-4d1d-8ee0-96e655258add/dhb97eu-3b00bbaf-f050-4657-83da-0b1664d7c022.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiIvZi9kNTI0ZjIzZi01MDNlLTRkMWQtOGVlMC05NmU2NTUyNThhZGQvZGhiOTdldS0zYjAwYmJhZi1mMDUwLTQ2NTctODNkYS0wYjE2NjRkN2MwMjIucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.o1jDig1STxxan1lSgwa6kt9pAnjG080eji1BbENBT3k" class="w-[22px] h-[22px] pointer-events-none opacity-90" draggable="false" alt="Start" onerror="this.src='https://img.icons8.com/?size=100&id=12140&format=png&color=000000';">
                 </button>
             </div>
 
-            <!-- Tray Segment -->
             <div id="tb-segment-tray" class="taskbar-segment pointer-events-auto h-[48px] taskbar-flat rounded-r-[8px] rounded-l-none flex items-center px-1 cursor-grab active:cursor-grabbing transition-all duration-300 origin-center z-10 scale-in" draggable="true" ondragstart="window.dragTaskbarSegment(event, 'segment')">
                 <button id="tb-app-btn-tray" draggable="true" ondragstart="window.dragExtractedApp(event, 'tray')" class="flex items-center justify-center hover:bg-black/5 dark-theme:hover:bg-white/10 px-3 h-[36px] rounded-[6px] transition-colors gap-2 group cursor-grab active:cursor-grabbing mx-0.5 shrink-0">
                   <img src="https://img.icons8.com/?size=100&id=50nJymaeC8CY&format=png&color=000000" class="h-[16px] w-auto opacity-80 group-hover:opacity-100 transition-opacity pointer-events-none" draggable="false" alt="System Tray">
@@ -1189,12 +1197,13 @@
     window.calcPress = calcPress;
     window.toggleLiquidGlass = toggleLiquidGlass;
     window.toggleMicaLayer = toggleMicaLayer;
+    window.handleCustomWallpaper = handleCustomWallpaper;
+    window.changeWallpaper = changeWallpaper;
     
     window.closeAllOverlays = closeAllOverlays;
     window.showAllApps = showAllApps;
     window.showPinnedApps = showPinnedApps;
 
-    // Drag and Drop bindings
     window.allowTaskbarDragOver = allowTaskbarDragOver;
     window.allowDrop = allowDrop;
     window.dropToTaskbar = dropToTaskbar;
@@ -1204,7 +1213,6 @@
     window.dragExtractedApp = dragExtractedApp;
     window.dragWidget = dragWidget;
 
-    // Add explicitly missing functions
     window.toggleQuickSettings = toggleQuickSettings;
     window.updateWeatherDisplay = updateWeatherDisplay;
 
@@ -1214,6 +1222,53 @@
     window.currentWeatherDesc = 'Sunny';
     window.currentWmoCode = 0;
     window.currentWindSpeed = 0;
+
+    const appDatabase = [
+        { id: 'settings', name: 'Settings', icon: 'https://raw.githubusercontent.com/blueedgetechno/win11React/master/public/img/icon/settings.png', action: "window.openApp('settings')" },
+        { id: 'calculator', name: 'Calculator', icon: 'https://img.icons8.com/?size=100&id=RNsqmCP8joVQ&format=png&color=000000', action: "window.openApp('calculator')" },
+        { id: 'notepad', name: 'Notepad', icon: 'https://img.icons8.com/?size=100&id=6VwxladcAlxL&format=png&color=000000', action: "window.openApp('notepad')" },
+        { id: 'photos', name: 'Photos', icon: 'https://raw.githubusercontent.com/blueedgetechno/win11React/master/public/img/icon/photos.png', action: "window.openApp('photos')" },
+        { id: 'weather', name: 'Weather', icon: 'https://img.icons8.com/?size=100&id=8EUmYhfLPTCF&format=png&color=000000', action: "window.openApp('weather')" }
+    ];
+
+    function getTaskbarItemHTML(id) {
+        if (id === 'weather') return `
+            <button id="tb-app-btn-weather" onclick="window.openApp('weather')" draggable="true" ondragstart="window.dragExtractedApp(event, 'weather')" class="flex items-center hover:bg-black/5 dark-theme:hover:bg-white/10 px-3 h-[36px] rounded-[6px] transition-colors group cursor-grab active:cursor-grabbing mx-0.5 shrink-0">
+              <img id="tb-weather-icon" src="" class="w-[20px] h-[20px] transition-all pointer-events-none opacity-90" draggable="false" alt="Weather">
+              <div class="flex flex-col ml-2.5 text-left pointer-events-none">
+                <span id="tb-weather-temp" class="text-[12px] font-semibold leading-none text-slate-900 text-3d-float">${window.currentTemp}</span>
+              </div>
+            </button>
+        `;
+        if (id === 'tray') return `
+            <button id="tb-app-btn-tray" draggable="true" ondragstart="window.dragExtractedApp(event, 'tray')" class="flex items-center justify-center hover:bg-black/5 dark-theme:hover:bg-white/10 px-3 h-[36px] rounded-[6px] transition-colors gap-2 group cursor-grab active:cursor-grabbing mx-0.5 shrink-0">
+              <img src="https://img.icons8.com/?size=100&id=50nJymaeC8CY&format=png&color=000000" class="h-[16px] w-auto opacity-80 group-hover:opacity-100 transition-opacity pointer-events-none" draggable="false" alt="System Tray">
+            </button>
+        `;
+        if (id === 'clock') return `
+            <button id="tb-app-btn-clock" draggable="true" ondragstart="window.dragExtractedApp(event, 'clock')" class="flex flex-col items-end justify-center hover:bg-black/5 dark-theme:hover:bg-white/10 px-3 h-[36px] rounded-[6px] transition-colors cursor-grab active:cursor-grabbing mx-0.5 shrink-0">
+              <span id="tb-time" class="text-[12px] font-medium text-slate-900 pointer-events-none leading-none text-3d-float"></span>
+              <span id="tb-date" class="text-[10px] text-slate-600 mt-0.5 pointer-events-none leading-none"></span>
+            </button>
+        `;
+        const app = appDatabase.find(a => a.id === id);
+        if (app) return `
+            <button id="tb-app-btn-${id}" onclick="${app.action}" draggable="true" ondragstart="window.dragExtractedApp(event, '${id}')" class="w-[38px] h-[38px] flex flex-col items-center justify-center rounded-[6px] transition-colors hover:bg-black/5 dark-theme:hover:bg-white/10 relative group pointer-events-auto shrink-0 mx-0.5">
+              <img src="${app.icon}" class="w-[22px] h-[22px] pointer-events-none opacity-90" draggable="false">
+              <div id="indicator-${id}" class="absolute bottom-0 w-0 h-[3px] bg-blue-500 rounded-full transition-all duration-300 opacity-0 pointer-events-none"></div>
+            </button>
+        `;
+        return '';
+    }
+
+    function rebindTaskbarItem(id) {
+        if (id === 'weather') updateWeatherDisplay(true);
+        if (id === 'clock') updateClock();
+        if (id === 'tray') {
+            const btn = document.getElementById('tb-app-btn-tray');
+            if (btn) btn.addEventListener('click', toggleQuickSettings);
+        }
+    }
 
     function initSystem() {
         updateClock(); 
@@ -1225,6 +1280,16 @@
         
         const trayBtn = document.getElementById('tb-app-btn-tray');
         if(trayBtn) trayBtn.addEventListener('click', toggleQuickSettings);
+        
+        document.addEventListener('keydown', (e) => {
+            const loginScreen = document.getElementById('login-overlay');
+            if (loginScreen && loginScreen.style.display !== 'none' && e.key === 'Enter') {
+                const pinInput = document.getElementById('login-pin');
+                if(document.activeElement !== pinInput) {
+                    dismissLockScreen();
+                }
+            }
+        });
     }
 
     async function initWeatherAPI() {
@@ -1355,7 +1420,6 @@
       if (dcTime) dcTime.innerText = timeStr;
       if (dcDate) dcDate.innerText = d.toLocaleDateString(undefined, {weekday: 'long', month:'long', day:'numeric'});
       
-      // Auto-update weather exactly on the hour
       if (d.getMinutes() === 0 && d.getSeconds() === 0) {
           updateWeatherDisplay();
       }
@@ -1415,7 +1479,6 @@
     function openApp(appId) {
         const appWindow = document.getElementById('app-' + appId);
         if(appWindow) {
-            // Act as a toggle if it's already open
             if(appWindow.classList.contains('app-window-visible') && !appWindow.classList.contains('app-minimized')) {
                 minimizeApp(appId);
                 return;
@@ -1689,28 +1752,41 @@
         ev.dataTransfer.setData("widgetType", type);
     }
     
+    function handleCustomWallpaper(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const url = e.target.result;
+                window.changeWallpaper(null, url, false);
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+
     function changeWallpaper(element, url, isDark = false) {
         document.getElementById('desktop-bg').style.backgroundImage = `url('${url}')`;
         const loginBgEl = document.getElementById('login-bg');
         if(loginBgEl) loginBgEl.style.backgroundImage = `url('${url}')`; 
         
-        // This variable is required for the Flipped Blur border engine to track what to render!
         document.documentElement.style.setProperty('--current-wallpaper', `url('${url}')`);
 
-        const osRoot = document.getElementById('os-root');
-        if (isDark) {
-            osRoot.classList.add('dark-theme');
-        } else {
-            osRoot.classList.remove('dark-theme');
-        }
+        if (element !== null) {
+            const osRoot = document.getElementById('os-root');
+            if (isDark) {
+                osRoot.classList.add('dark-theme');
+            } else {
+                osRoot.classList.remove('dark-theme');
+            }
 
-        const siblings = element.parentElement.children;
-        for(let i=0; i<siblings.length; i++) {
-            siblings[i].classList.remove('border-blue-500');
-            siblings[i].classList.add('border-transparent', 'hover:border-slate-300', 'dark-theme:hover:border-slate-600');
+            const siblings = element.parentElement.children;
+            for(let i=0; i<siblings.length; i++) {
+                siblings[i].classList.remove('border-blue-500');
+                siblings[i].classList.add('border-transparent', 'hover:border-slate-300', 'dark-theme:hover:border-slate-600');
+            }
+            element.classList.add('border-blue-500');
+            element.classList.remove('border-transparent', 'hover:border-slate-300', 'dark-theme:hover:border-slate-600');
         }
-        element.classList.add('border-blue-500');
-        element.classList.remove('border-transparent', 'hover:border-slate-300', 'dark-theme:hover:border-slate-600');
     }
 
     const startBtn = document.getElementById('tb-start');
@@ -1760,9 +1836,8 @@
         if(e.target === overlayStart) closeAllOverlays();
     });
 
-    // --- RESTORED DRAG AND DROP & ADVANCED INTERACTIVITY ---
+    // --- DRAG AND DROP & WINDOW INTERACTIVITY ---
     
-    // Attach minimize/maximize events dynamically to avoid massive HTML rewrites
     document.querySelectorAll('.app-window-container').forEach(app => {
         const appId = app.id.replace('app-', '');
         const btnMin = app.querySelector('.ph-minus');
@@ -1925,7 +2000,7 @@
                  </button>
                  <div class="start-content flex justify-between items-start relative z-10 pointer-events-none w-full">
                      <div class="flex items-center gap-2">
-                         <img id="start-weather-icon-1" src="https://img.icons8.com/?size=100&id=8EUmYhfLPTCF&format=png&color=000000" class="w-5 h-5">
+                         <img id="start-weather-icon-1" src="" class="w-5 h-5">
                          <span class="text-[11px] font-semibold text-slate-900">Weather</span>
                      </div>
                  </div>
@@ -2079,6 +2154,50 @@
         if(ev.target.classList) ev.target.classList.remove('is-taskbar-dragging', 'opacity-40', 'dragging');
         document.querySelectorAll('.taskbar-segment').forEach(s => { s.style.boxShadow = ''; s.style.backgroundColor = ''; });
         updateTaskbarCorners();
+    });
+
+    const dragAreas = document.querySelectorAll('.generic-drag-area');
+    let isWinDragging = false, winStartX, winStartY, initialLeft, initialTop, currentDraggedApp = null;
+
+    dragAreas.forEach(area => {
+        area.addEventListener('mousedown', (e) => {
+            if (e.target.tagName.toLowerCase() === 'button' || e.target.closest('button')) return;
+            
+            const targetId = area.getAttribute('data-target');
+            currentDraggedApp = document.getElementById(targetId);
+            if(!currentDraggedApp || currentDraggedApp.classList.contains('app-maximized')) return;
+
+            isWinDragging = true;
+            winStartX = e.clientX;
+            winStartY = e.clientY;
+            
+            document.querySelectorAll('.app-window-container').forEach(w => w.style.zIndex = 20000);
+            currentDraggedApp.style.zIndex = 20001;
+            
+            const rect = currentDraggedApp.getBoundingClientRect();
+            initialLeft = rect.left;
+            initialTop = rect.top;
+            
+            currentDraggedApp.style.left = initialLeft + 'px';
+            currentDraggedApp.style.top = initialTop + 'px';
+            currentDraggedApp.style.transition = 'none'; 
+        });
+    });
+
+    document.addEventListener('mousemove', (e) => {
+        if (!isWinDragging || !currentDraggedApp) return;
+        const dx = e.clientX - winStartX;
+        const dy = e.clientY - winStartY;
+        currentDraggedApp.style.left = (initialLeft + dx) + 'px';
+        currentDraggedApp.style.top = (initialTop + dy) + 'px';
+    });
+
+    document.addEventListener('mouseup', () => { 
+        if (isWinDragging) {
+            isWinDragging = false; 
+            if(currentDraggedApp) currentDraggedApp.style.transition = ''; 
+            currentDraggedApp = null;
+        }
     });
 
     initSystem();
