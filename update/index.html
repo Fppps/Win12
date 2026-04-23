@@ -381,7 +381,7 @@
                 <div id="login-input-area" class="flex items-center gap-2">
                     <input type="password" id="login-pin" placeholder="PIN" class="login-pin-input rounded-[8px] px-5 py-2.5 text-white placeholder-white/60 outline-none w-64 text-center tracking-[0.3em] text-lg font-medium" onkeypress="if(event.key === 'Enter') window.triggerWelcome()">
                     <button onclick="window.triggerWelcome()" class="w-12 h-12 rounded-[8px] bg-white/10 border border-white/20 flex items-center justify-center transition-all hover:bg-white/20 active:scale-95 group backdrop-blur-md">
-                        <i class="ph-bold ph-arrow-right text-white text-lg group-hover:translate-x-0.5 transition-transform"></i>
+                        <i class="ph-duotone ph-arrow-right text-white text-lg group-hover:translate-x-0.5 transition-transform"></i>
                     </button>
                 </div>
                 
@@ -399,9 +399,9 @@
 
         <!-- Lock Screen Bottom Icons -->
         <div id="lock-bottom-icons" class="absolute bottom-10 right-12 flex gap-6 transition-opacity duration-500 z-30">
-            <i class="ph-fill ph-wifi-high text-[22px] text-white/90 drop-shadow-md hover:text-white cursor-pointer transition-colors"></i>
-            <i class="ph-fill ph-wheelchair text-[22px] text-white/90 drop-shadow-md hover:text-white cursor-pointer transition-colors"></i>
-            <i class="ph-fill ph-power text-[22px] text-white/90 drop-shadow-md hover:text-white cursor-pointer transition-colors" onclick="document.body.innerHTML='<div style=\'background:#000;width:100vw;height:100vh;\'></div>'"></i>
+            <i class="ph-duotone ph-wifi-high text-[22px] text-white/90 drop-shadow-md hover:text-white cursor-pointer transition-colors"></i>
+            <i class="ph-duotone ph-wheelchair text-[22px] text-white/90 drop-shadow-md hover:text-white cursor-pointer transition-colors"></i>
+            <i class="ph-duotone ph-power text-[22px] text-white/90 drop-shadow-md hover:text-white cursor-pointer transition-colors" onclick="document.body.innerHTML='<div style=\'background:#000;width:100vw;height:100vh;\'></div>'"></i>
         </div>
     </div>
 
@@ -431,9 +431,9 @@
                  <span class="text-[12px] font-medium text-slate-900 tracking-tight">Settings <span class="text-[9px] font-bold text-blue-700 uppercase ml-2 bg-blue-100/50 px-1.5 py-0.5 rounded border border-blue-200/50">Canary 1H04</span></span>
              </div>
              <div class="flex gap-0.5 app-step-3">
-                 <button class="w-11 h-8 rounded-[6px] flex items-center justify-center transition-colors hover:bg-black/5 dark-theme:hover:bg-white/10 group"><i class="ph-bold ph-minus text-slate-600 text-[10px]"></i></button>
-                 <button class="w-11 h-8 rounded-[6px] flex items-center justify-center transition-colors hover:bg-black/5 dark-theme:hover:bg-white/10 group"><i class="ph-bold ph-square text-slate-600 text-[10px]"></i></button>
-                 <button class="w-11 h-8 rounded-[6px] flex items-center justify-center transition-colors hover:bg-red-500 hover:text-white group" onclick="window.closeApp('settings')"><i class="ph-bold ph-x text-slate-600 group-hover:text-white text-[10px]"></i></button>
+                 <button class="w-11 h-8 rounded-[6px] flex items-center justify-center transition-colors hover:bg-black/5 dark-theme:hover:bg-white/10 group"><i class="ph-duotone ph-minus text-slate-600 text-[10px]"></i></button>
+                 <button class="w-11 h-8 rounded-[6px] flex items-center justify-center transition-colors hover:bg-black/5 dark-theme:hover:bg-white/10 group"><i class="ph-duotone ph-square text-slate-600 text-[10px]"></i></button>
+                 <button class="w-11 h-8 rounded-[6px] flex items-center justify-center transition-colors hover:bg-red-500 hover:text-white group" onclick="window.closeApp('settings')"><i class="ph-duotone ph-x text-slate-600 group-hover:text-white text-[10px]"></i></button>
              </div>
           </div>
           <!-- Body -->
@@ -448,24 +448,24 @@
                       </div>
                   </div>
                   <div class="relative mb-4 px-1 app-step-3">
-                      <i class="ph-bold ph-magnifying-glass absolute left-3.5 top-2 text-slate-500 text-[13px]"></i>
+                      <i class="ph-duotone ph-magnifying-glass absolute left-3.5 top-2 text-slate-500 text-[13px]"></i>
                       <input type="text" placeholder="Find a setting" class="win-input w-full rounded-[6px] py-1.5 pl-9 pr-3 text-[12px] font-medium text-slate-800 placeholder-slate-500">
                   </div>
                   <!-- Tabs -->
                   <button id="tab-btn-system" onclick="window.switchSettingsTab('system')" class="settings-tab-btn settings-tab-active w-full flex items-center gap-3 px-3 py-2.5 rounded-[6px] text-left transition-colors group app-step-3">
-                      <i class="ph-fill ph-desktop text-[18px] group-hover:text-blue-600 transition-colors"></i>
+                      <i class="ph-duotone ph-desktop text-[18px] group-hover:text-blue-600 transition-colors"></i>
                       <span class="text-[13px] font-medium text-slate-800">System</span>
                   </button>
                   <button id="tab-btn-personalization" onclick="window.switchSettingsTab('personalization')" class="settings-tab-btn w-full flex items-center gap-3 px-3 py-2.5 hover:bg-black/5 dark-theme:hover:bg-white/10 rounded-[6px] text-left transition-colors group border border-transparent app-step-3">
-                      <i class="ph-fill ph-palette text-slate-500 group-hover:text-blue-600 transition-colors text-[18px]"></i>
+                      <i class="ph-duotone ph-palette text-slate-500 group-hover:text-blue-600 transition-colors text-[18px]"></i>
                       <span class="text-[13px] font-medium text-slate-600 group-hover:text-slate-900">Personalization</span>
                   </button>
                   <button id="tab-btn-taskbar" onclick="window.switchSettingsTab('taskbar')" class="settings-tab-btn w-full flex items-center gap-3 px-3 py-2.5 hover:bg-black/5 dark-theme:hover:bg-white/10 rounded-[6px] text-left transition-colors group border border-transparent app-step-3">
-                      <i class="ph-fill ph-rows text-slate-500 group-hover:text-blue-600 transition-colors text-[18px]"></i>
+                      <i class="ph-duotone ph-rows text-slate-500 group-hover:text-blue-600 transition-colors text-[18px]"></i>
                       <span class="text-[13px] font-medium text-slate-600 group-hover:text-slate-900">Taskbar & Desktop</span>
                   </button>
                   <button id="tab-btn-update" onclick="window.switchSettingsTab('update')" class="settings-tab-btn w-full flex items-center gap-3 px-3 py-2.5 hover:bg-black/5 dark-theme:hover:bg-white/10 rounded-[6px] text-left transition-colors group border border-transparent app-step-3">
-                      <i class="ph-fill ph-windows-logo text-slate-500 group-hover:text-blue-600 transition-colors text-[18px]"></i>
+                      <i class="ph-duotone ph-windows-logo text-slate-500 group-hover:text-blue-600 transition-colors text-[18px]"></i>
                       <span class="text-[13px] font-medium text-slate-600 group-hover:text-slate-900">Windows Update</span>
                   </button>
               </div>
@@ -476,7 +476,7 @@
                       <h1 class="text-[28px] font-semibold text-slate-900 tracking-tight mb-8">System</h1>
                       
                       <div class="flex items-center gap-6 mb-10 cursor-default">
-                          <i class="ph-fill ph-laptop text-[64px] text-slate-700"></i>
+                          <i class="ph-duotone ph-laptop text-[64px] text-slate-700"></i>
                           <div class="flex flex-col z-10">
                               <h2 class="text-[20px] font-semibold text-slate-900">Vision-PC</h2>
                               <p class="text-[12px] font-medium text-slate-600">Windows 12 Pro Canary</p>
@@ -484,9 +484,9 @@
                       </div>
 
                       <div class="flex flex-col gap-2 mb-8">
-                          <div class="flex items-center justify-between px-5 py-4 glass-card rounded-[8px] transition-colors">
+                          <div class="flex items-center justify-between px-5 py-4 glass-card rounded-[8px] transition-colors hover:bg-black/5 dark-theme:hover:bg-white/5">
                               <div class="flex items-center gap-4">
-                                  <i class="ph-fill ph-sun text-[20px] text-slate-700"></i>
+                                  <i class="ph-duotone ph-sun text-[20px] text-slate-700"></i>
                                   <span class="text-[13px] font-medium text-slate-900">Brightness</span>
                               </div>
                               <input type="range" id="set-brightness" class="win-slider w-48" value="100" min="10" max="100" oninput="window.updateBrightness(this.value)">
@@ -494,18 +494,18 @@
                       </div>
 
                       <div class="flex flex-col gap-2">
-                          <div class="flex items-center justify-between px-5 py-4 glass-card rounded-[8px] transition-colors cursor-default">
+                          <div class="flex items-center justify-between px-5 py-4 glass-card rounded-[8px] transition-colors cursor-default hover:bg-black/5 dark-theme:hover:bg-white/5">
                               <div class="flex items-center gap-4">
-                                  <i class="ph-fill ph-cpu text-[20px] text-slate-700"></i>
+                                  <i class="ph-duotone ph-cpu text-[20px] text-slate-700"></i>
                                   <div class="flex flex-col">
                                       <span class="text-[13px] font-medium text-slate-900">Processor</span>
                                       <span class="text-[11px] text-slate-500">Snapdragon X Elite X1E-80-100</span>
                                   </div>
                               </div>
                           </div>
-                          <div class="flex items-center justify-between px-5 py-4 glass-card rounded-[8px] transition-colors cursor-default">
+                          <div class="flex items-center justify-between px-5 py-4 glass-card rounded-[8px] transition-colors cursor-default hover:bg-black/5 dark-theme:hover:bg-white/5">
                               <div class="flex items-center gap-4">
-                                  <i class="ph-fill ph-memory text-[20px] text-slate-700"></i>
+                                  <i class="ph-duotone ph-memory text-[20px] text-slate-700"></i>
                                   <div class="flex flex-col">
                                       <span class="text-[13px] font-medium text-slate-900">Installed RAM</span>
                                       <span class="text-[11px] text-slate-500">32.0 GB (31.7 GB usable)</span>
@@ -521,10 +521,10 @@
                       
                       <!-- Custom Upload Section -->
                       <h3 class="text-[13px] font-semibold text-slate-800 mb-3">Custom Background</h3>
-                      <div class="glass-card p-5 rounded-[8px] flex items-center justify-between mb-8 shadow-sm transition-colors">
+                      <div class="glass-card p-5 rounded-[8px] flex items-center justify-between mb-8 shadow-sm transition-colors hover:bg-black/5 dark-theme:hover:bg-white/5">
                           <div class="flex items-center gap-4">
                               <div class="w-10 h-10 rounded-full bg-blue-100 dark-theme:bg-blue-900/50 flex items-center justify-center">
-                                  <i class="ph-fill ph-image text-blue-600 dark-theme:text-blue-400 text-[18px]"></i>
+                                  <i class="ph-duotone ph-image text-blue-600 dark-theme:text-blue-400 text-[18px]"></i>
                               </div>
                               <div class="flex flex-col">
                                   <span class="text-[14px] font-semibold text-slate-900 tracking-tight">Upload an Image</span>
@@ -545,9 +545,9 @@
 
                       <h3 class="text-[13px] font-semibold text-slate-800 mb-3">Visual Materials</h3>
                       <div class="flex flex-col gap-2">
-                          <div class="flex items-center justify-between px-5 py-4 glass-card rounded-[8px] transition-colors">
+                          <div class="flex items-center justify-between px-5 py-4 glass-card rounded-[8px] transition-colors hover:bg-black/5 dark-theme:hover:bg-white/5">
                               <div class="flex items-center gap-4">
-                                  <i class="ph-fill ph-sparkle text-[20px] text-slate-700"></i>
+                                  <i class="ph-duotone ph-sparkle text-[20px] text-slate-700"></i>
                                   <div class="flex flex-col">
                                       <span class="text-[13px] font-medium text-slate-900">Mica Dynamic Material</span>
                                       <span class="text-[11px] text-slate-500">Heavily blurred, ambient texture inside UI.</span>
@@ -563,9 +563,9 @@
                       <h1 class="text-[28px] font-semibold text-slate-900 tracking-tight mb-8">Taskbar & Desktop</h1>
                       
                       <div class="flex flex-col gap-2 mb-8">
-                          <div class="flex items-center justify-between px-5 py-4 glass-card rounded-[8px] transition-colors">
+                          <div class="flex items-center justify-between px-5 py-4 glass-card rounded-[8px] transition-colors hover:bg-black/5 dark-theme:hover:bg-white/5">
                               <div class="flex items-center gap-4">
-                                  <i class="ph-fill ph-clock text-[20px] text-slate-700"></i>
+                                  <i class="ph-duotone ph-clock text-[20px] text-slate-700"></i>
                                   <div class="flex flex-col">
                                       <span class="text-[13px] font-medium text-slate-900">Desktop Clock Widget</span>
                                       <span class="text-[11px] text-slate-500">Display a large clock on the wallpaper</span>
@@ -576,9 +576,9 @@
                       </div>
 
                       <div class="flex flex-col gap-2">
-                          <div class="flex items-center justify-between px-5 py-4 glass-card rounded-[8px] transition-colors">
+                          <div class="flex items-center justify-between px-5 py-4 glass-card rounded-[8px] transition-colors hover:bg-black/5 dark-theme:hover:bg-white/5">
                               <div class="flex items-center gap-4">
-                                  <i class="ph-fill ph-align-left text-[20px] text-slate-700"></i>
+                                  <i class="ph-duotone ph-align-left text-[20px] text-slate-700"></i>
                                   <div class="flex flex-col">
                                       <span class="text-[13px] font-medium text-slate-900">Left-aligned Taskbar</span>
                                       <span class="text-[11px] text-slate-500">Snap the taskbar to the left edge</span>
@@ -596,7 +596,7 @@
                       <div class="glass-card p-6 rounded-[8px] flex items-center justify-between mb-8 shadow-sm">
                           <div class="flex items-center gap-4 z-10">
                               <div id="update-icon-container" class="flex items-center justify-center w-12 h-12 shrink-0">
-                                  <i id="update-icon" class="ph-fill ph-check-circle text-[48px] text-emerald-600"></i>
+                                  <i id="update-icon" class="ph-duotone ph-check-circle text-[48px] text-emerald-600"></i>
                               </div>
                               <div>
                                   <h3 id="update-title" class="text-[16px] font-semibold text-slate-900">You're up to date</h3>
@@ -606,17 +606,17 @@
                           <button id="btn-check-updates" onclick="window.simulateUpdateCheck()" class="bg-[#0067c0] hover:bg-[#005a9e] text-white px-5 py-2 rounded-[6px] text-[13px] transition-colors z-10 font-medium shadow-sm">Check for updates</button>
                       </div>
 
-                      <!-- 1H05 Preview Update Banner -->
-                      <div class="glass-card p-5 rounded-[8px] shadow-sm flex flex-col gap-5">
+                      <!-- 1H04 Preview Update Banner -->
+                      <div class="glass-card p-5 rounded-[8px] shadow-sm flex flex-col gap-5 border border-white/20">
                           <div class="w-full shrink-0 flex justify-center">
-                              <img src="image.png" alt="1H04 Preview" class="w-full aspect-video object-cover rounded-[6px] shadow-sm border border-slate-200 dark-theme:border-slate-700" onerror="this.src='https://images.unsplash.com/photo-1593640408182-31c70c8268f5?q=80&w=1000&auto=format&fit=crop';">
+                              <img src="image.png" alt="1H04 Preview" class="w-full h-auto max-h-[280px] object-contain rounded-[6px] shadow-sm border border-slate-200 dark-theme:border-slate-700" onerror="this.src='https://images.unsplash.com/photo-1593640408182-31c70c8268f5?q=80&w=1000&auto=format&fit=crop';">
                           </div>
                           <div class="flex flex-col flex-1 px-1">
-                              <h3 class="text-[16px] font-semibold text-slate-900 tracking-tight mb-2">Welcome to 1H04 Preview</h3>
-                              <p class="text-[12px] text-slate-600 mb-3 leading-relaxed">
+                              <h3 class="text-[16px] font-semibold text-slate-900 tracking-tight mb-2.5">Welcome to 1H04 Preview</h3>
+                              <p class="text-[12.5px] text-slate-600 mb-4 leading-relaxed">
                                   This new update introduces a stunning zero shadow desktop concept featuring pure glassy reflections and highly saturated mica blur effects.
                               </p>
-                              <ul class="text-[11.5px] text-slate-500 space-y-2 list-disc list-inside">
+                              <ul class="text-[11.5px] text-slate-500 space-y-2.5 list-disc list-inside">
                                   <li><strong class="font-semibold text-slate-800">Interactive Prototypes:</strong> Users can now experience interactive application prototypes which include a fully functional word processor and a responsive file explorer system.</li>
                                   <li><strong class="font-semibold text-slate-800">Advanced Personalization:</strong> Complete control over your taskbar appearance through live transparency adjustments and custom color palette selections.</li>
                                   <li><strong class="font-semibold text-slate-800">Dynamic Weather:</strong> The redesigned weather widget delivers a dynamic parallax sky that perfectly adapts its beautiful lighting using precise astronomical sunrise data.</li>
@@ -626,15 +626,15 @@
                       </div>
 
                       <div class="mt-6 flex flex-col gap-2">
-                          <div class="flex items-center justify-between px-5 py-4 glass-card rounded-[8px] cursor-pointer transition-colors">
+                          <div class="flex items-center justify-between px-5 py-4 glass-card rounded-[8px] cursor-pointer transition-colors hover:bg-black/5 dark-theme:hover:bg-white/5">
                               <div class="flex items-center gap-4">
-                                  <i class="ph-bold ph-clock-counter-clockwise text-[20px] text-slate-600"></i>
+                                  <i class="ph-duotone ph-clock-counter-clockwise text-[20px] text-slate-600"></i>
                                   <div class="flex flex-col">
                                       <span class="text-[13px] font-medium text-slate-900">Update history</span>
                                       <span class="text-[11px] text-slate-500">See updates installed on your device</span>
                                   </div>
                               </div>
-                              <i class="ph-bold ph-caret-right text-[16px] text-slate-400"></i>
+                              <i class="ph-duotone ph-caret-right text-[16px] text-slate-400"></i>
                           </div>
                       </div>
                   </div>
@@ -651,9 +651,9 @@
                  <span class="text-[12px] font-medium text-slate-800 tracking-tight">Calculator</span>
              </div>
              <div class="flex gap-0.5 app-step-3">
-                 <button class="w-11 h-8 rounded-[6px] flex items-center justify-center transition-colors hover:bg-black/5 dark-theme:hover:bg-white/10 group"><i class="ph-bold ph-minus text-slate-600 text-[10px]"></i></button>
-                 <button class="w-11 h-8 rounded-[6px] flex items-center justify-center transition-colors hover:bg-black/5 dark-theme:hover:bg-white/10 group"><i class="ph-bold ph-square text-slate-600 text-[10px]"></i></button>
-                 <button class="w-11 h-8 rounded-[6px] flex items-center justify-center transition-colors hover:bg-red-500 hover:text-white group" onclick="window.closeApp('calculator')"><i class="ph-bold ph-x text-slate-600 group-hover:text-white text-[10px]"></i></button>
+                 <button class="w-11 h-8 rounded-[6px] flex items-center justify-center transition-colors hover:bg-black/5 dark-theme:hover:bg-white/10 group"><i class="ph-duotone ph-minus text-slate-600 text-[10px]"></i></button>
+                 <button class="w-11 h-8 rounded-[6px] flex items-center justify-center transition-colors hover:bg-black/5 dark-theme:hover:bg-white/10 group"><i class="ph-duotone ph-square text-slate-600 text-[10px]"></i></button>
+                 <button class="w-11 h-8 rounded-[6px] flex items-center justify-center transition-colors hover:bg-red-500 hover:text-white group" onclick="window.closeApp('calculator')"><i class="ph-duotone ph-x text-slate-600 group-hover:text-white text-[10px]"></i></button>
              </div>
           </div>
           <div class="flex-1 flex flex-col p-5 bg-transparent relative z-0 app-step-2 shadow-[inset_2px_2px_10px_rgba(0,0,0,0.05)] rounded-tl-[12px] border-t border-l border-white/20 dark-theme:border-white/5">
@@ -661,7 +661,7 @@
              
              <div class="grid grid-cols-4 gap-2 flex-1 app-step-3">
                  <button onclick="window.calcPress('C')" class="col-span-2 glass-card rounded-[6px] font-medium text-[15px] text-slate-800">C</button>
-                 <button onclick="window.calcPress('Del')" class="glass-card rounded-[6px] font-medium text-[15px] text-slate-800"><i class="ph-bold ph-backspace"></i></button>
+                 <button onclick="window.calcPress('Del')" class="glass-card rounded-[6px] font-medium text-[15px] text-slate-800"><i class="ph-duotone ph-backspace"></i></button>
                  <button onclick="window.calcPress('/')" class="glass-card bg-slate-100 dark-theme:bg-slate-800 rounded-[6px] font-medium text-[15px] text-slate-800">÷</button>
                  
                  <button onclick="window.calcPress('7')" class="glass-card rounded-[6px] font-semibold text-[16px] text-slate-900">7</button>
@@ -694,9 +694,9 @@
                  <span class="text-[12px] font-medium text-slate-800 tracking-tight">Notepad</span>
              </div>
              <div class="flex gap-0.5 app-step-3">
-                 <button class="w-11 h-8 rounded-[6px] flex items-center justify-center transition-colors hover:bg-black/5 dark-theme:hover:bg-white/10 group"><i class="ph-bold ph-minus text-slate-600 text-[10px]"></i></button>
-                 <button class="w-11 h-8 rounded-[6px] flex items-center justify-center transition-colors hover:bg-black/5 dark-theme:hover:bg-white/10 group"><i class="ph-bold ph-square text-slate-600 text-[10px]"></i></button>
-                 <button class="w-11 h-8 rounded-[6px] flex items-center justify-center transition-colors hover:bg-red-500 hover:text-white group" onclick="window.closeApp('notepad')"><i class="ph-bold ph-x text-slate-600 group-hover:text-white text-[10px]"></i></button>
+                 <button class="w-11 h-8 rounded-[6px] flex items-center justify-center transition-colors hover:bg-black/5 dark-theme:hover:bg-white/10 group"><i class="ph-duotone ph-minus text-slate-600 text-[10px]"></i></button>
+                 <button class="w-11 h-8 rounded-[6px] flex items-center justify-center transition-colors hover:bg-black/5 dark-theme:hover:bg-white/10 group"><i class="ph-duotone ph-square text-slate-600 text-[10px]"></i></button>
+                 <button class="w-11 h-8 rounded-[6px] flex items-center justify-center transition-colors hover:bg-red-500 hover:text-white group" onclick="window.closeApp('notepad')"><i class="ph-duotone ph-x text-slate-600 group-hover:text-white text-[10px]"></i></button>
              </div>
           </div>
           <div class="flex-1 flex flex-col bg-transparent relative z-0 p-3 app-step-2 shadow-[inset_2px_2px_10px_rgba(0,0,0,0.05)] rounded-tl-[12px] border-t border-l border-white/20 dark-theme:border-white/5">
@@ -712,9 +712,9 @@
                  <span class="text-[12px] font-medium text-slate-800 tracking-tight">Photos</span>
              </div>
              <div class="flex gap-0.5 app-step-3">
-                 <button class="w-11 h-8 rounded-[6px] flex items-center justify-center transition-colors hover:bg-black/5 dark-theme:hover:bg-white/10 group"><i class="ph-bold ph-minus text-slate-600 text-[10px]"></i></button>
-                 <button class="w-11 h-8 rounded-[6px] flex items-center justify-center transition-colors hover:bg-black/5 dark-theme:hover:bg-white/10 group"><i class="ph-bold ph-square text-slate-600 text-[10px]"></i></button>
-                 <button class="w-11 h-8 rounded-[6px] flex items-center justify-center transition-colors hover:bg-red-500 hover:text-white group" onclick="window.closeApp('photos')"><i class="ph-bold ph-x text-slate-600 group-hover:text-white text-[10px]"></i></button>
+                 <button class="w-11 h-8 rounded-[6px] flex items-center justify-center transition-colors hover:bg-black/5 dark-theme:hover:bg-white/10 group"><i class="ph-duotone ph-minus text-slate-600 text-[10px]"></i></button>
+                 <button class="w-11 h-8 rounded-[6px] flex items-center justify-center transition-colors hover:bg-black/5 dark-theme:hover:bg-white/10 group"><i class="ph-duotone ph-square text-slate-600 text-[10px]"></i></button>
+                 <button class="w-11 h-8 rounded-[6px] flex items-center justify-center transition-colors hover:bg-red-500 hover:text-white group" onclick="window.closeApp('photos')"><i class="ph-duotone ph-x text-slate-600 group-hover:text-white text-[10px]"></i></button>
              </div>
           </div>
           <div class="flex-1 flex flex-col bg-transparent relative z-0 p-6 overflow-y-auto custom-scrollbar app-step-2 shadow-[inset_2px_2px_10px_rgba(0,0,0,0.05)] rounded-tl-[12px] border-t border-l border-white/20 dark-theme:border-white/5">
@@ -736,9 +736,9 @@
                  <span class="text-[12px] font-medium text-slate-800 tracking-tight">Welcome</span>
              </div>
              <div class="flex gap-0.5 app-step-3">
-                 <button class="w-11 h-8 rounded-[6px] flex items-center justify-center transition-colors hover:bg-black/5 dark-theme:hover:bg-white/10 group"><i class="ph-bold ph-minus text-slate-600 text-[10px]"></i></button>
-                 <button class="w-11 h-8 rounded-[6px] flex items-center justify-center transition-colors hover:bg-black/5 dark-theme:hover:bg-white/10 group"><i class="ph-bold ph-square text-slate-600 text-[10px]"></i></button>
-                 <button class="w-11 h-8 rounded-[6px] flex items-center justify-center transition-colors hover:bg-red-500 hover:text-white group" onclick="window.closeApp('welcome')"><i class="ph-bold ph-x text-slate-600 group-hover:text-white text-[10px]"></i></button>
+                 <button class="w-11 h-8 rounded-[6px] flex items-center justify-center transition-colors hover:bg-black/5 dark-theme:hover:bg-white/10 group"><i class="ph-duotone ph-minus text-slate-600 text-[10px]"></i></button>
+                 <button class="w-11 h-8 rounded-[6px] flex items-center justify-center transition-colors hover:bg-black/5 dark-theme:hover:bg-white/10 group"><i class="ph-duotone ph-square text-slate-600 text-[10px]"></i></button>
+                 <button class="w-11 h-8 rounded-[6px] flex items-center justify-center transition-colors hover:bg-red-500 hover:text-white group" onclick="window.closeApp('welcome')"><i class="ph-duotone ph-x text-slate-600 group-hover:text-white text-[10px]"></i></button>
              </div>
           </div>
           <!-- Body -->
@@ -749,11 +749,11 @@
                       <p class="text-[11px] text-slate-500 mt-0.5 uppercase tracking-wider">Discover what's new.</p>
                   </div>
                   <button id="welcome-tab-new" onclick="window.switchWelcomeTab('new')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-[6px] text-left transition-colors group bg-black/5 dark-theme:bg-white/10 app-step-3">
-                      <i class="ph-fill ph-sparkle text-[18px] text-blue-600"></i>
+                      <i class="ph-duotone ph-sparkle text-[18px] text-blue-600"></i>
                       <span class="text-[13px] font-medium text-slate-900">The Destroyer Update</span>
                   </button>
                   <button id="welcome-tab-guide" onclick="window.switchWelcomeTab('guide')" class="w-full flex items-center gap-3 px-3 py-2.5 hover:bg-black/5 dark-theme:hover:bg-white/10 rounded-[6px] text-left transition-colors group app-step-3">
-                      <i class="ph-fill ph-magic-wand text-slate-500 group-hover:text-purple-500 text-[18px]"></i>
+                      <i class="ph-duotone ph-magic-wand text-slate-500 group-hover:text-purple-500 text-[18px]"></i>
                       <span class="text-[13px] font-medium text-slate-600 group-hover:text-slate-900">Tips & Tricks</span>
                   </button>
               </div>
@@ -762,7 +762,7 @@
                   <div id="welcome-content-new" class="flex flex-col h-full fade-in app-step-3 p-8">
                       <div class="flex items-center gap-5 mb-8">
                           <div class="w-16 h-16 rounded-[12px] bg-blue-600 flex items-center justify-center shadow-md shrink-0">
-                              <i class="ph-fill ph-rocket-launch text-[28px] text-white"></i>
+                              <i class="ph-duotone ph-rocket-launch text-[28px] text-white"></i>
                           </div>
                           <div>
                               <h1 class="text-[24px] font-semibold text-slate-900 tracking-tight">Experience Windows 12</h1>
@@ -773,21 +773,21 @@
                       <div class="grid grid-cols-2 gap-4 flex-1">
                           <div class="glass-card p-5 rounded-[8px] flex flex-col justify-center">
                               <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center mb-3">
-                                  <i class="ph-fill ph-layout text-blue-600 text-[16px]"></i>
+                                  <i class="ph-duotone ph-layout text-blue-600 text-[16px]"></i>
                               </div>
                               <h3 class="text-[14px] font-semibold text-slate-900 mb-1">Dynamic Taskbar</h3>
                               <p class="text-[12px] text-slate-600 leading-relaxed">The taskbar is fully fragmented. Drag segments, combine them, and watch the corners mathematically auto-adjust.</p>
                           </div>
                           <div class="glass-card p-5 rounded-[8px] flex flex-col justify-center">
                               <div class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center mb-3">
-                                  <i class="ph-fill ph-squares-four text-purple-600 text-[16px]"></i>
+                                  <i class="ph-duotone ph-squares-four text-purple-600 text-[16px]"></i>
                               </div>
                               <h3 class="text-[14px] font-semibold text-slate-900 mb-1">Widget Combos</h3>
                               <p class="text-[12px] text-slate-600 leading-relaxed">Drag any app directly from the Start Menu onto the taskbar, or drop it ON an existing widget to merge them.</p>
                           </div>
                           <div class="glass-card p-5 rounded-[8px] flex flex-col justify-center col-span-2">
                               <div class="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center mb-3">
-                                  <i class="ph-fill ph-drop text-emerald-600 text-[16px]"></i>
+                                  <i class="ph-duotone ph-drop text-emerald-600 text-[16px]"></i>
                               </div>
                               <h3 class="text-[14px] font-semibold text-slate-900 mb-1">Mica Materials Everywhere</h3>
                               <p class="text-[12px] text-slate-600 leading-relaxed">Experience our new unified rendering engine. A beautiful, pure Mica blur with high saturation creates incredible depth across the entire desktop.</p>
@@ -841,9 +841,9 @@
                  <span class="text-[12px] font-medium text-slate-800 tracking-tight">Weather</span>
              </div>
              <div class="flex gap-0.5 app-step-3">
-                 <button class="w-11 h-8 rounded-[6px] flex items-center justify-center transition-colors hover:bg-black/5 dark-theme:hover:bg-white/10 group"><i class="ph-bold ph-minus text-slate-600 text-[10px]"></i></button>
-                 <button class="w-11 h-8 rounded-[6px] flex items-center justify-center transition-colors hover:bg-black/5 dark-theme:hover:bg-white/10 group"><i class="ph-bold ph-square text-slate-600 text-[10px]"></i></button>
-                 <button class="w-11 h-8 rounded-[6px] flex items-center justify-center transition-colors hover:bg-red-500 hover:text-white group" onclick="window.closeApp('weather')"><i class="ph-bold ph-x text-slate-600 group-hover:text-white text-[10px]"></i></button>
+                 <button class="w-11 h-8 rounded-[6px] flex items-center justify-center transition-colors hover:bg-black/5 dark-theme:hover:bg-white/10 group"><i class="ph-duotone ph-minus text-slate-600 text-[10px]"></i></button>
+                 <button class="w-11 h-8 rounded-[6px] flex items-center justify-center transition-colors hover:bg-black/5 dark-theme:hover:bg-white/10 group"><i class="ph-duotone ph-square text-slate-600 text-[10px]"></i></button>
+                 <button class="w-11 h-8 rounded-[6px] flex items-center justify-center transition-colors hover:bg-red-500 hover:text-white group" onclick="window.closeApp('weather')"><i class="ph-duotone ph-x text-slate-600 group-hover:text-white text-[10px]"></i></button>
              </div>
           </div>
           <div class="flex-1 flex flex-col p-8 bg-transparent relative z-0 app-step-2 shadow-[inset_2px_2px_10px_rgba(0,0,0,0.05)] rounded-tl-[12px] border-t border-l border-white/20 dark-theme:border-white/5">
@@ -919,10 +919,10 @@
               </div>
               <div class="flex flex-col gap-1.5 w-full">
                   <button onclick="location.reload()" class="start-item flex items-center justify-start gap-2.5 px-3 py-2.5 glass-card rounded-[8px] transition-all text-slate-800 text-[12px] font-semibold hover:translate-x-1 group">
-                      <i class="ph-bold ph-arrows-clockwise text-[16px] text-blue-600 group-hover:rotate-180 transition-transform duration-500"></i> <span class="start-content">Restart</span>
+                      <i class="ph-duotone ph-arrows-clockwise text-[16px] text-blue-600 group-hover:rotate-180 transition-transform duration-500"></i> <span class="start-content">Restart</span>
                   </button>
                   <button onclick="window.location.reload()" class="start-item flex items-center justify-start gap-2.5 px-3 py-2.5 glass-card rounded-[8px] transition-all text-slate-800 text-[12px] font-semibold hover:translate-x-1 group">
-                      <i class="ph-bold ph-power text-[16px] text-red-500"></i> <span class="start-content">Shut down</span>
+                      <i class="ph-duotone ph-power text-[16px] text-red-500"></i> <span class="start-content">Shut down</span>
                   </button>
               </div>
           </div>
@@ -934,7 +934,7 @@
               <div id="pinned-apps-view" class="flex flex-col h-full w-full transition-all duration-500">
                   <div class="start-content flex justify-between items-center mb-4">
                       <h3 class="text-[14px] font-bold text-slate-900 tracking-tight">Pinned Apps</h3>
-                      <button onclick="window.showAllApps()" class="text-[11px] font-semibold text-slate-600 hover:text-slate-900 bg-white/40 dark-theme:bg-black/30 hover:bg-white/70 px-3 py-1.5 rounded-[6px] transition-all border border-slate-200 dark-theme:border-slate-700 shadow-sm flex items-center gap-1 group">All apps <i class="ph-bold ph-caret-right group-hover:translate-x-0.5 transition-transform"></i></button>
+                      <button onclick="window.showAllApps()" class="text-[11px] font-semibold text-slate-600 hover:text-slate-900 bg-white/40 dark-theme:bg-black/30 hover:bg-white/70 px-3 py-1.5 rounded-[6px] transition-all border border-slate-200 dark-theme:border-slate-700 shadow-sm flex items-center gap-1 group">All apps <i class="ph-duotone ph-caret-right group-hover:translate-x-0.5 transition-transform"></i></button>
                   </div>
                   <div class="grid grid-cols-4 gap-y-4 gap-x-2 custom-scrollbar overflow-y-auto pr-2 flex-1">
                       <div draggable="true" ondragstart="window.dragAppFromStart(event, 'settings')" onclick="window.openApp('settings')" class="start-item flex flex-col items-center justify-center cursor-pointer py-3 px-2 glass-card rounded-[8px] transition-all group hover:shadow-sm">
@@ -957,7 +957,7 @@
                   
                   <div class="start-content flex justify-between items-center mt-auto mb-3 pt-3 border-t border-slate-200/50 dark-theme:border-slate-700/50">
                       <h3 class="text-[14px] font-bold text-slate-900 tracking-tight">Recommended</h3>
-                      <button class="text-[11px] font-semibold text-slate-600 hover:text-slate-900 transition-all z-10 bg-white/40 dark-theme:bg-black/30 px-3 py-1.5 rounded-[6px] border border-slate-200 dark-theme:border-slate-700 shadow-sm flex items-center gap-1 group">More <i class="ph-bold ph-caret-right group-hover:translate-x-0.5 transition-transform"></i></button>
+                      <button class="text-[11px] font-semibold text-slate-600 hover:text-slate-900 transition-all z-10 bg-white/40 dark-theme:bg-black/30 px-3 py-1.5 rounded-[6px] border border-slate-200 dark-theme:border-slate-700 shadow-sm flex items-center gap-1 group">More <i class="ph-duotone ph-caret-right group-hover:translate-x-0.5 transition-transform"></i></button>
                   </div>
                   <div class="grid grid-cols-2 gap-3 shrink-0">
                       <div draggable="true" ondragstart="window.dragAppFromStart(event, 'settings')" onclick="window.openApp('settings')" class="start-item glass-card flex items-center gap-3 p-2.5 rounded-[8px] cursor-pointer transition-all group">
@@ -985,7 +985,7 @@
               <div id="all-apps-view" class="absolute inset-0 p-5 flex flex-col h-full w-full bg-transparent opacity-0 pointer-events-none translate-x-[30px] transition-all duration-400 z-20">
                   <div id="all-apps-header" class="flex justify-between items-center mb-4 pl-1 pr-1">
                       <button onclick="window.showPinnedApps()" class="flex items-center gap-1.5 text-[12px] font-semibold text-slate-700 bg-white/50 dark-theme:bg-black/30 hover:bg-white/80 hover:text-slate-900 px-3 py-1.5 rounded-[6px] transition-colors border border-slate-200 dark-theme:border-slate-700 shadow-sm">
-                          <i class="ph-bold ph-caret-left"></i> Back
+                          <i class="ph-duotone ph-caret-left"></i> Back
                       </button>
                       <h3 class="text-[13px] font-bold text-slate-900">All Apps</h3>
                   </div>
@@ -1028,13 +1028,13 @@
           <!-- SECTION 3: Taskbar Widgets Drop Zone (Right) -->
           <div class="start-panel w-[200px] taskbar-flat rounded-[12px] flex flex-col p-4 h-full pointer-events-auto relative" id="start-widget-area" ondragover="window.allowDrop(event)" ondrop="window.dropWidget(event)">
               <div class="flex items-center gap-2 mb-3 pl-1">
-                  <i class="ph-fill ph-squares-four text-[16px] text-blue-600"></i>
+                  <i class="ph-duotone ph-squares-four text-[16px] text-blue-600"></i>
                   <h3 class="start-content text-[14px] font-bold text-slate-900 tracking-tight">Dashboard</h3>
               </div>
               
-              <div id="widget-placeholder" class="start-item border-2 border-dashed border-slate-300/80 dark-theme:border-slate-600/80 rounded-[8px] h-24 flex flex-col items-center justify-center text-slate-500 text-[12px] font-semibold text-center px-4 gap-2 transition-colors bg-white/20 dark-theme:bg-black/10 hover:bg-white/40 dark-theme:hover:bg-black/20 mt-1">
+              <div id="widget-placeholder" class="start-item border-2 border-dashed border-slate-300/80 dark-theme:border-slate-600/80 rounded-[8px] h-24 flex flex-col items-center justify-center text-slate-500 text-[12px] font-semibold text-center px-4 gap-2 transition-colors bg-white/20 dark-theme:bg-black/10 hover:bg-white/40 dark-theme:bg-black/20 mt-1">
                   <div class="w-8 h-8 rounded-full bg-slate-200/50 dark-theme:bg-slate-700/50 flex items-center justify-center border border-slate-300/50 dark-theme:border-slate-600/50">
-                      <i class="ph-bold ph-plus text-[16px] text-slate-400"></i>
+                      <i class="ph-duotone ph-plus text-[16px] text-slate-400"></i>
                   </div>
                   <span class="start-content leading-tight">Drag modules here</span>
               </div>
@@ -1047,23 +1047,23 @@
           <!-- Action Grid -->
           <div class="taskbar-flat rounded-[12px] p-3 qs-step-1">
               <div class="flex justify-between items-center qs-step-3">
-                  <button class="w-[36px] h-[36px] shrink-0 rounded-[8px] flex items-center justify-center bg-[#0067c0] text-white transition-colors hover:bg-[#005a9e]">
-                      <i class="ph-bold ph-wifi-high text-[16px]"></i>
+                  <button class="w-[36px] h-[36px] shrink-0 rounded-[8px] flex items-center justify-center bg-[#0067c0] text-white transition-all duration-200 hover:scale-105 hover:bg-[#005a9e] shadow-sm hover:shadow-md">
+                      <i class="ph-duotone ph-wifi-high text-[16px]"></i>
                   </button>
-                  <button class="w-[36px] h-[36px] shrink-0 rounded-[8px] flex items-center justify-center glass-card transition-colors group">
-                      <i class="ph-bold ph-bluetooth-connected text-[16px] text-slate-700 transition-colors"></i>
+                  <button class="w-[36px] h-[36px] shrink-0 rounded-[8px] flex items-center justify-center glass-card transition-all duration-200 hover:scale-105 hover:bg-white/40 dark-theme:hover:bg-white/20 group shadow-sm hover:shadow-md">
+                      <i class="ph-duotone ph-bluetooth-connected text-[16px] text-slate-700 dark-theme:text-slate-300 group-hover:text-blue-600 transition-colors"></i>
                   </button>
-                  <button class="w-[36px] h-[36px] shrink-0 rounded-[8px] flex items-center justify-center glass-card transition-colors group">
-                      <i class="ph-bold ph-airplane-tilt text-[16px] text-slate-700 transition-colors"></i>
+                  <button class="w-[36px] h-[36px] shrink-0 rounded-[8px] flex items-center justify-center glass-card transition-all duration-200 hover:scale-105 hover:bg-white/40 dark-theme:hover:bg-white/20 group shadow-sm hover:shadow-md">
+                      <i class="ph-duotone ph-airplane-tilt text-[16px] text-slate-700 dark-theme:text-slate-300 group-hover:text-blue-600 transition-colors"></i>
                   </button>
-                  <button class="w-[36px] h-[36px] shrink-0 rounded-[8px] flex items-center justify-center glass-card transition-colors group">
-                      <i class="ph-bold ph-moon text-[16px] text-slate-700 transition-colors"></i>
+                  <button class="w-[36px] h-[36px] shrink-0 rounded-[8px] flex items-center justify-center glass-card transition-all duration-200 hover:scale-105 hover:bg-white/40 dark-theme:hover:bg-white/20 group shadow-sm hover:shadow-md">
+                      <i class="ph-duotone ph-moon text-[16px] text-slate-700 dark-theme:text-slate-300 group-hover:text-blue-600 transition-colors"></i>
                   </button>
-                  <button class="w-[36px] h-[36px] shrink-0 rounded-[8px] flex items-center justify-center glass-card transition-colors group">
-                      <i class="ph-bold ph-prohibit text-[16px] text-slate-700 transition-colors"></i>
+                  <button class="w-[36px] h-[36px] shrink-0 rounded-[8px] flex items-center justify-center glass-card transition-all duration-200 hover:scale-105 hover:bg-white/40 dark-theme:hover:bg-white/20 group shadow-sm hover:shadow-md">
+                      <i class="ph-duotone ph-prohibit text-[16px] text-slate-700 dark-theme:text-slate-300 group-hover:text-blue-600 transition-colors"></i>
                   </button>
-                  <button class="w-[36px] h-[36px] shrink-0 rounded-[8px] flex items-center justify-center glass-card transition-colors group">
-                      <i class="ph-bold ph-battery-plus text-[16px] text-slate-700 transition-colors"></i>
+                  <button class="w-[36px] h-[36px] shrink-0 rounded-[8px] flex items-center justify-center glass-card transition-all duration-200 hover:scale-105 hover:bg-white/40 dark-theme:hover:bg-white/20 group shadow-sm hover:shadow-md">
+                      <i class="ph-duotone ph-battery-plus text-[16px] text-slate-700 dark-theme:text-slate-300 group-hover:text-blue-600 transition-colors"></i>
                   </button>
               </div>
           </div>
@@ -1071,8 +1071,83 @@
           <!-- Brightness Slider -->
           <div class="taskbar-flat rounded-[12px] py-2.5 px-4 flex items-center gap-3 qs-step-2">
               <div class="flex items-center w-full gap-3 qs-step-3">
-                  <i class="ph-bold ph-sun text-slate-700 text-[16px] w-5 text-center"></i>
+                  <i class="ph-duotone ph-sun text-slate-700 text-[16px] w-5 text-center"></i>
                   <input type="range" id="qs-brightness" class="win-slider flex-grow" value="100" min="10" max="100" oninput="window.updateBrightness(this.value)">
+              </div>
+          </div>
+      </div>
+      
+      <!-- 5. Calendar & Notifications Overlay (Triggered by Clock click) -->
+      <div id="overlay-calendar" class="absolute bottom-[76px] w-[360px] z-[9998] overlay-right-hidden flex flex-col gap-2" style="transform-origin: bottom center;">
+          
+          <!-- Notifications Area -->
+          <div class="taskbar-flat rounded-[12px] p-4 flex flex-col gap-3 qs-step-1">
+              <div class="flex justify-between items-center qs-step-3">
+                  <span class="text-[13px] font-bold text-slate-900">Notifications</span>
+                  <button class="text-[11px] font-medium text-slate-500 hover:text-slate-800 transition-colors">Clear all</button>
+              </div>
+              <div class="glass-card rounded-[8px] p-3 flex items-start gap-3 qs-step-3">
+                  <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center shrink-0">
+                      <i class="ph-duotone ph-chat-circle text-blue-600 text-[16px]"></i>
+                  </div>
+                  <div class="flex flex-col">
+                      <span class="text-[12px] font-semibold text-slate-900">New Message</span>
+                      <span class="text-[11px] text-slate-600 leading-tight mt-0.5">You have 3 new messages from the team.</span>
+                  </div>
+              </div>
+          </div>
+          
+          <!-- Calendar Area -->
+          <div class="taskbar-flat rounded-[12px] p-4 flex flex-col qs-step-2">
+              <div class="flex justify-between items-center mb-4 qs-step-3">
+                  <span class="text-[14px] font-bold text-slate-900" id="calendar-month-year">April 2026</span>
+                  <div class="flex gap-1">
+                      <button class="w-7 h-7 rounded-[6px] flex items-center justify-center hover:bg-black/5 dark-theme:hover:bg-white/10 transition-colors"><i class="ph-bold ph-caret-up text-slate-600"></i></button>
+                      <button class="w-7 h-7 rounded-[6px] flex items-center justify-center hover:bg-black/5 dark-theme:hover:bg-white/10 transition-colors"><i class="ph-bold ph-caret-down text-slate-600"></i></button>
+                  </div>
+              </div>
+              <div class="grid grid-cols-7 gap-1 text-center mb-2 qs-step-3">
+                  <span class="text-[10px] font-semibold text-slate-500">Su</span>
+                  <span class="text-[10px] font-semibold text-slate-500">Mo</span>
+                  <span class="text-[10px] font-semibold text-slate-500">Tu</span>
+                  <span class="text-[10px] font-semibold text-slate-500">We</span>
+                  <span class="text-[10px] font-semibold text-slate-500">Th</span>
+                  <span class="text-[10px] font-semibold text-slate-500">Fr</span>
+                  <span class="text-[10px] font-semibold text-slate-500">Sa</span>
+              </div>
+              <div class="grid grid-cols-7 gap-1 text-center qs-step-3">
+                  <!-- Mock dates -->
+                  <div class="h-8 flex items-center justify-center text-[12px] text-slate-400">29</div>
+                  <div class="h-8 flex items-center justify-center text-[12px] text-slate-400">30</div>
+                  <div class="h-8 flex items-center justify-center text-[12px] text-slate-400">31</div>
+                  <div class="h-8 flex items-center justify-center text-[12px] font-medium text-slate-800 hover:bg-black/5 dark-theme:hover:bg-white/10 rounded-full cursor-pointer transition-colors">1</div>
+                  <div class="h-8 flex items-center justify-center text-[12px] font-medium text-slate-800 hover:bg-black/5 dark-theme:hover:bg-white/10 rounded-full cursor-pointer transition-colors">2</div>
+                  <div class="h-8 flex items-center justify-center text-[12px] font-medium text-slate-800 hover:bg-black/5 dark-theme:hover:bg-white/10 rounded-full cursor-pointer transition-colors">3</div>
+                  <div class="h-8 flex items-center justify-center text-[12px] font-medium text-slate-800 hover:bg-black/5 dark-theme:hover:bg-white/10 rounded-full cursor-pointer transition-colors">4</div>
+                  
+                  <div class="h-8 flex items-center justify-center text-[12px] font-medium text-slate-800 hover:bg-black/5 dark-theme:hover:bg-white/10 rounded-full cursor-pointer transition-colors">5</div>
+                  <div class="h-8 flex items-center justify-center text-[12px] font-medium text-slate-800 hover:bg-black/5 dark-theme:hover:bg-white/10 rounded-full cursor-pointer transition-colors">6</div>
+                  <div class="h-8 flex items-center justify-center text-[12px] font-medium text-slate-800 hover:bg-black/5 dark-theme:hover:bg-white/10 rounded-full cursor-pointer transition-colors">7</div>
+                  <div class="h-8 flex items-center justify-center text-[12px] font-medium text-slate-800 hover:bg-black/5 dark-theme:hover:bg-white/10 rounded-full cursor-pointer transition-colors">8</div>
+                  <div class="h-8 flex items-center justify-center text-[12px] font-medium text-slate-800 hover:bg-black/5 dark-theme:hover:bg-white/10 rounded-full cursor-pointer transition-colors">9</div>
+                  <div class="h-8 flex items-center justify-center text-[12px] font-medium text-slate-800 hover:bg-black/5 dark-theme:hover:bg-white/10 rounded-full cursor-pointer transition-colors">10</div>
+                  <div class="h-8 flex items-center justify-center text-[12px] font-medium text-slate-800 hover:bg-black/5 dark-theme:hover:bg-white/10 rounded-full cursor-pointer transition-colors">11</div>
+                  
+                  <div class="h-8 flex items-center justify-center text-[12px] font-medium text-slate-800 hover:bg-black/5 dark-theme:hover:bg-white/10 rounded-full cursor-pointer transition-colors">12</div>
+                  <div class="h-8 flex items-center justify-center text-[12px] font-medium text-slate-800 hover:bg-black/5 dark-theme:hover:bg-white/10 rounded-full cursor-pointer transition-colors">13</div>
+                  <div class="h-8 flex items-center justify-center text-[12px] font-medium text-slate-800 hover:bg-black/5 dark-theme:hover:bg-white/10 rounded-full cursor-pointer transition-colors">14</div>
+                  <div class="h-8 flex items-center justify-center text-[12px] font-medium text-slate-800 hover:bg-black/5 dark-theme:hover:bg-white/10 rounded-full cursor-pointer transition-colors">15</div>
+                  <div class="h-8 flex items-center justify-center text-[12px] font-medium text-slate-800 hover:bg-black/5 dark-theme:hover:bg-white/10 rounded-full cursor-pointer transition-colors">16</div>
+                  <div class="h-8 flex items-center justify-center text-[12px] font-medium text-slate-800 hover:bg-black/5 dark-theme:hover:bg-white/10 rounded-full cursor-pointer transition-colors">17</div>
+                  <div class="h-8 flex items-center justify-center text-[12px] font-medium text-slate-800 hover:bg-black/5 dark-theme:hover:bg-white/10 rounded-full cursor-pointer transition-colors">18</div>
+
+                  <div class="h-8 flex items-center justify-center text-[12px] font-medium text-slate-800 hover:bg-black/5 dark-theme:hover:bg-white/10 rounded-full cursor-pointer transition-colors">19</div>
+                  <div class="h-8 flex items-center justify-center text-[12px] font-medium text-slate-800 hover:bg-black/5 dark-theme:hover:bg-white/10 rounded-full cursor-pointer transition-colors">20</div>
+                  <div class="h-8 flex items-center justify-center text-[12px] font-medium text-slate-800 hover:bg-black/5 dark-theme:hover:bg-white/10 rounded-full cursor-pointer transition-colors">21</div>
+                  <div class="h-8 flex items-center justify-center text-[12px] font-medium text-slate-800 hover:bg-black/5 dark-theme:hover:bg-white/10 rounded-full cursor-pointer transition-colors">22</div>
+                  <div class="h-8 flex items-center justify-center text-[12px] font-bold text-white bg-blue-600 rounded-full cursor-pointer shadow-sm">23</div>
+                  <div class="h-8 flex items-center justify-center text-[12px] font-medium text-slate-800 hover:bg-black/5 dark-theme:hover:bg-white/10 rounded-full cursor-pointer transition-colors">24</div>
+                  <div class="h-8 flex items-center justify-center text-[12px] font-medium text-slate-800 hover:bg-black/5 dark-theme:hover:bg-white/10 rounded-full cursor-pointer transition-colors">25</div>
               </div>
           </div>
       </div>
@@ -1101,9 +1176,9 @@
                   <img src="https://img.icons8.com/?size=100&id=50nJymaeC8CY&format=png&color=000000" class="h-[16px] w-auto opacity-80 group-hover:opacity-100 transition-opacity pointer-events-none" draggable="false" alt="System Tray">
                 </button>
                 <div class="w-[1px] h-5 bg-slate-300 dark-theme:bg-slate-600 mx-1 rounded-full pointer-events-none tb-divider shrink-0 z-10 relative"></div>
-                <button id="tb-app-btn-clock" draggable="true" ondragstart="window.dragExtractedApp(event, 'clock')" class="flex flex-col items-end justify-center hover:bg-black/5 dark-theme:hover:bg-white/10 px-3 h-[36px] rounded-[6px] transition-colors cursor-grab active:cursor-grabbing mx-0.5 shrink-0">
-                  <span id="tb-time" class="text-[12px] font-medium text-slate-900 pointer-events-none leading-none text-3d-float"></span>
-                  <span id="tb-date" class="text-[10px] text-slate-600 mt-0.5 pointer-events-none leading-none"></span>
+                <button id="tb-app-btn-clock" onclick="window.toggleCalendar(event)" draggable="true" ondragstart="window.dragExtractedApp(event, 'clock')" class="flex flex-col items-end justify-center hover:bg-black/5 dark-theme:hover:bg-white/10 px-3 h-[36px] rounded-[6px] transition-colors cursor-grab active:cursor-grabbing mx-0.5 shrink-0">
+                  <span class="js-tb-time text-[12px] font-medium text-slate-900 pointer-events-none leading-none text-3d-float"></span>
+                  <span class="js-tb-date text-[10px] text-slate-600 mt-0.5 pointer-events-none leading-none"></span>
                 </button>
             </div>
 
@@ -1146,6 +1221,7 @@
     window.dragWidget = dragWidget;
 
     window.toggleQuickSettings = toggleQuickSettings;
+    window.toggleCalendar = toggleCalendar;
     window.updateWeatherDisplay = updateWeatherDisplay;
 
     let calcStr = "0";
@@ -1178,9 +1254,9 @@
             </button>
         `;
         if (id === 'clock') return `
-            <button id="tb-app-btn-clock" draggable="true" ondragstart="window.dragExtractedApp(event, 'clock')" class="flex flex-col items-end justify-center hover:bg-black/5 dark-theme:hover:bg-white/10 px-3 h-[36px] rounded-[6px] transition-colors cursor-grab active:cursor-grabbing mx-0.5 shrink-0">
-              <span id="tb-time" class="text-[12px] font-medium text-slate-900 pointer-events-none leading-none text-3d-float"></span>
-              <span id="tb-date" class="text-[10px] text-slate-600 mt-0.5 pointer-events-none leading-none"></span>
+            <button id="tb-app-btn-clock" onclick="window.toggleCalendar(event)" draggable="true" ondragstart="window.dragExtractedApp(event, 'clock')" class="flex flex-col items-end justify-center hover:bg-black/5 dark-theme:hover:bg-white/10 px-3 h-[36px] rounded-[6px] transition-colors cursor-grab active:cursor-grabbing mx-0.5 shrink-0">
+              <span class="js-tb-time text-[12px] font-medium text-slate-900 pointer-events-none leading-none text-3d-float"></span>
+              <span class="js-tb-date text-[10px] text-slate-600 mt-0.5 pointer-events-none leading-none"></span>
             </button>
         `;
         const app = appDatabase.find(a => a.id === id);
@@ -1204,11 +1280,9 @@
 
     function initSystem() {
         updateClock(); 
-        updateLockClock();
         updateTaskbarCorners();
         initWeatherAPI();
         setInterval(updateClock, 1000);
-        setInterval(updateLockClock, 1000);
         
         const trayBtn = document.getElementById('tb-app-btn-tray');
         if(trayBtn) trayBtn.addEventListener('click', toggleQuickSettings);
@@ -1341,28 +1415,59 @@
         }
     }
 
+    function toggleCalendar(e) {
+        if (e) e.stopPropagation();
+        
+        const overlayCalendar = document.getElementById('overlay-calendar');
+        const clockBtnTarget = document.getElementById('tb-app-btn-clock') || e.currentTarget;
+        if(!clockBtnTarget || !overlayCalendar) return;
+
+        if (overlayCalendar.classList.contains('overlay-right-visible')) {
+            closeAllOverlays();
+        } else {
+            closeAllOverlays();
+            
+            const rect = clockBtnTarget.getBoundingClientRect();
+            const overlayWidth = 360; 
+            let leftPos = rect.left + (rect.width / 2) - (overlayWidth / 2);
+            
+            if (leftPos + overlayWidth > window.innerWidth - 20) {
+                leftPos = window.innerWidth - overlayWidth - 20;
+            }
+            
+            overlayCalendar.style.left = `${leftPos}px`;
+            
+            overlayCalendar.classList.remove('overlay-right-hidden');
+            overlayCalendar.classList.add('overlay-right-visible');
+        }
+    }
+
     function updateClock() {
       const d = new Date();
       const timeStr = d.toLocaleTimeString([], {hour: 'numeric', minute:'2-digit'});
       const dateStr = d.toLocaleDateString(undefined, {month:'numeric', day:'numeric'});
-      document.querySelectorAll('#tb-time').forEach(el => el.innerText = timeStr);
-      document.querySelectorAll('#tb-date').forEach(el => el.innerText = dateStr);
+      
+      document.querySelectorAll('.js-tb-time').forEach(el => el.innerText = timeStr);
+      document.querySelectorAll('.js-tb-date').forEach(el => el.innerText = dateStr);
+      document.querySelectorAll('#start-clock-time').forEach(el => el.innerText = timeStr);
+      
       const dcTime = document.getElementById('dc-time');
       const dcDate = document.getElementById('dc-date');
       if (dcTime) dcTime.innerText = timeStr;
       if (dcDate) dcDate.innerText = d.toLocaleDateString(undefined, {weekday: 'long', month:'long', day:'numeric'});
       
+      const lockTime = document.getElementById('lock-time');
+      const lockDate = document.getElementById('lock-date');
+      if(lockTime) lockTime.innerText = timeStr;
+      if(lockDate) lockDate.innerText = d.toLocaleDateString(undefined, {weekday: 'long', month:'long', day:'numeric'});
+      
+      const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+      const calendarMonthYear = document.getElementById('calendar-month-year');
+      if(calendarMonthYear) calendarMonthYear.innerText = `${monthNames[d.getMonth()]} ${d.getFullYear()}`;
+
       if (d.getMinutes() === 0 && d.getSeconds() === 0) {
           updateWeatherDisplay();
       }
-    }
-
-    function updateLockClock() {
-        const d = new Date();
-        const lTime = document.getElementById('lock-time');
-        const lDate = document.getElementById('lock-date');
-        if(lTime) lTime.innerText = d.toLocaleTimeString([], {hour: 'numeric', minute:'2-digit'});
-        if(lDate) lDate.innerText = d.toLocaleDateString(undefined, {weekday: 'long', month:'long', day:'numeric'});
     }
 
     function dismissLockScreen() {
@@ -1462,6 +1567,7 @@
         const searchInput = document.getElementById('search-input');
         const overlayStart = document.getElementById('overlay-start');
         const overlayQuick = document.getElementById('overlay-quick');
+        const overlayCalendar = document.getElementById('overlay-calendar');
 
         if(overlaySearch && overlaySearch.classList.contains('step-1') && !overlaySearch.classList.contains('closing')) {
             overlaySearch.classList.add('closing');
@@ -1497,6 +1603,17 @@
                 overlayQuick.classList.add('overlay-right-hidden');
                 setTimeout(() => {
                     overlayQuick.classList.remove('overlay-right-closing');
+                }, 250);
+            }, 150); 
+        }
+
+        if(overlayCalendar && overlayCalendar.classList.contains('overlay-right-visible') && !overlayCalendar.classList.contains('overlay-right-closing')) {
+            overlayCalendar.classList.add('overlay-right-closing');
+            setTimeout(() => {
+                overlayCalendar.classList.remove('overlay-right-visible');
+                overlayCalendar.classList.add('overlay-right-hidden');
+                setTimeout(() => {
+                    overlayCalendar.classList.remove('overlay-right-closing');
                 }, 250);
             }, 150); 
         }
@@ -1674,6 +1791,10 @@
 
     function dragTaskbarSegment(ev, type) {
         ev.dataTransfer.setData("widgetType", type);
+        ev.dataTransfer.setData("draggingTaskbarId", ev.currentTarget.id);
+        setTimeout(() => {
+            if(ev.target && ev.target.classList) ev.target.classList.add('is-taskbar-dragging');
+        }, 0);
     }
     
     function handleCustomWallpaper(event) {
@@ -1817,7 +1938,7 @@
             s.style.backgroundColor = '';
         });
 
-        const hoveredSegment = e.target.closest('.taskbar-segment');
+        const hoveredSegment = (e.target && typeof e.target.closest === 'function') ? e.target.closest('.taskbar-segment') : null;
         if (hoveredSegment && draggable && hoveredSegment !== draggable) {
             const box = hoveredSegment.getBoundingClientRect();
             const offset = e.clientX - box.left - box.width / 2;
@@ -1867,49 +1988,25 @@
     }
 
     function removeWidget(type) {
-        const ev = { preventDefault: () => {}, clientX: window.innerWidth / 2, dataTransfer: { getData: () => type + '_back' } };
+        const appId = type.replace('_back', '');
+        const ev = { 
+            preventDefault: () => {}, 
+            clientX: window.innerWidth / 2, 
+            target: document.getElementById('taskbar-container') || document.body,
+            dataTransfer: { getData: (key) => key === 'widgetType' ? appId + '_back' : '' } 
+        };
         dropToTaskbar(ev);
     }
 
-    function dropWidget(ev) {
-        ev.preventDefault();
-        let type = ev.dataTransfer.getData("widgetType");
-        
-        if (type === 'extract_app') {
-            const appId = ev.dataTransfer.getData("appId");
-            const sourceBtnId = ev.dataTransfer.getData("sourceBtnId");
-            const sourceBtn = document.getElementById(sourceBtnId);
-            if (sourceBtn) {
-                const prev = sourceBtn.previousElementSibling;
-                const next = sourceBtn.nextElementSibling;
-                if (prev && prev.classList.contains('tb-divider')) prev.remove();
-                else if (next && next.classList.contains('tb-divider')) next.remove();
-                const parentSeg = sourceBtn.closest('.taskbar-segment');
-                sourceBtn.remove();
-                if (parentSeg) {
-                    const remaining = Array.from(parentSeg.children).filter(c => !c.classList.contains('tb-divider') && c.id !== 'tb-start');
-                    if (remaining.length === 0 && parentSeg.id !== 'tb-apps-segment') parentSeg.remove();
-                }
-                updateTaskbarCorners();
-            }
-            type = appId + "_back"; 
-        }
-
-        if (!type || !type.includes('_back')) return;
-        const rawType = type.replace('_back', '');
-
-        if (['calculator', 'notepad', 'photos', 'settings'].includes(rawType)) {
-             const placeholder = document.getElementById('widget-placeholder');
-             if(placeholder) placeholder.style.display = 'flex';
-             return;
-        }
-
-        const placeholder = document.getElementById('widget-placeholder');
-        if(placeholder) placeholder.style.display = 'none';
+    function spawnWidgetInDashboard(rawType) {
+        if (['calculator', 'notepad', 'photos', 'settings'].includes(rawType)) return;
 
         const container = document.getElementById('start-widget-area');
         if(!container) return;
         if (document.getElementById(`widget-${rawType}`)) return;
+
+        const placeholder = document.getElementById('widget-placeholder');
+        if(placeholder) placeholder.style.display = 'none';
 
         const widget = document.createElement('div');
         widget.id = `widget-${rawType}`;
@@ -1919,8 +2016,8 @@
         
         if (rawType === 'weather') {
             widget.innerHTML = `
-                 <button onclick="removeWidget('${type}')" class="absolute top-2 right-2 w-5 h-5 rounded-[4px] bg-transparent hover:bg-red-500 flex items-center justify-center transition-colors pointer-events-auto z-50 group/close">
-                     <i class="ph-bold ph-x text-[10px] text-slate-500 group-hover/close:text-white"></i>
+                 <button onclick="removeWidget('${rawType}_back')" class="absolute top-2 right-2 w-5 h-5 rounded-[4px] bg-transparent hover:bg-red-500 flex items-center justify-center transition-colors pointer-events-auto z-50 group/close">
+                     <i class="ph-duotone ph-x text-[10px] text-slate-500 group-hover/close:text-white"></i>
                  </button>
                  <div class="start-content flex justify-between items-start relative z-10 pointer-events-none w-full">
                      <div class="flex items-center gap-2">
@@ -1937,8 +2034,8 @@
             `;
         } else if (rawType === 'tray') {
             widget.innerHTML = `
-                 <button onclick="removeWidget('${type}')" class="absolute top-2 right-2 w-5 h-5 rounded-[4px] bg-transparent hover:bg-red-500 flex items-center justify-center transition-colors pointer-events-auto z-50 group/close">
-                     <i class="ph-bold ph-x text-[10px] text-slate-500 group-hover/close:text-white"></i>
+                 <button onclick="removeWidget('${rawType}_back')" class="absolute top-2 right-2 w-5 h-5 rounded-[4px] bg-transparent hover:bg-red-500 flex items-center justify-center transition-colors pointer-events-auto z-50 group/close">
+                     <i class="ph-duotone ph-x text-[10px] text-slate-500 group-hover/close:text-white"></i>
                  </button>
                  <div class="start-content flex items-center gap-2 mb-2 pointer-events-none">
                      <img src="https://img.icons8.com/?size=100&id=50nJymaeC8CY&format=png&color=000000" class="w-4 h-4 opacity-80">
@@ -1946,29 +2043,86 @@
                  </div>
                  <div class="start-content bg-white/50 dark-theme:bg-black/20 rounded-[6px] p-3 flex flex-col gap-2.5 pointer-events-none">
                      <div class="flex items-center justify-between">
-                        <div class="flex items-center gap-2.5"><i class="ph-bold ph-wifi-high text-blue-600 text-sm"></i><span class="text-[12px] text-slate-900">Vision_5G</span></div>
+                        <div class="flex items-center gap-2.5"><i class="ph-duotone ph-wifi-high text-blue-600 text-sm"></i><span class="text-[12px] text-slate-900">Vision_5G</span></div>
                         <span class="text-[9px] font-medium text-slate-600">Connected</span>
                      </div>
                  </div>
             `;
         } else if (rawType === 'clock') {
              widget.innerHTML = `
-                 <button onclick="removeWidget('${type}')" class="absolute top-2 right-2 w-5 h-5 rounded-[4px] bg-transparent hover:bg-red-500 flex items-center justify-center transition-colors pointer-events-auto z-50 group/close">
-                     <i class="ph-bold ph-x text-[10px] text-slate-500 group-hover/close:text-white"></i>
+                 <button onclick="removeWidget('${rawType}_back')" class="absolute top-2 right-2 w-5 h-5 rounded-[4px] bg-transparent hover:bg-red-500 flex items-center justify-center transition-colors pointer-events-auto z-50 group/close">
+                     <i class="ph-duotone ph-x text-[10px] text-slate-500 group-hover/close:text-white"></i>
                  </button>
                  <div class="start-content flex items-center gap-2 mb-2 pointer-events-none">
-                     <i class="ph-bold ph-clock text-[16px] text-blue-500"></i>
+                     <i class="ph-duotone ph-clock text-[16px] text-blue-500"></i>
                      <span class="text-[11px] font-semibold text-slate-900">Time & Date</span>
                  </div>
                  <div class="start-content bg-white/50 dark-theme:bg-black/20 rounded-[6px] p-4 flex flex-col items-center justify-center pointer-events-none">
                      <h2 id="start-clock-time" class="text-[24px] font-medium text-slate-900 tracking-tight"></h2>
                  </div>
             `;
-            setTimeout(updateClock, 50);
         }
         
         container.appendChild(widget);
         if (rawType === 'weather') updateWeatherDisplay(true); 
+        if (rawType === 'clock') updateClock();
+    }
+
+    function dropWidget(ev) {
+        ev.preventDefault();
+        let type = ev.dataTransfer.getData("widgetType");
+        
+        if (type === 'segment') {
+            const draggingId = ev.dataTransfer.getData("draggingTaskbarId");
+            const segment = document.getElementById(draggingId);
+            if (segment) {
+                const btns = Array.from(segment.querySelectorAll('button[id^="tb-app-btn-"]'));
+                const widgetBtns = btns.filter(b => ['weather', 'tray', 'clock'].includes(b.id.replace('tb-app-btn-', '')));
+                
+                if (widgetBtns.length > 0) {
+                    widgetBtns.forEach(btn => {
+                        const appId = btn.id.replace('tb-app-btn-', '');
+                        spawnWidgetInDashboard(appId);
+                    });
+                    segment.remove();
+                    updateTaskbarCorners();
+                }
+            }
+            return;
+        }
+        
+        if (type === 'extract_app') {
+            const appId = ev.dataTransfer.getData("appId");
+            
+            // Prevent normal applications from being dragged into the dashboard
+            if (['calculator', 'notepad', 'photos', 'settings'].includes(appId)) return;
+
+            const sourceBtnId = ev.dataTransfer.getData("sourceBtnId");
+            const sourceBtn = document.getElementById(sourceBtnId);
+            
+            if (sourceBtn) {
+                const prev = sourceBtn.previousElementSibling;
+                const next = sourceBtn.nextElementSibling;
+                if (prev && prev.classList.contains('tb-divider')) prev.remove();
+                else if (next && next.classList.contains('tb-divider')) next.remove();
+                
+                const parentSeg = (sourceBtn && typeof sourceBtn.closest === 'function') ? sourceBtn.closest('.taskbar-segment') : null;
+                sourceBtn.remove();
+                
+                if (parentSeg) {
+                    const remaining = Array.from(parentSeg.children).filter(c => !c.classList.contains('tb-divider') && c.id !== 'tb-start');
+                    if (remaining.length === 0 && parentSeg.id !== 'tb-apps-segment') parentSeg.remove();
+                }
+                updateTaskbarCorners();
+            }
+            
+            spawnWidgetInDashboard(appId); 
+            return;
+        }
+
+        if (!type || !type.includes('_back')) return;
+        const rawType = type.replace('_back', '');
+        spawnWidgetInDashboard(rawType);
     }
     
     function dropToTaskbar(ev) {
@@ -1992,7 +2146,7 @@
                 if (prev && prev.classList.contains('tb-divider')) prev.remove();
                 else if (next && next.classList.contains('tb-divider')) next.remove();
                 
-                const parentSeg = sourceBtn.closest('.taskbar-segment');
+                const parentSeg = (sourceBtn && typeof sourceBtn.closest === 'function') ? sourceBtn.closest('.taskbar-segment') : null;
                 sourceBtn.remove();
                 if (parentSeg) {
                     const remaining = Array.from(parentSeg.children).filter(c => !c.classList.contains('tb-divider') && c.id !== 'tb-start');
@@ -2005,7 +2159,7 @@
 
         const draggingId = ev.dataTransfer.getData("draggingTaskbarId");
         const draggable = document.getElementById(draggingId);
-        const targetSegment = ev.target.closest('.taskbar-segment');
+        const targetSegment = (ev.target && typeof ev.target.closest === 'function') ? ev.target.closest('.taskbar-segment') : null;
 
         if (draggable && targetSegment && targetSegment !== draggable && draggable.classList.contains('taskbar-segment')) {
             const box = targetSegment.getBoundingClientRect();
@@ -2059,7 +2213,7 @@
             
             const segment = document.createElement('div');
             segment.id = 'tb-segment-' + appId + '-' + Date.now(); 
-            segment.className = "taskbar-segment pointer-events-auto h-[48px] taskbar-flat flex items-center px-1 cursor-grab active:cursor-grabbing transition-all duration-300 origin-center z-10 scale-in";
+            segment.className = "taskbar-segment pointer-events-auto h-[48px] taskbar-flat flex items-center px-1 cursor-grab active:cursor-grabbing transition-all duration-300 origin-center z-10 scale-in border border-white/30";
             segment.draggable = true;
             segment.ondragstart = (e) => dragTaskbarSegment(e, 'segment');
             
@@ -2075,7 +2229,7 @@
     }
 
     document.addEventListener('dragend', (ev) => {
-        if(ev.target.classList) ev.target.classList.remove('is-taskbar-dragging', 'opacity-40', 'dragging');
+        if(ev.target && ev.target.classList) ev.target.classList.remove('is-taskbar-dragging', 'opacity-40', 'dragging');
         document.querySelectorAll('.taskbar-segment').forEach(s => { s.style.boxShadow = ''; s.style.backgroundColor = ''; });
         updateTaskbarCorners();
     });
