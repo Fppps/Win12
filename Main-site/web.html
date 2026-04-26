@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Webwindows 12: 1H05 Rebuild Wiki</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Segoe UI Variable Text"', '"Segoe UI"', 'system-ui', 'sans-serif'],
+                        display: ['"Segoe UI Variable Display"', '"Segoe UI"', 'system-ui', 'sans-serif'],
+                    },
+                    colors: {
+                        os: {
+                            accent: 'var(--os-accent)',
+                            dark: 'var(--os-dark)',
+                            card: 'var(--os-card)',
+                            cardHover: 'var(--os-card-hover)',
+                            border: 'var(--os-border)'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        :root {
+            --os-accent: #006eff;
+            --os-dark: #050505;
+            --os-card: rgba(255, 255, 255, 0.03);
+            --os-card-hover: rgba(255, 255, 255, 0.05);
+            --os-border: rgba(255, 255, 255, 0.08);
+        }
+
+        body {
+            background-color: var(--os-dark);
+            /* Added subtle wiki/doc dotted grid background */
+            background-image: radial-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+            background-size: 24px 24px;
+            color: #e2e8f0;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Ambient Glows */
+        .glow-orb-1 { position: fixed; top: -10%; left: -5%; width: 50vw; height: 50vw; background: radial-gradient(circle, rgba(0, 110, 255, 0.05) 0%, rgba(0, 110, 255, 0) 70%); z-index: -1; pointer-events: none; }
+        .glow-orb-2 { position: fixed; bottom: -10%; right: -5%; width: 40vw; height: 40vw; background: radial-gradient(circle, rgba(147, 51, 234, 0.05) 0%, rgba(147, 51, 234, 0) 70%); z-index: -1; pointer-events: none; }
+
+        /* Fluent Design Glass Cards */
+        .fluent-card {
+            background: var(--os-card);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border: 1px solid var(--os-border);
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .fluent-card-interactive:hover {
+            background: var(--os-card-hover);
+            border-color: rgba(255, 255, 255, 0.12);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.15); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.25); }
+
+        * { outline: none !important; }
+
+        /* Custom Webwindows Logo */
+        .start-logo-masked {
+            width: 20px;
+            height: 20px;
+            background: linear-gradient(135deg, color-mix(in srgb, var(--os-accent), white 50%), var(--os-accent), color-mix(in srgb, var(--os-accent), black 30%), color-mix(in srgb, var(--os-accent), white 20%));
+            background-size: 300% 300%;
+            background-position: 0% 50%;
+            -webkit-mask-image: url('https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/d524f23f-503e-4d1d-8ee0-96e655258add/dhb97eu-3b00bbaf-f050-4657-83da-0b1664d7c022.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiIvZi9kNTI0ZjIzZi01MDNlLTRkMWQtOGVlMC05NmU2NTUyNThhZGQvZGhiOTdldS0zYjAwYmJhZi1mMDUwLTQ2NTctODNkYS0wYjE2NjRkN2MwMjIucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.o1jDig1STxxan1lSgwa6kt9pAnjG080eji1BbENBT3k');
+            mask-image: url('https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/d524f23f-503e-4d1d-8ee0-96e655258add/dhb97eu-3b00bbaf-f050-4657-83da-0b1664d7c022.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiIvZi9kNTI0ZjIzZi01MDNlLTRkMWQtOGVlMC05NmU2NTUyNThhZGQvZGhiOTdldS0zYjAwYmJhZi1mMDUwLTQ2NTctODNkYS0wYjE2NjRkN2MwMjIucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.o1jDig1STxxan1lSgwa6kt9pAnjG080eji1BbENBT3k');
+            -webkit-mask-size: contain; mask-size: contain;
+            -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+            -webkit-mask-position: center; mask-position: center;
+        }
+
+        /* Wiki Table Styling */
+        .wiki-table th { background: rgba(255, 255, 255, 0.02); font-weight: 600; color: rgba(255, 255, 255, 0.6); padding: 10px 14px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); text-align: left; }
+        .wiki-table td { padding: 10px 14px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); color: rgba(255, 255, 255, 0.85); }
+        .wiki-table tr:last-child td, .wiki-table tr:last-child th { border-bottom: none; }
+    </style>
+</head>
+<body class="selection:bg-os-accent selection:text-white">
+
+    <div class="glow-orb-1"></div>
+    <div class="glow-orb-2"></div>
+
+    <!-- Top Navigation (Documentation Style) -->
+    <nav class="fixed top-0 w-full z-50 fluent-card !rounded-none !border-x-0 !border-t-0 py-3 px-6 flex justify-between items-center h-14">
+        <div class="flex items-center gap-4 cursor-pointer group">
+            <div class="start-logo-masked pointer-events-none group-hover:scale-110 transition-transform"></div>
+            <div class="flex items-baseline gap-2">
+                <span class="font-semibold text-white text-sm group-hover:text-blue-400 transition-colors">Webwindows 12</span>
+                <span class="text-white/40 text-xs">/</span>
+                <span class="text-white/70 text-sm font-medium hover:text-white transition-colors">Documentation</span>
+                <span class="text-white/40 text-xs">/</span>
+                <span class="text-white text-sm font-medium">Release Notes</span>
+            </div>
+        </div>
+        <div class="flex items-center gap-4">
+            <div class="hidden sm:flex items-center bg-black/40 border border-white/10 rounded-md px-3 py-1.5 text-xs text-white/50 w-64 cursor-text hover:border-white/20 transition-colors">
+                <i class="ph-bold ph-magnifying-glass mr-2"></i> Search wiki (Ctrl+K)
+            </div>
+            <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-blue-600 to-purple-600 text-white flex items-center justify-center text-xs font-bold shadow-lg shadow-blue-500/20">
+                AD
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Wiki Layout -->
+    <main class="max-w-7xl mx-auto pt-24 pb-20 px-4 sm:px-8 grid grid-cols-1 lg:grid-cols-12 gap-10 relative z-10">
+        
+        <!-- Left Sidebar (Table of Contents & Branches) -->
+        <aside class="lg:col-span-3 hidden lg:block">
+            <div class="sticky top-24 space-y-8">
+                
+                <!-- Better Branch Selector -->
+                <div>
+                    <h3 class="text-xs font-bold text-white/40 uppercase tracking-widest mb-3 px-3 flex items-center gap-2"><i class="ph-bold ph-git-branch"></i> Version Branches</h3>
+                    <ul class="space-y-2">
+                        <li>
+                            <a href="#" class="flex items-center justify-between px-3 py-2.5 rounded-md bg-blue-500/10 border border-blue-500/20 text-blue-400 text-sm font-medium w-full transition-colors hover:bg-blue-500/20 shadow-[inset_0_1px_0_rgba(255,255,255,0.1)]">
+                                <span class="flex items-center gap-2"><i class="ph-fill ph-check-circle"></i> 1H05 Rebuild</span>
+                                <span class="bg-blue-500/20 text-[10px] px-1.5 py-0.5 rounded text-blue-300 uppercase font-bold tracking-wider">Active</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#legacy-branch" class="flex items-center justify-between px-3 py-2.5 rounded-md bg-white/5 border border-white/5 text-white/60 text-sm font-medium w-full transition-colors hover:bg-white/10 hover:text-white hover:border-white/10">
+                                <span class="flex items-center gap-2"><i class="ph-fill ph-archive"></i> 1H04 Legacy</span>
+                                <span class="text-[10px] px-1.5 py-0.5 rounded text-white/40 uppercase font-bold tracking-wider">Archived</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Article Links -->
+                <div>
+                    <h3 class="text-xs font-bold text-white/40 uppercase tracking-widest mb-3 px-3 flex items-center gap-2"><i class="ph-bold ph-list-dashes"></i> On This Page</h3>
+                    <ul class="space-y-1 border-l border-white/10 ml-3">
+                        <li class="mb-2">
+                            <span class="block px-4 py-1 text-xs font-bold text-white/30 uppercase tracking-wider">1H05 Articles</span>
+                        </li>
+                        <li>
+                            <a href="#build-030" class="block px-4 py-1.5 text-sm text-blue-400 border-l-2 border-blue-500 -ml-[1px] bg-white/5 hover:bg-white/10 transition-colors">
+                                Build 030 <span class="text-[10px] text-blue-300/60 ml-2 uppercase font-bold">Latest</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#build-025" class="block px-4 py-1.5 text-sm text-white/60 hover:text-white hover:bg-white/5 transition-colors border-l-2 border-transparent -ml-[1px]">
+                                Build 025
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#build-015" class="block px-4 py-1.5 text-sm text-white/60 hover:text-white hover:bg-white/5 transition-colors border-l-2 border-transparent -ml-[1px]">
+                                Build 015
+                            </a>
+                        </li>
+                        <li class="mt-4 mb-2 pt-2 border-t border-white/5">
+                            <span class="block px-4 py-1 text-xs font-bold text-white/30 uppercase tracking-wider">1H04 Articles</span>
+                        </li>
+                        <li>
+                            <a href="#official-1h04" class="block px-4 py-1.5 text-sm text-white/60 hover:text-white hover:bg-white/5 transition-colors border-l-2 border-transparent -ml-[1px]">
+                                1H04 Official
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#alpha" class="block px-4 py-1.5 text-sm text-white/60 hover:text-white hover:bg-white/5 transition-colors border-l-2 border-transparent -ml-[1px]">
+                                1H04 Alpha
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Right Content Area (Documentation) -->
+        <div class="lg:col-span-9 space-y-12">
+            
+            <!-- Main Title Header -->
+            <header class="mb-8 border-b border-white/10 pb-8 pt-4">
+                <h1 class="text-4xl sm:text-5xl font-display font-bold text-white tracking-tight mb-4 flex items-center gap-3">
+                    <i class="ph-duotone ph-book-open-text text-blue-500 text-4xl"></i> 1H05 Rebuild Documentation
+                </h1>
+                <p class="text-base sm:text-lg text-white/60 leading-relaxed max-w-3xl">
+                    This document contains the official patch notes and structural documentation for the Webwindows 12 "Rebuild" updates. Features are listed chronologically below.
+                </p>
+            </header>
+
+            <!-- UPDATE: Build 030 -->
+            <article id="build-030" class="fluent-card fluent-card-interactive rounded-xl overflow-hidden scroll-mt-24">
+                <div class="bg-gradient-to-r from-blue-500/10 to-transparent border-b border-blue-500/20 px-6 py-5 flex flex-wrap items-center justify-between gap-4">
+                    <div class="flex items-center gap-3">
+                        <div class="p-2 rounded-lg bg-blue-500/20 text-blue-400"><i class="ph-fill ph-rocket-launch text-xl"></i></div>
+                        <div>
+                            <h2 class="text-2xl font-bold text-white tracking-tight">1H05: Build 030</h2>
+                            <p class="text-sm font-medium text-white/50">"The Intentionality Update"</p>
+                        </div>
+                    </div>
+                    <div class="flex flex-col items-end">
+                        <span class="px-2.5 py-1 rounded bg-blue-500/20 text-blue-400 text-xs font-bold uppercase tracking-wider border border-blue-500/20">Release Preview</span>
+                    </div>
+                </div>
+                
+                <div class="p-6 sm:p-8">
+                    <!-- Metadata Table -->
+                    <div class="mb-8 rounded-lg border border-white/10 overflow-hidden bg-black/40 shadow-inner">
+                        <table class="w-full text-left text-sm wiki-table">
+                            <tbody>
+                                <tr>
+                                    <th class="w-1/4">Release Date</th>
+                                    <td>Today - Evening</td>
+                                </tr>
+                                <tr>
+                                    <th>Focus Area</th>
+                                    <td>Interactive UI, Storage Handling, Widget Fixes</td>
+                                </tr>
+                                <tr>
+                                    <th>Status</th>
+                                    <td><span class="text-emerald-400 flex items-center gap-1.5 font-medium"><i class="ph-fill ph-check-circle"></i> Stable Build</span></td>
+                                </tr>
+                                <tr>
+                                    <th>Roadmap</th>
+                                    <td>Path to Official Release (Build 040)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Flex Layout for Content + Thumbnail -->
+                    <div class="flex flex-col sm:flex-row gap-8">
+                        <div class="flex-1">
+                            <div class="mb-6 p-4 rounded-lg bg-blue-500/10 border border-blue-500/20 text-sm text-blue-100 flex items-start gap-3 shadow-lg shadow-blue-500/5">
+                                <i class="ph-fill ph-info text-blue-400 mt-0.5 text-lg shrink-0"></i>
+                                <p><strong>Roadmap Update:</strong> Build 030 brings us significantly closer to release. <strong>Build 040</strong> will serve as the official public release version and is currently in active development.</p>
+                            </div>
+                            
+                            <h3 class="text-sm font-bold text-white mb-4 uppercase tracking-wider text-white/60 border-b border-white/10 pb-2">Changelog Notes</h3>
+                            <ul class="space-y-3 text-sm text-white/80 list-disc list-inside marker:text-blue-500">
+                                <li><strong class="text-white font-semibold">Calendar Interactivity:</strong> Added the calendar flyout with interactive date selection and agenda features (functionality requires user exploration).</li>
+                                <li><strong class="text-white font-semibold">Quick Settings Return:</strong> Reintroduced the Quick Menu functionality, heavily redesigned from original concepts and ideas.</li>
+                                <li><strong class="text-white font-semibold">Settings Application:</strong> Activated the Settings app with working interactive elements, sliders, and color pickers.</li>
+                                <li><strong class="text-white font-semibold">Smart Taskbar Toggle:</strong> Shifted the taskbar hiding logic to the taskbar itself instead of the Start menu. Clicking the taskbar area makes it pop up; double-clicking dismisses it back into hiding.</li>
+                            </ul>
+                        </div>
+                        <div class="w-full sm:w-1/3 shrink-0">
+                            <a href="#" class="block group relative rounded-xl overflow-hidden border border-white/10 shadow-2xl bg-black">
+                                <img src="image_aa9c78.png" alt="Build 030 Preview" class="w-full h-auto object-cover opacity-80 group-hover:opacity-100 transition-opacity group-hover:scale-105 duration-700">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent flex items-end p-4">
+                                    <span class="text-xs font-semibold text-white flex items-center gap-1.5"><i class="ph-bold ph-magnifying-glass-plus text-base"></i> View Screenshot</span>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- UPDATE: Build 025 -->
+            <article id="build-025" class="fluent-card fluent-card-interactive rounded-xl overflow-hidden scroll-mt-24">
+                <div class="bg-gradient-to-r from-purple-500/10 to-transparent border-b border-purple-500/20 px-6 py-5 flex flex-wrap items-center justify-between gap-4">
+                    <div class="flex items-center gap-3">
+                        <div class="p-2 rounded-lg bg-purple-500/20 text-purple-400"><i class="ph-fill ph-paint-brush-broad text-xl"></i></div>
+                        <div>
+                            <h2 class="text-2xl font-bold text-white tracking-tight">1H05: Build 025</h2>
+                            <p class="text-sm font-medium text-white/50">"The Glass & Edges Update"</p>
+                        </div>
+                    </div>
+                    <span class="px-2.5 py-1 rounded bg-purple-500/20 text-purple-400 text-xs font-bold uppercase tracking-wider border border-purple-500/20">Beta Channel</span>
+                </div>
+                
+                <div class="p-6 sm:p-8">
+                    <div class="mb-8 rounded-lg border border-white/10 overflow-hidden bg-black/40 shadow-inner">
+                        <table class="w-full text-left text-sm wiki-table">
+                            <tbody>
+                                <tr>
+                                    <th class="w-1/4">Release Date</th>
+                                    <td>Today - Afternoon</td>
+                                </tr>
+                                <tr>
+                                    <th>Focus Area</th>
+                                    <td>Visual Overhaul, CSS Radii, UI Standardization</td>
+                                </tr>
+                                <tr>
+                                    <th>Status</th>
+                                    <td><span class="text-purple-400 flex items-center gap-1.5 font-medium"><i class="ph-fill ph-link"></i> Dependent (Available if downloaded)</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row gap-8">
+                        <div class="flex-1">
+                            <h3 class="text-sm font-bold text-white mb-4 uppercase tracking-wider text-white/60 border-b border-white/10 pb-2">Changelog Notes</h3>
+                            <ul class="space-y-3 text-sm text-white/80 list-disc list-inside marker:text-purple-500">
+                                <li><strong class="text-white font-semibold">Unified Settings Engine:</strong> The settings loop was unified, immediately mirroring your Mica color and Opacity choices across the entire OS.</li>
+                                <li><strong class="text-white font-semibold">Global Radius Redesign:</strong> Implemented a centralized <code>--os-radius</code> CSS variable set to 6px, replacing overly rounded components with a sharper, intentional look.</li>
+                                <li><strong class="text-white font-semibold">Theme-Aware Outlines:</strong> Sliders are now the exclusive elements featuring borders, with outlines dynamically mixing the system accent color with white for a frosted effect.</li>
+                            </ul>
+                        </div>
+                        <div class="w-full sm:w-1/3 shrink-0">
+                            <a href="#" class="block group relative rounded-xl overflow-hidden border border-white/10 shadow-2xl bg-black">
+                                <img src="image_c563b3.png" alt="Build 025 Preview" class="w-full h-auto object-cover opacity-80 group-hover:opacity-100 transition-opacity group-hover:scale-105 duration-700">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent flex items-end p-4">
+                                    <span class="text-xs font-semibold text-white flex items-center gap-1.5"><i class="ph-bold ph-magnifying-glass-plus text-base"></i> View Screenshot</span>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- UPDATE: Build 015 -->
+            <article id="build-015" class="fluent-card fluent-card-interactive rounded-xl overflow-hidden scroll-mt-24">
+                <div class="bg-gradient-to-r from-emerald-500/10 to-transparent border-b border-emerald-500/20 px-6 py-5 flex flex-wrap items-center justify-between gap-4">
+                    <div class="flex items-center gap-3">
+                        <div class="p-2 rounded-lg bg-emerald-500/20 text-emerald-400"><i class="ph-fill ph-stack text-xl"></i></div>
+                        <div>
+                            <h2 class="text-2xl font-bold text-white tracking-tight">1H05: Build 015</h2>
+                            <p class="text-sm font-medium text-white/50">"Foundation Update"</p>
+                        </div>
+                    </div>
+                    <span class="px-2.5 py-1 rounded bg-emerald-500/20 text-emerald-400 text-xs font-bold uppercase tracking-wider border border-emerald-500/20">Dev Channel</span>
+                </div>
+                
+                <div class="p-6 sm:p-8">
+                    <div class="mb-8 rounded-lg border border-white/10 overflow-hidden bg-black/40 shadow-inner">
+                        <table class="w-full text-left text-sm wiki-table">
+                            <tbody>
+                                <tr>
+                                    <th class="w-1/4">Release Date</th>
+                                    <td>Today - Morning</td>
+                                </tr>
+                                <tr>
+                                    <th>Focus Area</th>
+                                    <td>Framework, Architecture, Layout</td>
+                                </tr>
+                                <tr>
+                                    <th>Status</th>
+                                    <td><span class="text-red-400 flex items-center gap-1.5 font-medium"><i class="ph-bold ph-warning-circle"></i> Deprecated</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row gap-8">
+                        <div class="flex-1">
+                            <p class="text-sm text-white/80 leading-relaxed bg-white/5 p-4 rounded-lg border border-white/5 shadow-inner">
+                                <i class="ph-duotone ph-quotes text-emerald-400 mr-1"></i> This build vastly expands with 1H04, which includes a new taskbar layout, a new Start menu design, an OS + mica blur color picker, and more.
+                            </p>
+                        </div>
+                        <div class="w-full sm:w-1/3 shrink-0">
+                            <a href="#" class="block group relative rounded-xl overflow-hidden border border-white/10 shadow-2xl bg-black">
+                                <img src="image_c5d3d6.png" alt="Build 015 Preview" class="w-full h-auto object-cover opacity-80 group-hover:opacity-100 transition-opacity group-hover:scale-105 duration-700">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent flex items-end p-4">
+                                    <span class="text-xs font-semibold text-white flex items-center gap-1.5"><i class="ph-bold ph-magnifying-glass-plus text-base"></i> View Screenshot</span>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- LEGACY DIVIDER -->
+            <div id="legacy-branch" class="pt-16 pb-4 mb-4 border-b border-white/10 scroll-mt-20">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-white/5 border border-white/10 text-xs font-bold text-white/50 mb-4 uppercase tracking-wider">
+                    <i class="ph-fill ph-archive"></i> Archived Branch
+                </div>
+                <h2 class="text-3xl font-display font-bold text-white/80 tracking-tight">1H04 Legacy Releases</h2>
+                <p class="text-sm text-white/50 mt-2">Historical documentation and patch notes for previous Webwindows 12 iterations.</p>
+            </div>
+
+            <!-- UPDATE: 1H04 Official -->
+            <article id="official-1h04" class="fluent-card fluent-card-interactive rounded-xl overflow-hidden scroll-mt-24 opacity-90">
+                <div class="bg-gradient-to-r from-teal-500/10 to-transparent border-b border-teal-500/20 px-6 py-5 flex flex-wrap items-center justify-between gap-4">
+                    <div class="flex items-center gap-3">
+                        <div class="p-2 rounded-lg bg-teal-500/20 text-teal-400"><i class="ph-fill ph-check-circle text-xl"></i></div>
+                        <div>
+                            <h2 class="text-2xl font-bold text-white tracking-tight">1H04 Official</h2>
+                            <p class="text-sm font-medium text-white/50">"Stable Release"</p>
+                        </div>
+                    </div>
+                    <span class="px-2.5 py-1 rounded bg-teal-500/20 text-teal-400 text-xs font-bold uppercase tracking-wider border border-teal-500/20">Official Release</span>
+                </div>
+                
+                <div class="p-6 sm:p-8">
+                    <div class="mb-8 rounded-lg border border-white/10 overflow-hidden bg-black/40 shadow-inner">
+                        <table class="w-full text-left text-sm wiki-table">
+                            <tbody>
+                                <tr>
+                                    <th class="w-1/4">Release Date</th>
+                                    <td>Previous Release</td>
+                                </tr>
+                                <tr>
+                                    <th>Focus Area</th>
+                                    <td>Stability, Widgets, Blur Engine</td>
+                                </tr>
+                                <tr>
+                                    <th>Status</th>
+                                    <td><span class="text-teal-400 flex items-center gap-1.5 font-medium"><i class="ph-fill ph-check-circle"></i> Official</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row gap-8">
+                        <div class="flex-1">
+                            <h3 class="text-sm font-bold text-white mb-4 uppercase tracking-wider text-white/60 border-b border-white/10 pb-2">Release Summary</h3>
+                            <p class="text-sm text-white/80 leading-relaxed mb-4">
+                                It changes how everything works and Mica blur is better and widget movement is better and more.
+                            </p>
+                        </div>
+                        <div class="w-full sm:w-1/3 shrink-0">
+                            <a href="#" class="block group relative rounded-xl overflow-hidden border border-white/10 shadow-2xl bg-black">
+                                <img src="1h04_official.png" alt="1H04 Official Preview" class="w-full h-auto object-cover opacity-80 group-hover:opacity-100 transition-opacity group-hover:scale-105 duration-700">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent flex items-end p-4">
+                                    <span class="text-xs font-semibold text-white flex items-center gap-1.5"><i class="ph-bold ph-magnifying-glass-plus text-base"></i> View Screenshot</span>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- UPDATE: 1H04 Alpha -->
+            <article id="alpha" class="fluent-card fluent-card-interactive rounded-xl overflow-hidden scroll-mt-24 opacity-80">
+                <div class="bg-gradient-to-r from-orange-500/10 to-transparent border-b border-orange-500/20 px-6 py-5 flex flex-wrap items-center justify-between gap-4">
+                    <div class="flex items-center gap-3">
+                        <div class="p-2 rounded-lg bg-orange-500/20 text-orange-400"><i class="ph-fill ph-archive text-xl"></i></div>
+                        <div>
+                            <h2 class="text-2xl font-bold text-white tracking-tight">1H04 Alpha</h2>
+                            <p class="text-sm font-medium text-white/50">"Legacy Alpha Refresh"</p>
+                        </div>
+                    </div>
+                    <span class="px-2.5 py-1 rounded bg-orange-500/20 text-orange-400 text-xs font-bold uppercase tracking-wider border border-orange-500/20">Alpha Release</span>
+                </div>
+                
+                <div class="p-6 sm:p-8">
+                    <div class="mb-8 rounded-lg border border-white/10 overflow-hidden bg-black/40 shadow-inner">
+                        <table class="w-full text-left text-sm wiki-table">
+                            <tbody>
+                                <tr>
+                                    <th class="w-1/4">Release Date</th>
+                                    <td>Previous Release</td>
+                                </tr>
+                                <tr>
+                                    <th>Focus Area</th>
+                                    <td>Glass Rendering, Prototyping</td>
+                                </tr>
+                                <tr>
+                                    <th>Status</th>
+                                    <td><span class="text-orange-400 flex items-center gap-1.5 font-medium"><i class="ph-fill ph-tag"></i> Available via Release Tags</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row gap-8">
+                        <div class="flex-1">
+                            <h3 class="text-sm font-bold text-white mb-4 uppercase tracking-wider text-white/60 border-b border-white/10 pb-2">Legacy Notes</h3>
+                            <ul class="space-y-3 text-sm text-white/80 list-disc list-inside marker:text-orange-500">
+                                <li>Made the liquid glass more refined and more better.</li>
+                                <li>Refreshed the whole app for Windows 12.</li>
+                                <li>Redone all animations for a concepted app feel + windows feel.</li>
+                                <li>Added widget pick and place and vice-versa.</li>
+                                <li>Moved the search bar to the Windows Icon on first click.</li>
+                                <li>Redone all layout styling.</li>
+                                <li>Real-time day/night updates.</li>
+                                <li>Refined most styling all together.</li>
+                            </ul>
+                        </div>
+                        <div class="w-full sm:w-1/3 shrink-0">
+                            <a href="#" class="block group relative rounded-xl overflow-hidden border border-white/10 shadow-2xl bg-black">
+                                <img src="1h04_alpha.png" alt="1H04 Alpha Preview" class="w-full h-auto object-cover opacity-80 group-hover:opacity-100 transition-opacity group-hover:scale-105 duration-700">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent flex items-end p-4">
+                                    <span class="text-xs font-semibold text-white flex items-center gap-1.5"><i class="ph-bold ph-magnifying-glass-plus text-base"></i> View Screenshot</span>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+        </div>
+    </main>
+
+    <!-- Official Webwindows Footer -->
+    <footer class="relative z-10 border-t border-white/10 bg-black/50 py-10 mt-12">
+        <div class="max-w-7xl mx-auto px-6 sm:px-10 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="flex items-center gap-6 text-sm font-medium text-white/40">
+                <a href="#" class="hover:text-white transition-colors">Terms of Use</a>
+                <a href="#" class="hover:text-white transition-colors">Privacy</a>
+                <a href="#" class="hover:text-white transition-colors">Trademarks</a>
+            </div>
+            <div class="text-sm text-white/30 flex items-center gap-2">
+                <div class="w-4 h-4 opacity-30 grayscale">
+                     <div class="start-logo-masked pointer-events-none" style="width: 16px; height: 16px;"></div>
+                </div>
+                Webwindows 12 Concept &copy; 2026 Webwindows
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
