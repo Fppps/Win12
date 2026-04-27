@@ -24,7 +24,7 @@
         --os-radius: 6px;
 
         /* Current Background */
-        --current-wallpaper: url('https://images8.alphacoders.com/127/1276649.png');
+        --current-wallpaper: url('wallpaper.png');
 
         /* ----------------------------------------------------------------------
            GLOBAL OS COLOR ENGINE
@@ -46,7 +46,7 @@
         
         --mica-base: rgba(var(--mica-color-rgb), var(--mica-base-alpha)); 
         --mica-tint: rgba(var(--sys-accent-rgb), var(--mica-tint-alpha));
-        --mica-blur: blur(60px) saturate(400%) contrast(1.1); 
+        --mica-blur: blur(90px) saturate(200%) contrast(1.1); 
     }
 
     /* Aggressively strip any browser default outlines to prevent blue edges */
@@ -85,6 +85,53 @@
     .theme-bg { background: rgba(var(--sys-accent-rgb), 0.12); transition: background 0.4s var(--smooth-easing); }
     .theme-bg-hover:hover { background: rgba(var(--sys-accent-rgb), 0.25); }
     .theme-bg-strong { background: rgba(var(--sys-accent-rgb), 0.25); }
+
+    /* Settings Premium Cards */
+    .settings-card {
+        background: linear-gradient(145deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        box-shadow: 0 4px 24px -2px rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(10px);
+        transition: all 0.4s var(--spring-easing);
+    }
+    .settings-card:hover {
+        background: linear-gradient(145deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.02) 100%);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 32px -4px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Taskbar Premium Hover Engine */
+    .taskbar-btn {
+        transition: all 0.4s var(--spring-easing);
+        position: relative;
+    }
+    .taskbar-btn:hover {
+        background: rgba(255, 255, 255, 0.08);
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+    }
+    .taskbar-btn:active {
+        transform: scale(0.85);
+        background: rgba(255, 255, 255, 0.04);
+    }
+    .taskbar-btn::after {
+        content: '';
+        position: absolute;
+        bottom: 0px;
+        left: 50%;
+        transform: translateX(-50%) scaleX(0);
+        width: 16px;
+        height: 3px;
+        border-radius: 3px 3px 0 0;
+        background: var(--sys-accent);
+        transition: transform 0.4s var(--spring-easing), opacity 0.3s;
+        opacity: 0;
+    }
+    .taskbar-btn:hover::after {
+        transform: translateX(-50%) scaleX(1);
+        opacity: 1;
+    }
+
 
     /* ==========================================================================
        UNIFIED MICA DYNAMIC MATERIAL (Zero Borders, Pure Glass Sheen)
@@ -212,7 +259,7 @@
     }
 
     /* ==========================================================================
-       TASKBAR TOGGLE ANIMATION (Dynamic depending on layout)
+       TASKBAR TOGGLE ANIMATION
        ========================================================================== */
     .tb-visible { transform: translateY(0); transition: transform 0.5s var(--spring-easing); }
     .tb-hidden { transform: translateY(52px); cursor: pointer; transition: transform 0.5s var(--smooth-easing); }
@@ -222,72 +269,31 @@
     .tb-hidden:hover .taskbar-segment { opacity: 0.85; }
 
     /* ==========================================================================
-       NATIVE WINDOWS SLIDER (Theme Aware Outline)
+       NATIVE WINDOWS SLIDERS
        ========================================================================== */
-    .win-slider {
+    .win-slider, .win-slider-vert {
         -webkit-appearance: none;
-        width: 100%;
-        height: 4px;
         background: rgba(150, 150, 150, 0.3);
         border-radius: var(--os-radius);
         outline: none;
         accent-color: var(--sys-accent);
     }
-    .win-slider::-webkit-slider-thumb {
-        -webkit-appearance: none;
-        appearance: none;
-        width: 18px;
-        height: 18px;
-        border-radius: 50%;
+    .win-slider { width: 100%; height: 4px; }
+    .win-slider-vert-container { position: relative; width: 20px; height: 110px; }
+    .win-slider-vert {
+        appearance: none; position: absolute; width: 110px; height: 4px; 
+        top: 110px; left: 8px; transform-origin: 0 0; transform: rotate(-90deg); margin: 0;
+    }
+    .win-slider::-webkit-slider-thumb, .win-slider-vert::-webkit-slider-thumb {
+        -webkit-appearance: none; appearance: none;
+        width: 18px; height: 18px; border-radius: 50%;
         background: var(--sys-accent);
         border: 4px solid var(--slider-outline) !important; 
-        box-sizing: border-box;
-        box-shadow: 0 0 4px rgba(0,0,0,0.2);
-        cursor: pointer;
-        transition: transform 0.2s var(--spring-easing);
+        box-sizing: border-box; box-shadow: 0 0 4px rgba(0,0,0,0.2);
+        cursor: pointer; transition: transform 0.2s var(--spring-easing);
     }
-    .win-slider::-webkit-slider-thumb:hover { transform: scale(1.1); }
-    .win-slider::-webkit-slider-thumb:active { transform: scale(0.9); }
-
-    /* ==========================================================================
-       VERTICAL SLIDERS (Theme Aware Outline)
-       ========================================================================== */
-    .win-slider-vert-container {
-        position: relative;
-        width: 20px;
-        height: 110px;
-    }
-    .win-slider-vert {
-        -webkit-appearance: none;
-        appearance: none;
-        position: absolute;
-        width: 110px; 
-        height: 4px; 
-        top: 110px;
-        left: 8px;
-        transform-origin: 0 0;
-        transform: rotate(-90deg);
-        background: rgba(150, 150, 150, 0.3);
-        margin: 0;
-        outline: none;
-        border-radius: var(--os-radius);
-        accent-color: var(--sys-accent);
-    }
-    .win-slider-vert::-webkit-slider-thumb {
-        -webkit-appearance: none;
-        appearance: none;
-        width: 16px;
-        height: 16px;
-        border-radius: 50%;
-        background: var(--sys-accent);
-        border: 4px solid var(--slider-outline) !important;
-        box-sizing: border-box;
-        box-shadow: 0 0 4px rgba(0,0,0,0.2);
-        cursor: pointer;
-        transition: transform 0.2s var(--spring-easing);
-    }
-    .win-slider-vert::-webkit-slider-thumb:hover { transform: scale(1.1); }
-    .win-slider-vert::-webkit-slider-thumb:active { transform: scale(0.9); }
+    .win-slider::-webkit-slider-thumb:hover, .win-slider-vert::-webkit-slider-thumb:hover { transform: scale(1.1); }
+    .win-slider::-webkit-slider-thumb:active, .win-slider-vert::-webkit-slider-thumb:active { transform: scale(0.9); }
 
     /* ==========================================================================
        CUSTOM SCROLLBAR
@@ -508,12 +514,15 @@
               <div class="flex items-center gap-6 relative z-10">
                   <div class="w-[84px] h-[84px] start-logo-masked-lg shrink-0"></div>
                   <div>
-                      <h1 class="text-3xl font-display font-bold text-mica-contrast tracking-tight mb-1">Windows 12</h1>
+                      <div class="flex items-center gap-3 mb-1">
+                          <h1 class="text-3xl font-display font-bold text-mica-contrast tracking-tight">Windows 12</h1>
+                          <span class="px-2.5 py-1 bg-sys-accent/20 text-sys-accent border border-sys-accent/30 text-[10px] font-bold rounded-full uppercase tracking-wider shadow-sm">Update 1.0</span>
+                      </div>
                       <p class="text-sm font-medium text-mica-contrast opacity-70">Version 1H05 (OS Build 040)</p>
                   </div>
               </div>
 
-              <div class="theme-bg p-5 rad-lg flex flex-col gap-4 ring-1 ring-white/5 relative z-10 shadow-md">
+              <div class="settings-card p-5 rad-lg flex flex-col gap-4 relative z-10">
                   <h3 class="text-sm font-bold text-mica-contrast flex items-center gap-2"><i class="ph-duotone ph-info text-lg text-sys-accent"></i> System specifications</h3>
                   <div class="grid grid-cols-[110px_1fr] gap-x-4 gap-y-3 text-[13px]">
                       <span class="font-semibold text-mica-contrast opacity-70 text-right">Device name</span>
@@ -531,13 +540,13 @@
           </div>
       </div>
 
-      <!-- MAIN SETTINGS APP WINDOW (Draggable & Task View Aware) -->
+      <!-- MAIN SETTINGS APP WINDOW (Premium Rebuild) -->
       <div id="app-settings" class="app-window app-window-hidden absolute top-1/2 left-1/2 w-[840px] h-[540px] rad-lg flex flex-col z-[15000]">
           
           <div class="task-view-blocker" onclick="window.toggleTaskView()"></div>
 
           <!-- Titlebar (Draggable Area) -->
-          <div id="app-settings-titlebar" class="h-[36px] w-full flex justify-between items-center px-3 select-none bg-black/10 cursor-move" style="border-top-left-radius: calc(var(--os-radius) * 1.5); border-top-right-radius: calc(var(--os-radius) * 1.5);">
+          <div id="app-settings-titlebar" class="h-[36px] w-full flex justify-between items-center px-3 select-none bg-black/10 cursor-move border-b border-white/5" style="border-top-left-radius: calc(var(--os-radius) * 1.5); border-top-right-radius: calc(var(--os-radius) * 1.5);">
               <div class="flex items-center gap-2 opacity-80 pointer-events-none">
                   <i class="ph-bold ph-gear text-[14px] text-mica-contrast"></i>
                   <span class="text-[11px] font-semibold text-mica-contrast">Settings</span>
@@ -551,8 +560,8 @@
           
           <div class="flex-1 flex flex-row overflow-hidden relative">
               <!-- Sidebar Navigation -->
-              <div class="w-[240px] p-3 flex flex-col gap-1 bg-black/5 border-r border-white/5 overflow-y-auto custom-scroll">
-                 <div class="flex items-center gap-3 px-3 py-4 mb-3 theme-bg-hover rad-base ring-1 ring-white/5 shadow-sm">
+              <div class="w-[240px] p-3 flex flex-col gap-1 bg-gradient-to-b from-white/[0.02] to-transparent border-r border-white/5 overflow-y-auto custom-scroll">
+                 <div class="flex items-center gap-3 px-3 py-4 mb-3 settings-card rad-base cursor-pointer">
                      <img src="user.png" class="w-10 h-10 rad-base object-cover grayscale-[0.1]" onerror="this.src='https://cdn-icons-png.freepik.com/512/9131/9131478.png';">
                      <div class="flex flex-col">
                          <span class="text-[13px] font-bold text-mica-contrast leading-tight">Administrator</span>
@@ -560,9 +569,9 @@
                      </div>
                  </div>
                  
-                 <!-- Nav Items -->
-                 <button onclick="window.switchSettingsTab('system')" id="nav-system" class="flex items-center gap-3 text-left px-3 py-2.5 text-[12px] font-bold text-mica-contrast theme-bg rad-base relative transition-all shadow-sm ring-1 ring-white/10"><i class="ph-bold ph-laptop text-[16px] text-sys-accent nav-icon transition-colors"></i> System</button>
-                 <button onclick="window.switchSettingsTab('personalization')" id="nav-personalization" class="flex items-center gap-3 text-left px-3 py-2.5 text-[12px] font-medium text-mica-contrast opacity-70 hover:opacity-100 hover:bg-white/5 rad-base transition-all"><i class="ph-bold ph-palette text-[16px] nav-icon transition-colors"></i> Personalization</button>
+                 <!-- Nav Items (Left Border Indicator Style) -->
+                 <button onclick="window.switchSettingsTab('system')" id="nav-system" class="flex items-center gap-3 text-left px-3 py-2.5 text-[12px] font-bold text-mica-contrast bg-white/10 border-l-2 border-sys-accent rad-r-base transition-all"><i class="ph-bold ph-laptop text-[16px] text-sys-accent nav-icon transition-colors"></i> System</button>
+                 <button onclick="window.switchSettingsTab('personalization')" id="nav-personalization" class="flex items-center gap-3 text-left px-3 py-2.5 text-[12px] font-medium text-mica-contrast opacity-70 hover:opacity-100 hover:bg-white/5 border-l-2 border-transparent rad-r-base transition-all"><i class="ph-bold ph-palette text-[16px] nav-icon transition-colors"></i> Personalization</button>
               </div>
 
               <!-- Main Content Area -->
@@ -572,17 +581,21 @@
                   <div id="pane-system" class="flex flex-col gap-6 transition-opacity duration-300 max-w-2xl mx-auto">
                       <h1 class="text-3xl font-display font-bold text-mica-contrast mb-2 tracking-tight">System</h1>
                       
-                      <div class="flex items-center gap-4 theme-bg p-6 rad-lg cursor-pointer hover:bg-[rgba(var(--sys-accent-rgb),0.2)] transition-colors active:scale-[0.99] ring-1 ring-white/5 shadow-md group">
-                          <img src="https://img.icons8.com/?size=100&id=12226&format=png&color=000000" class="w-16 h-16 pointer-events-none opacity-90 group-hover:scale-105 transition-transform">
-                          <div class="flex flex-col">
-                              <h2 class="text-lg font-bold text-mica-contrast">Windows 12 Preview</h2>
-                              <p class="text-sm text-mica-contrast opacity-70">Build 040 (1H05 Rebuild Update)</p>
+                      <!-- Premium Hero Card -->
+                      <div class="flex items-center gap-5 settings-card p-6 rad-lg cursor-pointer group relative overflow-hidden">
+                          <div class="absolute inset-0 bg-gradient-to-r from-sys-accent/20 to-transparent opacity-30 group-hover:opacity-50 transition-opacity"></div>
+                          <img src="https://img.icons8.com/?size=100&id=12226&format=png&color=000000" class="w-16 h-16 pointer-events-none opacity-90 group-hover:scale-110 transition-transform duration-500 relative z-10 drop-shadow-lg">
+                          <div class="flex flex-col relative z-10">
+                              <h2 class="text-xl font-bold text-mica-contrast tracking-tight">Windows 12 Preview</h2>
+                              <p class="text-sm text-mica-contrast opacity-70 mt-0.5">Build 040 (1H05 Rebuild Update)</p>
                           </div>
-                          <button class="ml-auto px-5 py-2.5 bg-sys-accent hover:bg-sys-accent-hover text-white text-xs font-bold rad-base transition-colors active:scale-95 shadow-sm shadow-sys-accent/20">Check for updates</button>
+                          <button class="ml-auto px-5 py-2.5 bg-sys-accent hover:bg-sys-accent-hover text-white text-xs font-bold rad-base transition-colors active:scale-95 shadow-md shadow-sys-accent/30 relative z-10">Check for updates</button>
                       </div>
                       
-                      <div class="theme-bg p-8 rad-lg flex flex-col items-center justify-center text-center h-56 ring-1 ring-white/5 shadow-inner cursor-pointer hover:bg-[rgba(255,255,255,0.05)] transition-colors" onclick="window.openAbout()">
-                          <i class="ph-duotone ph-info text-[48px] text-sys-accent mb-4"></i>
+                      <div class="settings-card p-8 rad-lg flex flex-col items-center justify-center text-center h-56 cursor-pointer" onclick="window.openAbout()">
+                          <div class="w-16 h-16 rounded-full bg-sys-accent/10 flex items-center justify-center mb-4 text-sys-accent group-hover:scale-110 transition-transform">
+                              <i class="ph-duotone ph-info text-[32px]"></i>
+                          </div>
                           <h3 class="text-lg font-bold text-mica-contrast">System Information</h3>
                           <p class="text-[13px] text-mica-contrast opacity-70 mt-2 max-w-md leading-relaxed">Click here to view deep details about this active development build, including device and OS specifications.</p>
                       </div>
@@ -593,7 +606,7 @@
                       <h1 class="text-3xl font-display font-bold text-mica-contrast mb-2 tracking-tight">Personalization</h1>
                       
                       <!-- Wallpaper Module -->
-                      <div class="theme-bg p-6 rad-lg flex flex-col gap-4 ring-1 ring-white/5 shadow-md">
+                      <div class="settings-card p-6 rad-lg flex flex-col gap-4">
                           <div class="flex justify-between items-center">
                               <h3 class="text-[14px] font-bold text-mica-contrast flex items-center gap-2"><i class="ph-bold ph-image text-sys-accent text-lg"></i> Background</h3>
                               <button onclick="window.setWallpaper('default')" class="text-[11px] font-semibold text-sys-accent hover:text-sys-accent-hover transition-colors bg-transparent border border-sys-accent/30 hover:border-sys-accent px-3 py-1 rad-base">Restore default</button>
@@ -611,7 +624,7 @@
                       </div>
 
                       <!-- Taskbar & Desktop Module -->
-                      <div class="theme-bg p-6 rad-lg flex flex-col gap-5 ring-1 ring-white/5 shadow-md">
+                      <div class="settings-card p-6 rad-lg flex flex-col gap-5">
                           <h3 class="text-[14px] font-bold text-mica-contrast flex items-center gap-2"><i class="ph-bold ph-layout text-sys-accent text-lg"></i> Taskbar Layout</h3>
                           
                           <div class="flex flex-col gap-2">
@@ -624,7 +637,7 @@
                       </div>
 
                       <!-- Colors & Glass Module -->
-                      <div class="theme-bg p-6 rad-lg flex flex-col gap-5 ring-1 ring-white/5 shadow-md">
+                      <div class="settings-card p-6 rad-lg flex flex-col gap-5">
                           <h3 class="text-[14px] font-bold text-mica-contrast flex items-center gap-2"><i class="ph-bold ph-drop text-sys-accent text-lg"></i> Colors & Glass</h3>
                           
                           <div class="flex flex-col gap-2">
@@ -816,36 +829,24 @@
 
       </div>
 
-      <!-- HORIZONTAL QUICK SETTINGS FLYOUT (Shrinked & Scrollable) -->
+      <!-- HORIZONTAL QUICK SETTINGS FLYOUT -->
       <div id="quick-settings-flyout" class="absolute bottom-[80px] right-2 w-[260px] max-h-[380px] taskbar-flat rad-lg p-4 flex flex-col flyout-right-base flyout-right-hidden z-[9995] overflow-y-auto custom-scroll shadow-2xl border border-white/10 sm-step-1">
-          
           <div class="flex gap-4 relative z-10 shrink-0">
-              <!-- Left Column: Action Boxes (Smaller) -->
               <div class="w-[90px] flex flex-col gap-2 shrink-0 h-[110px]">
-                  
-                  <!-- Brightness Box -->
                   <div id="brightness-bg-layer" class="flex-1 rad-base flex items-center justify-center border border-white/5 transition-all duration-300 shadow-sm theme-bg">
                       <i id="brightness-icon" class="ph-fill ph-sun text-[28px] transition-colors text-sys-accent"></i>
                   </div>
-
-                  <!-- Night Light Box -->
                   <div id="nl-bg-layer" class="flex-1 rad-base flex items-center justify-center border border-white/5 transition-all duration-300 shadow-sm theme-bg">
                       <i id="nl-icon" class="ph-bold ph-moon text-[28px] text-mica-contrast opacity-50 transition-colors"></i>
                   </div>
-
               </div>
-
-              <!-- Right Column: Vertical Sliders -->
               <div class="flex-1 flex justify-center gap-6 items-center h-[110px]">
-                  
                   <div class="win-slider-vert-container">
                       <input type="range" id="brightness-slider" min="0" max="100" value="100" class="win-slider-vert" oninput="window.updateBrightness(this)">
                   </div>
-
                   <div class="win-slider-vert-container">
                       <input type="range" id="nl-slider" min="0" max="100" value="0" class="win-slider-vert" oninput="window.updateNightLight(this)">
                   </div>
-
               </div>
           </div>
       </div>
@@ -895,28 +896,28 @@
           </div>
       </div>
 
-      <!-- TASKBAR -->
+      <!-- TASKBAR WITH PREMIUM HOVER -->
       <div id="taskbar-wrapper" class="absolute bottom-0 left-0 w-full flex items-center transition-all duration-500 ease-[cubic-bezier(0.1,0.9,0.2,1.0)] tb-visible" ondblclick="window.hideTaskbar()" onclick="window.showTaskbar(event)">
             
             <div id="tb-segment-about" class="taskbar-segment tb-reveal-visible pointer-events-auto h-[56px] taskbar-flat rad-lg flex items-center px-2 shrink-0 justify-self-start">
-                <button id="tb-app-btn-about" onclick="window.openAbout(event)" class="flex items-center justify-center theme-bg-hover active:scale-90 w-[44px] h-[44px] rad-base transition-transform duration-300 group cursor-default focus:outline-none">
+                <button id="tb-app-btn-about" onclick="window.openAbout(event)" class="taskbar-btn w-[44px] h-[44px] rad-base flex items-center justify-center group cursor-default focus:outline-none">
                   <img src="https://img.icons8.com/?size=100&id=NzIdJDXpXX0B&format=png&color=000000" class="w-[24px] h-[24px] pointer-events-none opacity-90 group-hover:scale-105 transition-transform" draggable="false" alt="About">
                 </button>
             </div>
 
             <div id="tb-apps-segment" class="taskbar-segment tb-reveal-visible pointer-events-auto h-[56px] taskbar-flat rad-lg flex items-center justify-center px-2 gap-1 z-10">
                 
-                <button id="tb-start" onclick="window.toggleStartMenu(event)" class="w-[44px] h-[44px] flex items-center justify-center rad-base theme-bg-hover active:scale-90 transition-transform duration-300 group shrink-0 cursor-default relative focus:outline-none">
+                <button id="tb-start" onclick="window.toggleStartMenu(event)" class="taskbar-btn w-[44px] h-[44px] flex items-center justify-center rad-base group shrink-0 cursor-default focus:outline-none">
                   <div class="start-logo-glow"></div>
                   <div class="start-logo-masked pointer-events-none relative z-10"></div>
                 </button>
 
                 <!-- TASK VIEW BUTTON -->
-                <button onclick="window.toggleTaskView(event)" class="w-[44px] h-[44px] flex items-center justify-center rad-base theme-bg-hover active:scale-90 transition-transform duration-300 shrink-0 cursor-default relative group focus:outline-none">
+                <button onclick="window.toggleTaskView(event)" class="taskbar-btn w-[44px] h-[44px] flex items-center justify-center rad-base shrink-0 cursor-default group focus:outline-none">
                   <img src="https://img.icons8.com/?size=100&id=tMgGl6VfxCnN&format=png&color=000000" class="w-[24px] h-[24px] pointer-events-none transition-transform duration-300 group-hover:scale-105" draggable="false">
                 </button>
 
-                <button onclick="window.openSettings(event)" class="w-[44px] h-[44px] flex items-center justify-center rad-base theme-bg-hover active:scale-90 transition-transform duration-300 shrink-0 cursor-default relative group focus:outline-none">
+                <button onclick="window.openSettings(event)" class="taskbar-btn w-[44px] h-[44px] flex items-center justify-center rad-base shrink-0 cursor-default group focus:outline-none">
                   <img src="https://img.icons8.com/?size=100&id=73FgXcRF4HNx&format=png&color=000000" class="w-[24px] h-[24px] pointer-events-none transition-transform duration-300 group-hover:scale-105" draggable="false">
                 </button>
 
@@ -924,17 +925,17 @@
 
             <div id="tb-segment-tray" class="taskbar-segment tb-reveal-visible pointer-events-auto h-[56px] taskbar-flat rad-lg flex items-center px-2 shrink-0 justify-self-end">
                 
-                <button class="flex items-center justify-center theme-bg-hover active:scale-95 w-[24px] h-[42px] rad-base transition-transform duration-300 cursor-default focus:outline-none">
+                <button class="taskbar-btn flex items-center justify-center w-[24px] h-[42px] rad-base cursor-default focus:outline-none">
                     <i class="ph-bold ph-caret-up text-[14px] text-mica-contrast"></i>
                 </button>
 
-                <button id="tb-app-btn-tray" onclick="window.toggleQuickSettings(event)" class="flex items-center justify-center theme-bg-hover active:scale-95 px-2 h-[42px] rad-base transition-transform duration-300 gap-2 group cursor-default focus:outline-none">
+                <button id="tb-app-btn-tray" onclick="window.toggleQuickSettings(event)" class="taskbar-btn flex items-center justify-center px-2 h-[42px] rad-base gap-2 group cursor-default focus:outline-none">
                   <div class="flex items-center text-[18px] text-mica-contrast pointer-events-none">
                       <i class="ph-fill ph-desktop"></i>
                   </div>
                 </button>
                 
-                <button id="tb-app-btn-clock" onclick="window.toggleCalendar(event)" class="flex flex-col items-end justify-center theme-bg-hover active:scale-95 px-3 h-[42px] rad-base transition-transform duration-300 cursor-default focus:outline-none">
+                <button id="tb-app-btn-clock" onclick="window.toggleCalendar(event)" class="taskbar-btn flex flex-col items-end justify-center px-3 h-[42px] rad-base cursor-default focus:outline-none">
                   <span class="js-tb-time text-[12px] font-semibold text-mica-contrast pointer-events-none leading-none"></span>
                   <span class="js-tb-date text-[11px] text-mica-contrast opacity-80 mt-1 pointer-events-none leading-none font-medium"></span>
                 </button>
@@ -1295,16 +1296,14 @@
     function switchSettingsTab(tabName) {
         document.querySelectorAll('#app-settings .nav-icon').forEach(el => el.classList.remove('text-sys-accent'));
         document.querySelectorAll('#nav-system, #nav-personalization').forEach(el => {
-            el.classList.remove('font-bold', 'text-mica-contrast', 'theme-bg');
-            el.classList.remove('ring-1', 'ring-white/10', 'shadow-sm');
-            el.classList.add('font-medium', 'opacity-70');
+            el.classList.remove('font-bold', 'text-mica-contrast', 'bg-white/10', 'border-sys-accent');
+            el.classList.add('font-medium', 'opacity-70', 'border-transparent');
         });
 
         const activeNav = document.getElementById(`nav-${tabName}`);
         if(activeNav) {
-            activeNav.classList.remove('font-medium', 'opacity-70');
-            activeNav.classList.add('font-bold', 'text-mica-contrast', 'theme-bg');
-            activeNav.classList.add('ring-1', 'ring-white/10', 'shadow-sm');
+            activeNav.classList.remove('font-medium', 'opacity-70', 'border-transparent');
+            activeNav.classList.add('font-bold', 'text-mica-contrast', 'bg-white/10', 'border-sys-accent');
             activeNav.querySelector('.nav-icon').classList.add('text-sys-accent');
         }
 
@@ -1316,8 +1315,6 @@
     }
 
     // --- Search Logic & Flyout Engine (Local Only) ---
-    
-    // Define searchable local objects
     const localSearchIndex = [
         { id: 'settings', title: 'Settings', desc: 'System Application', icon: 'ph-gear', action: () => { openSettings(); closeSearchFlyout(); } },
         { id: 'personalization', title: 'Personalization', desc: 'System Settings', icon: 'ph-palette', action: () => { openSettings(); switchSettingsTab('personalization'); closeSearchFlyout(); } },
@@ -1374,7 +1371,6 @@
             if(matches.length > 0) {
                 matches.forEach((match, idx) => {
                     const el = document.createElement('div');
-                    // Style first item as "best match"
                     el.className = `flex items-center gap-4 ${idx === 0 ? 'theme-bg-strong ring-1 ring-sys-accent/50' : 'theme-bg-hover'} p-3 rad-base cursor-pointer hover:bg-[rgba(var(--sys-accent-rgb),0.35)] transition-colors active:scale-[0.99] border border-[rgba(255,255,255,0.05)]`;
                     el.onclick = match.action;
                     el.innerHTML = `
