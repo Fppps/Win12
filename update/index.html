@@ -1,0 +1,1989 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Windows 12 Preview (1H05 Rebuild Update)</title>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+  <style>
+    /* ============================================================================
+       1H05 REBUILD UPDATE - FOUNDATIONAL ARCHITECTURE
+       ============================================================================ */
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Segoe+UI:wght@300;400;600;700&display=swap');
+    
+    :root {
+        /* Premium OS Physics & Spring Animations */
+        --spring-easing: cubic-bezier(0.175, 0.885, 0.32, 1.15);
+        --smooth-easing: cubic-bezier(0.25, 1, 0.5, 1);
+        --reveal-easing: cubic-bezier(0.3, 0, 0, 1);
+        
+        /* Centralized Border Radius (Sharper/Less Rounded) */
+        --os-radius: 6px;
+
+        /* Current Background */
+        --current-wallpaper: url('wallpaper.png');
+
+        /* ----------------------------------------------------------------------
+           GLOBAL OS COLOR ENGINE
+           ---------------------------------------------------------------------- */
+        --sys-accent: #006eff;
+        --sys-accent-rgb: 0, 110, 255; 
+        --sys-accent-hover: #005bb5;
+        
+        /* Theme Aware Slider Outline */
+        --slider-outline: color-mix(in srgb, var(--sys-accent) 30%, white 70%);
+
+        /* ----------------------------------------------------------------------
+           UNIFIED BORDERLESS MICA REBUILD (Pure Glass Sheen - No Noise)
+           ---------------------------------------------------------------------- */
+        --mica-color-rgb: 255, 255, 255;
+        --mica-base-alpha: 0.45;
+        --mica-tint-alpha: 0.15;
+        --mica-contrast: #0f172a; 
+        
+        --mica-base: rgba(var(--mica-color-rgb), var(--mica-base-alpha)); 
+        --mica-tint: rgba(var(--sys-accent-rgb), var(--mica-tint-alpha));
+        --mica-blur: blur(40px) saturate(400%) contrast(1.1); 
+    }
+
+    /* Aggressively strip any browser default outlines to prevent blue edges */
+    * {
+        outline: none !important;
+        box-shadow: none !important;
+        border-color: transparent;
+        -webkit-tap-highlight-color: transparent;
+    }
+    *:focus {
+        outline: none !important;
+        box-shadow: none !important;
+    }
+
+    body { 
+        font-family: 'Segoe UI Variable Text', 'Segoe UI', system-ui, sans-serif; 
+        overflow: hidden; 
+        background: #000; 
+        user-select: none;
+        -webkit-font-smoothing: antialiased;
+    }
+
+    /* Universal Radius Utilities */
+    .rad-base { border-radius: var(--os-radius) !important; }
+    .rad-lg { border-radius: calc(var(--os-radius) * 1.5) !important; }
+    .rad-xl { border-radius: calc(var(--os-radius) * 2.5) !important; }
+    .rad-full { border-radius: 9999px !important; }
+
+    /* Accent & Contrast Utility Classes */
+    .bg-sys-accent { background-color: var(--sys-accent) !important; transition: background-color 0.4s ease; }
+    .text-sys-accent { color: var(--sys-accent) !important; transition: color 0.4s ease; }
+    .text-mica-contrast { color: var(--mica-contrast); transition: color 0.4s ease; }
+    .placeholder-mica-contrast::placeholder { color: var(--mica-contrast); opacity: 0.6; transition: color 0.4s ease; }
+
+    /* Dynamic OS Surfaces */
+    .theme-bg { background: rgba(var(--sys-accent-rgb), 0.12); transition: background 0.4s var(--smooth-easing); }
+    .theme-bg-hover:hover { background: rgba(var(--sys-accent-rgb), 0.25); }
+    .theme-bg-strong { background: rgba(var(--sys-accent-rgb), 0.25); }
+
+    /* ==========================================================================
+       UNIFIED MICA DYNAMIC MATERIAL (Zero Borders, Pure Glass Sheen)
+       ========================================================================== */
+    .taskbar-flat, .app-window, .flyout-base, .flyout-right-base {
+        position: relative;
+        background-color: var(--mica-base) !important;
+        backdrop-filter: var(--mica-blur);
+        -webkit-backdrop-filter: var(--mica-blur);
+        border: none !important;
+    }
+    
+    .app-window {
+        box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+        border: 1px solid rgba(255,255,255,0.08) !important;
+        border-top: 1px solid rgba(255,255,255,0.15) !important;
+    }
+    
+    /* Layout Mode Disabled Background */
+    .taskbar-flat-disabled {
+        background: transparent !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        border: none !important;
+        box-shadow: none !important;
+    }
+
+    /* ==========================================================================
+       APP WINDOW ANIMATION LOGIC (Draggable & Task View Aware)
+       ========================================================================== */
+    .app-window-hidden { opacity: 0; transform: translate(calc(-50% + var(--drag-x, 0px)), calc(-45% + var(--drag-y, 0px))) scale(0.92); pointer-events: none; }
+    .app-window-visible { opacity: 1; transform: translate(calc(-50% + var(--drag-x, 0px)), calc(-50% + var(--drag-y, 0px))) scale(1); pointer-events: auto; }
+    .app-window { transition: transform 0.6s var(--spring-easing), opacity 0.4s ease; }
+    
+    /* Disable transition during drag for 1:1 mouse tracking */
+    .app-window.dragging { transition: none !important; }
+
+    /* ==========================================================================
+       TASK VIEW PHYSICS
+       ========================================================================== */
+    /* Desktop Background Reaction */
+    #desktop-bg { transition: transform 0.8s var(--smooth-easing), filter 0.8s var(--smooth-easing); }
+    .task-view-active #desktop-bg {
+        transform: scale(0.96);
+        filter: blur(25px) brightness(0.6);
+    }
+    
+    /* Windows in Task View Grid */
+    .task-view-active .app-window-visible {
+        transform: translate(-50%, -65%) scale(0.6) !important; 
+        transition: transform 0.6s var(--smooth-easing), opacity 0.4s ease !important;
+        cursor: pointer;
+    }
+    .task-view-active .app-window-visible:hover {
+        transform: translate(-50%, -66%) scale(0.62) !important; 
+    }
+    /* Invisible block over app to intercept clicks easily in Task View */
+    .task-view-blocker { display: none; }
+    .task-view-active .task-view-blocker { display: block; position: absolute; inset: 0; z-index: 99999; }
+
+    /* Desktops Dock UI */
+    #task-view-dock {
+        transition: transform 0.6s var(--spring-easing), opacity 0.4s ease;
+    }
+    .task-view-active #task-view-dock {
+        opacity: 1 !important;
+        transform: translate(-50%, 0) !important;
+        pointer-events: auto !important;
+    }
+
+    /* ==========================================================================
+       LOGIN & LOCK SCREEN LOGIC
+       ========================================================================== */
+    #login-overlay { transition: opacity 0.8s var(--reveal-easing), transform 1s var(--reveal-easing), filter 0.8s ease; }
+    .lock-screen-hide { opacity: 0; transform: scale(1.08); pointer-events: none; }
+    
+    .login-pin-input {
+        background: rgba(0, 0, 0, 0.4) !important; 
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        border-radius: var(--os-radius);
+        backdrop-filter: blur(20px);
+        transition: all 0.3s ease;
+        letter-spacing: 0.15em;
+        color: #ffffff !important;
+    }
+    .login-pin-input:focus { 
+        background: rgba(0, 0, 0, 0.6) !important; 
+        border-color: rgba(255, 255, 255, 0.3) !important; 
+    }
+    .login-pin-input::placeholder { letter-spacing: normal; color: rgba(255,255,255,0.5); }
+
+    /* ==========================================================================
+       WINDOWS DOTTED SPINNER
+       ========================================================================== */
+    .win-spinner { width: 48px; height: 48px; position: relative; }
+    .win-spinner .circle { position: absolute; width: 100%; height: 100%; opacity: 0; transform: rotate(225deg); animation: win-orbit 4.8s infinite; }
+    .win-spinner .circle::after { 
+        content: ''; 
+        position: absolute; 
+        width: 6px; 
+        height: 6px; 
+        border-radius: 50% !important; /* Forces perfect circle dots */
+        background: #ffffff; 
+        left: 50%; 
+        top: 0px; 
+        transform: translateX(-50%); 
+        box-shadow: 0 0 6px rgba(255, 255, 255, 0.6); 
+    }
+    
+    .win-spinner .circle:nth-child(2) { animation-delay: 170ms; }
+    .win-spinner .circle:nth-child(3) { animation-delay: 340ms; }
+    .win-spinner .circle:nth-child(4) { animation-delay: 510ms; }
+    .win-spinner .circle:nth-child(5) { animation-delay: 680ms; }
+    .win-spinner .circle:nth-child(6) { animation-delay: 850ms; }
+
+    @keyframes win-orbit {
+        0% { transform: rotate(225deg); opacity: 1; animation-timing-function: cubic-bezier(0.2, 0.7, 0.3, 1); }
+        7% { transform: rotate(345deg); animation-timing-function: linear; }
+        30% { transform: rotate(455deg); animation-timing-function: cubic-bezier(0.6, 0.04, 0.4, 1); }
+        45% { transform: rotate(690deg); animation-timing-function: linear; }
+        70% { transform: rotate(815deg); opacity: 1; animation-timing-function: cubic-bezier(0.2, 0.7, 0.3, 1); }
+        75% { transform: rotate(945deg); animation-timing-function: ease-out; }
+        76% { transform: rotate(945deg); opacity: 0; }
+        100% { transform: rotate(945deg); opacity: 0; }
+    }
+
+    /* ==========================================================================
+       TASKBAR TOGGLE ANIMATION (Dynamic depending on layout)
+       ========================================================================== */
+    .tb-visible { transform: translateY(0); transition: transform 0.5s var(--spring-easing); }
+    .tb-hidden { transform: translateY(52px); cursor: pointer; transition: transform 0.5s var(--smooth-easing); }
+    
+    .tb-hidden:hover { transform: translateY(46px); }
+    .tb-hidden .taskbar-segment { opacity: 0.5; pointer-events: none; transition: opacity 0.4s ease; }
+    .tb-hidden:hover .taskbar-segment { opacity: 0.85; }
+
+    /* ==========================================================================
+       NATIVE WINDOWS SLIDER (Theme Aware Outline)
+       ========================================================================== */
+    .win-slider {
+        -webkit-appearance: none;
+        width: 100%;
+        height: 4px;
+        background: rgba(150, 150, 150, 0.3);
+        border-radius: var(--os-radius);
+        outline: none;
+        accent-color: var(--sys-accent);
+    }
+    .win-slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: var(--sys-accent);
+        border: 4px solid var(--slider-outline) !important; 
+        box-sizing: border-box;
+        box-shadow: 0 0 4px rgba(0,0,0,0.2);
+        cursor: pointer;
+        transition: transform 0.2s var(--spring-easing);
+    }
+    .win-slider::-webkit-slider-thumb:hover { transform: scale(1.1); }
+    .win-slider::-webkit-slider-thumb:active { transform: scale(0.9); }
+
+    /* ==========================================================================
+       VERTICAL SLIDERS (Theme Aware Outline)
+       ========================================================================== */
+    .win-slider-vert-container {
+        position: relative;
+        width: 20px;
+        height: 110px;
+    }
+    .win-slider-vert {
+        -webkit-appearance: none;
+        appearance: none;
+        position: absolute;
+        width: 110px; 
+        height: 4px; 
+        top: 110px;
+        left: 8px;
+        transform-origin: 0 0;
+        transform: rotate(-90deg);
+        background: rgba(150, 150, 150, 0.3);
+        margin: 0;
+        outline: none;
+        border-radius: var(--os-radius);
+        accent-color: var(--sys-accent);
+    }
+    .win-slider-vert::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: var(--sys-accent);
+        border: 4px solid var(--slider-outline) !important;
+        box-sizing: border-box;
+        box-shadow: 0 0 4px rgba(0,0,0,0.2);
+        cursor: pointer;
+        transition: transform 0.2s var(--spring-easing);
+    }
+    .win-slider-vert::-webkit-slider-thumb:hover { transform: scale(1.1); }
+    .win-slider-vert::-webkit-slider-thumb:active { transform: scale(0.9); }
+
+    /* ==========================================================================
+       CUSTOM SCROLLBAR
+       ========================================================================== */
+    .custom-scroll::-webkit-scrollbar { width: 6px; }
+    .custom-scroll::-webkit-scrollbar-track { background: transparent; }
+    .custom-scroll::-webkit-scrollbar-thumb { background: rgba(var(--sys-accent-rgb), 0.4); border-radius: var(--os-radius); }
+    .custom-scroll::-webkit-scrollbar-thumb:hover { background: rgba(var(--sys-accent-rgb), 0.7); }
+
+    /* ==========================================================================
+       START LOGO COLOR MASKS
+       ========================================================================== */
+    .start-logo-masked {
+        width: 26px;
+        height: 26px;
+        background: linear-gradient(135deg, color-mix(in srgb, var(--sys-accent) 60%, white 40%) 0%, var(--sys-accent) 100%);
+        -webkit-mask-image: url('https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/d524f23f-503e-4d1d-8ee0-96e655258add/dhb97eu-3b00bbaf-f050-4657-83da-0b1664d7c022.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiIvZi9kNTI0ZjIzZi01MDNlLTRkMWQtOGVlMC05NmU2NTUyNThhZGQvZGhiOTdldS0zYjAwYmJhZi1mMDUwLTQ2NTctODNkYS0wYjE2NjRkN2MwMjIucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.o1jDig1STxxan1lSgwa6kt9pAnjG080eji1BbENBT3k');
+        mask-image: url('https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/d524f23f-503e-4d1d-8ee0-96e655258add/dhb97eu-3b00bbaf-f050-4657-83da-0b1664d7c022.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiIvZi9kNTI0ZjIzZi01MDNlLTRkMWQtOGVlMC05NmU2NTUyNThhZGQvZGhiOTdldS0zYjAwYmJhZi1mMDUwLTQ2NTctODNkYS0wYjE2NjRkN2MwMjIucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.o1jDig1STxxan1lSgwa6kt9pAnjG080eji1BbENBT3k');
+        -webkit-mask-size: contain; mask-size: contain;
+        -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+        -webkit-mask-position: center; mask-position: center;
+        opacity: 0.85;
+        transition: transform 0.6s var(--spring-easing), filter 0.4s ease, opacity 0.4s ease;
+    }
+
+    .start-logo-masked-lg {
+        width: 72px;
+        height: 72px;
+        background: linear-gradient(135deg, color-mix(in srgb, var(--sys-accent) 60%, white 40%) 0%, var(--sys-accent) 100%);
+        -webkit-mask-image: url('https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/d524f23f-503e-4d1d-8ee0-96e655258add/dhb97eu-3b00bbaf-f050-4657-83da-0b1664d7c022.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiIvZi9kNTI0ZjIzZi01MDNlLTRkMWQtOGVlMC05NmU2NTUyNThhZGQvZGhiOTdldS0zYjAwYmJhZi1mMDUwLTQ2NTctODNkYS0wYjE2NjRkN2MwMjIucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.o1jDig1STxxan1lSgwa6kt9pAnjG080eji1BbENBT3k');
+        mask-image: url('https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/d524f23f-503e-4d1d-8ee0-96e655258add/dhb97eu-3b00bbaf-f050-4657-83da-0b1664d7c022.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiIvZi9kNTI0ZjIzZi01MDNlLTRkMWQtOGVlMC05NmU2NTUyNThhZGQvZGhiOTdldS0zYjAwYmJhZi1mMDUwLTQ2NTctODNkYS0wYjE2NjRkN2MwMjIucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.o1jDig1STxxan1lSgwa6kt9pAnjG080eji1BbENBT3k');
+        -webkit-mask-size: contain; mask-size: contain;
+        -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+        -webkit-mask-position: center; mask-position: center;
+        opacity: 1;
+    }
+
+    @keyframes start-click-anim {
+        0% { transform: scale(1) rotate(0deg); filter: brightness(1) saturate(1); }
+        40% { transform: scale(0.65) rotate(-15deg); filter: brightness(1.4) saturate(1.5); }
+        100% { transform: scale(1) rotate(0deg); filter: brightness(1) saturate(1); }
+    }
+
+    .start-click-run {
+        animation: start-click-anim 0.55s var(--spring-easing) forwards;
+    }
+
+    #tb-start:hover .start-logo-masked { transform: scale(1.15); opacity: 1; }
+
+    .start-logo-glow {
+        position: absolute; width: 44px; height: 44px;
+        background: radial-gradient(circle, var(--sys-accent) 0%, transparent 70%);
+        filter: blur(12px); opacity: 0;
+        transition: opacity 0.5s ease, transform 0.6s var(--spring-easing), background 0.5s ease;
+        pointer-events: none; z-index: 0;
+    }
+    #tb-start:hover .start-logo-glow { opacity: 0.5; transform: scale(1.6); }
+
+    /* ==========================================================================
+       FLYOUT/MENU ANIMATION LOGIC (Start, Cal, Quick Settings)
+       ========================================================================== */
+    .flyout-hidden { opacity: 0; transform: translateY(40px) scale(0.95); pointer-events: none !important; }
+    .flyout-visible { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto !important; }
+    .flyout-base { transition: transform 0.7s var(--spring-easing), opacity 0.4s ease; }
+
+    .flyout-right-hidden { opacity: 0; transform: translateY(30px) scale(0.95); pointer-events: none !important; }
+    .flyout-right-visible { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto !important; }
+    .flyout-right-base { transform-origin: bottom right; transition: transform 0.7s var(--spring-easing), opacity 0.4s ease; }
+
+    /* Steps */
+    .flyout-hidden .sm-step-1, .flyout-right-hidden .sm-step-1 { opacity: 0; transform: translateY(20px); transition: none; }
+    .flyout-visible .sm-step-1, .flyout-right-visible .sm-step-1 { opacity: 1; transform: translateY(0); transition: opacity 0.4s ease 0.05s, transform 0.6s var(--spring-easing) 0.05s; }
+
+    .flyout-hidden .sm-step-2, .flyout-right-hidden .sm-step-2 { opacity: 0; transform: translateY(15px); transition: none; }
+    .flyout-visible .sm-step-2, .flyout-right-visible .sm-step-2 { opacity: 1; transform: translateY(0); transition: opacity 0.4s ease 0.15s, transform 0.6s var(--spring-easing) 0.15s; }
+
+    .flyout-hidden .sm-step-3, .flyout-right-hidden .sm-step-3 { opacity: 0; transform: scale(0.8) translateY(10px); transition: none; }
+    .flyout-visible .sm-step-3, .flyout-right-visible .sm-step-3 { opacity: 1; transform: scale(1) translateY(0); transition: opacity 0.4s ease 0.25s, transform 0.6s var(--spring-easing) 0.25s; }
+
+    .eval-watermark { font-family: 'Segoe UI', sans-serif; transition: opacity 2s ease-in-out; }
+  </style>
+</head>
+<body oncontextmenu="return false;">
+
+  <div id="os-root" class="relative w-full h-screen overflow-hidden bg-[#0a0a0a] transition-colors duration-500">
+
+    <!-- REAL HARDWARE OVERLAYS (Brightness Dimmer & Night Light Warmth) -->
+    <div id="brightness-overlay" class="absolute inset-0 bg-black pointer-events-none z-[100000] transition-opacity duration-150" style="opacity: 0;"></div>
+    <div id="night-light-overlay" class="absolute inset-0 bg-[#ff8800] mix-blend-multiply pointer-events-none z-[100001] transition-opacity duration-1000" style="opacity: 0;"></div>
+
+    <!-- LOCK / LOGIN SCREEN OVERLAY -->
+    <div id="login-overlay" class="absolute inset-0 z-[30000] flex flex-col items-center justify-center overflow-hidden bg-transparent">
+        <div id="login-bg" class="absolute inset-0 bg-cover bg-center transition-all duration-1000 z-[-2]" style="background-image: var(--current-wallpaper);"></div>
+        <div class="absolute inset-0 z-[-1] opacity-0 transition-opacity duration-1000 theme-bg-strong" id="login-dimmer"></div>
+
+        <div id="lock-state" onclick="window.dismissLockScreen()" class="absolute inset-0 flex flex-col items-center pt-[15vh] transition-all duration-700 cursor-pointer z-20">
+            <h1 id="lock-time" class="text-[100px] font-medium text-white/90 tracking-tight leading-none transition-transform duration-700"></h1>
+            <p id="lock-date" class="text-[24px] font-medium text-white/80 tracking-normal mt-1 transition-transform duration-700 delay-75"></p>
+        </div>
+
+        <div id="login-state" class="flex flex-col items-center opacity-0 translate-y-6 transition-all duration-700 pointer-events-none z-10 w-full h-full justify-center pb-[10vh]">
+            <div class="flex flex-col items-center">
+                <div class="mb-4 transition-transform duration-700 delay-100">
+                    <img src="user.png" class="w-40 h-40 rad-base object-cover grayscale-[0.1] shadow-2xl" onerror="this.src='https://cdn-icons-png.freepik.com/512/9131/9131478.png';">
+                </div>
+                <h2 class="text-[28px] font-semibold text-white mb-8 tracking-tight transition-transform duration-700 delay-150">Administrator</h2>
+                
+                <div id="login-input-area" class="flex items-center gap-2 transition-all duration-700 delay-200">
+                    <div class="relative">
+                        <input type="password" id="login-pin" placeholder="PIN" class="login-pin-input px-4 py-3 w-[280px] text-center text-[15px] font-semibold" onkeypress="if(event.key === 'Enter') window.triggerWelcome()">
+                        <button class="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rad-base flex items-center justify-center hover:bg-white/10 transition-colors">
+                            <i class="ph-bold ph-eye text-[16px] text-white/70"></i>
+                        </button>
+                    </div>
+                    <button onclick="window.triggerWelcome()" class="w-[46px] h-[46px] bg-black/40 hover:bg-sys-accent rad-base flex items-center justify-center transition-all active:scale-95 group backdrop-blur-md ml-1 border border-white/10">
+                        <i class="ph-bold ph-arrow-right text-xl text-white group-hover:translate-x-0.5 transition-transform"></i>
+                    </button>
+                </div>
+                
+                <p id="login-options-text" class="text-[13px] font-medium text-white/80 mt-8 cursor-pointer hover:text-white transition-colors opacity-0 animate-[fadeIn_0.5s_ease_forwards_1s]">Sign-in options</p>
+                
+                <div id="welcome-state" class="hidden flex-col items-center mt-2 opacity-0 transition-all duration-500">
+                    <div class="win-spinner mt-6 mb-4">
+                        <div class="circle"></div><div class="circle"></div><div class="circle"></div><div class="circle"></div><div class="circle"></div><div class="circle"></div>
+                    </div>
+                    <p class="text-[16px] font-semibold text-white tracking-wide">Welcome</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- DESKTOP ENVIRONMENT -->
+    <div id="screen-desktop" class="absolute inset-0 overflow-hidden z-[10000]">
+      
+      <!-- Desktop Wallpaper -->
+      <div id="desktop-bg" class="absolute inset-0 bg-cover bg-center z-[-3]" style="background-image: var(--current-wallpaper); transform: scale(1.1); filter: blur(0px);"></div>
+
+      <!-- Watermark intentionally hidden -->
+      <div class="eval-watermark absolute bottom-20 right-6 text-right z-[9000] pointer-events-none select-none opacity-0 hidden" id="desktop-watermark">
+          <p class="text-[13px] font-semibold text-white leading-tight tracking-wide">Windows 12 1H06 build 045</p>
+          <p class="text-[11px] font-medium text-white leading-tight mt-1">Do not send this to anyone as a link to the site</p>
+      </div>
+
+      <div id="desktop-clock-widget" class="absolute top-20 left-1/2 -translate-x-1/2 z-0 pointer-events-none opacity-0 scale-95 origin-top flex flex-col items-center justify-center transition-all duration-1000 ease-[cubic-bezier(0.1,0.9,0.2,1)]" style="font-family: 'Segoe UI Variable Display', 'Segoe UI', sans-serif;">
+          <h1 id="dc-time" class="text-[110px] font-semibold leading-none tracking-tighter text-white/90"></h1>
+          <h2 id="dc-date" class="text-[24px] font-medium mt-1 tracking-wide text-white/80"></h2>
+      </div>
+      
+      <!-- Interactive Top Search Bar (PERMANENT VISIBILITY) -->
+      <div id="desktop-search-bar" class="absolute top-4 left-1/2 -translate-x-1/2 w-[480px] h-[48px] taskbar-flat rad-base flex items-center px-5 z-[9998] transition-all pointer-events-auto focus-within:bg-[rgba(var(--sys-accent-rgb),0.15)] group" style="opacity: 1;">
+          <i class="ph-bold ph-magnifying-glass text-[18px] text-mica-contrast transition-colors group-focus-within:text-sys-accent"></i>
+          <input id="top-search-input" type="text" placeholder="Search apps, settings, and documents..." class="bg-transparent w-full ml-4 text-[14px] font-medium text-mica-contrast placeholder-mica-contrast" onkeydown="window.handleSearch(event)" onfocus="window.openSearchFlyout()" oninput="window.handleSearchInput(event)">
+      </div>
+
+      <!-- SEARCH FLYOUT -->
+      <div id="search-flyout" class="absolute top-[72px] left-1/2 -translate-x-1/2 w-[600px] h-[450px] taskbar-flat rad-lg p-6 flex flex-col z-[9997] flyout-hidden flyout-base pointer-events-none overflow-y-auto custom-scroll">
+          <!-- Default View (Before Typing) -->
+          <div id="search-default-view" class="flex flex-col h-full sm-step-1">
+              <div class="w-full mb-5 sm-step-2">
+                  <div class="w-full theme-bg p-4 rad-base transition-colors hover:bg-[rgba(255,255,255,0.1)] cursor-pointer active:scale-[0.98] border border-white/5" onclick="window.openSettings(); window.closeSearchFlyout();">
+                      <i class="ph-duotone ph-gear text-[22px] text-sys-accent mb-2"></i>
+                      <h4 class="text-[13px] font-bold text-mica-contrast">System Settings</h4>
+                      <p class="text-[11px] text-mica-contrast opacity-60">Personalization, Background, Taskbar...</p>
+                  </div>
+              </div>
+              <h3 class="text-[11px] font-bold text-mica-contrast opacity-70 mb-3 uppercase tracking-wider sm-step-2">Top Apps</h3>
+              <div class="grid grid-cols-5 gap-2 mb-6 sm-step-3">
+                  <div class="flex flex-col items-center gap-1.5 theme-bg-hover p-2.5 rad-base transition-colors cursor-pointer group active:scale-95 border border-transparent hover:border-white/5" onclick="window.openSettings(); window.closeSearchFlyout();">
+                      <img src="https://img.icons8.com/?size=100&id=73FgXcRF4HNx&format=png&color=000000" class="w-[32px] h-[32px] pointer-events-none" draggable="false">
+                      <span class="text-[11px] font-semibold text-mica-contrast mt-1">Settings</span>
+                  </div>
+                  <div class="flex flex-col items-center gap-1.5 theme-bg-hover p-2.5 rad-base transition-colors cursor-pointer group active:scale-95 border border-transparent hover:border-white/5" onclick="window.openAbout(); window.closeSearchFlyout();">
+                      <img src="https://img.icons8.com/?size=100&id=NzIdJDXpXX0B&format=png&color=000000" class="w-[32px] h-[32px] pointer-events-none" draggable="false">
+                      <span class="text-[11px] font-semibold text-mica-contrast mt-1">About OS</span>
+                  </div>
+              </div>
+          </div>
+
+          <!-- Local Results View (When Typing) -->
+          <div id="search-results-view" class="hidden flex-col h-full">
+              <h3 class="text-[11px] font-bold text-mica-contrast opacity-70 mb-3 uppercase tracking-wider">Local Apps & Settings</h3>
+              <div id="local-search-list" class="flex flex-col gap-2">
+                  <!-- JS Injected dynamically -->
+              </div>
+          </div>
+      </div>
+
+      <!-- DESKTOPS DOCK (Task View UI) -->
+      <div id="task-view-dock" class="absolute bottom-[90px] left-1/2 -translate-x-1/2 flex gap-4 opacity-0 pointer-events-none z-[14000]" style="transform: translate(-50%, 30px);">
+          <div class="w-48 h-28 taskbar-flat rad-lg flex flex-col items-center justify-center gap-2 cursor-pointer group hover:bg-[rgba(255,255,255,0.1)] transition-colors border border-white/5" onclick="window.toggleTaskView()">
+              <div class="w-40 h-16 bg-cover bg-center rad-base border-2 border-sys-accent transition-all" style="background-image: var(--current-wallpaper);"></div>
+              <span class="text-xs font-semibold text-mica-contrast">Desktop 1</span>
+          </div>
+          <div class="w-48 h-28 taskbar-flat rad-lg flex flex-col items-center justify-center gap-2 cursor-pointer opacity-60 hover:opacity-100 transition-all hover:bg-[rgba(255,255,255,0.1)] border border-transparent hover:border-white/5" onclick="window.toggleTaskView()">
+              <i class="ph-bold ph-plus text-2xl text-mica-contrast"></i>
+              <span class="text-xs font-semibold text-mica-contrast">New Desktop</span>
+          </div>
+      </div>
+
+      <!-- UPGRADED ABOUT WINDOW -->
+      <div id="app-about" class="app-window app-window-hidden absolute top-1/2 left-1/2 w-[600px] h-[500px] rad-xl flex flex-col z-[16000] overflow-hidden ring-1 ring-white/10 shadow-2xl">
+          
+          <!-- Titlebar -->
+          <div id="app-about-titlebar" class="h-[40px] w-full flex justify-between items-center px-4 select-none bg-black/20 cursor-move border-b border-white/5 shrink-0 z-20 relative backdrop-blur-md">
+              <div class="flex items-center gap-2 opacity-80 pointer-events-none">
+                  <img src="https://img.icons8.com/?size=100&id=NzIdJDXpXX0B&format=png&color=000000" class="w-[14px] h-[14px] opacity-70" draggable="false">
+                  <span class="text-[12px] font-semibold text-mica-contrast tracking-wide">System > About</span>
+              </div>
+              <div class="flex gap-1 cursor-default -mr-2 pointer-events-auto">
+                  <button onclick="window.closeAbout()" class="w-8 h-8 hover:bg-red-500 hover:text-white rad-base flex items-center justify-center text-mica-contrast transition-colors"><i class="ph-bold ph-x text-[12px]"></i></button>
+              </div>
+          </div>
+          
+          <!-- Content -->
+          <div class="flex-1 p-8 overflow-y-auto custom-scroll flex flex-col gap-8 bg-white/5 relative">
+              <div class="absolute -top-32 -left-32 w-64 h-64 bg-sys-accent opacity-20 blur-[100px] rounded-full pointer-events-none z-0"></div>
+              
+              <div class="flex items-center gap-6 relative z-10">
+                  <div class="w-[84px] h-[84px] start-logo-masked-lg shrink-0"></div>
+                  <div>
+                      <h1 class="text-3xl font-display font-bold text-mica-contrast tracking-tight mb-1">Windows 12</h1>
+                      <p class="text-sm font-medium text-mica-contrast opacity-70">Version 1H05 (OS Build 040)</p>
+                  </div>
+              </div>
+
+              <div class="theme-bg p-5 rad-lg flex flex-col gap-4 ring-1 ring-white/5 relative z-10 shadow-md">
+                  <h3 class="text-sm font-bold text-mica-contrast flex items-center gap-2"><i class="ph-duotone ph-info text-lg text-sys-accent"></i> System specifications</h3>
+                  <div class="grid grid-cols-[110px_1fr] gap-x-4 gap-y-3 text-[13px]">
+                      <span class="font-semibold text-mica-contrast opacity-70 text-right">Device name</span>
+                      <span class="text-mica-contrast font-medium">DESKTOP-W12-PREVIEW</span>
+                      <span class="font-semibold text-mica-contrast opacity-70 text-right">Version</span>
+                      <span class="text-mica-contrast font-medium">1H05</span>
+                      <span class="font-semibold text-mica-contrast opacity-70 text-right">OS build</span>
+                      <span class="text-mica-contrast font-medium">040</span>
+                  </div>
+              </div>
+
+              <div class="mt-auto w-full flex justify-end pt-2 relative z-10">
+                  <button onclick="window.closeAbout()" class="theme-bg theme-bg-strong text-mica-contrast hover:bg-sys-accent hover:text-white px-8 py-2.5 text-xs font-bold rad-base transition-colors active:scale-95 ring-1 ring-white/10 shadow-sm">Copy details</button>
+              </div>
+          </div>
+      </div>
+
+      <!-- MAIN SETTINGS APP WINDOW (Draggable & Task View Aware) -->
+      <div id="app-settings" class="app-window app-window-hidden absolute top-1/2 left-1/2 w-[840px] h-[540px] rad-lg flex flex-col z-[15000]">
+          
+          <div class="task-view-blocker" onclick="window.toggleTaskView()"></div>
+
+          <!-- Titlebar (Draggable Area) -->
+          <div id="app-settings-titlebar" class="h-[36px] w-full flex justify-between items-center px-3 select-none bg-black/10 cursor-move" style="border-top-left-radius: calc(var(--os-radius) * 1.5); border-top-right-radius: calc(var(--os-radius) * 1.5);">
+              <div class="flex items-center gap-2 opacity-80 pointer-events-none">
+                  <i class="ph-bold ph-gear text-[14px] text-mica-contrast"></i>
+                  <span class="text-[11px] font-semibold text-mica-contrast">Settings</span>
+              </div>
+              <div class="flex gap-1 cursor-default">
+                  <button class="w-8 h-8 hover:bg-white/10 rad-base flex items-center justify-center text-mica-contrast transition-colors"><i class="ph-bold ph-minus text-[12px]"></i></button>
+                  <button class="w-8 h-8 hover:bg-white/10 rad-base flex items-center justify-center text-mica-contrast transition-colors"><i class="ph-bold ph-square text-[12px]"></i></button>
+                  <button onclick="window.closeSettings()" class="w-8 h-8 hover:bg-red-500 hover:text-white rad-base flex items-center justify-center text-mica-contrast transition-colors"><i class="ph-bold ph-x text-[12px]"></i></button>
+              </div>
+          </div>
+          
+          <div class="flex-1 flex flex-row overflow-hidden relative">
+              <!-- Sidebar Navigation -->
+              <div class="w-[240px] p-3 flex flex-col gap-1 bg-black/5 border-r border-white/5 overflow-y-auto custom-scroll">
+                 <div class="flex items-center gap-3 px-3 py-4 mb-3 theme-bg-hover rad-base ring-1 ring-white/5 shadow-sm">
+                     <img src="user.png" class="w-10 h-10 rad-base object-cover grayscale-[0.1]" onerror="this.src='https://cdn-icons-png.freepik.com/512/9131/9131478.png';">
+                     <div class="flex flex-col">
+                         <span class="text-[13px] font-bold text-mica-contrast leading-tight">Administrator</span>
+                         <span class="text-[10px] text-mica-contrast opacity-70 font-medium">Local Account</span>
+                     </div>
+                 </div>
+                 
+                 <!-- Nav Items -->
+                 <button onclick="window.switchSettingsTab('system')" id="nav-system" class="flex items-center gap-3 text-left px-3 py-2.5 text-[12px] font-bold text-mica-contrast theme-bg rad-base relative transition-all shadow-sm ring-1 ring-white/10"><i class="ph-bold ph-laptop text-[16px] text-sys-accent nav-icon transition-colors"></i> System</button>
+                 <button onclick="window.switchSettingsTab('personalization')" id="nav-personalization" class="flex items-center gap-3 text-left px-3 py-2.5 text-[12px] font-medium text-mica-contrast opacity-70 hover:opacity-100 hover:bg-white/5 rad-base transition-all"><i class="ph-bold ph-palette text-[16px] nav-icon transition-colors"></i> Personalization</button>
+              </div>
+
+              <!-- Main Content Area -->
+              <div class="flex-1 p-10 overflow-y-auto custom-scroll relative">
+                  
+                  <!-- SYSTEM PANE -->
+                  <div id="pane-system" class="flex flex-col gap-6 transition-opacity duration-300 max-w-2xl mx-auto">
+                      <h1 class="text-3xl font-display font-bold text-mica-contrast mb-2 tracking-tight">System</h1>
+                      
+                      <div class="flex items-center gap-4 theme-bg p-6 rad-lg cursor-pointer hover:bg-[rgba(var(--sys-accent-rgb),0.2)] transition-colors active:scale-[0.99] ring-1 ring-white/5 shadow-md group">
+                          <img src="https://img.icons8.com/?size=100&id=12226&format=png&color=000000" class="w-16 h-16 pointer-events-none opacity-90 group-hover:scale-105 transition-transform">
+                          <div class="flex flex-col">
+                              <h2 class="text-lg font-bold text-mica-contrast">Windows 12 Preview</h2>
+                              <p class="text-sm text-mica-contrast opacity-70">Build 040 (1H05 Rebuild Update)</p>
+                          </div>
+                          <button class="ml-auto px-5 py-2.5 bg-sys-accent hover:bg-sys-accent-hover text-white text-xs font-bold rad-base transition-colors active:scale-95 shadow-sm shadow-sys-accent/20">Check for updates</button>
+                      </div>
+                      
+                      <div class="theme-bg p-8 rad-lg flex flex-col items-center justify-center text-center h-56 ring-1 ring-white/5 shadow-inner cursor-pointer hover:bg-[rgba(255,255,255,0.05)] transition-colors" onclick="window.openAbout()">
+                          <i class="ph-duotone ph-info text-[48px] text-sys-accent mb-4"></i>
+                          <h3 class="text-lg font-bold text-mica-contrast">System Information</h3>
+                          <p class="text-[13px] text-mica-contrast opacity-70 mt-2 max-w-md leading-relaxed">Click here to view deep details about this active development build, including device and OS specifications.</p>
+                      </div>
+                  </div>
+
+                  <!-- PERSONALIZATION PANE -->
+                  <div id="pane-personalization" class="flex flex-col gap-6 transition-opacity duration-300 hidden max-w-2xl mx-auto">
+                      <h1 class="text-3xl font-display font-bold text-mica-contrast mb-2 tracking-tight">Personalization</h1>
+                      
+                      <!-- Wallpaper Module -->
+                      <div class="theme-bg p-6 rad-lg flex flex-col gap-4 ring-1 ring-white/5 shadow-md">
+                          <div class="flex justify-between items-center">
+                              <h3 class="text-[14px] font-bold text-mica-contrast flex items-center gap-2"><i class="ph-bold ph-image text-sys-accent text-lg"></i> Background</h3>
+                              <button onclick="window.setWallpaper('default')" class="text-[11px] font-semibold text-sys-accent hover:text-sys-accent-hover transition-colors bg-transparent border border-sys-accent/30 hover:border-sys-accent px-3 py-1 rad-base">Restore default</button>
+                          </div>
+                          
+                          <div class="w-full h-[160px] rad-base overflow-hidden relative ring-1 ring-black/20 shadow-inner">
+                              <div class="absolute inset-0 bg-cover bg-center transition-transform hover:scale-105 duration-700" style="background-image: var(--current-wallpaper);"></div>
+                          </div>
+
+                          <div class="relative w-full h-[60px] rad-base theme-bg-strong flex items-center justify-center gap-3 transition-colors hover:bg-[rgba(255,255,255,0.15)] group ring-1 ring-white/5 cursor-pointer" ondrop="window.handleWallpaperUpload(event)" ondragover="window.allowDrop(event)">
+                              <i class="ph-duotone ph-upload-simple text-[20px] text-mica-contrast opacity-60 group-hover:opacity-100 group-hover:text-sys-accent transition-all"></i>
+                              <span class="text-[12px] font-semibold text-mica-contrast opacity-80 group-hover:opacity-100 transition-opacity">Choose a photo or drop it here</span>
+                              <input type="file" id="wallpaper-upload-main" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" onchange="window.handleWallpaperUpload(event)">
+                          </div>
+                      </div>
+
+                      <!-- Taskbar & Desktop Module -->
+                      <div class="theme-bg p-6 rad-lg flex flex-col gap-5 ring-1 ring-white/5 shadow-md">
+                          <h3 class="text-[14px] font-bold text-mica-contrast flex items-center gap-2"><i class="ph-bold ph-layout text-sys-accent text-lg"></i> Taskbar Layout</h3>
+                          
+                          <div class="flex flex-col gap-2">
+                              <label class="text-[11px] font-bold text-mica-contrast opacity-80 uppercase tracking-wider">Behavior</label>
+                              <select id="layout-select" onchange="window.setTaskbarLayout(this.value)" class="win-input theme-bg-strong text-mica-contrast text-[13px] font-medium p-3 rad-base border border-[rgba(255,255,255,0.1)] outline-none focus:border-sys-accent transition-colors shadow-inner">
+                                  <option value="default">Default Taskbar (Split Islands)</option>
+                                  <option value="classic">Classic Taskbar (Unified Bottom)</option>
+                              </select>
+                          </div>
+                      </div>
+
+                      <!-- Colors & Glass Module -->
+                      <div class="theme-bg p-6 rad-lg flex flex-col gap-5 ring-1 ring-white/5 shadow-md">
+                          <h3 class="text-[14px] font-bold text-mica-contrast flex items-center gap-2"><i class="ph-bold ph-drop text-sys-accent text-lg"></i> Colors & Glass</h3>
+                          
+                          <div class="flex flex-col gap-2">
+                              <label class="text-[11px] font-bold text-mica-contrast opacity-80 uppercase tracking-wider">OS Accent Color</label>
+                              <div class="flex flex-wrap items-center gap-3">
+                                  <label title="Custom Color" for="custom-color-picker-main" class="relative w-8 h-8 rounded-full cursor-pointer hover:scale-105 active:scale-95 transition-transform flex items-center justify-center shadow-md ring-1 ring-white/10 bg-white/10">
+                                      <i class="ph-bold ph-palette text-[14px] text-mica-contrast"></i>
+                                      <input type="color" id="custom-color-picker-main" value="#006eff" class="opacity-0 absolute inset-0 w-full h-full cursor-pointer" oninput="window.setCustomOSColor(event)">
+                                  </label>
+                                  <div class="h-6 w-[1px] bg-mica-contrast opacity-20 mx-2"></div>
+                                  <button onclick="window.setOSColor('blue')" class="w-8 h-8 rounded-full bg-[#006eff] hover:scale-110 active:scale-95 transition-transform focus:outline-none shadow-md ring-1 ring-white/10"></button>
+                                  <button onclick="window.setOSColor('purple')" class="w-8 h-8 rounded-full bg-[#9333ea] hover:scale-110 active:scale-95 transition-transform focus:outline-none shadow-md ring-1 ring-white/10"></button>
+                                  <button onclick="window.setOSColor('green')" class="w-8 h-8 rounded-full bg-[#10b981] hover:scale-110 active:scale-95 transition-transform focus:outline-none shadow-md ring-1 ring-white/10"></button>
+                                  <button onclick="window.setOSColor('orange')" class="w-8 h-8 rounded-full bg-[#f97316] hover:scale-110 active:scale-95 transition-transform focus:outline-none shadow-md ring-1 ring-white/10"></button>
+                                  <button onclick="window.setOSColor('dark')" class="w-8 h-8 rounded-full bg-[#334155] hover:scale-110 active:scale-95 transition-transform focus:outline-none shadow-md ring-1 ring-white/10"></button>
+                              </div>
+                          </div>
+
+                          <div class="flex flex-col gap-2 pt-3 border-t border-white/5">
+                              <label class="text-[11px] font-bold text-mica-contrast opacity-80 uppercase tracking-wider">Mica Glass Base</label>
+                              <div class="flex flex-wrap items-center gap-3">
+                                  <label title="Custom Mica Color" for="mica-color-picker-main" class="relative w-8 h-8 rounded-full cursor-pointer hover:scale-105 active:scale-95 transition-transform flex items-center justify-center shadow-md ring-1 ring-white/10 bg-white/10">
+                                      <i class="ph-bold ph-palette text-[14px] text-mica-contrast"></i>
+                                      <input type="color" id="mica-color-picker-main" value="#ffffff" class="opacity-0 absolute inset-0 w-full h-full cursor-pointer" oninput="window.setCustomMicaColor(event)">
+                                  </label>
+                                  <div class="h-6 w-[1px] bg-mica-contrast opacity-20 mx-2"></div>
+                                  <button onclick="window.setMicaColor('#ffffff')" class="w-8 h-8 rounded-full bg-[#ffffff] hover:scale-110 active:scale-95 transition-transform focus:outline-none shadow-md ring-1 ring-white/10"></button>
+                                  <button onclick="window.setMicaColor('#e2e8f0')" class="w-8 h-8 rounded-full bg-[#e2e8f0] hover:scale-110 active:scale-95 transition-transform focus:outline-none shadow-md ring-1 ring-white/10"></button>
+                                  <button onclick="window.setMicaColor('#1e293b')" class="w-8 h-8 rounded-full bg-[#1e293b] hover:scale-110 active:scale-95 transition-transform focus:outline-none shadow-md ring-1 ring-white/10"></button>
+                                  <button onclick="window.setMicaColor('#000000')" class="w-8 h-8 rounded-full bg-[#000000] hover:scale-110 active:scale-95 transition-transform focus:outline-none shadow-md ring-1 ring-white/10"></button>
+                              </div>
+                          </div>
+
+                          <div class="flex flex-col gap-3 pt-3 border-t border-white/5">
+                              <div class="flex justify-between items-center">
+                                  <label class="text-[12px] font-bold text-mica-contrast uppercase tracking-wider">Transparency effects</label>
+                              </div>
+                              <input title="Adjust base glass transparency" type="range" min="0" max="0.9" step="0.01" value="0.45" class="win-slider opacity-slider-sync mt-2" oninput="window.setMicaAlpha(event)">
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+
+      <!-- START MENU (Separated Floating Islands) -->
+      <div id="start-menu-container" class="absolute bottom-[80px] left-1/2 -translate-x-1/2 flex flex-row gap-4 z-[9995] h-[520px] items-stretch pointer-events-none">
+          
+          <div id="sm-rail" class="w-[60px] taskbar-flat rad-lg py-4 flex flex-col justify-between items-center shrink-0 flyout-base flyout-hidden overflow-y-auto custom-scroll">
+              <button class="w-10 h-10 rad-base flex items-center justify-center transition-all active:scale-95 group theme-bg theme-bg-hover sm-step-3 shrink-0">
+                  <img src="user.png" class="w-8 h-8 rad-base group-hover:scale-110 transition-transform" onerror="this.src='https://cdn-icons-png.freepik.com/512/9131/9131478.png';">
+              </button>
+
+              <div class="flex flex-col gap-2 mt-auto">
+                  <button onclick="window.openSettings()" class="w-10 h-10 flex items-center justify-center rad-base theme-bg-hover transition-colors group active:scale-95 sm-step-3 shrink-0">
+                      <i class="ph-bold ph-gear text-[18px] text-mica-contrast"></i>
+                  </button>
+                  <button class="w-10 h-10 flex items-center justify-center rad-base theme-bg-hover transition-colors group active:scale-95 sm-step-3 shrink-0">
+                      <i class="ph-bold ph-power text-[18px] text-mica-contrast group-hover:text-red-600 transition-colors"></i>
+                  </button>
+              </div>
+          </div>
+
+          <div id="sm-apps" class="w-[380px] taskbar-flat rad-lg p-5 flex flex-col shrink-0 flyout-base flyout-hidden overflow-y-auto custom-scroll">
+              <div class="w-full theme-bg theme-bg-hover transition-colors rad-base h-9 flex items-center px-3 mb-5 cursor-text sm-step-2 shrink-0">
+                  <i class="ph-bold ph-magnifying-glass text-mica-contrast opacity-70 text-[14px]"></i>
+                  <span class="ml-3 text-[12px] text-mica-contrast opacity-70 font-medium">Type here to search</span>
+              </div>
+
+              <div class="flex justify-between items-center mb-3 px-1 sm-step-2 shrink-0">
+                  <h3 class="text-[13px] font-bold text-mica-contrast">Pinned</h3>
+                  <button class="text-[11px] font-semibold theme-bg theme-bg-hover px-2 py-1 rad-base transition-colors text-mica-contrast flex items-center gap-1 active:scale-95">All apps <i class="ph-bold ph-caret-right text-[10px]"></i></button>
+              </div>
+              
+              <div class="grid grid-cols-5 gap-y-4 gap-x-2 mb-5 shrink-0">
+                  <div onclick="window.openSettings()" class="flex flex-col items-center gap-1.5 theme-bg-hover p-2 rad-base transition-colors cursor-pointer group active:scale-95 sm-step-3">
+                      <img src="https://img.icons8.com/?size=100&id=73FgXcRF4HNx&format=png&color=000000" class="w-[28px] h-[28px] pointer-events-none" draggable="false">
+                      <span class="text-[11px] font-semibold text-mica-contrast">Settings</span>
+                  </div>
+              </div>
+
+              <div class="flex justify-between items-center mb-3 px-1 sm-step-2 shrink-0">
+                  <h3 class="text-[13px] font-bold text-mica-contrast">Recommended</h3>
+                  <button class="text-[11px] font-semibold theme-bg theme-bg-hover px-2 py-1 rad-base transition-colors text-mica-contrast flex items-center gap-1 active:scale-95">More <i class="ph-bold ph-caret-right text-[10px]"></i></button>
+              </div>
+
+              <div class="flex flex-col items-center justify-center min-h-[140px] theme-bg-strong rad-lg sm-step-2 border border-white/5 shrink-0">
+                  <i class="ph-duotone ph-folder-dashed text-[32px] text-mica-contrast mb-2 sm-step-3"></i>
+                  <span class="text-[12px] font-semibold text-mica-contrast">No recent files</span>
+                  <span class="text-[11px] text-mica-contrast font-medium opacity-80">To show your recent files, open them.</span>
+              </div>
+          </div>
+
+          <div id="sm-widgets" class="w-[300px] flex flex-col gap-4 shrink-0 flyout-base flyout-hidden overflow-y-auto custom-scroll pb-2" style="background: transparent !important; backdrop-filter: none !important;">
+              
+              <div class="h-[140px] taskbar-flat rad-lg p-4 flex flex-col justify-between relative overflow-hidden shrink-0 group/update sm-step-1">
+                  <div class="absolute inset-0 bg-sys-accent opacity-[0.1] pointer-events-none transition-colors duration-500"></div>
+                  <i class="ph-duotone ph-arrows-clockwise text-[100px] text-sys-accent opacity-20 absolute -right-4 -bottom-4 pointer-events-none transition-all duration-700 group-hover/update:rotate-180 sm-step-3"></i>
+                  
+                  <div class="flex items-center gap-2 relative z-10 mb-1 sm-step-2">
+                      <i class="ph-fill ph-arrows-clockwise text-sys-accent text-[16px] transition-colors duration-500 sm-step-3"></i>
+                      <h4 class="text-[13px] font-bold text-mica-contrast tracking-tight">Windows Update</h4>
+                  </div>
+                  
+                  <div class="relative z-10 flex-1 flex flex-col justify-center sm-step-2">
+                      <p class="text-[15px] font-bold text-mica-contrast leading-tight">1H05 Rebuild Update</p>
+                      <p class="text-[11px] font-medium text-mica-contrast mt-0.5 theme-bg px-1.5 py-0.5 rad-base w-max">Build 040 (Stable)</p>
+                  </div>
+                  
+                  <div class="flex items-center justify-between mt-auto relative z-10 pt-2 sm-step-2">
+                      <span class="text-[10px] font-semibold text-mica-contrast opacity-70">Last checked: Today</span>
+                      <button class="bg-sys-accent hover:bg-sys-accent-hover text-white text-[11px] font-bold px-3 py-1.5 rad-base transition-colors flex items-center gap-1.5 active:scale-95 sm-step-3 shadow-md shadow-sys-accent/20">
+                          Check <i class="ph-bold ph-caret-right"></i>
+                      </button>
+                  </div>
+              </div>
+
+              <div class="flex-1 min-h-[300px] taskbar-flat rad-lg p-4 flex flex-col relative overflow-hidden sm-step-1">
+                  <div class="absolute inset-0 bg-sys-accent opacity-[0.05] pointer-events-none transition-colors duration-500"></div>
+                  
+                  <div class="flex items-center justify-between mb-3 relative z-10 sm-step-2 shrink-0">
+                      <div class="flex items-center gap-2">
+                          <i class="ph-fill ph-palette text-sys-accent text-[16px] transition-colors duration-500 sm-step-3"></i>
+                          <h4 class="text-[13px] font-bold text-mica-contrast">Personalization</h4>
+                      </div>
+                      <button onclick="window.openSettings()" class="w-6 h-6 flex items-center justify-center rad-full theme-bg theme-bg-hover transition-colors text-mica-contrast active:scale-95 sm-step-3">
+                          <i class="ph-bold ph-gear text-[13px]"></i>
+                      </button>
+                  </div>
+
+                  <div class="flex-1 flex flex-col gap-2 relative z-10">
+                      <div class="theme-bg p-3 rad-lg flex flex-col gap-2 sm-step-2 shrink-0 border border-white/5">
+                          <div class="w-full h-[60px] rad-base overflow-hidden relative group/preview cursor-pointer shadow-inner" onclick="window.openSettings()">
+                              <div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover/preview:scale-105" style="background-image: var(--current-wallpaper);"></div>
+                          </div>
+                          
+                          <div class="flex justify-between items-center mt-1">
+                              <div class="relative w-full active:scale-95 transition-transform group" ondrop="window.handleWallpaperUpload(event)" ondragover="window.allowDrop(event)">
+                                  <input type="file" id="wallpaper-upload-start" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" onchange="window.handleWallpaperUpload(event)">
+                                  <button class="w-full theme-bg-strong hover:bg-white/10 text-mica-contrast text-[11px] font-bold py-1.5 rad-base transition-all flex items-center justify-center gap-1.5 pointer-events-none sm-step-3 border border-white/5">
+                                      Upload
+                                  </button>
+                              </div>
+                          </div>
+                      </div>
+
+                      <div class="theme-bg p-3 rad-lg flex flex-col gap-3 mt-1 sm-step-2 shrink-0 border border-white/5">
+                          <div class="flex flex-col gap-1.5">
+                              <label class="text-[10px] font-bold text-mica-contrast opacity-80 uppercase tracking-wider">Accent Color</label>
+                              <div class="flex flex-wrap items-center gap-2 sm-step-3">
+                                  <label title="Custom Color" for="custom-color-picker-sm" class="relative w-4 h-4 rounded-full cursor-pointer active:scale-90 transition-transform flex items-center justify-center shadow-sm ring-1 ring-white/10 bg-white/10">
+                                      <i class="ph-bold ph-palette text-[9px] text-mica-contrast"></i>
+                                      <input type="color" id="custom-color-picker-sm" value="#006eff" class="opacity-0 absolute inset-0 w-full h-full cursor-pointer" oninput="window.setCustomOSColor(event)">
+                                  </label>
+                                  <div class="h-3 w-[1px] bg-mica-contrast opacity-20 mx-0.5"></div>
+                                  <button onclick="window.setOSColor('blue')" class="w-4 h-4 rounded-full bg-[#006eff] active:scale-90 transition-all shadow-sm ring-1 ring-white/10"></button>
+                                  <button onclick="window.setOSColor('purple')" class="w-4 h-4 rounded-full bg-[#9333ea] active:scale-90 transition-all shadow-sm ring-1 ring-white/10"></button>
+                                  <button onclick="window.setOSColor('green')" class="w-4 h-4 rounded-full bg-[#10b981] active:scale-90 transition-all shadow-sm ring-1 ring-white/10"></button>
+                                  <button onclick="window.setOSColor('orange')" class="w-4 h-4 rounded-full bg-[#f97316] active:scale-90 transition-all shadow-sm ring-1 ring-white/10"></button>
+                              </div>
+                          </div>
+
+                          <div class="flex flex-col gap-1.5 pt-1">
+                              <label class="text-[10px] font-bold text-mica-contrast opacity-80 uppercase tracking-wider">Glass Color</label>
+                              <div class="flex flex-wrap items-center gap-2 sm-step-3">
+                                  <label title="Custom Mica Color" for="mica-color-picker-sm" class="relative w-4 h-4 rounded-full cursor-pointer active:scale-90 transition-transform flex items-center justify-center shadow-sm ring-1 ring-white/10 bg-white/10">
+                                      <i class="ph-bold ph-palette text-[9px] text-mica-contrast"></i>
+                                      <input type="color" id="mica-color-picker-sm" value="#ffffff" class="opacity-0 absolute inset-0 w-full h-full cursor-pointer" oninput="window.setCustomMicaColor(event)">
+                                  </label>
+                                  <div class="h-3 w-[1px] bg-mica-contrast opacity-20 mx-0.5"></div>
+                                  <button onclick="window.setMicaColor('#ffffff')" class="w-4 h-4 rounded-full bg-[#ffffff] active:scale-90 transition-all focus:outline-none shadow-sm ring-1 ring-white/10"></button>
+                                  <button onclick="window.setMicaColor('#e2e8f0')" class="w-4 h-4 rounded-full bg-[#e2e8f0] active:scale-90 transition-all focus:outline-none shadow-sm ring-1 ring-white/10"></button>
+                                  <button onclick="window.setMicaColor('#1e293b')" class="w-4 h-4 rounded-full bg-[#1e293b] active:scale-90 transition-all focus:outline-none shadow-sm ring-1 ring-white/10"></button>
+                                  <button onclick="window.setMicaColor('#000000')" class="w-4 h-4 rounded-full bg-[#000000] active:scale-90 transition-all focus:outline-none shadow-sm ring-1 ring-white/10"></button>
+                              </div>
+                          </div>
+                          
+                          <div class="flex flex-col gap-1 mt-1 pt-1 border-t border-white/5">
+                              <label class="text-[10px] font-bold text-mica-contrast opacity-80 uppercase tracking-wider">Glass Opacity</label>
+                              <div class="flex items-center mt-1 sm-step-3">
+                                   <input title="Adjust base glass transparency" type="range" min="0" max="0.9" step="0.01" value="0.45" class="win-slider opacity-slider-sync w-full" oninput="window.setMicaAlpha(event)">
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+
+          </div>
+
+      </div>
+
+      <!-- HORIZONTAL QUICK SETTINGS FLYOUT (Shrinked & Scrollable) -->
+      <div id="quick-settings-flyout" class="absolute bottom-[80px] right-2 w-[260px] max-h-[380px] taskbar-flat rad-lg p-4 flex flex-col flyout-right-base flyout-right-hidden z-[9995] overflow-y-auto custom-scroll shadow-2xl border border-white/10 sm-step-1">
+          
+          <div class="flex gap-4 relative z-10 shrink-0">
+              <!-- Left Column: Action Boxes (Smaller) -->
+              <div class="w-[90px] flex flex-col gap-2 shrink-0 h-[110px]">
+                  
+                  <!-- Brightness Box -->
+                  <div id="brightness-bg-layer" class="flex-1 rad-base flex items-center justify-center border border-white/5 transition-all duration-300 shadow-sm theme-bg">
+                      <i id="brightness-icon" class="ph-fill ph-sun text-[28px] transition-colors text-sys-accent"></i>
+                  </div>
+
+                  <!-- Night Light Box -->
+                  <div id="nl-bg-layer" class="flex-1 rad-base flex items-center justify-center border border-white/5 transition-all duration-300 shadow-sm theme-bg">
+                      <i id="nl-icon" class="ph-bold ph-moon text-[28px] text-mica-contrast opacity-50 transition-colors"></i>
+                  </div>
+
+              </div>
+
+              <!-- Right Column: Vertical Sliders -->
+              <div class="flex-1 flex justify-center gap-6 items-center h-[110px]">
+                  
+                  <div class="win-slider-vert-container">
+                      <input type="range" id="brightness-slider" min="0" max="100" value="100" class="win-slider-vert" oninput="window.updateBrightness(this)">
+                  </div>
+
+                  <div class="win-slider-vert-container">
+                      <input type="range" id="nl-slider" min="0" max="100" value="0" class="win-slider-vert" oninput="window.updateNightLight(this)">
+                  </div>
+
+              </div>
+          </div>
+      </div>
+
+      <!-- CONCEPT CALENDAR FLYOUT -->
+      <div id="calendar-flyout" class="absolute bottom-[80px] right-2 w-[360px] max-h-[560px] taskbar-flat rad-lg p-0 flex flex-col flyout-right-base flyout-right-hidden z-[9995] overflow-y-auto custom-scroll">
+          
+          <div class="px-5 pt-6 pb-4 relative overflow-hidden sm-step-1 shrink-0">
+              <div class="absolute top-0 right-0 w-32 h-32 bg-sys-accent opacity-[0.15] blur-3xl rounded-full pointer-events-none"></div>
+              <div class="relative z-10 flex flex-col">
+                  <p id="cal-header-day" class="text-[13px] font-semibold text-mica-contrast opacity-70 uppercase tracking-wider mb-0.5">...</p>
+                  <h2 id="cal-header-date" class="text-[32px] font-bold text-mica-contrast leading-none tracking-tight">...</h2>
+              </div>
+          </div>
+
+          <div class="flex justify-between items-center px-5 mb-3 mt-1 sm-step-2 shrink-0">
+              <h3 id="cal-month-year" class="text-[14px] font-bold text-mica-contrast">...</h3>
+              <div class="flex gap-1">
+                  <button onclick="window.changeMonth(event, -1)" class="w-8 h-8 flex items-center justify-center rad-base theme-bg-hover text-mica-contrast transition-colors active:scale-95 focus:outline-none"><i class="ph-bold ph-caret-up pointer-events-none"></i></button>
+                  <button onclick="window.changeMonth(event, 1)" class="w-8 h-8 flex items-center justify-center rad-base theme-bg-hover text-mica-contrast transition-colors active:scale-95 focus:outline-none"><i class="ph-bold ph-caret-down pointer-events-none"></i></button>
+              </div>
+          </div>
+          
+          <div class="px-5 pb-5 sm-step-2 shrink-0">
+              <div class="grid grid-cols-7 gap-1 mb-2">
+                  <div class="text-center text-[11px] font-bold text-mica-contrast opacity-60">Su</div>
+                  <div class="text-center text-[11px] font-bold text-mica-contrast opacity-60">Mo</div>
+                  <div class="text-center text-[11px] font-bold text-mica-contrast opacity-60">Tu</div>
+                  <div class="text-center text-[11px] font-bold text-mica-contrast opacity-60">We</div>
+                  <div class="text-center text-[11px] font-bold text-mica-contrast opacity-60">Th</div>
+                  <div class="text-center text-[11px] font-bold text-mica-contrast opacity-60">Fr</div>
+                  <div class="text-center text-[11px] font-bold text-mica-contrast opacity-60">Sa</div>
+              </div>
+              <div id="cal-days-grid" class="grid grid-cols-7 gap-y-2 gap-x-1 justify-items-center">
+                  <!-- Dynamically populated via JS -->
+              </div>
+          </div>
+          
+          <div class="p-5 pt-4 theme-bg mt-auto sm-step-1 border-t border-white/5 shrink-0">
+              <div class="flex justify-between items-center mb-3 sm-step-2">
+                  <h4 id="agenda-title" class="text-[13px] font-bold text-mica-contrast">Today's Agenda</h4>
+                  <button class="text-[11px] font-semibold theme-bg-hover px-2 py-1 rad-base transition-colors text-mica-contrast active:scale-95 flex items-center gap-1 focus:outline-none ring-1 ring-white/10"><i class="ph-bold ph-plus"></i> Add</button>
+              </div>
+              <div id="agenda-content" class="flex flex-col gap-2 sm-step-3">
+                  <!-- Dynamic content injected here -->
+              </div>
+          </div>
+      </div>
+
+      <!-- TASKBAR -->
+      <div id="taskbar-wrapper" class="absolute bottom-0 left-0 w-full flex items-center transition-all duration-500 ease-[cubic-bezier(0.1,0.9,0.2,1.0)] tb-visible" ondblclick="window.hideTaskbar()" onclick="window.showTaskbar(event)">
+            
+            <div id="tb-segment-about" class="taskbar-segment tb-reveal-visible pointer-events-auto h-[56px] taskbar-flat rad-lg flex items-center px-2 shrink-0 justify-self-start">
+                <button id="tb-app-btn-about" onclick="window.openAbout(event)" class="flex items-center justify-center theme-bg-hover active:scale-90 w-[44px] h-[44px] rad-base transition-transform duration-300 group cursor-default focus:outline-none">
+                  <img src="https://img.icons8.com/?size=100&id=NzIdJDXpXX0B&format=png&color=000000" class="w-[24px] h-[24px] pointer-events-none opacity-90 group-hover:scale-105 transition-transform" draggable="false" alt="About">
+                </button>
+            </div>
+
+            <div id="tb-apps-segment" class="taskbar-segment tb-reveal-visible pointer-events-auto h-[56px] taskbar-flat rad-lg flex items-center justify-center px-2 gap-1 z-10">
+                
+                <button id="tb-start" onclick="window.toggleStartMenu(event)" class="w-[44px] h-[44px] flex items-center justify-center rad-base theme-bg-hover active:scale-90 transition-transform duration-300 group shrink-0 cursor-default relative focus:outline-none">
+                  <div class="start-logo-glow"></div>
+                  <div class="start-logo-masked pointer-events-none relative z-10"></div>
+                </button>
+
+                <!-- TASK VIEW BUTTON -->
+                <button onclick="window.toggleTaskView(event)" class="w-[44px] h-[44px] flex items-center justify-center rad-base theme-bg-hover active:scale-90 transition-transform duration-300 shrink-0 cursor-default relative group focus:outline-none">
+                  <img src="https://img.icons8.com/?size=100&id=tMgGl6VfxCnN&format=png&color=000000" class="w-[24px] h-[24px] pointer-events-none transition-transform duration-300 group-hover:scale-105" draggable="false">
+                </button>
+
+                <button onclick="window.openSettings(event)" class="w-[44px] h-[44px] flex items-center justify-center rad-base theme-bg-hover active:scale-90 transition-transform duration-300 shrink-0 cursor-default relative group focus:outline-none">
+                  <img src="https://img.icons8.com/?size=100&id=73FgXcRF4HNx&format=png&color=000000" class="w-[24px] h-[24px] pointer-events-none transition-transform duration-300 group-hover:scale-105" draggable="false">
+                </button>
+
+            </div>
+
+            <div id="tb-segment-tray" class="taskbar-segment tb-reveal-visible pointer-events-auto h-[56px] taskbar-flat rad-lg flex items-center px-2 shrink-0 justify-self-end">
+                
+                <button class="flex items-center justify-center theme-bg-hover active:scale-95 w-[24px] h-[42px] rad-base transition-transform duration-300 cursor-default focus:outline-none">
+                    <i class="ph-bold ph-caret-up text-[14px] text-mica-contrast"></i>
+                </button>
+
+                <button id="tb-app-btn-tray" onclick="window.toggleQuickSettings(event)" class="flex items-center justify-center theme-bg-hover active:scale-95 px-2 h-[42px] rad-base transition-transform duration-300 gap-2 group cursor-default focus:outline-none">
+                  <div class="flex items-center text-[18px] text-mica-contrast pointer-events-none">
+                      <i class="ph-fill ph-desktop"></i>
+                  </div>
+                </button>
+                
+                <button id="tb-app-btn-clock" onclick="window.toggleCalendar(event)" class="flex flex-col items-end justify-center theme-bg-hover active:scale-95 px-3 h-[42px] rad-base transition-transform duration-300 cursor-default focus:outline-none">
+                  <span class="js-tb-time text-[12px] font-semibold text-mica-contrast pointer-events-none leading-none"></span>
+                  <span class="js-tb-date text-[11px] text-mica-contrast opacity-80 mt-1 pointer-events-none leading-none font-medium"></span>
+                </button>
+            </div>
+
+        </div>
+    </div>
+  </div>
+
+  <script>
+    // System Lifecycle
+    window.dismissLockScreen = dismissLockScreen;
+    window.triggerWelcome = triggerWelcome;
+    window.toggleStartMenu = toggleStartMenu;
+    window.toggleQuickSettings = toggleQuickSettings;
+    window.toggleTaskView = toggleTaskView;
+    window.handleSearch = handleSearch;
+    window.setWallpaper = setWallpaper;
+    window.handleWallpaperUpload = handleWallpaperUpload;
+    window.allowDrop = function(e) { e.preventDefault(); };
+    window.setOSColor = setOSColor;
+    window.setCustomOSColor = setCustomOSColor;
+    window.setCustomMicaColor = setCustomMicaColor;
+    window.setMicaColor = setMicaColor;
+    window.setMicaAlpha = setMicaAlpha;
+    window.updateBrightness = updateBrightness;
+    window.updateNightLight = updateNightLight;
+    window.showTaskbar = showTaskbar;
+    window.hideTaskbar = hideTaskbar;
+    window.setTaskbarLayout = setTaskbarLayout;
+    window.toggleCalendar = toggleCalendar;
+    window.changeMonth = changeMonth;
+    window.selectDate = selectDate;
+    window.openSettings = openSettings;
+    window.closeSettings = closeSettings;
+    window.openAbout = openAbout;
+    window.closeAbout = closeAbout;
+    window.switchSettingsTab = switchSettingsTab;
+    window.handleAppClick = handleAppClick;
+    window.openSearchFlyout = openSearchFlyout;
+    window.closeSearchFlyout = closeSearchFlyout;
+    window.handleSearchInput = handleSearchInput;
+
+    let isStartOpen = false;
+    let isTaskbarVisible = true;
+    let isSystemStarted = false; 
+    let isCalOpen = false;
+    let isQsOpen = false;
+    let isTaskViewOpen = false;
+    let isSearchOpen = false;
+    let calViewDate = new Date();
+    let selectedDate = new Date(); 
+    
+    // Layout State
+    let currentTaskbarLayout = 'default';
+
+    // --- High-Quality Wallpaper Storage (IndexedDB) ---
+    const dbName = "Win12DB";
+    const storeName = "wallpapers";
+
+    function initDB(callback) {
+        const request = indexedDB.open(dbName, 1);
+        request.onupgradeneeded = (e) => {
+            e.target.result.createObjectStore(storeName);
+        };
+        request.onsuccess = (e) => callback(e.target.result);
+        request.onerror = (e) => console.error("IndexedDB error", e);
+    }
+
+    function saveWallpaper(file) {
+        initDB(db => {
+            const tx = db.transaction(storeName, "readwrite");
+            tx.objectStore(storeName).put(file, "custom_wallpaper");
+        });
+    }
+
+    function loadWallpaper() {
+        initDB(db => {
+            const tx = db.transaction(storeName, "readonly");
+            const request = tx.objectStore(storeName).get("custom_wallpaper");
+            request.onsuccess = (e) => {
+                const file = e.target.result;
+                if (file) {
+                    const url = URL.createObjectURL(file);
+                    document.documentElement.style.setProperty('--current-wallpaper', `url('${url}')`);
+                }
+            };
+        });
+    }
+
+    // --- Local Storage Management ---
+    function saveSettings() {
+        const settings = {
+            accent: document.documentElement.style.getPropertyValue('--sys-accent'),
+            accentRgb: document.documentElement.style.getPropertyValue('--sys-accent-rgb'),
+            micaColorRgb: document.documentElement.style.getPropertyValue('--mica-color-rgb'),
+            micaAlpha: document.documentElement.style.getPropertyValue('--mica-base-alpha'),
+            contrast: document.documentElement.style.getPropertyValue('--mica-contrast'),
+            taskbarLayout: currentTaskbarLayout
+        };
+        try {
+            localStorage.setItem('win12_settings', JSON.stringify(settings));
+        } catch (e) {
+            console.warn('Could not save settings to localStorage.');
+        }
+    }
+
+    function loadSettings() {
+        const saved = localStorage.getItem('win12_settings');
+        if (saved) {
+            try {
+                const settings = JSON.parse(saved);
+                if(settings.accent) document.documentElement.style.setProperty('--sys-accent', settings.accent);
+                if(settings.accentRgb) document.documentElement.style.setProperty('--sys-accent-rgb', settings.accentRgb);
+                if(settings.micaColorRgb) document.documentElement.style.setProperty('--mica-color-rgb', settings.micaColorRgb);
+                if(settings.contrast) document.documentElement.style.setProperty('--mica-contrast', settings.contrast);
+                
+                if(settings.micaAlpha) {
+                    document.documentElement.style.setProperty('--mica-base-alpha', settings.micaAlpha);
+                    document.querySelectorAll('.opacity-slider-sync').forEach(slider => {
+                        slider.value = settings.micaAlpha;
+                    });
+                }
+                
+                if(settings.accent) {
+                    const m1 = document.getElementById('custom-color-picker-main');
+                    const m2 = document.getElementById('custom-color-picker-sm');
+                    if(m1) m1.value = settings.accent.trim();
+                    if(m2) m2.value = settings.accent.trim();
+                }
+                
+                if(settings.micaColorRgb) {
+                    const hex = rgbStrToHex(settings.micaColorRgb);
+                    const c1 = document.getElementById('mica-color-picker-main');
+                    const c2 = document.getElementById('mica-color-picker-sm');
+                    if(c1) c1.value = hex;
+                    if(c2) c2.value = hex;
+                }
+
+                if(settings.taskbarLayout) {
+                    const sel = document.getElementById('layout-select');
+                    if(sel) sel.value = settings.taskbarLayout;
+                    currentTaskbarLayout = settings.taskbarLayout;
+                }
+            } catch(e) {
+                console.error("Failed to parse local storage settings", e);
+            }
+        } else {
+            setMicaColor('#ffffff'); 
+        }
+
+        setTaskbarLayout(currentTaskbarLayout);
+        loadWallpaper();
+    }
+
+    function rgbStrToHex(rgbStr) {
+        if(!rgbStr) return '#ffffff';
+        let arr = rgbStr.split(',').map(n => parseInt(n.trim(), 10));
+        return "#" + (1 << 24 | arr[0] << 16 | arr[1] << 8 | arr[2]).toString(16).slice(1);
+    }
+
+    // --- Taskbar Configuration Engine ---
+    function updateTaskbarVisibility() {
+        const wrapper = document.getElementById('taskbar-wrapper');
+        if (!wrapper) return;
+        
+        wrapper.classList.remove('tb-visible', 'tb-hidden');
+
+        if (isTaskbarVisible) {
+            wrapper.classList.add('tb-visible');
+        } else {
+            wrapper.classList.add('tb-hidden');
+        }
+    }
+
+    function setTaskbarLayout(layout) {
+        currentTaskbarLayout = layout;
+        const wrapper = document.getElementById('taskbar-wrapper');
+        const appsSeg = document.getElementById('tb-apps-segment');
+        const aboutSeg = document.getElementById('tb-segment-about');
+        const traySeg = document.getElementById('tb-segment-tray');
+        
+        // Reset base wrapper classes
+        wrapper.className = 'absolute bottom-0 z-[9999] flex items-center transition-all duration-500 w-full left-0';
+        appsSeg.className = 'taskbar-segment tb-reveal-visible pointer-events-auto h-[56px] taskbar-flat rad-lg flex items-center justify-center px-2 gap-1 z-10';
+        
+        // Re-enable individual flat backgrounds for children
+        document.querySelectorAll('.taskbar-segment').forEach(seg => {
+            seg.classList.remove('taskbar-flat-disabled');
+        });
+
+        if (layout === 'default') {
+            wrapper.classList.add('px-2', 'pb-2', 'pt-2', 'justify-between');
+            appsSeg.classList.add('flex-1', 'mx-2'); // Stretches middle
+        } else if (layout === 'classic') {
+            wrapper.classList.add('px-4', 'pb-0', 'pt-0', 'justify-between', 'taskbar-flat');
+            appsSeg.classList.add('flex-1', 'mx-2', 'taskbar-flat-disabled');
+            aboutSeg.classList.add('taskbar-flat-disabled');
+            traySeg.classList.add('taskbar-flat-disabled');
+        }
+
+        updateTaskbarVisibility();
+        saveSettings();
+    }
+
+    // --- Task View Engine ---
+    function toggleTaskView(e) {
+        if(e) e.stopPropagation();
+        
+        if(isStartOpen) toggleStartMenu();
+        if(isCalOpen) toggleCalendar();
+        if(isQsOpen) toggleQuickSettings();
+        if(isSearchOpen) closeSearchFlyout();
+        
+        const osRoot = document.getElementById('os-root');
+        if (!osRoot) return;
+
+        isTaskViewOpen = !isTaskViewOpen;
+        
+        if(isTaskViewOpen) {
+            osRoot.classList.add('task-view-active');
+        } else {
+            osRoot.classList.remove('task-view-active');
+        }
+    }
+
+    function handleAppClick(e) {
+        if(isTaskViewOpen) {
+            e.stopPropagation();
+            toggleTaskView(); 
+        } else {
+            e.stopPropagation(); 
+        }
+    }
+
+    // --- Draggable App Engine (Settings & About) ---
+    let dragX = 0, dragY = 0, startX = 0, startY = 0;
+    let currentDraggingApp = null;
+    
+    const titleBars = [
+        document.getElementById('app-settings-titlebar'),
+        document.getElementById('app-about-titlebar')
+    ];
+
+    titleBars.forEach(bar => {
+        if(bar) bar.addEventListener('mousedown', dragMouseDown);
+    });
+
+    function dragMouseDown(e) {
+        if(isTaskViewOpen) return; 
+        if(e.target.tagName === 'BUTTON' || e.target.closest('button')) return; 
+        e.preventDefault();
+        
+        currentDraggingApp = e.target.closest('.app-window');
+        if (!currentDraggingApp) return;
+
+        // Ensure clicked window comes to front
+        document.querySelectorAll('.app-window').forEach(app => app.style.zIndex = '15000');
+        currentDraggingApp.style.zIndex = '16000';
+
+        // Extract current translation values
+        let cx = 0, cy = 0;
+        const transform = window.getComputedStyle(currentDraggingApp).transform;
+        if(transform !== 'none') {
+            const matrix = transform.match(/^matrix\((.+)\)$/);
+            if(matrix) {
+                const values = matrix[1].split(', ');
+                cx = parseFloat(values[4]);
+                cy = parseFloat(values[5]);
+            }
+        }
+        
+        // Compensate for the native -50% CSS transform
+        const rect = currentDraggingApp.getBoundingClientRect();
+        dragX = rect.left + (rect.width/2) - (window.innerWidth/2);
+        dragY = rect.top + (rect.height/2) - (window.innerHeight/2);
+
+        startX = e.clientX - dragX;
+        startY = e.clientY - dragY;
+        
+        document.onmouseup = closeDragElement;
+        document.onmousemove = elementDrag;
+        currentDraggingApp.classList.add('dragging'); 
+    }
+
+    function elementDrag(e) {
+        e.preventDefault();
+        dragX = e.clientX - startX;
+        dragY = e.clientY - startY;
+        currentDraggingApp.style.setProperty('--drag-x', dragX + 'px');
+        currentDraggingApp.style.setProperty('--drag-y', dragY + 'px');
+    }
+
+    function closeDragElement() {
+        document.onmouseup = null;
+        document.onmousemove = null;
+        if (currentDraggingApp) {
+            currentDraggingApp.classList.remove('dragging'); 
+            currentDraggingApp = null;
+        }
+    }
+
+    // App Toggles
+    const settingsApp = document.getElementById('app-settings');
+    function openSettings(e) {
+        if(e) e.stopPropagation();
+        if(isStartOpen) toggleStartMenu();
+        if(isCalOpen) toggleCalendar();
+        if(isQsOpen) toggleQuickSettings();
+        if(isTaskViewOpen) toggleTaskView();
+        if(isSearchOpen) closeSearchFlyout();
+        
+        if (settingsApp) {
+            document.querySelectorAll('.app-window').forEach(app => app.style.zIndex = '15000');
+            settingsApp.style.zIndex = '16000';
+            settingsApp.classList.remove('app-window-hidden');
+            settingsApp.classList.add('app-window-visible');
+        }
+    }
+    function closeSettings() {
+        if (settingsApp) {
+            settingsApp.classList.remove('app-window-visible');
+            settingsApp.classList.add('app-window-hidden');
+            setTimeout(() => {
+                settingsApp.style.setProperty('--drag-x', '0px');
+                settingsApp.style.setProperty('--drag-y', '0px');
+            }, 300);
+        }
+    }
+
+    const aboutApp = document.getElementById('app-about');
+    function openAbout(e) {
+        if(e) e.stopPropagation();
+        if(isStartOpen) toggleStartMenu();
+        if(isCalOpen) toggleCalendar();
+        if(isQsOpen) toggleQuickSettings();
+        if(isTaskViewOpen) toggleTaskView();
+        if(isSearchOpen) closeSearchFlyout();
+        
+        if (aboutApp) {
+            document.querySelectorAll('.app-window').forEach(app => app.style.zIndex = '15000');
+            aboutApp.style.zIndex = '16000';
+            aboutApp.classList.remove('app-window-hidden');
+            aboutApp.classList.add('app-window-visible');
+        }
+    }
+    function closeAbout() {
+        if (aboutApp) {
+            aboutApp.classList.remove('app-window-visible');
+            aboutApp.classList.add('app-window-hidden');
+            setTimeout(() => {
+                aboutApp.style.setProperty('--drag-x', '0px');
+                aboutApp.style.setProperty('--drag-y', '0px');
+            }, 300);
+        }
+    }
+
+    function switchSettingsTab(tabName) {
+        document.querySelectorAll('#app-settings .nav-icon').forEach(el => el.classList.remove('text-sys-accent'));
+        document.querySelectorAll('#nav-system, #nav-personalization').forEach(el => {
+            el.classList.remove('font-bold', 'text-mica-contrast', 'theme-bg');
+            el.classList.remove('ring-1', 'ring-white/10', 'shadow-sm');
+            el.classList.add('font-medium', 'opacity-70');
+        });
+
+        const activeNav = document.getElementById(`nav-${tabName}`);
+        if(activeNav) {
+            activeNav.classList.remove('font-medium', 'opacity-70');
+            activeNav.classList.add('font-bold', 'text-mica-contrast', 'theme-bg');
+            activeNav.classList.add('ring-1', 'ring-white/10', 'shadow-sm');
+            activeNav.querySelector('.nav-icon').classList.add('text-sys-accent');
+        }
+
+        document.getElementById('pane-system').classList.add('hidden');
+        document.getElementById('pane-personalization').classList.add('hidden');
+        
+        const activePane = document.getElementById(`pane-${tabName}`);
+        if(activePane) activePane.classList.remove('hidden');
+    }
+
+    // --- Search Logic & Flyout Engine (Local Only) ---
+    
+    // Define searchable local objects
+    const localSearchIndex = [
+        { id: 'settings', title: 'Settings', desc: 'System Application', icon: 'ph-gear', action: () => { openSettings(); closeSearchFlyout(); } },
+        { id: 'personalization', title: 'Personalization', desc: 'System Settings', icon: 'ph-palette', action: () => { openSettings(); switchSettingsTab('personalization'); closeSearchFlyout(); } },
+        { id: 'about', title: 'System Information', desc: 'About OS', icon: 'ph-info', action: () => { openAbout(); closeSearchFlyout(); } },
+        { id: 'calendar', title: 'Calendar', desc: 'Time & Date', icon: 'ph-calendar', action: () => { toggleCalendar(); closeSearchFlyout(); } },
+        { id: 'taskview', title: 'Task View', desc: 'Desktops & Windows', icon: 'ph-squares-four', action: () => { toggleTaskView(); closeSearchFlyout(); } },
+        { id: 'quicksettings', title: 'Quick Settings', desc: 'Brightness & Display', icon: 'ph-sliders-horizontal', action: () => { toggleQuickSettings(); closeSearchFlyout(); } }
+    ];
+
+    function openSearchFlyout() {
+        if(isTaskViewOpen) return;
+        isSearchOpen = true;
+        
+        if (isStartOpen) toggleStartMenu();
+        if (isCalOpen) toggleCalendar();
+        if (isQsOpen) toggleQuickSettings();
+        
+        const flyout = document.getElementById('search-flyout');
+        if(flyout) {
+            flyout.classList.remove('flyout-hidden');
+            flyout.classList.add('flyout-visible');
+        }
+    }
+
+    function closeSearchFlyout() {
+        isSearchOpen = false;
+        const flyout = document.getElementById('search-flyout');
+        const input = document.getElementById('top-search-input');
+        if(flyout) {
+            flyout.classList.remove('flyout-visible');
+            flyout.classList.add('flyout-hidden');
+        }
+        if(input) {
+            input.value = '';
+            handleSearchInput({target: input}); // reset back to default view
+        }
+    }
+
+    function handleSearchInput(e) {
+        const val = e.target.value.trim().toLowerCase();
+        const defaultView = document.getElementById('search-default-view');
+        const resultsView = document.getElementById('search-results-view');
+        const list = document.getElementById('local-search-list');
+        
+        if (val !== '') {
+            if(defaultView) { defaultView.classList.add('hidden'); defaultView.classList.remove('flex'); }
+            if(resultsView) { resultsView.classList.remove('hidden'); resultsView.classList.add('flex'); }
+            
+            const matches = localSearchIndex.filter(item => 
+                item.title.toLowerCase().includes(val) || item.desc.toLowerCase().includes(val)
+            );
+
+            list.innerHTML = '';
+            if(matches.length > 0) {
+                matches.forEach((match, idx) => {
+                    const el = document.createElement('div');
+                    // Style first item as "best match"
+                    el.className = `flex items-center gap-4 ${idx === 0 ? 'theme-bg-strong ring-1 ring-sys-accent/50' : 'theme-bg-hover'} p-3 rad-base cursor-pointer hover:bg-[rgba(var(--sys-accent-rgb),0.35)] transition-colors active:scale-[0.99] border border-[rgba(255,255,255,0.05)]`;
+                    el.onclick = match.action;
+                    el.innerHTML = `
+                        <div class="w-10 h-10 bg-white/10 rounded-md flex items-center justify-center text-xl text-mica-contrast shadow-inner border border-white/10">
+                            <i class="ph-duotone ${match.icon}"></i>
+                        </div>
+                        <div class="flex flex-col flex-1">
+                            <h4 class="text-[14px] font-bold text-mica-contrast">${match.title}</h4>
+                            <p class="text-[11px] text-mica-contrast opacity-70 font-medium">${match.desc}</p>
+                        </div>
+                        <i class="ph-bold ph-caret-right text-mica-contrast opacity-50 text-lg"></i>
+                    `;
+                    list.appendChild(el);
+                });
+            } else {
+                list.innerHTML = `
+                    <div class="flex flex-col items-center justify-center h-32 opacity-70 mt-4">
+                        <i class="ph-duotone ph-magnifying-glass text-3xl mb-3 text-mica-contrast"></i>
+                        <span class="text-[13px] font-medium text-mica-contrast">No local apps or settings found for "${val}"</span>
+                    </div>
+                `;
+            }
+
+        } else {
+            if(defaultView) { defaultView.classList.remove('hidden'); defaultView.classList.add('flex'); }
+            if(resultsView) { resultsView.classList.add('hidden'); resultsView.classList.remove('flex'); }
+        }
+    }
+
+    function handleSearch(e) {
+        if (e.key === 'Enter') {
+            const val = e.target.value.trim().toLowerCase();
+            const matches = localSearchIndex.filter(item => 
+                item.title.toLowerCase().includes(val) || item.desc.toLowerCase().includes(val)
+            );
+            if (matches.length > 0) {
+                matches[0].action(); // Open the best match on Enter
+            }
+        }
+    }
+
+    // --- OS Color Engine ---
+    function hexToRgbString(hex) {
+        hex = hex.replace(/^#/, '');
+        let bigint = parseInt(hex, 16);
+        let r = (bigint >> 16) & 255;
+        let g = (bigint >> 8) & 255;
+        let b = bigint & 255;
+        return `${r}, ${g}, ${b}`;
+    }
+
+    function setCustomOSColor(event) {
+        const hexColor = event.target.value;
+        const rgbString = hexToRgbString(hexColor);
+        const root = document.documentElement;
+        root.style.setProperty('--sys-accent', hexColor);
+        root.style.setProperty('--sys-accent-rgb', rgbString);
+        
+        // Sync sliders directly
+        const bSlider = document.getElementById('brightness-slider');
+        if(bSlider) updateBrightness(bSlider);
+        
+        const nlSlider = document.getElementById('nl-slider');
+        if(nlSlider) updateNightLight(nlSlider);
+        
+        const cpm = document.getElementById('custom-color-picker-main');
+        const cps = document.getElementById('custom-color-picker-sm');
+        if(cpm) cpm.value = hexColor;
+        if(cps) cps.value = hexColor;
+        saveSettings();
+    }
+
+    function setOSColor(theme) {
+        const root = document.documentElement;
+        const themes = {
+            'blue': { hex: '#006eff', rgb: '0, 110, 255' },
+            'purple': { hex: '#9333ea', rgb: '147, 51, 234' },
+            'green': { hex: '#10b981', rgb: '16, 185, 129' },
+            'orange': { hex: '#f97316', rgb: '249, 115, 22' },
+            'dark': { hex: '#334155', rgb: '51, 65, 85' },
+            'red': { hex: '#ef4444', rgb: '239, 68, 68' }
+        };
+        const t = themes[theme] || themes['blue'];
+        root.style.setProperty('--sys-accent', t.hex);
+        root.style.setProperty('--sys-accent-rgb', t.rgb);
+        
+        // Sync sliders
+        const bSlider = document.getElementById('brightness-slider');
+        if(bSlider) updateBrightness(bSlider);
+        
+        const nlSlider = document.getElementById('nl-slider');
+        if(nlSlider) updateNightLight(nlSlider);
+        
+        saveSettings();
+    }
+
+    function setCustomMicaColor(event) {
+        setMicaColor(event.target.value);
+    }
+
+    function setMicaColor(hexColor) {
+        const rgbString = hexToRgbString(hexColor);
+        document.documentElement.style.setProperty('--mica-color-rgb', rgbString);
+
+        const mcm = document.getElementById('mica-color-picker-main');
+        const mcs = document.getElementById('mica-color-picker-sm');
+        if(mcm) mcm.value = hexColor;
+        if(mcs) mcs.value = hexColor;
+
+        const rgb = rgbString.split(',').map(Number);
+        const luminance = 0.299 * rgb[0] + 0.587 * rgb[1] + 0.114 * rgb[2];
+        const contrastColor = luminance > 150 ? '#0f172a' : '#ffffff';
+        document.documentElement.style.setProperty('--mica-contrast', contrastColor);
+        saveSettings();
+    }
+
+    function setMicaAlpha(event) {
+        document.documentElement.style.setProperty('--mica-base-alpha', event.target.value);
+        document.querySelectorAll('.opacity-slider-sync').forEach(slider => {
+            slider.value = event.target.value;
+        });
+        saveSettings();
+    }
+
+    // --- Slider Engines ---
+    function updateNightLight(slider) {
+        const val = slider.value;
+        const valText = document.getElementById('nl-val-text');
+        if (valText) valText.innerText = val + '%';
+        
+        const icon = document.getElementById('nl-icon');
+        const bgLayer = document.getElementById('nl-bg-layer');
+
+        if (val > 0) {
+            if (icon) icon.className = 'ph-fill ph-moon text-[28px] transition-colors text-sys-accent';
+            if (bgLayer) {
+                bgLayer.classList.add('theme-bg-strong');
+                bgLayer.classList.remove('theme-bg');
+            }
+        } else {
+            if (icon) icon.className = 'ph-bold ph-moon text-[28px] transition-colors text-mica-contrast opacity-50';
+            if (bgLayer) {
+                bgLayer.classList.add('theme-bg');
+                bgLayer.classList.remove('theme-bg-strong');
+            }
+        }
+
+        const overlay = document.getElementById('night-light-overlay');
+        if(overlay) overlay.style.opacity = (val / 100) * 0.6;
+    }
+
+    function updateBrightness(slider) {
+        const val = slider.value;
+        const valText = document.getElementById('brightness-val-text');
+        if (valText) valText.innerText = val + '%';
+        
+        const icon = document.getElementById('brightness-icon');
+        const bgLayer = document.getElementById('brightness-bg-layer');
+
+        if (val > 0) {
+            if (icon) icon.className = 'ph-fill ph-sun text-[28px] transition-colors text-sys-accent';
+            if (bgLayer) {
+                bgLayer.classList.add('theme-bg-strong');
+                bgLayer.classList.remove('theme-bg');
+            }
+        } else {
+            if (icon) icon.className = 'ph-bold ph-sun-dim text-[28px] transition-colors text-mica-contrast opacity-50';
+            if (bgLayer) {
+                bgLayer.classList.add('theme-bg');
+                bgLayer.classList.remove('theme-bg-strong');
+            }
+        }
+
+        const overlay = document.getElementById('brightness-overlay');
+        if(overlay) overlay.style.opacity = 0.75 - ((val / 100) * 0.75);
+    }
+
+    // --- Taskbar Toggle Logic ---
+    function hideTaskbar() {
+        if (!isSystemStarted) return;
+        isTaskbarVisible = false;
+        updateTaskbarVisibility();
+        
+        if (isStartOpen) toggleStartMenu();
+        if (isCalOpen) toggleCalendar();
+        if (isQsOpen) toggleQuickSettings();
+    }
+
+    function showTaskbar(e) {
+        if (!isSystemStarted || isTaskbarVisible || isTaskViewOpen) return;
+        isTaskbarVisible = true;
+        updateTaskbarVisibility();
+    }
+
+    // --- Flyout Toggles ---
+    function toggleQuickSettings(e) {
+        if(e) e.stopPropagation();
+        if (isTaskViewOpen) toggleTaskView();
+
+        const qs = document.getElementById('quick-settings-flyout');
+        if (!qs) return;
+
+        isQsOpen = !isQsOpen;
+        
+        if (isQsOpen) {
+            if(isStartOpen) toggleStartMenu(); 
+            if(isCalOpen) toggleCalendar(); 
+            if(isSearchOpen) closeSearchFlyout();
+            qs.classList.remove('flyout-right-hidden');
+            qs.classList.add('flyout-right-visible');
+        } else {
+            qs.classList.remove('flyout-right-visible');
+            qs.classList.add('flyout-right-hidden');
+        }
+    }
+
+    function toggleCalendar(e) {
+        if(e) e.stopPropagation();
+        if (isTaskViewOpen) toggleTaskView();
+
+        const cal = document.getElementById('calendar-flyout');
+        if (!cal) return;
+
+        isCalOpen = !isCalOpen;
+        
+        if (isCalOpen) {
+            if(isStartOpen) toggleStartMenu(); 
+            if(isQsOpen) toggleQuickSettings();
+            if(isSearchOpen) closeSearchFlyout();
+            cal.classList.remove('flyout-right-hidden');
+            cal.classList.add('flyout-right-visible');
+            
+            calViewDate = new Date();
+            selectedDate = new Date(); 
+            renderCalendar();
+            updateAgenda();
+        } else {
+            cal.classList.remove('flyout-right-visible');
+            cal.classList.add('flyout-right-hidden');
+        }
+    }
+
+    function toggleStartMenu(e) {
+        if(e) e.stopPropagation();
+        if (isTaskViewOpen) toggleTaskView();
+
+        isStartOpen = !isStartOpen;
+        
+        // Trigger Start Menu Icon Animation
+        const startLogo = document.querySelector('#tb-start .start-logo-masked');
+        if (startLogo) {
+            startLogo.classList.remove('start-click-run');
+            void startLogo.offsetWidth; // Trigger DOM reflow to restart animation
+            startLogo.classList.add('start-click-run');
+        }
+
+        const panels = ['sm-rail', 'sm-apps', 'sm-widgets'];
+
+        if (isStartOpen) {
+            if(isCalOpen) toggleCalendar(); 
+            if(isQsOpen) toggleQuickSettings();
+            if(isSearchOpen) closeSearchFlyout();
+
+            panels.forEach((id, idx) => {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.classList.remove('flyout-hidden');
+                    el.classList.add('flyout-visible');
+                    el.style.transitionDelay = `${idx * 0.05}s`;
+                }
+            });
+        } else {
+            panels.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.classList.remove('flyout-visible');
+                    el.classList.add('flyout-hidden');
+                    el.style.transitionDelay = `0s`;
+                }
+            });
+        }
+    }
+
+    // --- Calendar System ---
+    function changeMonth(e, delta) {
+        if(e) e.stopPropagation(); 
+        calViewDate.setMonth(calViewDate.getMonth() + delta);
+        renderCalendar();
+    }
+    
+    function selectDate(e, day) {
+        if(e) e.stopPropagation(); 
+        selectedDate = new Date(calViewDate.getFullYear(), calViewDate.getMonth(), day);
+        renderCalendar();
+        updateAgenda();
+    }
+
+    function updateAgenda() {
+        const agendaTitle = document.getElementById('agenda-title');
+        const agendaContent = document.getElementById('agenda-content');
+        if (!agendaTitle || !agendaContent) return;
+        
+        const today = new Date();
+        const isToday = selectedDate.getDate() === today.getDate() &&
+                        selectedDate.getMonth() === today.getMonth() &&
+                        selectedDate.getFullYear() === today.getFullYear();
+
+        if (isToday) {
+            agendaTitle.innerText = "Today's Agenda";
+        } else {
+            const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+            agendaTitle.innerText = `${monthNames[selectedDate.getMonth()]} ${selectedDate.getDate()} Agenda`;
+        }
+
+        const seed = selectedDate.getDate() + selectedDate.getMonth() + selectedDate.getFullYear();
+        
+        if (seed % 3 === 0) {
+             agendaContent.innerHTML = `
+                <div class="flex items-stretch gap-3 group/event cursor-pointer active:scale-[0.98] transition-transform">
+                  <div class="w-1 rad-base bg-sys-accent opacity-80 group-hover/event:opacity-100 transition-opacity"></div>
+                  <div class="flex-1 theme-bg-hover p-2.5 rad-base transition-colors ring-1 ring-white/5">
+                      <p class="text-[12px] font-bold text-mica-contrast leading-tight">Team Sync</p>
+                      <p class="text-[11px] font-medium text-mica-contrast opacity-70 mt-0.5 flex items-center"><i class="ph-fill ph-video-camera mr-1"></i>10:00 AM</p>
+                  </div>
+                </div>
+             `;
+        } else if (seed % 3 === 1) {
+            agendaContent.innerHTML = `
+                <div class="flex items-stretch gap-3 group/event cursor-pointer active:scale-[0.98] transition-transform">
+                  <div class="w-1 rad-base bg-sys-accent opacity-80 group-hover/event:opacity-100 transition-opacity"></div>
+                  <div class="flex-1 theme-bg-hover p-2.5 rad-base transition-colors ring-1 ring-white/5">
+                      <p class="text-[12px] font-bold text-mica-contrast leading-tight">Focus Session</p>
+                      <p class="text-[11px] font-medium text-mica-contrast opacity-70 mt-0.5 flex items-center"><i class="ph-fill ph-clock mr-1"></i>45 min</p>
+                  </div>
+                  <button class="w-10 flex-shrink-0 flex items-center justify-center rad-base theme-bg-strong hover:bg-sys-accent hover:text-white text-mica-contrast transition-colors focus:outline-none ring-1 ring-white/5">
+                      <i class="ph-fill ph-play text-[14px]"></i>
+                  </button>
+              </div>
+            `;
+        } else {
+             agendaContent.innerHTML = `
+                <div class="flex items-center gap-3 theme-bg-hover p-2.5 rad-base transition-colors cursor-default active:scale-[0.98] ring-1 ring-white/5">
+                  <div class="w-1 h-10 bg-sys-accent rad-base opacity-30"></div>
+                  <div class="flex flex-col">
+                      <span class="text-[13px] font-semibold text-mica-contrast">No events scheduled</span>
+                      <span class="text-[11px] font-medium text-mica-contrast opacity-70">Take time to relax and focus</span>
+                  </div>
+              </div>
+             `;
+        }
+    }
+
+    function renderCalendar() {
+        const year = calViewDate.getFullYear();
+        const month = calViewDate.getMonth();
+        
+        const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        const calMonthYear = document.getElementById('cal-month-year');
+        if (calMonthYear) calMonthYear.innerText = `${monthNames[month]} ${year}`;
+        
+        const today = new Date();
+        const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+        
+        const calHeaderDay = document.getElementById('cal-header-day');
+        if (calHeaderDay) calHeaderDay.innerText = dayNames[today.getDay()];
+
+        const calHeaderDate = document.getElementById('cal-header-date');
+        if (calHeaderDate) calHeaderDate.innerText = `${monthNames[today.getMonth()]} ${today.getDate()}`;
+        
+        const firstDayIndex = new Date(year, month, 1).getDay();
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+        
+        const grid = document.getElementById('cal-days-grid');
+        if (!grid) return;
+
+        grid.innerHTML = '';
+        
+        for(let i = 0; i < firstDayIndex; i++) {
+            grid.innerHTML += `<div class="w-10 h-10"></div>`;
+        }
+        
+        for(let d = 1; d <= daysInMonth; d++) {
+            const isToday = today.getFullYear() === year && today.getMonth() === month && today.getDate() === d;
+            const isSelected = selectedDate.getFullYear() === year && selectedDate.getMonth() === month && selectedDate.getDate() === d;
+            
+            let extraClasses = 'text-mica-contrast theme-bg-hover hover:bg-white/10';
+            let innerStyle = d;
+            
+            if (isSelected) {
+                extraClasses = 'bg-sys-accent text-white font-bold relative overflow-visible';
+                innerStyle = `
+                    <div class="absolute inset-0 bg-sys-accent opacity-40 blur-md rad-base -z-10"></div>
+                    <span class="relative z-10">${d}</span>
+                `;
+            } else if (isToday) {
+                extraClasses = 'text-sys-accent font-extrabold theme-bg-hover hover:bg-white/10 relative';
+                innerStyle = `
+                    <span class="relative z-10">${d}</span>
+                    <div class="absolute bottom-1.5 left-1/2 -translate-x-1/2 w-1 h-1 bg-sys-accent rounded-[2px]"></div>
+                `;
+            }
+                
+            grid.innerHTML += `
+                <div onclick="window.selectDate(event, ${d})" class="w-10 h-10 rad-base flex items-center justify-center text-[13px] cursor-pointer transition-transform active:scale-95 ${extraClasses}">
+                    ${innerStyle}
+                </div>
+            `;
+        }
+    }
+
+    function setWallpaper(type) {
+        if (type === 'default') {
+            document.documentElement.style.setProperty('--current-wallpaper', "url('wallpaper.png')");
+            const wpUploadSettings = document.getElementById('wallpaper-upload-settings');
+            const wpUploadStart = document.getElementById('wallpaper-upload-start');
+            if (wpUploadSettings) wpUploadSettings.value = ''; 
+            if (wpUploadStart) wpUploadStart.value = ''; 
+            saveSettings();
+            
+            initDB(db => {
+                const tx = db.transaction(storeName, "readwrite");
+                tx.objectStore(storeName).delete("custom_wallpaper");
+            });
+        }
+    }
+
+    function handleWallpaperUpload(event) {
+        event.preventDefault();
+        let file;
+        
+        if (event.type === 'drop') {
+            file = event.dataTransfer.files[0];
+        } else {
+            file = event.target.files[0];
+        }
+
+        if (file && file.type.startsWith('image/')) {
+            const imageUrl = URL.createObjectURL(file);
+            document.documentElement.style.setProperty('--current-wallpaper', `url('${imageUrl}')`);
+            saveWallpaper(file);
+        }
+    }
+
+    // --- Clock & Login Logic ---
+    function updateClock() {
+      const d = new Date();
+      const timeStr = d.toLocaleTimeString([], {hour: 'numeric', minute:'2-digit'});
+      const dateStr = d.toLocaleDateString(undefined, {month:'numeric', day:'numeric', year:'numeric'});
+      const fullDateStr = d.toLocaleDateString(undefined, {weekday: 'long', month:'long', day:'numeric', year:'numeric'});
+      
+      document.querySelectorAll('.js-tb-time').forEach(el => el.innerText = timeStr);
+      document.querySelectorAll('.js-tb-date').forEach(el => el.innerText = dateStr);
+      
+      const dcTime = document.getElementById('dc-time');
+      const dcDate = document.getElementById('dc-date');
+      if (dcTime) dcTime.innerText = timeStr;
+      if (dcDate) dcDate.innerText = fullDateStr;
+      
+      const lockTime = document.getElementById('lock-time');
+      const lockDate = document.getElementById('lock-date');
+      if(lockTime) lockTime.innerText = timeStr;
+      if(lockDate) lockDate.innerText = fullDateStr;
+    }
+
+    function dismissLockScreen() {
+        const lockState = document.getElementById('lock-state');
+        const loginState = document.getElementById('login-state');
+        const loginBg = document.getElementById('login-bg');
+        const loginDimmer = document.getElementById('login-dimmer');
+        
+        if (lockState) {
+            lockState.classList.add('opacity-0', '-translate-y-12', 'pointer-events-none');
+            lockState.style.transform = 'scale(0.95)';
+        }
+        if (loginBg) loginBg.style.filter = 'blur(40px) brightness(0.8)';
+        if (loginDimmer) {
+            loginDimmer.classList.remove('opacity-0');
+            loginDimmer.classList.add('opacity-100');
+        }
+        
+        setTimeout(() => {
+            if (loginState) {
+                loginState.classList.remove('opacity-0', 'translate-y-6', 'pointer-events-none');
+                loginState.classList.add('opacity-100', 'translate-y-0');
+            }
+            setTimeout(() => { 
+                const pin = document.getElementById('login-pin');
+                if (pin) pin.focus(); 
+            }, 100);
+        }, 250);
+    }
+
+    function triggerWelcome() {
+        const pinInput = document.getElementById('login-pin');
+        if(!pinInput || !pinInput.value) return; 
+
+        const inputArea = document.getElementById('login-input-area');
+        if (inputArea) {
+            inputArea.style.opacity = '0';
+            inputArea.style.transform = 'scale(0.95)';
+        }
+
+        const optionsText = document.getElementById('login-options-text');
+        if (optionsText) optionsText.style.opacity = '0';
+        
+        setTimeout(() => {
+            const welcomeState = document.getElementById('welcome-state');
+            if (welcomeState) {
+                welcomeState.classList.remove('hidden');
+                welcomeState.classList.add('flex');
+                setTimeout(() => {
+                    welcomeState.classList.remove('opacity-0');
+                    welcomeState.style.transform = 'scale(1)';
+                }, 50);
+            }
+        }, 300);
+
+        setTimeout(() => {
+            const loginOverlay = document.getElementById('login-overlay');
+            if (loginOverlay) loginOverlay.classList.add('lock-screen-hide');
+            
+            const desktopBg = document.getElementById('desktop-bg');
+            if (desktopBg) {
+                desktopBg.style.transform = 'scale(1)';
+                desktopBg.style.filter = 'blur(0px)';
+            }
+
+            const segments = ['tb-segment-about', 'tb-apps-segment', 'tb-segment-tray'];
+            segments.forEach((id, index) => {
+                setTimeout(() => {
+                    const el = document.getElementById(id);
+                    if (el) {
+                        el.classList.remove('tb-reveal-hidden');
+                        el.classList.add('tb-reveal-visible');
+                    }
+                }, 400 + (index * 80));
+            });
+
+            setTimeout(() => {
+                const watermark = document.getElementById('desktop-watermark');
+                // if (watermark) watermark.style.opacity = '0.5'; // Keep hidden
+            }, 800);
+
+            setTimeout(() => { isSystemStarted = true; }, 1000);
+            setTimeout(() => { if (loginOverlay) loginOverlay.style.display = 'none'; }, 1000);
+        }, 2200);
+    }
+
+    function initSystem() {
+        updateClock(); 
+        setInterval(updateClock, 1000);
+        
+        loadSettings();
+        
+        // Init Sliders
+        const bSlider = document.getElementById('brightness-slider');
+        if (bSlider) updateBrightness(bSlider);
+        
+        const nlSlider = document.getElementById('nl-slider');
+        if (nlSlider) updateNightLight(nlSlider);
+        
+        document.addEventListener('keydown', (e) => {
+            const loginScreen = document.getElementById('login-overlay');
+            if (loginScreen && loginScreen.style.display !== 'none' && (e.key === 'Enter' || e.key === ' ')) {
+                const pinInput = document.getElementById('login-pin');
+                if(document.activeElement !== pinInput) dismissLockScreen();
+            } else if (e.key === 'Escape') {
+                if (isStartOpen) toggleStartMenu();
+                if (isCalOpen) toggleCalendar();
+                if (isQsOpen) toggleQuickSettings();
+                if (isTaskViewOpen) toggleTaskView();
+                if (isSearchOpen) closeSearchFlyout();
+            }
+        });
+
+        // Smart UI dismissal handling.
+        document.addEventListener('click', (e) => {
+            // Task View exit on background or app-window click
+            if (isTaskViewOpen && (e.target.id === 'desktop-bg' || e.target.closest('.app-window'))) {
+                toggleTaskView();
+                return;
+            }
+
+            // Ignore normal clicks inside interactive windows
+            if (e.target.closest('.app-window') || e.target.closest('.task-view-blocker')) return;
+
+            // Handle Search Flyout Dismissal
+            if (isSearchOpen && !e.target.closest('#search-flyout') && !e.target.closest('#desktop-search-bar')) {
+                closeSearchFlyout();
+            }
+
+            // Handle Start Menu Dismissal
+            if (isStartOpen && !e.target.closest('#start-menu-container') && !e.target.closest('#tb-start')) {
+                toggleStartMenu();
+            }
+
+            // Handle Calendar Dismissal
+            if (isCalOpen && !e.target.closest('#calendar-flyout') && !e.target.closest('#tb-app-btn-clock')) {
+                toggleCalendar();
+            }
+
+            // Handle Quick Settings Dismissal
+            if (isQsOpen && !e.target.closest('#quick-settings-flyout') && !e.target.closest('#tb-app-btn-tray')) {
+                toggleQuickSettings();
+            }
+        });
+    }
+
+    initSystem();
+  </script>
+</body>
+</html>
