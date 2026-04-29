@@ -352,50 +352,47 @@
     <div id="filter-brightness" class="absolute inset-0 pointer-events-none z-[100000] bg-black transition-opacity duration-200" style="opacity: 0;"></div>
 
     <!-- OOBE OVERLAY -->
-    <div id="oobe-overlay" class="absolute inset-0 z-[60000] flex flex-col items-center justify-center bg-black transition-opacity duration-1000 opacity-100 pointer-events-auto">
-        <div class="absolute inset-0 bg-cover bg-center z-[-2] opacity-30 blur-2xl transition-all duration-700" style="background-image: url('https://4kwallpapers.com/images/wallpapers/windows-11-bloom-3840x2160-14423.jpg');"></div>
-        <div class="absolute inset-0 bg-gradient-to-b from-black/40 to-black/80 z-[-1]"></div>
+    <div id="oobe-overlay" class="absolute inset-0 z-[60000] flex flex-col items-center justify-center bg-[#050505] transition-opacity duration-1000 opacity-100 pointer-events-auto">
+        <!-- Animated soft background glows -->
+        <div class="absolute inset-0 overflow-hidden pointer-events-none z-[-2]">
+            <div class="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-blue-600/20 blur-[120px] rounded-full animate-pulse" style="animation-duration: 8s;"></div>
+            <div class="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-purple-600/20 blur-[120px] rounded-full animate-pulse" style="animation-duration: 10s;"></div>
+        </div>
+        <div class="absolute inset-0 bg-gradient-to-b from-transparent to-black/80 z-[-1]"></div>
 
-        <div id="oobe-container" class="w-[700px] h-[500px] flex flex-col relative overflow-hidden glass-card rounded-[16px] border border-white/10 !bg-black/20 shadow-2xl">
+        <div id="oobe-container" class="w-[800px] h-[540px] flex flex-col relative overflow-hidden glass-card rounded-[24px] border border-white/10 !bg-white/[0.02] shadow-[0_30px_80px_rgba(0,0,0,0.8)] backdrop-blur-3xl">
             <!-- Step 1: Welcome -->
-            <div id="oobe-step-1" class="absolute inset-0 flex flex-col items-center justify-center p-10 transition-all duration-700 opacity-100 translate-x-0 pointer-events-auto">
-                <img src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/d524f23f-503e-4d1d-8ee0-96e655258add/dhb97eu-3b00bbaf-f050-4657-83da-0b1664d7c022.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiIvZi9kNTI0ZjIzZi01MDNlLTRkMWQtOGVlMC05NmU2NTUyNThhZGQvZGhiOTdldS0zYjAwYmJhZi1mMDUwLTQ2NTctODNkYS0wYjE2NjRkN2MwMjIucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.o1jDig1STxxan1lSgwa6kt9pAnjG080eji1BbENBT3k" class="w-[80px] h-[80px] mb-8 drop-shadow-[0_0_15px_rgba(59,130,246,0.5)] object-contain" alt="Windows 12">
-                <h1 class="text-[40px] font-bold tracking-tight text-white mb-3">Welcome to Windows 12</h1>
-                <p class="text-[16px] text-white/70 mb-12 text-center max-w-md">Let's get things set up for the 1H04 Destroyer preview build. Experience the next generation of dynamic materials.</p>
-                <button onclick="window.nextOobeStep(2)" class="bg-[#0067c0] hover:bg-[#005a9e] text-white px-10 py-3.5 rounded-[8px] text-[15px] font-semibold transition-all hover:scale-105 shadow-lg">Continue</button>
+            <div id="oobe-step-1" class="absolute inset-0 flex flex-col items-center justify-center p-12 transition-all duration-700 opacity-100 translate-x-0 pointer-events-auto">
+                <div class="w-24 h-24 mb-8 relative">
+                    <div class="absolute inset-0 bg-blue-500/20 blur-xl rounded-full"></div>
+                    <img src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/d524f23f-503e-4d1d-8ee0-96e655258add/dhb97eu-3b00bbaf-f050-4657-83da-0b1664d7c022.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiIvZi9kNTI0ZjIzZi01MDNlLTRkMWQtOGVlMC05NmU2NTUyNThhZGQvZGhiOTdldS0zYjAwYmJhZi1mMDUwLTQ2NTctODNkYS0wYjE2NjRkN2MwMjIucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.o1jDig1STxxan1lSgwa6kt9pAnjG080eji1BbENBT3k" class="w-full h-full object-contain relative z-10 drop-shadow-xl" alt="Windows 12">
+                </div>
+                <h1 class="text-[44px] font-bold tracking-tight text-white mb-4 drop-shadow-md">Welcome to Windows 12</h1>
+                <p class="text-[18px] text-white/70 mb-12 text-center max-w-lg font-medium leading-relaxed">Let's get things set up for the 1H04 Destroyer preview build. Experience the next generation of dynamic materials.</p>
+                <button onclick="window.nextOobeStep(2)" class="bg-blue-600 hover:bg-blue-500 text-white px-12 py-4 rounded-full text-[16px] font-semibold transition-all hover:scale-105 shadow-[0_0_20px_rgba(37,99,235,0.3)] hover:shadow-[0_0_30px_rgba(37,99,235,0.6)]">Continue</button>
             </div>
 
             <!-- Step 2: What to do -->
-            <div id="oobe-step-2" class="absolute inset-0 flex flex-col items-center justify-center p-10 transition-all duration-700 opacity-0 translate-x-10 pointer-events-none">
-                <i class="ph-duotone ph-magic-wand text-[64px] text-purple-500 mb-6 drop-shadow-[0_0_15px_rgba(168,85,247,0.5)]"></i>
-                <h1 class="text-[32px] font-bold tracking-tight text-white mb-6">What to do</h1>
-                <div class="flex flex-col gap-4 text-[14px] text-white/90 w-full max-w-md mb-10">
-                    <div class="flex items-center gap-5 bg-white/5 hover:bg-white/10 transition-colors p-4 rounded-[12px] border border-white/5">
-                        <div class="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center shrink-0"><i class="ph-duotone ph-squares-four text-xl text-blue-400"></i></div>
-                        <span class="leading-relaxed font-medium">Drag and drop taskbar elements onto each other to combine widgets into interactive dashboards.</span>
+            <div id="oobe-step-2" class="absolute inset-0 flex flex-col items-center justify-center p-12 transition-all duration-700 opacity-0 translate-x-10 pointer-events-none">
+                <h1 class="text-[36px] font-bold tracking-tight text-white mb-2 drop-shadow-md">What's New</h1>
+                <p class="text-[16px] text-white/60 mb-10 font-medium">Discover the power of the Destroyer update.</p>
+                
+                <div class="flex gap-6 w-full max-w-2xl mb-12">
+                    <div class="flex-1 bg-white/5 hover:bg-white/10 transition-all duration-300 p-6 rounded-[20px] border border-white/5 hover:border-white/20 hover:-translate-y-1 shadow-lg group">
+                        <div class="w-12 h-12 rounded-full bg-blue-500/20 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300"><i class="ph-duotone ph-squares-four text-2xl text-blue-400"></i></div>
+                        <h3 class="text-white font-semibold text-[17px] mb-2">Interactive Widgets</h3>
+                        <p class="text-white/60 text-[14px] leading-relaxed">Drag and drop taskbar elements onto each other to combine them into powerful dashboard modules.</p>
                     </div>
-                    <div class="flex items-center gap-5 bg-white/5 hover:bg-white/10 transition-colors p-4 rounded-[12px] border border-white/5">
-                        <div class="w-10 h-10 rounded-full bg-amber-500/20 flex items-center justify-center shrink-0"><i class="ph-duotone ph-sparkle text-xl text-amber-400"></i></div>
-                        <span class="leading-relaxed font-medium">Explore the unified Mica rendering engine, featuring pure glassy reflections across all windows.</span>
+                    <div class="flex-1 bg-white/5 hover:bg-white/10 transition-all duration-300 p-6 rounded-[20px] border border-white/5 hover:border-white/20 hover:-translate-y-1 shadow-lg group">
+                        <div class="w-12 h-12 rounded-full bg-purple-500/20 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300"><i class="ph-duotone ph-sparkle text-2xl text-purple-400"></i></div>
+                        <h3 class="text-white font-semibold text-[17px] mb-2">Pure Mica Engine</h3>
+                        <p class="text-white/60 text-[14px] leading-relaxed">Explore the unified rendering engine, featuring pure glassy reflections and deep blurs across all apps.</p>
                     </div>
                 </div>
-                <div class="flex gap-4">
-                    <button onclick="window.nextOobeStep(1)" class="bg-white/10 hover:bg-white/20 text-white px-8 py-3.5 rounded-[8px] text-[15px] font-semibold transition-colors">Back</button>
-                    <button onclick="window.nextOobeStep(3)" class="bg-[#0067c0] hover:bg-[#005a9e] text-white px-10 py-3.5 rounded-[8px] text-[15px] font-semibold transition-all hover:scale-105 shadow-lg">Next</button>
-                </div>
-            </div>
 
-            <!-- Step 3: Notice -->
-            <div id="oobe-step-3" class="absolute inset-0 flex flex-col items-center justify-center p-10 transition-all duration-700 opacity-0 translate-x-10 pointer-events-none">
-                <i class="ph-duotone ph-warning-circle text-[64px] text-amber-500 mb-6 drop-shadow-[0_0_15px_rgba(245,158,11,0.4)]"></i>
-                <h1 class="text-[32px] font-bold tracking-tight text-white mb-2 text-center">Important Notice</h1>
-                <div class="bg-amber-500/10 border border-amber-500/30 text-amber-400 font-semibold px-4 py-1.5 rounded-full text-[12px] uppercase tracking-widest mb-6">1H04 Support Ending Soon</div>
-                <p class="text-[15px] text-white/80 mb-10 text-center max-w-md leading-relaxed font-medium">
-                    The 1H04 Destroyer preview build is nearing its end of life in approximately <span class="text-white font-bold">1-5 days</span>, pending the release of the 1H06 update.<br><br>An Extended Security Updates (ESU) version of 1H04 will become available on the day of transition.
-                </p>
                 <div class="flex gap-4">
-                    <button onclick="window.nextOobeStep(2)" class="bg-white/10 hover:bg-white/20 text-white px-8 py-3.5 rounded-[8px] text-[15px] font-semibold transition-colors">Back</button>
-                    <button onclick="window.finishOobe()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-10 py-3.5 rounded-[8px] text-[15px] font-semibold transition-all hover:scale-105 shadow-[0_0_15px_rgba(16,185,129,0.4)]">Accept & Start</button>
+                    <button onclick="window.nextOobeStep(1)" class="bg-white/5 hover:bg-white/15 border border-white/10 text-white px-8 py-3.5 rounded-full text-[15px] font-semibold transition-colors">Back</button>
+                    <button onclick="window.finishOobe()" class="bg-blue-600 hover:bg-blue-500 text-white px-10 py-3.5 rounded-full text-[15px] font-semibold transition-all hover:scale-105 shadow-[0_0_20px_rgba(37,99,235,0.3)] hover:shadow-[0_0_30px_rgba(37,99,235,0.6)]">Accept & Start</button>
                 </div>
             </div>
         </div>
@@ -2425,9 +2422,8 @@
     function nextOobeStep(step) {
         const s1 = document.getElementById('oobe-step-1');
         const s2 = document.getElementById('oobe-step-2');
-        const s3 = document.getElementById('oobe-step-3');
         
-        [s1, s2, s3].forEach(s => {
+        [s1, s2].forEach(s => {
             if(s) {
                 s.classList.remove('opacity-100', 'translate-x-0', 'pointer-events-auto');
                 s.classList.add('opacity-0', 'pointer-events-none');
@@ -2442,13 +2438,8 @@
 
         if (step === 1) {
             if(s2) s2.classList.add('translate-x-10');
-            if(s3) s3.classList.add('translate-x-10');
         } else if (step === 2) {
             if(s1) s1.classList.add('-translate-x-10');
-            if(s3) s3.classList.add('translate-x-10');
-        } else if (step === 3) {
-            if(s1) s1.classList.add('-translate-x-10');
-            if(s2) s2.classList.add('-translate-x-10');
         }
     }
 
