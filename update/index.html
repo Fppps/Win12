@@ -46,7 +46,7 @@
         
         --mica-base: rgba(var(--mica-color-rgb), var(--mica-base-alpha)); 
         --mica-tint: rgba(var(--sys-accent-rgb), var(--mica-tint-alpha));
-        --mica-blur: blur(90px) saturate(200%) contrast(1.1); 
+        --mica-blur: blur(90px) saturate(100%) contrast(1.1); 
     }
 
     /* Aggressively strip any browser default outlines to prevent blue edges */
@@ -71,8 +71,6 @@
 
     /* Universal Radius Utilities */
     .rad-base { border-radius: var(--os-radius) !important; }
-    .rad-lg { border-radius: calc(var(--os-radius) * 1.5) !important; }
-    .rad-xl { border-radius: calc(var(--os-radius) * 2.5) !important; }
     .rad-full { border-radius: 9999px !important; }
 
     /* Accent & Contrast Utility Classes */
@@ -449,7 +447,7 @@
       </div>
 
       <!-- SEARCH FLYOUT -->
-      <div id="search-flyout" class="absolute top-[72px] left-1/2 -translate-x-1/2 w-[600px] h-[450px] taskbar-flat rad-lg p-6 flex flex-col z-[9997] flyout-hidden flyout-base pointer-events-none overflow-y-auto custom-scroll">
+      <div id="search-flyout" class="absolute top-[72px] left-1/2 -translate-x-1/2 w-[600px] h-[450px] taskbar-flat rad-base p-6 flex flex-col z-[9997] flyout-hidden flyout-base pointer-events-none overflow-y-auto custom-scroll">
           <!-- Default View (Before Typing) -->
           <div id="search-default-view" class="flex flex-col h-full sm-step-1">
               <div class="w-full mb-5 sm-step-2">
@@ -483,21 +481,21 @@
 
       <!-- DESKTOPS DOCK (Task View UI) -->
       <div id="task-view-dock" class="absolute bottom-[90px] left-1/2 -translate-x-1/2 flex gap-4 opacity-0 pointer-events-none z-[14000]" style="transform: translate(-50%, 30px);">
-          <div class="w-48 h-28 taskbar-flat rad-lg flex flex-col items-center justify-center gap-2 cursor-pointer group hover:bg-[rgba(255,255,255,0.1)] transition-colors border border-white/5" onclick="window.toggleTaskView()">
+          <div class="w-48 h-28 taskbar-flat rad-base flex flex-col items-center justify-center gap-2 cursor-pointer group hover:bg-[rgba(255,255,255,0.1)] transition-colors border border-white/5" onclick="window.toggleTaskView()">
               <div class="w-40 h-16 bg-cover bg-center rad-base border-2 border-sys-accent transition-all" style="background-image: var(--current-wallpaper);"></div>
               <span class="text-xs font-semibold text-mica-contrast">Desktop 1</span>
           </div>
-          <div class="w-48 h-28 taskbar-flat rad-lg flex flex-col items-center justify-center gap-2 cursor-pointer opacity-60 hover:opacity-100 transition-all hover:bg-[rgba(255,255,255,0.1)] border border-transparent hover:border-white/5" onclick="window.toggleTaskView()">
+          <div class="w-48 h-28 taskbar-flat rad-base flex flex-col items-center justify-center gap-2 cursor-pointer opacity-60 hover:opacity-100 transition-all hover:bg-[rgba(255,255,255,0.1)] border border-transparent hover:border-white/5" onclick="window.toggleTaskView()">
               <i class="ph-bold ph-plus text-2xl text-mica-contrast"></i>
               <span class="text-xs font-semibold text-mica-contrast">New Desktop</span>
           </div>
       </div>
 
       <!-- UPGRADED ABOUT WINDOW -->
-      <div id="app-about" class="app-window app-window-hidden absolute top-1/2 left-1/2 w-[600px] h-[500px] rad-xl flex flex-col z-[16000] overflow-hidden ring-1 ring-white/10 shadow-2xl">
+      <div id="app-about" class="app-window app-window-hidden absolute top-1/2 left-1/2 w-[600px] h-[500px] rad-base flex flex-col z-[16000] overflow-hidden ring-1 ring-white/10 shadow-2xl">
           
           <!-- Titlebar -->
-          <div id="app-about-titlebar" class="h-[40px] w-full flex justify-between items-center px-4 select-none bg-black/20 cursor-move border-b border-white/5 shrink-0 z-20 relative backdrop-blur-md">
+          <div id="app-about-titlebar" class="h-[40px] w-full flex justify-between items-center px-4 select-none bg-black/20 cursor-move border-b border-white/5 shrink-0 z-20 relative backdrop-blur-md" style="border-top-left-radius: var(--os-radius); border-top-right-radius: var(--os-radius);">
               <div class="flex items-center gap-2 opacity-80 pointer-events-none">
                   <img src="https://img.icons8.com/?size=100&id=NzIdJDXpXX0B&format=png&color=000000" class="w-[14px] h-[14px] opacity-70" draggable="false">
                   <span class="text-[12px] font-semibold text-mica-contrast tracking-wide">System > About</span>
@@ -516,13 +514,13 @@
                   <div>
                       <div class="flex items-center gap-3 mb-1">
                           <h1 class="text-3xl font-display font-bold text-mica-contrast tracking-tight">Windows 12</h1>
-                          <span class="px-2.5 py-1 bg-sys-accent/20 text-sys-accent border border-sys-accent/30 text-[10px] font-bold rounded-full uppercase tracking-wider shadow-sm">Update 1.0</span>
+                          <span class="px-2.5 py-1 bg-sys-accent/20 text-sys-accent border border-sys-accent/30 text-[10px] font-bold rounded-full uppercase tracking-wider shadow-sm">Update 2.0</span>
                       </div>
                       <p class="text-sm font-medium text-mica-contrast opacity-70">Version 1H05 (OS Build 040)</p>
                   </div>
               </div>
 
-              <div class="settings-card p-5 rad-lg flex flex-col gap-4 relative z-10">
+              <div class="settings-card p-5 rad-base flex flex-col gap-4 relative z-10">
                   <h3 class="text-sm font-bold text-mica-contrast flex items-center gap-2"><i class="ph-duotone ph-info text-lg text-sys-accent"></i> System specifications</h3>
                   <div class="grid grid-cols-[110px_1fr] gap-x-4 gap-y-3 text-[13px]">
                       <span class="font-semibold text-mica-contrast opacity-70 text-right">Device name</span>
@@ -541,12 +539,12 @@
       </div>
 
       <!-- MAIN SETTINGS APP WINDOW (Premium Rebuild) -->
-      <div id="app-settings" class="app-window app-window-hidden absolute top-1/2 left-1/2 w-[840px] h-[540px] rad-lg flex flex-col z-[15000]">
+      <div id="app-settings" class="app-window app-window-hidden absolute top-1/2 left-1/2 w-[840px] h-[540px] rad-base flex flex-col z-[15000]">
           
           <div class="task-view-blocker" onclick="window.toggleTaskView()"></div>
 
           <!-- Titlebar (Draggable Area) -->
-          <div id="app-settings-titlebar" class="h-[36px] w-full flex justify-between items-center px-3 select-none bg-black/10 cursor-move border-b border-white/5" style="border-top-left-radius: calc(var(--os-radius) * 1.5); border-top-right-radius: calc(var(--os-radius) * 1.5);">
+          <div id="app-settings-titlebar" class="h-[36px] w-full flex justify-between items-center px-3 select-none bg-black/10 cursor-move border-b border-white/5" style="border-top-left-radius: var(--os-radius); border-top-right-radius: var(--os-radius);">
               <div class="flex items-center gap-2 opacity-80 pointer-events-none">
                   <i class="ph-bold ph-gear text-[14px] text-mica-contrast"></i>
                   <span class="text-[11px] font-semibold text-mica-contrast">Settings</span>
@@ -570,8 +568,8 @@
                  </div>
                  
                  <!-- Nav Items (Left Border Indicator Style) -->
-                 <button onclick="window.switchSettingsTab('system')" id="nav-system" class="flex items-center gap-3 text-left px-3 py-2.5 text-[12px] font-bold text-mica-contrast bg-white/10 border-l-2 border-sys-accent rad-r-base transition-all"><i class="ph-bold ph-laptop text-[16px] text-sys-accent nav-icon transition-colors"></i> System</button>
-                 <button onclick="window.switchSettingsTab('personalization')" id="nav-personalization" class="flex items-center gap-3 text-left px-3 py-2.5 text-[12px] font-medium text-mica-contrast opacity-70 hover:opacity-100 hover:bg-white/5 border-l-2 border-transparent rad-r-base transition-all"><i class="ph-bold ph-palette text-[16px] nav-icon transition-colors"></i> Personalization</button>
+                 <button onclick="window.switchSettingsTab('system')" id="nav-system" class="flex items-center gap-3 text-left px-3 py-2.5 text-[12px] font-bold text-mica-contrast bg-white/10 border-l-2 border-sys-accent rad-base transition-all"><i class="ph-bold ph-laptop text-[16px] text-sys-accent nav-icon transition-colors"></i> System</button>
+                 <button onclick="window.switchSettingsTab('personalization')" id="nav-personalization" class="flex items-center gap-3 text-left px-3 py-2.5 text-[12px] font-medium text-mica-contrast opacity-70 hover:opacity-100 hover:bg-white/5 border-l-2 border-transparent rad-base transition-all"><i class="ph-bold ph-palette text-[16px] nav-icon transition-colors"></i> Personalization</button>
               </div>
 
               <!-- Main Content Area -->
@@ -582,7 +580,7 @@
                       <h1 class="text-3xl font-display font-bold text-mica-contrast mb-2 tracking-tight">System</h1>
                       
                       <!-- Premium Hero Card -->
-                      <div class="flex items-center gap-5 settings-card p-6 rad-lg cursor-pointer group relative overflow-hidden">
+                      <div class="flex items-center gap-5 settings-card p-6 rad-base cursor-pointer group relative overflow-hidden">
                           <div class="absolute inset-0 bg-gradient-to-r from-sys-accent/20 to-transparent opacity-30 group-hover:opacity-50 transition-opacity"></div>
                           <img src="https://img.icons8.com/?size=100&id=12226&format=png&color=000000" class="w-16 h-16 pointer-events-none opacity-90 group-hover:scale-110 transition-transform duration-500 relative z-10 drop-shadow-lg">
                           <div class="flex flex-col relative z-10">
@@ -592,7 +590,7 @@
                           <button class="ml-auto px-5 py-2.5 bg-sys-accent hover:bg-sys-accent-hover text-white text-xs font-bold rad-base transition-colors active:scale-95 shadow-md shadow-sys-accent/30 relative z-10">Check for updates</button>
                       </div>
                       
-                      <div class="settings-card p-8 rad-lg flex flex-col items-center justify-center text-center h-56 cursor-pointer" onclick="window.openAbout()">
+                      <div class="settings-card p-8 rad-base flex flex-col items-center justify-center text-center h-56 cursor-pointer" onclick="window.openAbout()">
                           <div class="w-16 h-16 rounded-full bg-sys-accent/10 flex items-center justify-center mb-4 text-sys-accent group-hover:scale-110 transition-transform">
                               <i class="ph-duotone ph-info text-[32px]"></i>
                           </div>
@@ -606,7 +604,7 @@
                       <h1 class="text-3xl font-display font-bold text-mica-contrast mb-2 tracking-tight">Personalization</h1>
                       
                       <!-- Wallpaper Module -->
-                      <div class="settings-card p-6 rad-lg flex flex-col gap-4">
+                      <div class="settings-card p-6 rad-base flex flex-col gap-4">
                           <div class="flex justify-between items-center">
                               <h3 class="text-[14px] font-bold text-mica-contrast flex items-center gap-2"><i class="ph-bold ph-image text-sys-accent text-lg"></i> Background</h3>
                               <button onclick="window.setWallpaper('default')" class="text-[11px] font-semibold text-sys-accent hover:text-sys-accent-hover transition-colors bg-transparent border border-sys-accent/30 hover:border-sys-accent px-3 py-1 rad-base">Restore default</button>
@@ -624,7 +622,7 @@
                       </div>
 
                       <!-- Taskbar & Desktop Module -->
-                      <div class="settings-card p-6 rad-lg flex flex-col gap-5">
+                      <div class="settings-card p-6 rad-base flex flex-col gap-5">
                           <h3 class="text-[14px] font-bold text-mica-contrast flex items-center gap-2"><i class="ph-bold ph-layout text-sys-accent text-lg"></i> Taskbar Layout</h3>
                           
                           <div class="flex flex-col gap-2">
@@ -637,7 +635,7 @@
                       </div>
 
                       <!-- Colors & Glass Module -->
-                      <div class="settings-card p-6 rad-lg flex flex-col gap-5">
+                      <div class="settings-card p-6 rad-base flex flex-col gap-5">
                           <h3 class="text-[14px] font-bold text-mica-contrast flex items-center gap-2"><i class="ph-bold ph-drop text-sys-accent text-lg"></i> Colors & Glass</h3>
                           
                           <div class="flex flex-col gap-2">
@@ -686,7 +684,7 @@
       <!-- START MENU (Separated Floating Islands) -->
       <div id="start-menu-container" class="absolute bottom-[80px] left-1/2 -translate-x-1/2 flex flex-row gap-4 z-[9995] h-[520px] items-stretch pointer-events-none">
           
-          <div id="sm-rail" class="w-[60px] taskbar-flat rad-lg py-4 flex flex-col justify-between items-center shrink-0 flyout-base flyout-hidden overflow-y-auto custom-scroll">
+          <div id="sm-rail" class="w-[60px] taskbar-flat rad-base py-4 flex flex-col justify-between items-center shrink-0 flyout-base flyout-hidden overflow-y-auto custom-scroll">
               <button class="w-10 h-10 rad-base flex items-center justify-center transition-all active:scale-95 group theme-bg theme-bg-hover sm-step-3 shrink-0">
                   <img src="user.png" class="w-8 h-8 rad-base group-hover:scale-110 transition-transform" onerror="this.src='https://cdn-icons-png.freepik.com/512/9131/9131478.png';">
               </button>
@@ -701,7 +699,7 @@
               </div>
           </div>
 
-          <div id="sm-apps" class="w-[380px] taskbar-flat rad-lg p-5 flex flex-col shrink-0 flyout-base flyout-hidden overflow-y-auto custom-scroll">
+          <div id="sm-apps" class="w-[380px] taskbar-flat rad-base p-5 flex flex-col shrink-0 flyout-base flyout-hidden overflow-y-auto custom-scroll">
               <div class="w-full theme-bg theme-bg-hover transition-colors rad-base h-9 flex items-center px-3 mb-5 cursor-text sm-step-2 shrink-0">
                   <i class="ph-bold ph-magnifying-glass text-mica-contrast opacity-70 text-[14px]"></i>
                   <span class="ml-3 text-[12px] text-mica-contrast opacity-70 font-medium">Type here to search</span>
@@ -724,7 +722,7 @@
                   <button class="text-[11px] font-semibold theme-bg theme-bg-hover px-2 py-1 rad-base transition-colors text-mica-contrast flex items-center gap-1 active:scale-95">More <i class="ph-bold ph-caret-right text-[10px]"></i></button>
               </div>
 
-              <div class="flex flex-col items-center justify-center min-h-[140px] theme-bg-strong rad-lg sm-step-2 border border-white/5 shrink-0">
+              <div class="flex flex-col items-center justify-center min-h-[140px] theme-bg-strong rad-base sm-step-2 border border-white/5 shrink-0">
                   <i class="ph-duotone ph-folder-dashed text-[32px] text-mica-contrast mb-2 sm-step-3"></i>
                   <span class="text-[12px] font-semibold text-mica-contrast">No recent files</span>
                   <span class="text-[11px] text-mica-contrast font-medium opacity-80">To show your recent files, open them.</span>
@@ -733,7 +731,7 @@
 
           <div id="sm-widgets" class="w-[300px] flex flex-col gap-4 shrink-0 flyout-base flyout-hidden overflow-y-auto custom-scroll pb-2" style="background: transparent !important; backdrop-filter: none !important;">
               
-              <div class="h-[140px] taskbar-flat rad-lg p-4 flex flex-col justify-between relative overflow-hidden shrink-0 group/update sm-step-1">
+              <div class="h-[140px] taskbar-flat rad-base p-4 flex flex-col justify-between relative overflow-hidden shrink-0 group/update sm-step-1">
                   <div class="absolute inset-0 bg-sys-accent opacity-[0.1] pointer-events-none transition-colors duration-500"></div>
                   <i class="ph-duotone ph-arrows-clockwise text-[100px] text-sys-accent opacity-20 absolute -right-4 -bottom-4 pointer-events-none transition-all duration-700 group-hover/update:rotate-180 sm-step-3"></i>
                   
@@ -755,7 +753,7 @@
                   </div>
               </div>
 
-              <div class="flex-1 min-h-[300px] taskbar-flat rad-lg p-4 flex flex-col relative overflow-hidden sm-step-1">
+              <div class="flex-1 min-h-[300px] taskbar-flat rad-base p-4 flex flex-col relative overflow-hidden sm-step-1">
                   <div class="absolute inset-0 bg-sys-accent opacity-[0.05] pointer-events-none transition-colors duration-500"></div>
                   
                   <div class="flex items-center justify-between mb-3 relative z-10 sm-step-2 shrink-0">
@@ -769,7 +767,7 @@
                   </div>
 
                   <div class="flex-1 flex flex-col gap-2 relative z-10">
-                      <div class="theme-bg p-3 rad-lg flex flex-col gap-2 sm-step-2 shrink-0 border border-white/5">
+                      <div class="theme-bg p-3 rad-base flex flex-col gap-2 sm-step-2 shrink-0 border border-white/5">
                           <div class="w-full h-[60px] rad-base overflow-hidden relative group/preview cursor-pointer shadow-inner" onclick="window.openSettings()">
                               <div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover/preview:scale-105" style="background-image: var(--current-wallpaper);"></div>
                           </div>
@@ -784,7 +782,7 @@
                           </div>
                       </div>
 
-                      <div class="theme-bg p-3 rad-lg flex flex-col gap-3 mt-1 sm-step-2 shrink-0 border border-white/5">
+                      <div class="theme-bg p-3 rad-base flex flex-col gap-3 mt-1 sm-step-2 shrink-0 border border-white/5">
                           <div class="flex flex-col gap-1.5">
                               <label class="text-[10px] font-bold text-mica-contrast opacity-80 uppercase tracking-wider">Accent Color</label>
                               <div class="flex flex-wrap items-center gap-2 sm-step-3">
@@ -830,29 +828,49 @@
       </div>
 
       <!-- HORIZONTAL QUICK SETTINGS FLYOUT -->
-      <div id="quick-settings-flyout" class="absolute bottom-[80px] right-2 w-[260px] max-h-[380px] taskbar-flat rad-lg p-4 flex flex-col flyout-right-base flyout-right-hidden z-[9995] overflow-y-auto custom-scroll shadow-2xl border border-white/10 sm-step-1">
-          <div class="flex gap-4 relative z-10 shrink-0">
-              <div class="w-[90px] flex flex-col gap-2 shrink-0 h-[110px]">
-                  <div id="brightness-bg-layer" class="flex-1 rad-base flex items-center justify-center border border-white/5 transition-all duration-300 shadow-sm theme-bg">
-                      <i id="brightness-icon" class="ph-fill ph-sun text-[28px] transition-colors text-sys-accent"></i>
+      <div id="quick-settings-flyout" class="absolute bottom-[80px] right-2 w-[260px] taskbar-flat rad-base p-5 flex flex-col flyout-right-base flyout-right-hidden z-[9995] shadow-2xl border border-white/10 sm-step-1">
+          
+          <!-- Header -->
+          <div class="flex items-center justify-between mb-5 shrink-0 sm-step-2">
+              <div class="flex items-center gap-2.5">
+                  <div class="w-8 h-8 rounded-full bg-sys-accent/10 flex items-center justify-center">
+                      <i class="ph-bold ph-sliders-horizontal text-[15px] text-sys-accent"></i>
                   </div>
-                  <div id="nl-bg-layer" class="flex-1 rad-base flex items-center justify-center border border-white/5 transition-all duration-300 shadow-sm theme-bg">
-                      <i id="nl-icon" class="ph-bold ph-moon text-[28px] text-mica-contrast opacity-50 transition-colors"></i>
+                  <h3 class="text-[14px] font-bold text-mica-contrast">Quick Settings</h3>
+              </div>
+              <button onclick="window.openSettings()" class="w-8 h-8 flex items-center justify-center rad-full theme-bg theme-bg-hover transition-all duration-300 text-mica-contrast active:scale-90 group border border-white/5">
+                  <i class="ph-bold ph-gear text-[15px] group-hover:rotate-90 transition-transform duration-500"></i>
+              </button>
+          </div>
+
+          <!-- Controls Grid -->
+          <div class="flex gap-3 relative z-10 shrink-0 sm-step-3">
+              
+              <!-- Brightness Control Group -->
+              <div class="flex-1 settings-card p-2.5 rad-base flex flex-col items-center gap-4 group/control hover:border-sys-accent/30 transition-colors">
+                  <div class="win-slider-vert-container mt-3">
+                      <input title="Brightness" type="range" id="brightness-slider" min="0" max="100" value="100" class="win-slider-vert group-hover/control:opacity-100 transition-opacity" oninput="window.updateBrightness(this)">
+                  </div>
+                  <div id="brightness-bg-layer" class="w-full h-12 rad-base flex items-center justify-center border border-white/5 transition-all duration-300 shadow-sm theme-bg cursor-pointer hover:bg-[rgba(var(--sys-accent-rgb),0.15)] active:scale-[0.94]">
+                      <i id="brightness-icon" class="ph-fill ph-sun text-[22px] transition-colors text-sys-accent"></i>
                   </div>
               </div>
-              <div class="flex-1 flex justify-center gap-6 items-center h-[110px]">
-                  <div class="win-slider-vert-container">
-                      <input type="range" id="brightness-slider" min="0" max="100" value="100" class="win-slider-vert" oninput="window.updateBrightness(this)">
+
+              <!-- Night Light Control Group -->
+              <div class="flex-1 settings-card p-2.5 rad-base flex flex-col items-center gap-4 group/control hover:border-sys-accent/30 transition-colors">
+                  <div class="win-slider-vert-container mt-3">
+                      <input title="Night Light" type="range" id="nl-slider" min="0" max="100" value="0" class="win-slider-vert group-hover/control:opacity-100 transition-opacity" oninput="window.updateNightLight(this)">
                   </div>
-                  <div class="win-slider-vert-container">
-                      <input type="range" id="nl-slider" min="0" max="100" value="0" class="win-slider-vert" oninput="window.updateNightLight(this)">
+                  <div id="nl-bg-layer" class="w-full h-12 rad-base flex items-center justify-center border border-white/5 transition-all duration-300 shadow-sm theme-bg cursor-pointer hover:bg-[rgba(var(--sys-accent-rgb),0.15)] active:scale-[0.94]">
+                      <i id="nl-icon" class="ph-bold ph-moon text-[22px] text-mica-contrast opacity-50 transition-colors"></i>
                   </div>
               </div>
+
           </div>
       </div>
 
       <!-- CONCEPT CALENDAR FLYOUT -->
-      <div id="calendar-flyout" class="absolute bottom-[80px] right-2 w-[360px] max-h-[560px] taskbar-flat rad-lg p-0 flex flex-col flyout-right-base flyout-right-hidden z-[9995] overflow-y-auto custom-scroll">
+      <div id="calendar-flyout" class="absolute bottom-[80px] right-2 w-[360px] max-h-[560px] taskbar-flat rad-base p-0 flex flex-col flyout-right-base flyout-right-hidden z-[9995] overflow-y-auto custom-scroll">
           
           <div class="px-5 pt-6 pb-4 relative overflow-hidden sm-step-1 shrink-0">
               <div class="absolute top-0 right-0 w-32 h-32 bg-sys-accent opacity-[0.15] blur-3xl rounded-full pointer-events-none"></div>
@@ -899,13 +917,13 @@
       <!-- TASKBAR WITH PREMIUM HOVER -->
       <div id="taskbar-wrapper" class="absolute bottom-0 left-0 w-full flex items-center transition-all duration-500 ease-[cubic-bezier(0.1,0.9,0.2,1.0)] tb-visible" ondblclick="window.hideTaskbar()" onclick="window.showTaskbar(event)">
             
-            <div id="tb-segment-about" class="taskbar-segment tb-reveal-visible pointer-events-auto h-[56px] taskbar-flat rad-lg flex items-center px-2 shrink-0 justify-self-start">
+            <div id="tb-segment-about" class="taskbar-segment tb-reveal-visible pointer-events-auto h-[56px] taskbar-flat rad-base flex items-center px-2 shrink-0 justify-self-start">
                 <button id="tb-app-btn-about" onclick="window.openAbout(event)" class="taskbar-btn w-[44px] h-[44px] rad-base flex items-center justify-center group cursor-default focus:outline-none">
                   <img src="https://img.icons8.com/?size=100&id=NzIdJDXpXX0B&format=png&color=000000" class="w-[24px] h-[24px] pointer-events-none opacity-90 group-hover:scale-105 transition-transform" draggable="false" alt="About">
                 </button>
             </div>
 
-            <div id="tb-apps-segment" class="taskbar-segment tb-reveal-visible pointer-events-auto h-[56px] taskbar-flat rad-lg flex items-center justify-center px-2 gap-1 z-10">
+            <div id="tb-apps-segment" class="taskbar-segment tb-reveal-visible pointer-events-auto h-[56px] taskbar-flat rad-base flex items-center justify-center px-2 gap-1 z-10">
                 
                 <button id="tb-start" onclick="window.toggleStartMenu(event)" class="taskbar-btn w-[44px] h-[44px] flex items-center justify-center rad-base group shrink-0 cursor-default focus:outline-none">
                   <div class="start-logo-glow"></div>
@@ -923,7 +941,7 @@
 
             </div>
 
-            <div id="tb-segment-tray" class="taskbar-segment tb-reveal-visible pointer-events-auto h-[56px] taskbar-flat rad-lg flex items-center px-2 shrink-0 justify-self-end">
+            <div id="tb-segment-tray" class="taskbar-segment tb-reveal-visible pointer-events-auto h-[56px] taskbar-flat rad-base flex items-center px-2 shrink-0 justify-self-end">
                 
                 <button class="taskbar-btn flex items-center justify-center w-[24px] h-[42px] rad-base cursor-default focus:outline-none">
                     <i class="ph-bold ph-caret-up text-[14px] text-mica-contrast"></i>
@@ -1120,7 +1138,7 @@
         
         // Reset base wrapper classes
         wrapper.className = 'absolute bottom-0 z-[9999] flex items-center transition-all duration-500 w-full left-0';
-        appsSeg.className = 'taskbar-segment tb-reveal-visible pointer-events-auto h-[56px] taskbar-flat rad-lg flex items-center justify-center px-2 gap-1 z-10';
+        appsSeg.className = 'taskbar-segment tb-reveal-visible pointer-events-auto h-[56px] taskbar-flat rad-base flex items-center justify-center px-2 gap-1 z-10';
         
         // Re-enable individual flat backgrounds for children
         document.querySelectorAll('.taskbar-segment').forEach(seg => {
@@ -1371,17 +1389,26 @@
             if(matches.length > 0) {
                 matches.forEach((match, idx) => {
                     const el = document.createElement('div');
-                    el.className = `flex items-center gap-4 ${idx === 0 ? 'theme-bg-strong ring-1 ring-sys-accent/50' : 'theme-bg-hover'} p-3 rad-base cursor-pointer hover:bg-[rgba(var(--sys-accent-rgb),0.35)] transition-colors active:scale-[0.99] border border-[rgba(255,255,255,0.05)]`;
+                    const isBestMatch = idx === 0;
+                    
+                    el.className = `flex items-center p-2 rad-base cursor-pointer group transition-colors active:scale-[0.99] ${
+                        isBestMatch 
+                        ? 'bg-[rgba(var(--sys-accent-rgb),0.1)] border-l-[3px] border-l-sys-accent border-y border-r border-white/5' 
+                        : 'hover:bg-[rgba(255,255,255,0.06)] border-l-[3px] border-transparent border-y border-r border-transparent'
+                    }`;
+                    
                     el.onclick = match.action;
                     el.innerHTML = `
-                        <div class="w-10 h-10 bg-white/10 rounded-md flex items-center justify-center text-xl text-mica-contrast shadow-inner border border-white/10">
+                        <div class="w-9 h-9 flex items-center justify-center text-[22px] ${isBestMatch ? 'text-sys-accent' : 'text-mica-contrast opacity-90'} transition-transform group-hover:scale-105 ml-1 drop-shadow-sm">
                             <i class="ph-duotone ${match.icon}"></i>
                         </div>
-                        <div class="flex flex-col flex-1">
-                            <h4 class="text-[14px] font-bold text-mica-contrast">${match.title}</h4>
-                            <p class="text-[11px] text-mica-contrast opacity-70 font-medium">${match.desc}</p>
+                        <div class="flex flex-col flex-1 ml-3">
+                            <h4 class="text-[13px] font-semibold text-mica-contrast leading-tight">${match.title}</h4>
+                            <p class="text-[11px] text-mica-contrast opacity-60 font-medium mt-[1px]">${match.desc}</p>
                         </div>
-                        <i class="ph-bold ph-caret-right text-mica-contrast opacity-50 text-lg"></i>
+                        <div class="text-mica-contrast opacity-0 group-hover:opacity-60 transition-opacity duration-200 mr-2 flex items-center">
+                            <i class="ph-bold ph-caret-right text-[12px]"></i>
+                        </div>
                     `;
                     list.appendChild(el);
                 });
