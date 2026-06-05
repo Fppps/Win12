@@ -687,7 +687,7 @@
                               <h2 class="text-xl font-bold text-mica-contrast tracking-tight">Windows 12 Preview</h2>
                               <p class="text-sm text-mica-contrast opacity-70 mt-0.5">Build 040 (1H05 Rebuild Update)</p>
                           </div>
-                          <button class="ml-auto px-5 py-2.5 bg-sys-accent hover:bg-sys-accent-hover text-white text-xs font-bold rad-base transition-colors active:scale-95 shadow-md shadow-sys-accent/30 relative z-10">Check for updates</button>
+                          <button onclick="window.checkForUpdates(this)" class="ml-auto px-5 py-2.5 bg-sys-accent hover:bg-sys-accent-hover text-white text-xs font-bold rad-base transition-colors active:scale-95 shadow-md shadow-sys-accent/30 relative z-10 w-[160px] flex justify-center items-center gap-2">Check for updates</button>
                       </div>
                       
                       <div class="settings-card p-8 rad-base flex flex-col items-center justify-center text-center h-56 cursor-pointer" onclick="window.openAbout()">
@@ -847,7 +847,7 @@
                   
                   <div class="flex items-center justify-between mt-auto relative z-10 pt-2 sm-step-2">
                       <span class="text-[10px] font-semibold text-mica-contrast opacity-70">Last checked: Today</span>
-                      <button class="bg-sys-accent hover:bg-sys-accent-hover text-white text-[11px] font-bold px-3 py-1.5 rad-base transition-colors flex items-center gap-1.5 active:scale-95 sm-step-3 shadow-md shadow-sys-accent/20">
+                      <button onclick="window.checkForUpdates(this)" class="bg-sys-accent hover:bg-sys-accent-hover text-white text-[11px] font-bold px-3 py-1.5 rad-base transition-colors flex items-center justify-center gap-1.5 active:scale-95 sm-step-3 shadow-md shadow-sys-accent/20 w-[80px]">
                           Check <i class="ph-bold ph-caret-right"></i>
                       </button>
                   </div>
@@ -1096,6 +1096,7 @@
     window.openSearchFlyout = openSearchFlyout;
     window.closeSearchFlyout = closeSearchFlyout;
     window.handleSearchInput = handleSearchInput;
+    window.checkForUpdates = checkForUpdates;
 
     let isStartOpen = false;
     let isTaskbarVisible = true;
@@ -1939,6 +1940,53 @@
             document.documentElement.style.setProperty('--current-wallpaper', `url('${imageUrl}')`);
             saveWallpaper(file);
         }
+    }
+
+    // --- Updater Engine ---
+    function checkForUpdates(btn) {
+        if (btn.disabled) return;
+        
+        // Block interaction and show checking state
+        btn.disabled = true;
+        btn.innerHTML = `<i class="ph-bold ph-spinner animate-spin text-lg"></i> Checking...`;
+        btn.classList.add('opacity-90', 'cursor-not-allowed');
+
+        // Step 1: Simulate network fetch (2s)
+        setTimeout(() => {
+            btn.innerHTML = `<i class="ph-bold ph-download-simple text-lg"></i> Installing...`;
+            btn.classList.remove('bg-sys-accent', 'hover:bg-sys-accent-hover');
+            btn.classList.add('bg-green-600', 'hover:bg-green-700');
+            
+            // Step 2: Show overlay and transition out (1.5s)
+            setTimeout(() => {
+                const overlay = document.createElement('div');
+                overlay.className = 'fixed inset-0 bg-[#0a0a0a] z-[99999] transition-opacity duration-1000 opacity-0 flex items-center justify-center';
+                overlay.innerHTML = `
+                    <div class="flex flex-col items-center gap-6 text-white transform transition-transform duration-1000 scale-95" id="update-content-box">
+                        <div class="win-spinner scale-[2] mb-6 drop-shadow-[0_0_16px_rgba(255,255,255,0.4)]">
+                            <div class="circle"></div><div class="circle"></div><div class="circle"></div>
+                            <div class="circle"></div><div class="circle"></div><div class="circle"></div>
+                        </div>
+                        <h2 class="text-3xl font-bold tracking-tight">Preparing Update Phase...</h2>
+                        <p class="opacity-70 text-sm font-medium tracking-wide">Please wait while your system transitions to the updater environment.</p>
+                    </div>`;
+                document.body.appendChild(overlay);
+                
+                // Trigger fade in and subtle zoom
+                setTimeout(() => { 
+                    overlay.classList.remove('opacity-0'); 
+                    overlay.classList.add('opacity-100'); 
+                    document.getElementById('update-content-box').classList.remove('scale-95');
+                    document.getElementById('update-content-box').classList.add('scale-100');
+                }, 50);
+
+                // Final redirect
+                setTimeout(() => {
+                    window.location.href = 'update/index.html';
+                }, 2200);
+
+            }, 1500);
+        }, 2000);
     }
 
     // --- Clock & Login Logic ---
