@@ -3,21 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Windows 12 Preview (1H05 Rebuild Update)</title>
+  <title>Windows 12 (1H06 "New Valley")</title>
   
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
 
   <style>
     /* ============================================================================
-       1H05 REBUILD UPDATE - FOUNDATIONAL ARCHITECTURE
+       1H06 REBUILD UPDATE - FOUNDATIONAL ARCHITECTURE
        ============================================================================ */
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Segoe+UI:wght@300;400;600;700&display=swap');
     
     :root {
         /* Premium OS Physics & Spring Animations */
-        --spring-easing: cubic-bezier(0.175, 0.885, 0.32, 1.15);
-        --smooth-easing: cubic-bezier(0.25, 1, 0.5, 1);
+        --spring-easing: cubic-bezier(0.16, 1, 0.3, 1);
+        --smooth-easing: cubic-bezier(0.25, 0.1, 0.25, 1);
         --reveal-easing: cubic-bezier(0.3, 0, 0, 1);
         
         /* Centralized Border Radius (Sharper/Less Rounded) */
@@ -37,7 +37,7 @@
         --slider-outline: color-mix(in srgb, var(--sys-accent) 30%, white 70%);
 
         /* ----------------------------------------------------------------------
-           UNIFIED BORDERLESS MICA REBUILD (Pure Glass Sheen - No Noise)
+           UNIFIED BORDERLESS MICA REBUILD (Clean Native Glass)
            ---------------------------------------------------------------------- */
         --mica-color-rgb: 255, 255, 255;
         --mica-base-alpha: 0.45;
@@ -46,20 +46,34 @@
         
         --mica-base: rgba(var(--mica-color-rgb), var(--mica-base-alpha)); 
         --mica-tint: rgba(var(--sys-accent-rgb), var(--mica-tint-alpha));
-        --mica-blur: blur(90px) saturate(100%) contrast(1.1); 
+        --mica-blur: blur(80px) saturate(150%); 
+        
+        /* Dynamic Icon Filter */
+        --icon-filter: brightness(0) invert(1) opacity(0.9);
+
+        /* Edge Adaptation Variables */
+        --flyout-x: 0px;
+        --flyout-y: 30px;
+        --step-x: 0px;
+        --step-y: 20px;
+        --tb-hide-x: 0px;
+        --tb-hide-y: 52px;
+        --tb-peek-x: 0px;
+        --tb-peek-y: 46px;
     }
 
-    /* Aggressively strip any browser default outlines to prevent blue edges */
+    /* Aggressively strip any browser default outlines and user borders */
     * {
         outline: none !important;
-        box-shadow: none !important;
-        border-color: transparent;
+        border: none !important;
         -webkit-tap-highlight-color: transparent;
     }
     *:focus {
         outline: none !important;
-        box-shadow: none !important;
     }
+
+    /* Allow standard inputs to have backgrounds and outlines */
+    input[type="range"]::-webkit-slider-thumb { border: 4px solid var(--slider-outline) !important; }
 
     body { 
         font-family: 'Segoe UI Variable Text', 'Segoe UI', system-ui, sans-serif; 
@@ -79,89 +93,334 @@
     .text-mica-contrast { color: var(--mica-contrast); transition: color 0.4s ease; }
     .placeholder-mica-contrast::placeholder { color: var(--mica-contrast); opacity: 0.6; transition: color 0.4s ease; }
 
+    /* Dynamic Glass Aware Filter for Image Icons */
+    .glass-icon {
+        filter: var(--icon-filter);
+        transition: filter 0.4s ease;
+    }
+
+    /* Fallback Avatar Profile Styling (Clean Glass) */
+    .fallback-avatar {
+        background-color: var(--mica-base) !important;
+        backdrop-filter: blur(20px) !important;
+        -webkit-backdrop-filter: blur(20px) !important;
+        object-fit: contain !important;
+        padding: 18% !important;
+        border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    }
+
+    /* Dynamic OS & Transparency Aware Search Icon Mask */
+    .search-icon-masked {
+        background: linear-gradient(135deg, var(--sys-accent) 0%, color-mix(in srgb, var(--mica-contrast) 80%, transparent 20%) 100%);
+        -webkit-mask-image: url('https://img.icons8.com/?size=100&id=elSdeHsB03U3&format=png&color=000000');
+        mask-image: url('https://img.icons8.com/?size=100&id=elSdeHsB03U3&format=png&color=000000');
+        -webkit-mask-size: contain; mask-size: contain;
+        -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+        -webkit-mask-position: center; mask-position: center;
+        opacity: 0.9;
+        filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); 
+        transition: transform 0.3s cubic-bezier(0.2, 0.9, 0.4, 1), opacity 0.3s ease, background 0.4s ease;
+    }
+
     /* Dynamic OS Surfaces */
-    .theme-bg { background: rgba(var(--sys-accent-rgb), 0.12); transition: background 0.4s var(--smooth-easing); }
-    .theme-bg-hover:hover { background: rgba(var(--sys-accent-rgb), 0.25); }
+    .theme-bg { background: rgba(var(--sys-accent-rgb), 0.1); transition: background 0.3s ease; }
+    .theme-bg-hover:hover { background: rgba(var(--sys-accent-rgb), 0.2); }
     .theme-bg-strong { background: rgba(var(--sys-accent-rgb), 0.25); }
 
-    /* Settings Premium Cards */
+    /* Settings Premium Cards (Windows Concept Fluent Design) */
     .settings-card {
-        background: linear-gradient(145deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%);
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        box-shadow: 0 4px 24px -2px rgba(0, 0, 0, 0.1);
-        backdrop-filter: blur(10px);
-        transition: all 0.4s var(--spring-easing);
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.015) 100%);
+        backdrop-filter: blur(40px) saturate(150%);
+        -webkit-backdrop-filter: blur(40px) saturate(150%);
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        border-top: 1px solid rgba(255, 255, 255, 0.15); /* Signature Fluent highlight */
+        border-radius: 8px !important;
+        transition: background 0.3s ease, border-color 0.3s ease, transform 0.3s var(--spring-easing), box-shadow 0.3s ease;
+        /* 3D Card Depth */
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.1);
     }
     .settings-card:hover {
-        background: linear-gradient(145deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.02) 100%);
-        border: 1px solid rgba(255, 255, 255, 0.15);
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.07) 0%, rgba(255, 255, 255, 0.025) 100%);
+        border-color: rgba(255, 255, 255, 0.12);
+        border-top-color: rgba(255, 255, 255, 0.25);
+        /* 3D Hover Lift */
         transform: translateY(-2px);
-        box-shadow: 0 8px 32px -4px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 16px 40px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.2);
     }
 
-    /* Taskbar Premium Hover Engine */
+    /* Section Labels Styling (Upgraded Premium Look) */
+    .section-label {
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--sys-accent);
+        margin-bottom: 0.75rem;
+        display: flex;
+        align-items: center;
+        opacity: 1;
+        padding-bottom: 4px;
+        border-bottom: 1px solid color-mix(in srgb, var(--sys-accent) 25%, transparent);
+        text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    }
+
+    /* Taskbar Hover Engine (Clean Native Windows Feel) */
     .taskbar-btn {
-        transition: all 0.4s var(--spring-easing);
+        transition: background 0.15s ease, transform 0.15s cubic-bezier(0.2, 0, 0, 1);
         position: relative;
     }
     .taskbar-btn:hover {
-        background: rgba(255, 255, 255, 0.08);
-        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+        background: rgba(255, 255, 255, 0.06);
     }
     .taskbar-btn:active {
-        transform: scale(0.85);
-        background: rgba(255, 255, 255, 0.04);
+        background: rgba(255, 255, 255, 0.03);
+        transform: scale(0.96) translateY(1px); /* 3D Physical Push Down */
+        box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.3); /* 3D Inset Shadow */
     }
-    .taskbar-btn::after {
+
+    /* Target inner images/icons for deep click effect */
+    .taskbar-btn img, .taskbar-btn i, .taskbar-btn .start-logo-masked, .taskbar-btn .search-icon-masked {
+        transition: transform 0.4s var(--spring-easing), opacity 0.2s ease;
+    }
+    .taskbar-btn:active img, .taskbar-btn:active i, .taskbar-btn:active .start-logo-masked, .taskbar-btn:active .search-icon-masked {
+        transform: scale(0.75) !important;
+        opacity: 0.8;
+        transition: transform 0.1s cubic-bezier(0.2, 0, 0, 1), opacity 0.1s ease !important;
+    }
+
+    /* App Active Indicator Pill (Apps & Start Only) */
+    #tb-segment-about .taskbar-btn::after,
+    #tb-apps-segment .taskbar-btn::after {
         content: '';
         position: absolute;
         bottom: 0px;
         left: 50%;
-        transform: translateX(-50%) scaleX(0);
-        width: 16px;
+        transform: translateX(-50%);
+        width: 0px;
         height: 3px;
         border-radius: 3px 3px 0 0;
-        background: var(--sys-accent);
-        transition: transform 0.4s var(--spring-easing), opacity 0.3s;
+        background: rgba(255, 255, 255, 0.6);
+        transition: width 0.3s cubic-bezier(0.2, 0.9, 0.4, 1), background-color 0.2s ease, opacity 0.2s ease;
         opacity: 0;
     }
-    .taskbar-btn:hover::after {
-        transform: translateX(-50%) scaleX(1);
+    /* Vertical adjustment for indicators */
+    #taskbar-wrapper[data-pos="left"] .taskbar-btn::after { left: 0; top: 50%; bottom: auto; transform: translateY(-50%); width: 3px; height: 0px; border-radius: 0 3px 3px 0; }
+    #taskbar-wrapper[data-pos="right"] .taskbar-btn::after { right: 0; left: auto; top: 50%; bottom: auto; transform: translateY(-50%); width: 3px; height: 0px; border-radius: 3px 0 0 3px; }
+
+    #tb-segment-about .taskbar-btn:hover::after,
+    #tb-apps-segment .taskbar-btn:hover::after {
+        width: 22px;
+        background: rgba(255, 255, 255, 0.9);
         opacity: 1;
+    }
+    #taskbar-wrapper[data-pos="left"] .taskbar-btn:hover::after, #taskbar-wrapper[data-pos="right"] .taskbar-btn:hover::after { height: 22px; width: 3px; }
+
+    #tb-segment-about .taskbar-btn:active::after,
+    #tb-apps-segment .taskbar-btn:active::after {
+        width: 8px; /* Shrinks to a dot on press */
+        background: var(--sys-accent);
+        opacity: 1;
+        transition: width 0.15s cubic-bezier(0.2, 0, 0, 1), background-color 0.1s ease;
+    }
+    #taskbar-wrapper[data-pos="left"] .taskbar-btn:active::after, #taskbar-wrapper[data-pos="right"] .taskbar-btn:active::after { height: 8px; width: 3px; transition: height 0.15s cubic-bezier(0.2,0,0,1); }
+
+    /* Active/Open App Pill State */
+    .app-open::after, .start-is-open::after {
+        width: 16px !important;
+        background: var(--sys-accent) !important;
+        opacity: 1 !important;
+    }
+    #taskbar-wrapper[data-pos="left"] .app-open::after, #taskbar-wrapper[data-pos="right"] .app-open::after,
+    #taskbar-wrapper[data-pos="left"] .start-is-open::after, #taskbar-wrapper[data-pos="right"] .start-is-open::after {
+        height: 16px !important; width: 3px !important;
+    }
+
+    .app-open:hover::after, .start-is-open:hover::after {
+        width: 24px !important;
+        background: color-mix(in srgb, var(--sys-accent) 80%, white 20%) !important;
+    }
+    #taskbar-wrapper[data-pos="left"] .app-open:hover::after, #taskbar-wrapper[data-pos="right"] .app-open:hover::after,
+    #taskbar-wrapper[data-pos="left"] .start-is-open:hover::after, #taskbar-wrapper[data-pos="right"] .start-is-open:hover::after {
+        height: 24px !important; width: 3px !important;
+    }
+
+    .app-open:active::after, .start-is-open:active::after {
+        width: 8px !important;
+    }
+    #taskbar-wrapper[data-pos="left"] .app-open:active::after, #taskbar-wrapper[data-pos="right"] .app-open:active::after,
+    #taskbar-wrapper[data-pos="left"] .start-is-open:active::after, #taskbar-wrapper[data-pos="right"] .start-is-open:active::after {
+        height: 8px !important; width: 3px !important;
+    }
+
+    /* Taskbar Search Expansion */
+    #tb-search-btn {
+        width: 44px;
+        padding-left: 12px;
+        justify-content: flex-start !important;
+        overflow: hidden;
+        transition: width 0.4s var(--spring-easing), background 0.15s ease, transform 0.15s cubic-bezier(0.2, 0, 0, 1);
+    }
+    #tb-search-btn.app-open {
+        width: 240px;
+        background: rgba(var(--sys-accent-rgb), 0.15);
+    }
+    #tb-search-btn.app-open:active {
+        transform: none !important;
+    }
+    #tb-search-btn.app-open:active .search-icon-masked {
+        transform: none !important;
+    }
+    #tb-search-btn .tb-search-text {
+        opacity: 0;
+        transition: opacity 0.2s ease;
+        white-space: nowrap;
+        margin-left: 10px;
+        font-size: 13px;
+        font-weight: 500;
+        pointer-events: none;
+        background: transparent;
+        color: var(--mica-contrast);
+    }
+    #tb-search-btn.app-open .tb-search-text {
+        opacity: 1;
+        transition-delay: 0.1s;
+        pointer-events: auto;
+    }
+
+    /* App Minimized Expandable Buttons */
+    .app-expandable {
+        width: 44px;
+        padding-left: 10px;
+        justify-content: flex-start !important;
+        overflow: hidden;
+        transition: width 0.4s var(--spring-easing), background 0.15s ease, transform 0.15s cubic-bezier(0.2, 0, 0, 1);
+    }
+    .app-expandable.app-minimized {
+        width: 120px;
+        background: rgba(var(--sys-accent-rgb), 0.15);
+    }
+    .app-expandable.app-minimized:hover {
+        background: rgba(var(--sys-accent-rgb), 0.25);
+    }
+    .app-expandable .tb-app-text {
+        opacity: 0;
+        transition: opacity 0.2s ease;
+        white-space: nowrap;
+        margin-left: 12px;
+        font-size: 12.5px;
+        font-weight: 600;
+        pointer-events: none;
+        background: transparent;
+        color: var(--mica-contrast);
+    }
+    .app-expandable.app-minimized .tb-app-text {
+        opacity: 1;
+        transition-delay: 0.1s;
+        pointer-events: auto;
     }
 
     /* ==========================================================================
-       UNIFIED MICA DYNAMIC MATERIAL (Zero Borders, Pure Glass Sheen)
+       OMNI-DIRECTIONAL TASKBAR ENGINE
+       ========================================================================== */
+    #taskbar-wrapper { transition: bottom 0.6s var(--spring-easing), top 0.6s var(--spring-easing), left 0.6s var(--spring-easing), right 0.6s var(--spring-easing), height 0.6s var(--spring-easing), width 0.6s var(--spring-easing), background-color 0.4s ease, backdrop-filter 0.4s ease, opacity 0.3s ease; }
+    
+    /* Horizontal (Bottom/Top) */
+    #taskbar-wrapper[data-pos="bottom"], #taskbar-wrapper[data-pos="top"] {
+        width: 100%; height: 72px; flex-direction: row; justify-content: center;
+    }
+    #taskbar-wrapper[data-pos="bottom"] { bottom: 0; left: 0; }
+    #taskbar-wrapper[data-pos="top"] { top: 0; left: 0; }
+    
+    #taskbar-wrapper[data-pos="bottom"] .taskbar-segment, #taskbar-wrapper[data-pos="top"] .taskbar-segment {
+        height: 56px; flex-direction: row; padding: 0 8px; gap: 4px;
+    }
+
+    /* Vertical (Left/Right) */
+    #taskbar-wrapper[data-pos="left"], #taskbar-wrapper[data-pos="right"] {
+        height: 100%; width: 72px; flex-direction: column; justify-content: center;
+    }
+    #taskbar-wrapper[data-pos="left"] { top: 0; left: 0; }
+    #taskbar-wrapper[data-pos="right"] { top: 0; right: 0; }
+    
+    #taskbar-wrapper[data-pos="left"] .taskbar-segment, #taskbar-wrapper[data-pos="right"] .taskbar-segment {
+        width: 56px; flex-direction: column; padding: 8px 0; gap: 4px;
+    }
+
+    /* Layout Split (Default) */
+    #taskbar-wrapper.layout-default[data-pos="bottom"], #taskbar-wrapper.layout-default[data-pos="top"] { justify-content: space-between; padding: 0 8px; }
+    #taskbar-wrapper.layout-default[data-pos="bottom"] #tb-apps-segment, #taskbar-wrapper.layout-default[data-pos="top"] #tb-apps-segment { flex: 1; margin: 0 8px; }
+    
+    #taskbar-wrapper.layout-default[data-pos="left"], #taskbar-wrapper.layout-default[data-pos="right"] { justify-content: space-between; padding: 8px 0; }
+    #taskbar-wrapper.layout-default[data-pos="left"] #tb-apps-segment, #taskbar-wrapper.layout-default[data-pos="right"] #tb-apps-segment { flex: 1; margin: 8px 0; }
+
+    /* Layout Unified Classic (Windows 11 Full-Bleed Style) */
+    #taskbar-wrapper.layout-classic {
+        background-color: var(--mica-base) !important;
+        backdrop-filter: var(--mica-blur);
+        -webkit-backdrop-filter: var(--mica-blur);
+        box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.2), 0 0 40px rgba(0,0,0,0.4) !important;
+        border-radius: 0 !important;
+    }
+    #taskbar-wrapper.layout-classic .taskbar-segment {
+        background: transparent !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        box-shadow: none !important;
+        border-radius: 0 !important;
+    }
+    #taskbar-wrapper.layout-classic[data-pos="bottom"], #taskbar-wrapper.layout-classic[data-pos="top"] { 
+        padding: 0 16px; justify-content: space-between; height: 56px; 
+    }
+    #taskbar-wrapper.layout-classic[data-pos="bottom"] #tb-apps-segment, #taskbar-wrapper.layout-classic[data-pos="top"] #tb-apps-segment { flex: 1; margin: 0; }
+    
+    #taskbar-wrapper.layout-classic[data-pos="left"], #taskbar-wrapper.layout-classic[data-pos="right"] { 
+        padding: 16px 0; justify-content: space-between; width: 56px; 
+    }
+    #taskbar-wrapper.layout-classic[data-pos="left"] #tb-apps-segment, #taskbar-wrapper.layout-classic[data-pos="right"] #tb-apps-segment { flex: 1; margin: 0; }
+
+    /* Vertical Taskbar Hard-Overrides (Disable expansions to save layout) */
+    #taskbar-wrapper[data-pos="left"] .app-expandable, #taskbar-wrapper[data-pos="right"] .app-expandable,
+    #taskbar-wrapper[data-pos="left"] #tb-search-btn, #taskbar-wrapper[data-pos="right"] #tb-search-btn {
+        width: 44px !important; padding-left: 0 !important; justify-content: center !important;
+    }
+    #taskbar-wrapper[data-pos="left"] .tb-app-text, #taskbar-wrapper[data-pos="right"] .tb-app-text,
+    #taskbar-wrapper[data-pos="left"] .tb-search-text, #taskbar-wrapper[data-pos="right"] .tb-search-text,
+    #taskbar-wrapper[data-pos="left"] .js-tb-date, #taskbar-wrapper[data-pos="right"] .js-tb-date {
+        display: none !important;
+    }
+    #taskbar-wrapper[data-pos="left"] #tb-app-btn-clock, #taskbar-wrapper[data-pos="right"] #tb-app-btn-clock {
+        align-items: center !important; padding: 0 !important;
+    }
+
+    /* ==========================================================================
+       UNIFIED MICA DYNAMIC MATERIAL (Clean Glass)
        ========================================================================== */
     .taskbar-flat, .app-window, .flyout-base, .flyout-right-base {
         position: relative;
         background-color: var(--mica-base) !important;
         backdrop-filter: var(--mica-blur);
         -webkit-backdrop-filter: var(--mica-blur);
-        border: none !important;
+        /* 3D Depth Elevation (Enhanced Blur) */
+        box-shadow: 
+            0 30px 60px -10px rgba(0, 0, 0, 0.6), /* Deep ambient blurred shadow */
+            inset 0 1px 1px rgba(255, 255, 255, 0.25), /* Bright top bevel edge */
+            inset 0 0 0 1px rgba(255, 255, 255, 0.08) !important; /* Crisp inner glass contour */
     }
-    
-    .app-window {
-        box-shadow: 0 12px 40px rgba(0,0,0,0.3);
-        border: 1px solid rgba(255,255,255,0.08) !important;
-        border-top: 1px solid rgba(255,255,255,0.15) !important;
-    }
-    
+
     /* Layout Mode Disabled Background */
     .taskbar-flat-disabled {
         background: transparent !important;
         backdrop-filter: none !important;
         -webkit-backdrop-filter: none !important;
-        border: none !important;
         box-shadow: none !important;
     }
 
     /* ==========================================================================
        APP WINDOW ANIMATION LOGIC (Draggable & Task View Aware)
        ========================================================================== */
-    .app-window-hidden { opacity: 0; transform: translate(calc(-50% + var(--drag-x, 0px)), calc(-45% + var(--drag-y, 0px))) scale(0.92); pointer-events: none; }
-    .app-window-visible { opacity: 1; transform: translate(calc(-50% + var(--drag-x, 0px)), calc(-50% + var(--drag-y, 0px))) scale(1); pointer-events: auto; }
-    .app-window { transition: transform 0.6s var(--spring-easing), opacity 0.4s ease; }
+    .app-window-hidden { opacity: 0; transform: translate(calc(-50% + var(--drag-x, 0px)), calc(-45% + var(--drag-y, 0px))) scale(0.96); filter: blur(12px); pointer-events: none; }
+    .app-window-visible { opacity: 1; transform: translate(calc(-50% + var(--drag-x, 0px)), calc(-50% + var(--drag-y, 0px))) scale(1); filter: blur(0px); pointer-events: auto; }
+    .app-window { transition: transform 0.7s var(--spring-easing), opacity 0.5s ease, filter 0.5s ease; }
     
     /* Disable transition during drag for 1:1 mouse tracking */
     .app-window.dragging { transition: none !important; }
@@ -171,22 +430,27 @@
        ========================================================================== */
     #desktop-bg { transition: transform 0.8s var(--smooth-easing), filter 0.8s var(--smooth-easing); }
     .task-view-active #desktop-bg {
-        transform: scale(0.96);
-        filter: blur(25px) brightness(0.6);
+        transform: scale(0.92);
+        filter: blur(50px) brightness(0.4);
     }
     
     .task-view-active .app-window-visible {
         transform: translate(-50%, -65%) scale(0.6) !important; 
-        transition: transform 0.6s var(--smooth-easing), opacity 0.4s ease !important;
+        transition: transform 0.7s var(--spring-easing), opacity 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease !important;
         cursor: pointer;
+        /* 3D Deep Task View Shadow */
+        box-shadow: 0 0 0 1px rgba(255,255,255,0.05), 0 30px 80px rgba(0,0,0,0.6) !important;
     }
     .task-view-active .app-window-visible:hover {
-        transform: translate(-50%, -66%) scale(0.62) !important; 
+        transform: translate(-50%, -66%) scale(0.63) !important; 
+        box-shadow: 0 0 0 2px var(--sys-accent), 0 40px 100px rgba(0,0,0,0.8) !important;
     }
     .task-view-blocker { display: none; }
     .task-view-active .task-view-blocker { display: block; position: absolute; inset: 0; z-index: 99999; }
 
-    #task-view-dock { transition: transform 0.6s var(--spring-easing), opacity 0.4s ease; }
+    #task-view-dock {
+        transition: transform 0.7s var(--spring-easing), opacity 0.5s ease;
+    }
     .task-view-active #task-view-dock {
         opacity: 1 !important;
         transform: translate(-50%, 0) !important;
@@ -194,138 +458,53 @@
     }
 
     /* ==========================================================================
-       LOGIN & LOCK SCREEN STYLING & KEYFRAMES (UPGRADED)
+       LOGIN & LOCK SCREEN LOGIC
        ========================================================================== */
     #login-overlay { transition: opacity 1s var(--smooth-easing), filter 0.8s ease; }
     .lock-screen-hide { opacity: 0; pointer-events: none; }
     
-    /* Lock Screen Text Animation */
-    @keyframes lock-reveal-time {
-        0% { transform: translateY(-20px) scale(1.05); opacity: 0; filter: blur(10px); }
-        100% { transform: translateY(0) scale(1); opacity: 1; filter: blur(0); }
-    }
-    @keyframes lock-reveal-date {
-        0% { transform: translateY(-10px); opacity: 0; filter: blur(5px); }
-        100% { transform: translateY(0); opacity: 1; filter: blur(0); }
-    }
-    
-    #lock-time {
-        animation: lock-reveal-time 1.2s var(--spring-easing) forwards;
-        text-shadow: 0 4px 32px rgba(0,0,0,0.5);
-    }
-    #lock-date {
-        animation: lock-reveal-date 1s var(--spring-easing) 0.15s forwards;
-        opacity: 0;
-        text-shadow: 0 2px 16px rgba(0,0,0,0.5);
-    }
-
-    /* Login Stage Reveal Animations (Triggered via #login-state.opacity-100) */
-    @keyframes login-pop-avatar {
-        0% { transform: scale(0.8) translateY(20px); opacity: 0; filter: blur(10px); }
-        100% { transform: scale(1) translateY(0); opacity: 1; filter: blur(0); }
-    }
-    @keyframes login-slide-up {
-        0% { transform: translateY(15px); opacity: 0; }
-        100% { transform: translateY(0); opacity: 1; }
-    }
-
-    #login-state.opacity-100 .login-anim-avatar { animation: login-pop-avatar 0.8s var(--spring-easing) 0.1s forwards; opacity: 0; }
-    #login-state.opacity-100 .login-anim-text { animation: login-slide-up 0.8s var(--smooth-easing) 0.2s forwards; opacity: 0; }
-    #login-state.opacity-100 .login-anim-input { animation: login-slide-up 0.8s var(--smooth-easing) 0.3s forwards; opacity: 0; }
-    #login-state.opacity-100 .login-anim-options { animation: login-slide-up 0.8s var(--smooth-easing) 0.4s forwards; opacity: 0; }
-
-    /* Enhanced Premium Avatar styling */
-    .avatar-wrapper {
-        position: relative;
-        padding: 6px;
-        border-radius: 50%;
-        background: linear-gradient(145deg, rgba(255,255,255,0.1), rgba(0,0,0,0.2));
-        box-shadow: 0 8px 32px rgba(0,0,0,0.3), inset 0 1px 1px rgba(255,255,255,0.2);
-        transition: transform 0.5s var(--spring-easing), box-shadow 0.5s ease;
-    }
-    .avatar-wrapper:hover {
-        transform: scale(1.05);
-        box-shadow: 0 12px 40px rgba(var(--sys-accent-rgb), 0.3), inset 0 1px 1px rgba(255,255,255,0.3);
-    }
-    .avatar-glow-ring {
-        position: absolute;
-        inset: -2px;
-        border-radius: 50%;
-        background: conic-gradient(from 0deg, transparent 0%, var(--sys-accent) 50%, transparent 100%);
-        animation: spin-slow 3s linear infinite;
-        opacity: 0;
-        transition: opacity 0.5s ease;
-        z-index: -1;
-    }
-    .group:hover .avatar-glow-ring { opacity: 1; }
-    @keyframes spin-slow { 100% { transform: rotate(360deg); } }
-
-    /* Glassmorphic PIN Input */
     .login-pin-input {
-        background: rgba(0, 0, 0, 0.4) !important; 
-        border: 1px solid rgba(255, 255, 255, 0.1) !important;
-        border-bottom-color: rgba(255, 255, 255, 0.4) !important;
+        background: rgba(0, 0, 0, 0.45) !important; 
+        border: 1px solid rgba(255, 255, 255, 0.08) !important;
+        border-bottom: 2px solid rgba(255, 255, 255, 0.2) !important;
         border-radius: var(--os-radius);
         backdrop-filter: blur(25px);
         transition: all 0.4s var(--spring-easing);
-        letter-spacing: 0.25em;
+        letter-spacing: 0.15em;
         color: #ffffff !important;
-        box-shadow: 0 4px 16px rgba(0,0,0,0.2), inset 0 1px 2px rgba(255,255,255,0.05);
-    }
-    .login-pin-input::placeholder { letter-spacing: normal; color: rgba(255,255,255,0.7); font-weight: 500; }
-    .login-pin-input:hover {
-        background: rgba(0, 0, 0, 0.5) !important;
-        border-color: rgba(255, 255, 255, 0.2) !important;
     }
     .login-pin-input:focus { 
-        background: rgba(0, 0, 0, 0.7) !important; 
-        border-color: rgba(var(--sys-accent-rgb), 0.8) !important; 
-        box-shadow: 0 0 0 4px rgba(var(--sys-accent-rgb), 0.15), 0 8px 32px rgba(0,0,0,0.4) !important;
-        transform: scale(1.02);
+        background: rgba(0, 0, 0, 0.65) !important; 
+        border-color: rgba(255, 255, 255, 0.15) !important; 
+        border-bottom-color: rgba(255, 255, 255, 0.4) !important;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(0,0,0,0.2);
     }
+    .login-pin-input::placeholder { letter-spacing: normal; color: rgba(255,255,255,0.7); font-weight: 500; }
 
-    /* Submit Button Active Pulse */
-    @keyframes login-btn-pulse {
-        0% { box-shadow: 0 0 0 0 rgba(var(--sys-accent-rgb), 0.4); }
-        70% { box-shadow: 0 0 0 10px rgba(var(--sys-accent-rgb), 0); }
-        100% { box-shadow: 0 0 0 0 rgba(var(--sys-accent-rgb), 0); }
+    @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        20%, 60% { transform: translateX(-6px); }
+        40%, 80% { transform: translateX(6px); }
     }
-    .login-submit-btn {
-        background: rgba(255,255,255,0.05);
-        border: 1px solid rgba(255,255,255,0.1);
-        backdrop-filter: blur(10px);
-        transition: all 0.3s var(--spring-easing);
-    }
-    .login-submit-btn:hover {
-        background: var(--sys-accent);
-        border-color: var(--sys-accent);
-        transform: scale(1.05);
-        animation: login-btn-pulse 2s infinite;
-    }
+    .animate-shake { animation: shake 0.35s ease-in-out; }
 
-    /* Welcome Spinner & Text Animation */
-    @keyframes welcome-text-anim {
-        0% { opacity: 0; transform: translateY(10px); letter-spacing: 0; filter: blur(5px); }
-        100% { opacity: 1; transform: translateY(0); letter-spacing: 1px; filter: blur(0); }
-    }
-    #welcome-state.flex p {
-        animation: welcome-text-anim 1s var(--spring-easing) 0.2s forwards;
-        opacity: 0;
-    }
-
+    /* ==========================================================================
+       WINDOWS DOTTED SPINNER
+       ========================================================================== */
     .win-spinner { width: 48px; height: 48px; position: relative; }
     .win-spinner .circle { position: absolute; width: 100%; height: 100%; opacity: 0; transform: rotate(225deg); animation: win-orbit 4.8s infinite; }
     .win-spinner .circle::after { 
         content: ''; 
         position: absolute; 
-        width: 6px; 
-        height: 6px; 
+        width: 5px; 
+        height: 5px; 
         border-radius: 50% !important; 
         background: #ffffff; 
         left: 50%; 
         top: 0px; 
         transform: translateX(-50%); 
-        box-shadow: 0 0 6px rgba(255, 255, 255, 0.6); 
+        box-shadow: 0 0 8px rgba(255, 255, 255, 0.8); 
     }
     
     .win-spinner .circle:nth-child(2) { animation-delay: 170ms; }
@@ -348,10 +527,10 @@
     /* ==========================================================================
        TASKBAR TOGGLE ANIMATION
        ========================================================================== */
-    .tb-visible { transform: translateY(0); transition: transform 0.5s var(--spring-easing); }
-    .tb-hidden { transform: translateY(52px); cursor: pointer; transition: transform 0.5s var(--smooth-easing); }
+    .tb-visible { transform: translate(0, 0); transition: transform 0.6s var(--spring-easing); }
+    .tb-hidden { transform: translate(var(--tb-hide-x, 0), var(--tb-hide-y, 52px)); cursor: pointer; transition: transform 0.6s var(--smooth-easing); }
     
-    .tb-hidden:hover { transform: translateY(46px); }
+    .tb-hidden:hover { transform: translate(var(--tb-peek-x, 0), var(--tb-peek-y, 46px)); }
     .tb-hidden .taskbar-segment { opacity: 0.5; pointer-events: none; transition: opacity 0.4s ease; }
     .tb-hidden:hover .taskbar-segment { opacity: 0.85; }
 
@@ -360,11 +539,12 @@
        ========================================================================== */
     .win-slider, .win-slider-vert {
         -webkit-appearance: none;
-        background: rgba(150, 150, 150, 0.3);
+        background: rgba(150, 150, 150, 0.25);
         border-radius: var(--os-radius);
-        outline: none;
         accent-color: var(--sys-accent);
+        transition: background 0.3s ease;
     }
+    .win-slider:hover, .win-slider-vert:hover { background: rgba(150, 150, 150, 0.35); }
     .win-slider { width: 100%; height: 4px; }
     .win-slider-vert-container { position: relative; width: 20px; height: 110px; }
     .win-slider-vert {
@@ -376,18 +556,18 @@
         width: 18px; height: 18px; border-radius: 50%;
         background: var(--sys-accent);
         border: 4px solid var(--slider-outline) !important; 
-        box-sizing: border-box; box-shadow: 0 0 4px rgba(0,0,0,0.2);
-        cursor: pointer; transition: transform 0.2s var(--spring-easing);
+        box-sizing: border-box; box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+        cursor: pointer; transition: transform 0.3s var(--spring-easing);
     }
-    .win-slider::-webkit-slider-thumb:hover, .win-slider-vert::-webkit-slider-thumb:hover { transform: scale(1.1); }
-    .win-slider::-webkit-slider-thumb:active, .win-slider-vert::-webkit-slider-thumb:active { transform: scale(0.9); }
+    .win-slider::-webkit-slider-thumb:hover, .win-slider-vert::-webkit-slider-thumb:hover { transform: scale(1.15); }
+    .win-slider::-webkit-slider-thumb:active, .win-slider-vert::-webkit-slider-thumb:active { transform: scale(0.85); }
 
     /* ==========================================================================
        CUSTOM SCROLLBAR
        ========================================================================== */
     .custom-scroll::-webkit-scrollbar { width: 6px; }
     .custom-scroll::-webkit-scrollbar-track { background: transparent; }
-    .custom-scroll::-webkit-scrollbar-thumb { background: rgba(var(--sys-accent-rgb), 0.4); border-radius: var(--os-radius); }
+    .custom-scroll::-webkit-scrollbar-thumb { background: rgba(var(--sys-accent-rgb), 0.3); border-radius: var(--os-radius); transition: background 0.3s ease; }
     .custom-scroll::-webkit-scrollbar-thumb:hover { background: rgba(var(--sys-accent-rgb), 0.7); }
 
     /* ==========================================================================
@@ -402,8 +582,8 @@
         -webkit-mask-size: contain; mask-size: contain;
         -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
         -webkit-mask-position: center; mask-position: center;
-        opacity: 0.85;
-        transition: transform 0.6s var(--spring-easing), filter 0.4s ease, opacity 0.4s ease;
+        opacity: 0.9;
+        transition: background 0.3s ease, filter 0.3s ease, opacity 0.3s ease;
     }
 
     .start-logo-masked-lg {
@@ -418,49 +598,58 @@
         opacity: 1;
     }
 
-    @keyframes start-click-anim {
-        0% { transform: scale(1) rotate(0deg); filter: brightness(1) saturate(1); }
-        40% { transform: scale(0.65) rotate(-15deg); filter: brightness(1.4) saturate(1.5); }
-        100% { transform: scale(1) rotate(0deg); filter: brightness(1) saturate(1); }
+    #tb-start:hover .start-logo-masked { 
+        opacity: 1; 
+        filter: brightness(1.2) drop-shadow(0 0 2px rgba(255,255,255,0.3)); 
+    }
+    
+    #tb-start:active .start-logo-masked {
+        filter: brightness(0.8);
+        transition: filter 0.1s ease !important;
     }
 
-    .start-click-run {
-        animation: start-click-anim 0.55s var(--spring-easing) forwards;
+    .start-is-open .start-logo-masked {
+        background: linear-gradient(135deg, color-mix(in srgb, var(--sys-accent) 20%, white 80%) 0%, var(--sys-accent) 100%);
+        filter: brightness(1.1);
+        opacity: 1;
     }
-
-    #tb-start:hover .start-logo-masked { transform: scale(1.15); opacity: 1; }
 
     .start-logo-glow {
         position: absolute; width: 44px; height: 44px;
-        background: radial-gradient(circle, var(--sys-accent) 0%, transparent 70%);
-        filter: blur(12px); opacity: 0;
-        transition: opacity 0.5s ease, transform 0.6s var(--spring-easing), background 0.5s ease;
+        background: radial-gradient(circle, var(--sys-accent) 0%, transparent 60%);
+        filter: blur(14px); opacity: 0;
+        transition: opacity 0.4s ease, transform 0.4s ease;
         pointer-events: none; z-index: 0;
     }
-    #tb-start:hover .start-logo-glow { opacity: 0.5; transform: scale(1.6); }
+    
+    #tb-start:hover .start-logo-glow { opacity: 0.4; transform: scale(1.1); }
+    
+    #tb-start:active .start-logo-glow { 
+        opacity: 0.2 !important; 
+        transform: scale(0.9) !important; 
+        transition: opacity 0.1s ease, transform 0.1s ease !important;
+    }
 
     /* ==========================================================================
-       FLYOUT/MENU ANIMATION LOGIC (Start, Cal, Quick Settings)
+       FLYOUT/MENU ANIMATION LOGIC (Dynamic Edge Anchored)
        ========================================================================== */
-    .flyout-hidden { opacity: 0; transform: translateY(40px) scale(0.95); pointer-events: none !important; }
-    .flyout-visible { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto !important; }
-    .flyout-base { transition: transform 0.7s var(--spring-easing), opacity 0.4s ease; }
+    .flyout-hidden { opacity: 0; transform: translate(var(--flyout-x, 0), var(--flyout-y, 30px)) scale(0.97); filter: blur(4px); pointer-events: none !important; }
+    .flyout-visible { opacity: 1; transform: translate(0, 0) scale(1); filter: blur(0px); pointer-events: auto !important; }
+    .flyout-base { transition: transform 0.7s var(--spring-easing), opacity 0.4s ease, filter 0.4s ease; }
 
-    .flyout-right-hidden { opacity: 0; transform: translateY(30px) scale(0.95); pointer-events: none !important; }
-    .flyout-right-visible { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto !important; }
-    .flyout-right-base { transform-origin: bottom right; transition: transform 0.7s var(--spring-easing), opacity 0.4s ease; }
+    .flyout-right-hidden { opacity: 0; transform: translate(var(--flyout-x, 0), var(--flyout-y, 20px)) scale(0.97); filter: blur(4px); pointer-events: none !important; }
+    .flyout-right-visible { opacity: 1; transform: translate(0, 0) scale(1); filter: blur(0px); pointer-events: auto !important; }
+    .flyout-right-base { transition: transform 0.7s var(--spring-easing), opacity 0.4s ease, filter 0.4s ease; }
 
     /* Steps */
-    .flyout-hidden .sm-step-1, .flyout-right-hidden .sm-step-1 { opacity: 0; transform: translateY(20px); transition: none; }
-    .flyout-visible .sm-step-1, .flyout-right-visible .sm-step-1 { opacity: 1; transform: translateY(0); transition: opacity 0.4s ease 0.05s, transform 0.6s var(--spring-easing) 0.05s; }
+    .flyout-hidden .sm-step-1, .flyout-right-hidden .sm-step-1 { opacity: 0; transform: translate(var(--step-x, 0), var(--step-y, 20px)); transition: none; }
+    .flyout-visible .sm-step-1, .flyout-right-visible .sm-step-1 { opacity: 1; transform: translate(0, 0); transition: opacity 0.5s ease 0.05s, transform 0.7s var(--spring-easing) 0.05s; }
 
-    .flyout-hidden .sm-step-2, .flyout-right-hidden .sm-step-2 { opacity: 0; transform: translateY(15px); transition: none; }
-    .flyout-visible .sm-step-2, .flyout-right-visible .sm-step-2 { opacity: 1; transform: translateY(0); transition: opacity 0.4s ease 0.15s, transform 0.6s var(--spring-easing) 0.15s; }
+    .flyout-hidden .sm-step-2, .flyout-right-hidden .sm-step-2 { opacity: 0; transform: translate(var(--step-x, 0), var(--step-y, 15px)); transition: none; }
+    .flyout-visible .sm-step-2, .flyout-right-visible .sm-step-2 { opacity: 1; transform: translate(0, 0); transition: opacity 0.5s ease 0.15s, transform 0.7s var(--spring-easing) 0.15s; }
 
-    .flyout-hidden .sm-step-3, .flyout-right-hidden .sm-step-3 { opacity: 0; transform: scale(0.8) translateY(10px); transition: none; }
-    .flyout-visible .sm-step-3, .flyout-right-visible .sm-step-3 { opacity: 1; transform: scale(1) translateY(0); transition: opacity 0.4s ease 0.25s, transform 0.6s var(--spring-easing) 0.25s; }
-
-    .eval-watermark { font-family: 'Segoe UI', sans-serif; transition: opacity 2s ease-in-out; }
+    .flyout-hidden .sm-step-3, .flyout-right-hidden .sm-step-3 { opacity: 0; transform: translate(var(--step-x, 0), var(--step-y, 10px)) scale(0.9); transition: none; }
+    .flyout-visible .sm-step-3, .flyout-right-visible .sm-step-3 { opacity: 1; transform: translate(0, 0) scale(1); transition: opacity 0.5s ease 0.25s, transform 0.7s var(--spring-easing) 0.25s; }
   </style>
 </head>
 <body oncontextmenu="return false;">
@@ -472,52 +661,50 @@
     <div id="night-light-overlay" class="absolute inset-0 bg-[#ff8800] mix-blend-multiply pointer-events-none z-[100001] transition-opacity duration-1000" style="opacity: 0;"></div>
 
     <!-- LOCK / LOGIN SCREEN OVERLAY -->
-    <div id="login-overlay" class="absolute inset-0 z-[30000] flex flex-col items-center justify-center overflow-hidden bg-transparent">
-        <div id="login-bg" class="absolute inset-0 bg-cover bg-center transition-all duration-1000 z-[-2]" style="background-image: var(--current-wallpaper);"></div>
-        <!-- Deeper Gradient Dimmer -->
-        <div class="absolute inset-0 z-[-1] opacity-0 transition-opacity duration-1000 theme-bg-strong bg-gradient-to-b from-black/20 to-black/70" id="login-dimmer"></div>
+    <div id="login-overlay" class="absolute inset-0 z-[30000] flex flex-col items-center justify-center overflow-hidden bg-black">
+        <div id="login-bg" class="absolute inset-0 bg-cover bg-center transition-all duration-1000 z-[-2]" style="background-image: var(--current-wallpaper); transform: scale(1.1);"></div>
+        <div class="absolute inset-0 z-[-1] opacity-0 transition-opacity duration-1000 bg-black/40" id="login-dimmer"></div>
 
-        <div id="lock-state" onclick="window.dismissLockScreen()" class="absolute inset-0 flex flex-col items-center pt-[15vh] transition-all duration-700 cursor-pointer z-20 group/lock">
-            <h1 id="lock-time" class="text-[100px] font-medium text-white/95 tracking-tight leading-none transition-transform duration-700 group-hover/lock:-translate-y-2"></h1>
-            <p id="lock-date" class="text-[24px] font-medium text-white/90 tracking-normal mt-2 transition-transform duration-700 delay-75 group-hover/lock:-translate-y-1"></p>
+        <div id="lock-state" onclick="window.dismissLockScreen()" class="absolute inset-0 flex flex-col items-center pt-[15vh] transition-all duration-700 cursor-pointer z-20">
+            <h1 id="lock-time" class="text-[100px] font-medium text-white/90 tracking-tight leading-none transition-transform duration-700"></h1>
+            <p id="lock-date" class="text-[24px] font-medium text-white/80 tracking-normal mt-1 transition-transform duration-700 delay-75"></p>
         </div>
 
         <div id="login-state" class="flex flex-col items-center opacity-0 translate-y-6 transition-all duration-700 pointer-events-none z-10 w-full h-full justify-center pb-[10vh]">
             <div class="flex flex-col items-center relative">
-                
-                <!-- Enhanced Avatar Area with Keyframing -->
-                <div class="mb-6 group relative login-anim-avatar z-20">
-                    <div class="avatar-glow-ring"></div>
-                    <div class="absolute inset-0 bg-sys-accent/30 rounded-full blur-[30px] opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                    <div class="avatar-wrapper">
-                        <img src="user.png" class="w-32 h-32 rounded-full object-cover grayscale-[0.05] relative z-10" onerror="this.src='https://cdn-icons-png.freepik.com/512/9131/9131478.png';">
-                    </div>
+                <div class="mb-6 transition-transform duration-700 delay-100">
+                    <img src="user.png" class="w-32 h-32 rounded-full object-cover grayscale-[0.1]" onerror="this.src='https://wallpapers.com/images/high/user-profile-login-icon-kjjzz29apr1bilzr.png'; this.classList.add('fallback-avatar');">
                 </div>
+                <h2 id="login-username" class="text-[28px] font-semibold text-white mb-8 tracking-tight transition-transform duration-700 delay-150">Administrator</h2>
                 
-                <h2 class="text-[28px] font-semibold text-white mb-8 tracking-tight drop-shadow-lg login-anim-text z-20">Administrator</h2>
-                
-                <!-- FIX: Added relative wrapper for input/welcome states to prevent clipping & push layout down correctly -->
-                <div class="relative w-full h-[100px] mt-2">
-                    <div id="login-input-area" class="absolute top-0 w-full flex flex-col items-center gap-2 login-anim-input z-20">
-                        <div class="flex items-center gap-2">
-                            <div class="relative group/input">
-                                <input type="password" id="login-pin" placeholder="PIN" class="login-pin-input px-4 py-3 w-[260px] text-center text-[15px] font-semibold" onkeypress="if(event.key === 'Enter') window.triggerWelcome()">
-                                <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[2px] bg-sys-accent transition-all duration-300 group-focus-within/input:w-full rounded-full shadow-[0_0_8px_rgba(var(--sys-accent-rgb),0.8)]"></div>
-                            </div>
-                            
-                            <!-- Pulsing Glass Button -->
-                            <button onclick="window.triggerWelcome()" class="login-submit-btn w-[46px] h-[46px] rad-base flex items-center justify-center group/btn ml-1 shadow-lg">
-                                <i class="ph-bold ph-arrow-right text-xl text-white group-hover/btn:translate-x-0.5 transition-transform"></i>
+                <div id="login-input-area" class="flex flex-col items-center gap-2 transition-all duration-500 delay-200">
+                    <div class="flex items-center gap-2">
+                        <div class="relative group/input">
+                            <input type="password" id="login-pin" placeholder="PIN" class="login-pin-input px-4 py-3 w-[260px] text-center text-[15px] font-semibold" onkeypress="if(event.key === 'Enter') window.triggerWelcome()">
+                        </div>
+                        <button onclick="window.triggerWelcome()" class="w-[46px] h-[46px] bg-black/40 hover:bg-white/20 rad-base flex items-center justify-center transition-all active:scale-95 group backdrop-blur-md ml-1">
+                            <i class="ph-bold ph-arrow-right text-xl text-white group-hover:translate-x-0.5 transition-transform"></i>
+                        </button>
+                    </div>
+                    
+                    <div id="login-options-area" class="flex flex-col items-center gap-4 mt-6 opacity-0 animate-[fadeIn_0.5s_ease_forwards_1s]">
+                        <p class="text-[13px] font-medium text-white/80 cursor-pointer hover:text-white transition-colors">Sign-in options</p>
+                        <div class="flex items-center gap-4">
+                            <button class="w-10 h-10 rad-base bg-white/10 flex items-center justify-center transition-all hover:bg-white/20 backdrop-blur-md text-white" title="PIN">
+                                <i class="ph-fill ph-numpad text-[20px]"></i>
+                            </button>
+                            <button class="w-10 h-10 rad-base bg-transparent flex items-center justify-center hover:bg-white/10 transition-all backdrop-blur-md opacity-60 hover:opacity-100 text-white" title="Password">
+                                <i class="ph-fill ph-key text-[20px]"></i>
                             </button>
                         </div>
                     </div>
-                    
-                    <div id="welcome-state" class="absolute top-[-12px] hidden flex-col items-center opacity-0 transition-all duration-500 w-full z-30">
-                        <div class="win-spinner mt-2 mb-4 scale-90 drop-shadow-[0_0_12px_rgba(255,255,255,0.3)]">
-                            <div class="circle"></div><div class="circle"></div><div class="circle"></div><div class="circle"></div><div class="circle"></div><div class="circle"></div>
-                        </div>
-                        <p class="text-[16px] font-semibold text-white tracking-wide drop-shadow-md">Welcome</p>
+                </div>
+                
+                <div id="welcome-state" class="absolute top-[240px] hidden flex-col items-center opacity-0 transition-all duration-500 w-full">
+                    <div class="win-spinner mt-2 mb-4 scale-90">
+                        <div class="circle"></div><div class="circle"></div><div class="circle"></div><div class="circle"></div><div class="circle"></div><div class="circle"></div>
                     </div>
+                    <p class="text-[16px] font-semibold text-white tracking-wide">Welcome</p>
                 </div>
             </div>
         </div>
@@ -529,42 +716,36 @@
       <!-- Desktop Wallpaper -->
       <div id="desktop-bg" class="absolute inset-0 bg-cover bg-center z-[-3]" style="background-image: var(--current-wallpaper); transform: scale(1.1); filter: blur(0px);"></div>
 
-      <!-- Watermark intentionally hidden -->
-      <div class="eval-watermark absolute bottom-20 right-6 text-right z-[9000] pointer-events-none select-none opacity-0 hidden" id="desktop-watermark">
-          <p class="text-[13px] font-semibold text-white leading-tight tracking-wide">Windows 12 1H06 build 045</p>
-          <p class="text-[11px] font-medium text-white leading-tight mt-1">Do not send this to anyone as a link to the site</p>
-      </div>
-
       <div id="desktop-clock-widget" class="absolute top-20 left-1/2 -translate-x-1/2 z-0 pointer-events-none opacity-0 scale-95 origin-top flex flex-col items-center justify-center transition-all duration-1000 ease-[cubic-bezier(0.1,0.9,0.2,1)]" style="font-family: 'Segoe UI Variable Display', 'Segoe UI', sans-serif;">
           <h1 id="dc-time" class="text-[110px] font-semibold leading-none tracking-tighter text-white/90"></h1>
           <h2 id="dc-date" class="text-[24px] font-medium mt-1 tracking-wide text-white/80"></h2>
       </div>
       
-      <!-- Interactive Top Search Bar (PERMANENT VISIBILITY) -->
+      <!-- Interactive Top Search Bar (PERMANENT VISIBILITY OR HIDDEN BY SETTING) -->
       <div id="desktop-search-bar" class="absolute top-4 left-1/2 -translate-x-1/2 w-[480px] h-[48px] taskbar-flat rad-base flex items-center px-5 z-[9998] transition-all pointer-events-auto focus-within:bg-[rgba(var(--sys-accent-rgb),0.15)] group" style="opacity: 1;">
-          <i class="ph-bold ph-magnifying-glass text-[18px] text-mica-contrast transition-colors group-focus-within:text-sys-accent"></i>
-          <input id="top-search-input" type="text" placeholder="Search apps, settings, and documents..." class="bg-transparent w-full ml-4 text-[14px] font-medium text-mica-contrast placeholder-mica-contrast" onkeydown="window.handleSearch(event)" onfocus="window.openSearchFlyout()" oninput="window.handleSearchInput(event)">
+          <div class="w-[22px] h-[22px] group-focus-within:scale-110 pointer-events-none search-icon-masked" draggable="false"></div>
+          <input id="top-search-input" type="text" placeholder="Search apps, settings, and documents..." class="bg-transparent w-full ml-4 text-[14px] font-medium text-mica-contrast placeholder-mica-contrast" onkeydown="window.handleSearch(event)" onfocus="window.openSearchFlyout()" oninput="window.handleSearchInput(event)" autocomplete="off">
       </div>
 
       <!-- SEARCH FLYOUT -->
-      <div id="search-flyout" class="absolute top-[72px] left-1/2 -translate-x-1/2 w-[600px] h-[450px] taskbar-flat rad-base p-6 flex flex-col z-[9997] flyout-hidden flyout-base pointer-events-none overflow-y-auto custom-scroll">
+      <div id="search-flyout" class="absolute w-[600px] h-[450px] taskbar-flat rad-base p-6 flex flex-col z-[9997] flyout-hidden flyout-base pointer-events-none overflow-y-auto custom-scroll transition-all duration-300">
           <!-- Default View (Before Typing) -->
           <div id="search-default-view" class="flex flex-col h-full sm-step-1">
               <div class="w-full mb-5 sm-step-2">
-                  <div class="w-full theme-bg p-4 rad-base transition-colors hover:bg-[rgba(255,255,255,0.1)] cursor-pointer active:scale-[0.98] border border-white/5" onclick="window.openSettings(); window.closeSearchFlyout();">
+                  <div class="w-full theme-bg p-4 rad-base transition-colors hover:bg-[rgba(255,255,255,0.1)] cursor-pointer active:scale-[0.98]" onclick="window.openSettings(); window.closeSearchFlyout();">
                       <i class="ph-duotone ph-gear text-[22px] text-sys-accent mb-2"></i>
                       <h4 class="text-[13px] font-bold text-mica-contrast">System Settings</h4>
                       <p class="text-[11px] text-mica-contrast opacity-60">Personalization, Background, Taskbar...</p>
                   </div>
               </div>
-              <h3 class="text-[11px] font-bold text-mica-contrast opacity-70 mb-3 uppercase tracking-wider sm-step-2">Top Apps</h3>
+              <h3 class="section-label sm-step-2">Top Apps</h3>
               <div class="grid grid-cols-5 gap-2 mb-6 sm-step-3">
-                  <div class="flex flex-col items-center gap-1.5 theme-bg-hover p-2.5 rad-base transition-colors cursor-pointer group active:scale-95 border border-transparent hover:border-white/5" onclick="window.openSettings(); window.closeSearchFlyout();">
-                      <img src="https://img.icons8.com/?size=100&id=73FgXcRF4HNx&format=png&color=000000" class="w-[32px] h-[32px] pointer-events-none" draggable="false">
+                  <div class="flex flex-col items-center gap-1.5 theme-bg-hover p-2.5 rad-base transition-colors cursor-pointer group active:scale-95" onclick="window.openSettings(); window.closeSearchFlyout();">
+                      <img src="https://img.icons8.com/?size=100&id=73FgXcRF4HNx&format=png&color=000000" class="w-[32px] h-[32px] pointer-events-none transition-transform group-hover:scale-105" draggable="false">
                       <span class="text-[11px] font-semibold text-mica-contrast mt-1">Settings</span>
                   </div>
-                  <div class="flex flex-col items-center gap-1.5 theme-bg-hover p-2.5 rad-base transition-colors cursor-pointer group active:scale-95 border border-transparent hover:border-white/5" onclick="window.openAbout(); window.closeSearchFlyout();">
-                      <img src="https://img.icons8.com/?size=100&id=NzIdJDXpXX0B&format=png&color=000000" class="w-[32px] h-[32px] pointer-events-none" draggable="false">
+                  <div class="flex flex-col items-center gap-1.5 theme-bg-hover p-2.5 rad-base transition-colors cursor-pointer group active:scale-95" onclick="window.openAbout(); window.closeSearchFlyout();">
+                      <img src="https://img.icons8.com/?size=100&id=z8muZ3e2Mkh4&format=png&color=000000" class="w-[32px] h-[32px] pointer-events-none transition-transform group-hover:scale-105" draggable="false">
                       <span class="text-[11px] font-semibold text-mica-contrast mt-1">About OS</span>
                   </div>
               </div>
@@ -572,7 +753,7 @@
 
           <!-- Local Results View (When Typing) -->
           <div id="search-results-view" class="hidden flex-col h-full">
-              <h3 class="text-[11px] font-bold text-mica-contrast opacity-70 mb-3 uppercase tracking-wider">Local Apps & Settings</h3>
+              <h3 class="section-label">Local Apps & Settings</h3>
               <div id="local-search-list" class="flex flex-col gap-2">
                   <!-- JS Injected dynamically -->
               </div>
@@ -581,42 +762,42 @@
 
       <!-- DESKTOPS DOCK (Task View UI) -->
       <div id="task-view-dock" class="absolute bottom-[90px] left-1/2 -translate-x-1/2 flex gap-4 opacity-0 pointer-events-none z-[14000]" style="transform: translate(-50%, 30px);">
-          <div class="w-48 h-28 taskbar-flat rad-base flex flex-col items-center justify-center gap-2 cursor-pointer group hover:bg-[rgba(255,255,255,0.1)] transition-colors border border-white/5" onclick="window.toggleTaskView()">
-              <div class="w-40 h-16 bg-cover bg-center rad-base border-2 border-sys-accent transition-all" style="background-image: var(--current-wallpaper);"></div>
+          <div class="w-48 h-28 taskbar-flat rad-base flex flex-col items-center justify-center gap-2 cursor-pointer group hover:bg-[rgba(255,255,255,0.1)] transition-colors" onclick="window.toggleTaskView()">
+              <div class="w-40 h-16 bg-cover bg-center rad-base transition-all bg-black/20" style="background-image: var(--current-wallpaper);"></div>
               <span class="text-xs font-semibold text-mica-contrast">Desktop 1</span>
           </div>
-          <div class="w-48 h-28 taskbar-flat rad-base flex flex-col items-center justify-center gap-2 cursor-pointer opacity-60 hover:opacity-100 transition-all hover:bg-[rgba(255,255,255,0.1)] border border-transparent hover:border-white/5" onclick="window.toggleTaskView()">
+          <div class="w-48 h-28 taskbar-flat rad-base flex flex-col items-center justify-center gap-2 cursor-pointer opacity-60 hover:opacity-100 transition-all hover:bg-[rgba(255,255,255,0.1)]" onclick="window.toggleTaskView()">
               <i class="ph-bold ph-plus text-2xl text-mica-contrast"></i>
               <span class="text-xs font-semibold text-mica-contrast">New Desktop</span>
           </div>
       </div>
 
       <!-- UPGRADED ABOUT WINDOW -->
-      <div id="app-about" class="app-window app-window-hidden absolute top-1/2 left-1/2 w-[600px] h-[500px] rad-base flex flex-col z-[16000] overflow-hidden ring-1 ring-white/10 shadow-2xl">
+      <div id="app-about" class="app-window app-window-hidden absolute top-1/2 left-1/2 w-[600px] h-[500px] rad-base flex flex-col z-[16000] overflow-hidden">
           
           <!-- Titlebar -->
-          <div id="app-about-titlebar" class="h-[40px] w-full flex justify-between items-center px-4 select-none bg-black/20 cursor-move border-b border-white/5 shrink-0 z-20 relative backdrop-blur-md" style="border-top-left-radius: var(--os-radius); border-top-right-radius: var(--os-radius);">
+          <div id="app-about-titlebar" class="h-[40px] w-full flex justify-between items-center px-4 select-none bg-black/5 cursor-move shrink-0 z-20 relative backdrop-blur-md">
               <div class="flex items-center gap-2 opacity-80 pointer-events-none">
-                  <img src="https://img.icons8.com/?size=100&id=NzIdJDXpXX0B&format=png&color=000000" class="w-[14px] h-[14px] opacity-70" draggable="false">
+                  <img src="https://img.icons8.com/?size=100&id=z8muZ3e2Mkh4&format=png&color=000000" class="w-[14px] h-[14px]" draggable="false">
                   <span class="text-[12px] font-semibold text-mica-contrast tracking-wide">System > About</span>
               </div>
               <div class="flex gap-1 cursor-default -mr-2 pointer-events-auto">
+                  <button onclick="window.minimizeAbout()" class="w-8 h-8 hover:bg-white/10 rad-base flex items-center justify-center text-mica-contrast transition-colors"><i class="ph-bold ph-minus text-[12px]"></i></button>
                   <button onclick="window.closeAbout()" class="w-8 h-8 hover:bg-red-500 hover:text-white rad-base flex items-center justify-center text-mica-contrast transition-colors"><i class="ph-bold ph-x text-[12px]"></i></button>
               </div>
           </div>
           
           <!-- Content -->
-          <div class="flex-1 p-8 overflow-y-auto custom-scroll flex flex-col gap-8 bg-white/5 relative">
-              <div class="absolute -top-32 -left-32 w-64 h-64 bg-sys-accent opacity-20 blur-[100px] rounded-full pointer-events-none z-0"></div>
+          <div class="flex-1 p-8 overflow-y-auto custom-scroll flex flex-col gap-8 bg-transparent relative">
               
               <div class="flex items-center gap-6 relative z-10">
                   <div class="w-[84px] h-[84px] start-logo-masked-lg shrink-0"></div>
                   <div>
                       <div class="flex items-center gap-3 mb-1">
                           <h1 class="text-3xl font-display font-bold text-mica-contrast tracking-tight">Windows 12</h1>
-                          <span class="px-2.5 py-1 bg-sys-accent/20 text-sys-accent border border-sys-accent/30 text-[10px] font-bold rounded-full uppercase tracking-wider shadow-sm">Update 3.0</span>
+                          <span class="px-2.5 py-1 theme-bg text-sys-accent text-[10px] font-bold rounded-full uppercase tracking-wider">(release)</span>
                       </div>
-                      <p class="text-sm font-medium text-mica-contrast opacity-70">Version 1H05 (OS Build 040)</p>
+                      <p class="text-sm font-medium text-mica-contrast opacity-70">Version 1H06 "New Valley" (OS Build 060)</p>
                   </div>
               </div>
 
@@ -626,154 +807,311 @@
                       <span class="font-semibold text-mica-contrast opacity-70 text-right">Device name</span>
                       <span class="text-mica-contrast font-medium">DESKTOP-W12-PREVIEW</span>
                       <span class="font-semibold text-mica-contrast opacity-70 text-right">Version</span>
-                      <span class="text-mica-contrast font-medium">1H05</span>
+                      <span class="text-mica-contrast font-medium">1H06 "New Valley"</span>
                       <span class="font-semibold text-mica-contrast opacity-70 text-right">OS build</span>
-                      <span class="text-mica-contrast font-medium">040</span>
+                      <span class="text-mica-contrast font-medium">060</span>
                   </div>
               </div>
 
               <div class="mt-auto w-full flex justify-end pt-2 relative z-10">
-                  <button onclick="window.closeAbout()" class="theme-bg theme-bg-strong text-mica-contrast hover:bg-sys-accent hover:text-white px-8 py-2.5 text-xs font-bold rad-base transition-colors active:scale-95 ring-1 ring-white/10 shadow-sm">Copy details</button>
+                  <button onclick="window.closeAbout()" class="theme-bg theme-bg-strong text-mica-contrast hover:bg-sys-accent hover:text-white px-8 py-2.5 text-xs font-bold rad-base transition-colors active:scale-95">Copy details</button>
               </div>
           </div>
       </div>
 
       <!-- MAIN SETTINGS APP WINDOW (Premium Rebuild) -->
-      <div id="app-settings" class="app-window app-window-hidden absolute top-1/2 left-1/2 w-[840px] h-[540px] rad-base flex flex-col z-[15000]">
+      <div id="app-settings" class="app-window app-window-hidden absolute top-1/2 left-1/2 w-[900px] h-[620px] rad-base flex flex-col z-[15000]">
           
           <div class="task-view-blocker" onclick="window.toggleTaskView()"></div>
 
           <!-- Titlebar (Draggable Area) -->
-          <div id="app-settings-titlebar" class="h-[36px] w-full flex justify-between items-center px-3 select-none bg-black/10 cursor-move border-b border-white/5" style="border-top-left-radius: var(--os-radius); border-top-right-radius: var(--os-radius);">
+          <div id="app-settings-titlebar" class="h-[44px] w-full flex justify-between items-center px-4 select-none bg-black/10 cursor-move border-b border-white/5">
               <div class="flex items-center gap-2 opacity-80 pointer-events-none">
-                  <i class="ph-bold ph-gear text-[14px] text-mica-contrast"></i>
-                  <span class="text-[11px] font-semibold text-mica-contrast">Settings</span>
+                  <i class="ph-bold ph-gear text-[15px] text-mica-contrast"></i>
+                  <span class="text-[12px] font-semibold text-mica-contrast">Settings</span>
               </div>
               <div class="flex gap-1 cursor-default">
-                  <button class="w-8 h-8 hover:bg-white/10 rad-base flex items-center justify-center text-mica-contrast transition-colors"><i class="ph-bold ph-minus text-[12px]"></i></button>
-                  <button class="w-8 h-8 hover:bg-white/10 rad-base flex items-center justify-center text-mica-contrast transition-colors"><i class="ph-bold ph-square text-[12px]"></i></button>
-                  <button onclick="window.closeSettings()" class="w-8 h-8 hover:bg-red-500 hover:text-white rad-base flex items-center justify-center text-mica-contrast transition-colors"><i class="ph-bold ph-x text-[12px]"></i></button>
+                  <button onclick="window.minimizeSettings()" class="w-9 h-9 hover:bg-white/10 rounded-md flex items-center justify-center text-mica-contrast transition-colors"><i class="ph-bold ph-minus text-[12px]"></i></button>
+                  <button class="w-9 h-9 hover:bg-white/10 rounded-md flex items-center justify-center text-mica-contrast transition-colors"><i class="ph-bold ph-square text-[12px]"></i></button>
+                  <button onclick="window.closeSettings()" class="w-9 h-9 hover:bg-red-500 hover:text-white rounded-md flex items-center justify-center text-mica-contrast transition-colors"><i class="ph-bold ph-x text-[12px]"></i></button>
               </div>
           </div>
           
           <div class="flex-1 flex flex-row overflow-hidden relative">
               <!-- Sidebar Navigation -->
-              <div class="w-[240px] p-3 flex flex-col gap-1 bg-gradient-to-b from-white/[0.02] to-transparent border-r border-white/5 overflow-y-auto custom-scroll">
-                 <div class="flex items-center gap-3 px-3 py-4 mb-3 settings-card rad-base cursor-pointer">
-                     <img src="user.png" class="w-10 h-10 rad-base object-cover grayscale-[0.1]" onerror="this.src='https://cdn-icons-png.freepik.com/512/9131/9131478.png';">
+              <div class="w-[260px] p-5 flex flex-col gap-2 bg-black/20 border-r border-white/5 overflow-y-auto custom-scroll relative z-10">
+                 <div class="flex items-center gap-4 px-3 py-4 mb-5 rounded-lg cursor-pointer transition-all border border-transparent hover:bg-white/5 hover:border-white/10">
+                     <img src="user.png" class="w-12 h-12 rounded-full object-cover grayscale-[0.1]" onerror="this.src='https://wallpapers.com/images/high/user-profile-login-icon-kjjzz29apr1bilzr.png'; this.classList.add('fallback-avatar');">
                      <div class="flex flex-col">
-                         <span class="text-[13px] font-bold text-mica-contrast leading-tight">Administrator</span>
-                         <span class="text-[10px] text-mica-contrast opacity-70 font-medium">Local Account</span>
+                         <span id="settings-sidebar-username" class="text-[14px] font-bold text-mica-contrast leading-tight">Administrator</span>
+                         <span class="text-[11px] text-sys-accent font-semibold mt-1">Local Account</span>
                      </div>
                  </div>
                  
-                 <!-- Nav Items (Left Border Indicator Style) -->
-                 <button onclick="window.switchSettingsTab('system')" id="nav-system" class="flex items-center gap-3 text-left px-3 py-2.5 text-[12px] font-bold text-mica-contrast bg-white/10 border-l-2 border-sys-accent rad-base transition-all"><i class="ph-bold ph-laptop text-[16px] text-sys-accent nav-icon transition-colors"></i> System</button>
-                 <button onclick="window.switchSettingsTab('personalization')" id="nav-personalization" class="flex items-center gap-3 text-left px-3 py-2.5 text-[12px] font-medium text-mica-contrast opacity-70 hover:opacity-100 hover:bg-white/5 border-l-2 border-transparent rad-base transition-all"><i class="ph-bold ph-palette text-[16px] nav-icon transition-colors"></i> Personalization</button>
+                 <!-- Nav Items -->
+                 <button onclick="window.switchSettingsTab('system')" id="nav-system" class="relative flex items-center gap-3 text-left px-4 py-3 text-[13px] font-bold text-mica-contrast bg-white/[0.08] border border-white/5 rounded-lg transition-all group overflow-hidden">
+                     <div class="nav-active-pill absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-[16px] bg-sys-accent rounded-r-full transition-opacity opacity-100"></div>
+                     <i class="ph-bold ph-laptop text-[18px] text-sys-accent nav-icon transition-transform group-hover:scale-110"></i> System
+                 </button>
+                 <button onclick="window.switchSettingsTab('personalization')" id="nav-personalization" class="relative flex items-center gap-3 text-left px-4 py-3 text-[13px] font-medium text-mica-contrast opacity-70 hover:opacity-100 hover:bg-white/5 rounded-lg transition-all group overflow-hidden border border-transparent hover:border-white/5">
+                     <div class="nav-active-pill absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-[16px] bg-sys-accent rounded-r-full transition-opacity opacity-0"></div>
+                     <i class="ph-bold ph-palette text-[18px] nav-icon transition-transform group-hover:scale-110"></i> Personalization
+                 </button>
+                 <button onclick="window.switchSettingsTab('accounts')" id="nav-accounts" class="relative flex items-center gap-3 text-left px-4 py-3 text-[13px] font-medium text-mica-contrast opacity-70 hover:opacity-100 hover:bg-white/5 rounded-lg transition-all group overflow-hidden border border-transparent hover:border-white/5">
+                     <div class="nav-active-pill absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-[16px] bg-sys-accent rounded-r-full transition-opacity opacity-0"></div>
+                     <i class="ph-bold ph-user text-[18px] nav-icon transition-transform group-hover:scale-110"></i> Accounts
+                 </button>
               </div>
 
               <!-- Main Content Area -->
-              <div class="flex-1 p-10 overflow-y-auto custom-scroll relative">
+              <div class="flex-1 p-10 overflow-y-auto custom-scroll relative bg-transparent">
                   
                   <!-- SYSTEM PANE -->
-                  <div id="pane-system" class="flex flex-col gap-6 transition-opacity duration-300 max-w-2xl mx-auto">
-                      <h1 class="text-3xl font-display font-bold text-mica-contrast mb-2 tracking-tight">System</h1>
+                  <div id="pane-system" class="flex flex-col gap-5 transition-opacity duration-300 max-w-2xl mx-auto w-full pb-10">
+                      <h1 class="text-[28px] font-semibold text-mica-contrast mb-1 tracking-tight">System</h1>
                       
                       <!-- Premium Hero Card -->
-                      <div class="flex items-center gap-5 settings-card p-6 rad-base cursor-pointer group relative overflow-hidden">
-                          <div class="absolute inset-0 bg-gradient-to-r from-sys-accent/20 to-transparent opacity-30 group-hover:opacity-50 transition-opacity"></div>
-                          <img src="https://img.icons8.com/?size=100&id=12226&format=png&color=000000" class="w-16 h-16 pointer-events-none opacity-90 group-hover:scale-110 transition-transform duration-500 relative z-10 drop-shadow-lg">
-                          <div class="flex flex-col relative z-10">
-                              <h2 class="text-xl font-bold text-mica-contrast tracking-tight">Windows 12 Preview</h2>
-                              <p class="text-sm text-mica-contrast opacity-70 mt-0.5">Build 040 (1H05 Rebuild Update)</p>
+                      <div class="flex items-center gap-5 settings-card p-6 rad-base relative overflow-hidden">
+                          <img src="https://img.icons8.com/?size=100&id=12226&format=png&color=000000" class="w-[72px] h-[72px] pointer-events-none transition-transform duration-500 relative z-10">
+                          <div class="flex flex-col relative z-10 flex-1">
+                              <h2 class="text-[22px] font-bold text-mica-contrast tracking-tight leading-tight">Windows 12 Preview</h2>
+                              <p class="text-[13px] text-mica-contrast opacity-70 mt-1 font-medium">1H06 "New Valley" (Build 060)</p>
                           </div>
-                          <button class="ml-auto px-5 py-2.5 bg-sys-accent hover:bg-sys-accent-hover text-white text-xs font-bold rad-base transition-colors active:scale-95 shadow-md shadow-sys-accent/30 relative z-10">Check for updates</button>
+                          <button class="px-5 py-2 theme-bg theme-bg-hover text-mica-contrast text-[13px] font-semibold rad-base transition-colors active:scale-95 relative z-10 border border-white/5">Rename</button>
                       </div>
-                      
-                      <div class="settings-card p-8 rad-base flex flex-col items-center justify-center text-center h-56 cursor-pointer" onclick="window.openAbout()">
-                          <div class="w-16 h-16 rounded-full bg-sys-accent/10 flex items-center justify-center mb-4 text-sys-accent group-hover:scale-110 transition-transform">
-                              <i class="ph-duotone ph-info text-[32px]"></i>
+
+                      <!-- OS Specs Card -->
+                      <div class="settings-card flex flex-col rad-base overflow-hidden border border-white/5 mt-2">
+                          <div class="p-4 px-5 flex items-center gap-4 cursor-pointer hover:bg-white/5 transition-colors border-b border-white/5 active:scale-[0.99]" onclick="window.openAbout()">
+                              <i class="ph-duotone ph-info text-[22px] text-sys-accent"></i>
+                              <div class="flex flex-col flex-1">
+                                  <span class="text-[14px] font-semibold text-mica-contrast leading-tight">System Information</span>
+                                  <span class="text-[12px] text-mica-contrast opacity-60 mt-0.5 font-medium">Device specifications, OS details, and more</span>
+                              </div>
+                              <i class="ph-bold ph-caret-right text-mica-contrast opacity-50"></i>
                           </div>
-                          <h3 class="text-lg font-bold text-mica-contrast">System Information</h3>
-                          <p class="text-[13px] text-mica-contrast opacity-70 mt-2 max-w-md leading-relaxed">Click here to view deep details about this active development build, including device and OS specifications.</p>
+                          
+                          <div class="bg-black/10 p-5 px-6 grid grid-cols-[140px_1fr] gap-x-4 gap-y-3.5">
+                              <span class="text-[12px] font-semibold text-mica-contrast opacity-70 text-right">Version</span>
+                              <span class="text-[12px] font-bold text-mica-contrast">1H06 "New Valley"</span>
+                              
+                              <span class="text-[12px] font-semibold text-mica-contrast opacity-70 text-right">OS build</span>
+                              <span class="text-[12px] font-bold text-mica-contrast">060</span>
+                              
+                              <span class="text-[12px] font-semibold text-mica-contrast opacity-70 text-right">Initial build</span>
+                              <span class="text-[12px] font-bold text-mica-contrast">060</span>
+                          </div>
                       </div>
                   </div>
 
                   <!-- PERSONALIZATION PANE -->
-                  <div id="pane-personalization" class="flex flex-col gap-6 transition-opacity duration-300 hidden max-w-2xl mx-auto">
-                      <h1 class="text-3xl font-display font-bold text-mica-contrast mb-2 tracking-tight">Personalization</h1>
+                  <div id="pane-personalization" class="flex flex-col gap-5 transition-opacity duration-300 hidden max-w-2xl mx-auto w-full pb-10">
+                      <h1 class="text-[28px] font-semibold text-mica-contrast mb-1 tracking-tight">Personalization</h1>
                       
                       <!-- Wallpaper Module -->
-                      <div class="settings-card p-6 rad-base flex flex-col gap-4">
-                          <div class="flex justify-between items-center">
+                      <div class="settings-card p-6 flex flex-col gap-4 border border-white/5">
+                          <div class="flex justify-between items-center mb-1">
                               <h3 class="text-[14px] font-bold text-mica-contrast flex items-center gap-2"><i class="ph-bold ph-image text-sys-accent text-lg"></i> Background</h3>
-                              <button onclick="window.setWallpaper('default')" class="text-[11px] font-semibold text-sys-accent hover:text-sys-accent-hover transition-colors bg-transparent border border-sys-accent/30 hover:border-sys-accent px-3 py-1 rad-base">Restore default</button>
+                              <button onclick="window.setWallpaper('default')" class="text-[11px] font-semibold text-sys-accent hover:text-sys-accent-hover transition-colors bg-transparent px-3 py-1 rad-base border border-transparent hover:border-sys-accent/30">Restore default</button>
                           </div>
                           
-                          <div class="w-full h-[160px] rad-base overflow-hidden relative ring-1 ring-black/20 shadow-inner">
-                              <div class="absolute inset-0 bg-cover bg-center transition-transform hover:scale-105 duration-700" style="background-image: var(--current-wallpaper);"></div>
+                          <div class="w-full h-[180px] rad-base overflow-hidden relative bg-black/20 border border-white/10">
+                              <div id="settings-wallpaper-preview" class="absolute inset-0 bg-cover bg-center transition-transform hover:scale-105 duration-700" style="background-image: var(--current-wallpaper);"></div>
                           </div>
 
-                          <div class="relative w-full h-[60px] rad-base theme-bg-strong flex items-center justify-center gap-3 transition-colors hover:bg-[rgba(255,255,255,0.15)] group ring-1 ring-white/5 cursor-pointer" ondrop="window.handleWallpaperUpload(event)" ondragover="window.allowDrop(event)">
-                              <i class="ph-duotone ph-upload-simple text-[20px] text-mica-contrast opacity-60 group-hover:opacity-100 group-hover:text-sys-accent transition-all"></i>
-                              <span class="text-[12px] font-semibold text-mica-contrast opacity-80 group-hover:opacity-100 transition-opacity">Choose a photo or drop it here</span>
-                              <input type="file" id="wallpaper-upload-main" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" onchange="window.handleWallpaperUpload(event)">
+                          <div class="flex flex-col gap-2 mt-3">
+                              <label class="section-label">Recent Images</label>
+                              <div class="grid grid-cols-5 gap-3 w-full" id="recent-wallpapers-list">
+                                  <!-- JS Injected -->
+                              </div>
+                          </div>
+
+                          <div class="flex items-center justify-between mt-4 p-4 rad-base bg-black/10 border border-white/5 transition-colors hover:bg-black/20" ondrop="window.handleWallpaperUpload(event)" ondragover="window.allowDrop(event)">
+                              <div class="flex flex-col">
+                                  <span class="text-[13px] font-semibold text-mica-contrast">Choose a photo</span>
+                                  <span class="text-[11px] text-mica-contrast opacity-60">You can also drag and drop an image here</span>
+                              </div>
+                              <div class="relative">
+                                  <button class="theme-bg hover:bg-white/20 text-mica-contrast text-[12px] font-semibold px-4 py-1.5 rad-base transition-colors border border-white/10 active:scale-95 pointer-events-none">
+                                      Browse photos
+                                  </button>
+                                  <input type="file" id="wallpaper-upload-main" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" onchange="window.handleWallpaperUpload(event)">
+                              </div>
                           </div>
                       </div>
 
-                      <!-- Taskbar & Desktop Module -->
-                      <div class="settings-card p-6 rad-base flex flex-col gap-5">
+                      <!-- Taskbar Layout Module -->
+                      <div class="settings-card p-6 flex flex-col gap-5 border border-white/5">
                           <h3 class="text-[14px] font-bold text-mica-contrast flex items-center gap-2"><i class="ph-bold ph-layout text-sys-accent text-lg"></i> Taskbar Layout</h3>
                           
-                          <div class="flex flex-col gap-2">
-                              <label class="text-[11px] font-bold text-mica-contrast opacity-80 uppercase tracking-wider">Behavior</label>
-                              <select id="layout-select" onchange="window.setTaskbarLayout(this.value)" class="win-input theme-bg-strong text-mica-contrast text-[13px] font-medium p-3 rad-base border border-[rgba(255,255,255,0.1)] outline-none focus:border-sys-accent transition-colors shadow-inner">
-                                  <option value="default">Default Taskbar (Split Islands)</option>
-                                  <option value="classic">Classic Taskbar (Unified Bottom)</option>
-                              </select>
+                          <div class="flex flex-col gap-2 mt-1">
+                              <label class="section-label">Behavior</label>
+                              <div class="grid grid-cols-2 gap-3 mt-1">
+                                  <button id="btn-layout-default" onclick="window.setTaskbarLayout('default')" class="p-3 rad-base flex flex-col items-center gap-3 transition-all active:scale-95 bg-[rgba(var(--sys-accent-rgb),0.15)] hover:bg-[rgba(var(--sys-accent-rgb),0.25)] border border-sys-accent/50">
+                                      <div class="w-full h-10 bg-black/30 rad-base flex items-end justify-center gap-1 pb-1 overflow-hidden border border-white/5">
+                                          <div class="w-4 h-5 bg-white/20 rad-base"></div>
+                                          <div class="w-16 h-5 bg-sys-accent rad-base"></div>
+                                          <div class="w-8 h-5 bg-white/20 rad-base"></div>
+                                      </div>
+                                      <span class="text-[11px] font-semibold text-mica-contrast">Split Islands</span>
+                                  </button>
+                                  <button id="btn-layout-classic" onclick="window.setTaskbarLayout('classic')" class="theme-bg p-3 rad-base flex flex-col items-center gap-3 hover:bg-[rgba(255,255,255,0.1)] transition-all active:scale-95 border border-transparent">
+                                      <div class="w-full h-10 bg-black/20 rad-base flex items-end justify-center px-4 overflow-hidden border border-white/5">
+                                          <div class="w-full h-5 bg-white/10 rounded-t-md flex items-center justify-center gap-1">
+                                              <div class="w-12 h-3 bg-white/20 rounded-sm"></div>
+                                          </div>
+                                      </div>
+                                      <span class="text-[11px] font-semibold text-mica-contrast">Unified Bottom</span>
+                                  </button>
+                              </div>
+                          </div>
+
+                          <div class="flex flex-col gap-2 mt-4 pt-4 border-t border-white/5 relative">
+                              <label class="section-label">Screen Edge</label>
+                              <div class="grid grid-cols-4 gap-3 mt-1">
+                                  <button id="btn-edge-bottom" onclick="window.setTaskbarPosition('bottom')" class="p-2.5 rad-base flex flex-col items-center gap-3 transition-all active:scale-95 bg-[rgba(var(--sys-accent-rgb),0.15)] border border-sys-accent/50 group hover:bg-[rgba(var(--sys-accent-rgb),0.25)]">
+                                      <div class="w-[42px] h-[28px] bg-black/40 border border-white/20 rounded-sm relative overflow-hidden transition-colors group-hover:border-white/40">
+                                          <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-8 h-[3px] bg-sys-accent rounded-t-sm shadow-[0_0_4px_var(--sys-accent)]"></div>
+                                      </div>
+                                      <span class="text-[10px] font-semibold text-mica-contrast">Bottom</span>
+                                  </button>
+                                  <button id="btn-edge-top" onclick="window.setTaskbarPosition('top')" class="theme-bg p-2.5 rad-base flex flex-col items-center gap-3 transition-all active:scale-95 border border-transparent hover:bg-white/10 group">
+                                      <div class="w-[42px] h-[28px] bg-black/40 border border-white/20 rounded-sm relative overflow-hidden transition-colors group-hover:border-white/40">
+                                          <div class="absolute top-0 left-1/2 -translate-x-1/2 w-8 h-[3px] bg-sys-accent rounded-b-sm shadow-[0_0_4px_var(--sys-accent)]"></div>
+                                      </div>
+                                      <span class="text-[10px] font-semibold text-mica-contrast">Top</span>
+                                  </button>
+                                  <button id="btn-edge-left" onclick="window.setTaskbarPosition('left')" class="theme-bg p-2.5 rad-base flex flex-col items-center gap-3 transition-all active:scale-95 border border-transparent hover:bg-white/10 group">
+                                      <div class="w-[42px] h-[28px] bg-black/40 border border-white/20 rounded-sm relative overflow-hidden transition-colors group-hover:border-white/40">
+                                          <div class="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-5 bg-sys-accent rounded-r-sm shadow-[0_0_4px_var(--sys-accent)]"></div>
+                                      </div>
+                                      <span class="text-[10px] font-semibold text-mica-contrast">Left</span>
+                                  </button>
+                                  <button id="btn-edge-right" onclick="window.setTaskbarPosition('right')" class="theme-bg p-2.5 rad-base flex flex-col items-center gap-3 transition-all active:scale-95 border border-transparent hover:bg-white/10 group">
+                                      <div class="w-[42px] h-[28px] bg-black/40 border border-white/20 rounded-sm relative overflow-hidden transition-colors group-hover:border-white/40">
+                                          <div class="absolute right-0 top-1/2 -translate-y-1/2 w-[3px] h-5 bg-sys-accent rounded-l-sm shadow-[0_0_4px_var(--sys-accent)]"></div>
+                                      </div>
+                                      <span class="text-[10px] font-semibold text-mica-contrast">Right</span>
+                                  </button>
+                              </div>
+                          </div>
+
+                          <div class="flex flex-col gap-2 mt-4 pt-4 border-t border-white/5 relative">
+                              <label class="section-label">Search Box Design</label>
+                              <div class="grid grid-cols-2 gap-3 mt-1">
+                                  <button id="btn-search-top" onclick="window.setSearchLayout('top')" class="p-3 rad-base flex flex-col items-center gap-3 transition-all active:scale-95 bg-[rgba(var(--sys-accent-rgb),0.15)] hover:bg-[rgba(var(--sys-accent-rgb),0.25)] border border-sys-accent/50">
+                                      <div class="w-full h-10 bg-black/30 rad-base flex items-center px-3 border border-white/5">
+                                          <div class="w-[16px] h-[16px] search-icon-masked"></div>
+                                          <div class="w-12 h-1 bg-white/20 rounded-full ml-2"></div>
+                                      </div>
+                                      <span class="text-[11px] font-semibold text-mica-contrast">Top Search Bar</span>
+                                  </button>
+                                  <button id="btn-search-taskbar" onclick="window.setSearchLayout('taskbar')" class="theme-bg p-3 rad-base flex flex-col items-center gap-3 hover:bg-[rgba(255,255,255,0.1)] transition-all active:scale-95 border border-transparent">
+                                      <div class="w-full h-10 bg-black/10 rad-base flex items-center justify-center gap-1.5 border border-white/5">
+                                          <div class="w-4 h-4 bg-white/10 rounded-sm"></div>
+                                          <div class="bg-white/10 p-1 rounded-sm"><div class="w-[16px] h-[16px] search-icon-masked"></div></div>
+                                          <div class="w-4 h-4 bg-white/10 rounded-sm"></div>
+                                      </div>
+                                      <span class="text-[11px] font-semibold text-mica-contrast">Taskbar Icon</span>
+                                  </button>
+                              </div>
                           </div>
                       </div>
 
                       <!-- Colors & Glass Module -->
-                      <div class="settings-card p-6 rad-base flex flex-col gap-5">
-                          <h3 class="text-[14px] font-bold text-mica-contrast flex items-center gap-2"><i class="ph-bold ph-drop text-sys-accent text-lg"></i> Colors & Glass</h3>
+                      <div class="settings-card p-6 rad-base flex flex-col gap-5 border border-white/5">
+                          <div class="flex items-center justify-between mb-1">
+                              <h3 class="text-[14px] font-bold text-mica-contrast flex items-center gap-2"><i class="ph-bold ph-drop text-sys-accent text-lg"></i> Colors & Glass</h3>
+                          </div>
                           
-                          <div class="flex flex-col gap-2">
-                              <label class="text-[11px] font-bold text-mica-contrast opacity-80 uppercase tracking-wider">OS Accent Color</label>
-                              <div class="flex flex-wrap items-center gap-3">
-                                  <label title="Custom Color" for="custom-color-picker-main" class="relative w-8 h-8 rounded-full cursor-pointer hover:scale-105 active:scale-95 transition-transform flex items-center justify-center shadow-md ring-1 ring-white/10 bg-white/10">
-                                      <i class="ph-bold ph-palette text-[14px] text-mica-contrast"></i>
-                                      <input type="color" id="custom-color-picker-main" value="#006eff" class="opacity-0 absolute inset-0 w-full h-full cursor-pointer" oninput="window.setCustomOSColor(event)">
+                          <!-- Auto Adapt Toggle -->
+                          <div class="flex items-center justify-between p-4 rad-base bg-black/10 border border-white/5 hover:bg-white/5 transition-colors cursor-pointer" onclick="window.toggleAutoColor()">
+                              <div class="flex flex-col">
+                                  <span class="text-[13px] font-semibold text-mica-contrast">Auto-adapt color & glass</span>
+                                  <span class="text-[11px] text-mica-contrast opacity-60">Automatically extract theme colors from your background</span>
+                              </div>
+                              <button id="toggle-auto-color-main" class="w-10 h-5 rad-full bg-white/20 relative transition-colors duration-300 pointer-events-none border border-white/10">
+                                  <div id="knob-auto-color-main" class="w-3.5 h-3.5 bg-white rad-full absolute top-[2px] left-[3px] transition-transform duration-300"></div>
+                              </button>
+                          </div>
+
+                          <div class="flex flex-col gap-2 mt-2">
+                              <label class="section-label">OS Accent Color</label>
+                              <div class="theme-bg p-3 rad-base flex items-center gap-3 border border-white/5">
+                                  <label title="Custom Color" for="custom-color-picker-main" class="relative w-8 h-8 rad-full cursor-pointer hover:scale-105 active:scale-95 transition-all flex items-center justify-center bg-white/10 hover:bg-white/20 group overflow-hidden border border-white/10">
+                                      <i class="ph-bold ph-palette text-[16px] text-mica-contrast group-hover:text-sys-accent transition-colors relative z-10"></i>
+                                      <input type="color" id="custom-color-picker-main" value="#006eff" class="opacity-0 absolute inset-0 w-full h-full cursor-pointer z-20" oninput="window.setCustomOSColor(event)">
                                   </label>
-                                  <div class="h-6 w-[1px] bg-mica-contrast opacity-20 mx-2"></div>
-                                  <button onclick="window.setOSColor('blue')" class="w-8 h-8 rounded-full bg-[#006eff] hover:scale-110 active:scale-95 transition-transform focus:outline-none shadow-md ring-1 ring-white/10"></button>
-                                  <button onclick="window.setOSColor('purple')" class="w-8 h-8 rounded-full bg-[#9333ea] hover:scale-110 active:scale-95 transition-transform focus:outline-none shadow-md ring-1 ring-white/10"></button>
-                                  <button onclick="window.setOSColor('green')" class="w-8 h-8 rounded-full bg-[#10b981] hover:scale-110 active:scale-95 transition-transform focus:outline-none shadow-md ring-1 ring-white/10"></button>
-                                  <button onclick="window.setOSColor('orange')" class="w-8 h-8 rounded-full bg-[#f97316] hover:scale-110 active:scale-95 transition-transform focus:outline-none shadow-md ring-1 ring-white/10"></button>
-                                  <button onclick="window.setOSColor('dark')" class="w-8 h-8 rounded-full bg-[#334155] hover:scale-110 active:scale-95 transition-transform focus:outline-none shadow-md ring-1 ring-white/10"></button>
+                                  <div class="h-6 w-[1px] bg-white/10 mx-1"></div>
+                                  <div class="flex flex-1 gap-2.5 flex-wrap">
+                                      <button onclick="window.setOSColor('blue')" class="w-8 h-8 rad-full bg-[#006eff] hover:scale-110 active:scale-95 transition-all focus:outline-none"></button>
+                                      <button onclick="window.setOSColor('purple')" class="w-8 h-8 rad-full bg-[#9333ea] hover:scale-110 active:scale-95 transition-all focus:outline-none"></button>
+                                      <button onclick="window.setOSColor('green')" class="w-8 h-8 rad-full bg-[#10b981] hover:scale-110 active:scale-95 transition-all focus:outline-none"></button>
+                                      <button onclick="window.setOSColor('orange')" class="w-8 h-8 rad-full bg-[#f97316] hover:scale-110 active:scale-95 transition-all focus:outline-none"></button>
+                                      <button onclick="window.setOSColor('red')" class="w-8 h-8 rad-full bg-[#ef4444] hover:scale-110 active:scale-95 transition-all focus:outline-none"></button>
+                                      <button onclick="window.setOSColor('dark')" class="w-8 h-8 rad-full bg-[#475569] hover:scale-110 active:scale-95 transition-all focus:outline-none"></button>
+                                  </div>
                               </div>
                           </div>
 
-                          <div class="flex flex-col gap-2 pt-3 border-t border-white/5">
-                              <label class="text-[11px] font-bold text-mica-contrast opacity-80 uppercase tracking-wider">Mica Glass Base</label>
-                              <div class="flex flex-wrap items-center gap-3">
-                                  <label title="Custom Mica Color" for="mica-color-picker-main" class="relative w-8 h-8 rounded-full cursor-pointer hover:scale-105 active:scale-95 transition-transform flex items-center justify-center shadow-md ring-1 ring-white/10 bg-white/10">
-                                      <i class="ph-bold ph-palette text-[14px] text-mica-contrast"></i>
-                                      <input type="color" id="mica-color-picker-main" value="#ffffff" class="opacity-0 absolute inset-0 w-full h-full cursor-pointer" oninput="window.setCustomMicaColor(event)">
+                          <div class="flex flex-col gap-3 pt-4 border-t border-white/5 relative">
+                              <label class="section-label">Mica Glass Base</label>
+                              <div class="theme-bg p-3 rad-base flex items-center gap-3 border border-white/5">
+                                  <label title="Custom Mica Color" for="mica-color-picker-main" class="relative w-8 h-8 rad-full cursor-pointer hover:scale-105 active:scale-95 transition-all flex items-center justify-center bg-white/10 hover:bg-white/20 group overflow-hidden border border-white/10">
+                                      <i class="ph-bold ph-eyedropper text-[16px] text-mica-contrast group-hover:text-sys-accent transition-colors relative z-10"></i>
+                                      <input type="color" id="mica-color-picker-main" value="#ffffff" class="opacity-0 absolute inset-0 w-full h-full cursor-pointer z-20" oninput="window.setCustomMicaColor(event)">
                                   </label>
-                                  <div class="h-6 w-[1px] bg-mica-contrast opacity-20 mx-2"></div>
-                                  <button onclick="window.setMicaColor('#ffffff')" class="w-8 h-8 rounded-full bg-[#ffffff] hover:scale-110 active:scale-95 transition-transform focus:outline-none shadow-md ring-1 ring-white/10"></button>
-                                  <button onclick="window.setMicaColor('#e2e8f0')" class="w-8 h-8 rounded-full bg-[#e2e8f0] hover:scale-110 active:scale-95 transition-transform focus:outline-none shadow-md ring-1 ring-white/10"></button>
-                                  <button onclick="window.setMicaColor('#1e293b')" class="w-8 h-8 rounded-full bg-[#1e293b] hover:scale-110 active:scale-95 transition-transform focus:outline-none shadow-md ring-1 ring-white/10"></button>
-                                  <button onclick="window.setMicaColor('#000000')" class="w-8 h-8 rounded-full bg-[#000000] hover:scale-110 active:scale-95 transition-transform focus:outline-none shadow-md ring-1 ring-white/10"></button>
+                                  <div class="h-6 w-[1px] bg-white/10 mx-1"></div>
+                                  <div class="flex flex-1 gap-2.5 flex-wrap">
+                                      <button onclick="window.setMicaColor('#ffffff')" class="w-8 h-8 rad-full bg-[#ffffff] hover:scale-110 active:scale-95 transition-all focus:outline-none border border-white/20"></button>
+                                      <button onclick="window.setMicaColor('#cbd5e1')" class="w-8 h-8 rad-full bg-[#cbd5e1] hover:scale-110 active:scale-95 transition-all focus:outline-none border border-transparent"></button>
+                                      <button onclick="window.setMicaColor('#1e293b')" class="w-8 h-8 rad-full bg-[#1e293b] hover:scale-110 active:scale-95 transition-all focus:outline-none border border-transparent"></button>
+                                      <button onclick="window.setMicaColor('#000000')" class="w-8 h-8 rad-full bg-[#000000] hover:scale-110 active:scale-95 transition-all focus:outline-none border border-transparent"></button>
+                                  </div>
                               </div>
                           </div>
 
-                          <div class="flex flex-col gap-3 pt-3 border-t border-white/5">
-                              <div class="flex justify-between items-center">
-                                  <label class="text-[12px] font-bold text-mica-contrast uppercase tracking-wider">Transparency effects</label>
+                          <div class="flex flex-col gap-3 pt-4 border-t border-white/5 relative">
+                              <label class="section-label">Transparency effects</label>
+                              <div class="flex items-center gap-4 bg-black/10 p-3 rad-base border border-white/5">
+                                  <div class="w-8 h-8 rad-base bg-white/5 flex items-center justify-center">
+                                      <i class="ph-fill ph-drop-half text-[16px] text-sys-accent"></i>
+                                  </div>
+                                  <input title="Adjust base glass transparency" type="range" min="0" max="0.9" step="0.01" value="0.45" class="win-slider opacity-slider-sync flex-1" oninput="window.setMicaAlpha(event)">
                               </div>
-                              <input title="Adjust base glass transparency" type="range" min="0" max="0.9" step="0.01" value="0.45" class="win-slider opacity-slider-sync mt-2" oninput="window.setMicaAlpha(event)">
+                          </div>
+                      </div>
+                  </div>
+
+                  <!-- ACCOUNTS PANE -->
+                  <div id="pane-accounts" class="flex flex-col gap-5 transition-opacity duration-300 hidden max-w-2xl mx-auto w-full pb-10">
+                      <h1 class="text-[28px] font-semibold text-mica-contrast mb-1 tracking-tight">Accounts</h1>
+                      
+                      <div class="settings-card p-6 flex flex-col gap-4 border border-white/5">
+                          <div class="flex items-center gap-5 mb-2">
+                              <img src="user.png" class="w-16 h-16 rounded-full object-cover grayscale-[0.1]" onerror="this.src='https://wallpapers.com/images/high/user-profile-login-icon-kjjzz29apr1bilzr.png'; this.classList.add('fallback-avatar');">
+                              <div class="flex flex-col">
+                                  <span id="settings-account-name" class="text-[20px] font-bold text-mica-contrast leading-tight">Administrator</span>
+                                  <span class="text-[13px] text-sys-accent font-semibold mt-1">Local Account</span>
+                              </div>
+                          </div>
+                      </div>
+
+                      <div class="settings-card p-6 flex flex-col gap-6 border border-white/5">
+                          <h3 class="text-[14px] font-bold text-mica-contrast flex items-center gap-2"><i class="ph-bold ph-identification-card text-sys-accent text-[20px]"></i> User & Passwords</h3>
+                          
+                          <div class="flex flex-col gap-2 mt-1">
+                              <label class="section-label">Change Username</label>
+                              <input type="text" id="input-new-username" placeholder="Enter new username" class="bg-black/20 border border-white/10 text-mica-contrast text-[13px] px-4 py-2.5 rounded-lg focus:border-sys-accent transition-colors placeholder-mica-contrast placeholder-opacity-40 outline-none w-full max-w-sm">
+                          </div>
+
+                          <div class="flex flex-col gap-2 pt-4 border-t border-white/5 relative">
+                              <label class="section-label">Change Password / PIN</label>
+                              <input type="password" id="input-new-pin" placeholder="Enter new password" class="bg-black/20 border border-white/10 text-mica-contrast text-[13px] px-4 py-2.5 rounded-lg focus:border-sys-accent transition-colors placeholder-mica-contrast placeholder-opacity-40 outline-none w-full max-w-sm">
+                          </div>
+
+                          <div class="flex justify-start mt-2">
+                              <button id="btn-save-account" onclick="window.saveAccountDetails()" class="px-6 py-2 bg-sys-accent hover:bg-sys-accent-hover text-white text-[13px] font-semibold rounded-lg transition-colors active:scale-95 border border-white/10">Save Changes</button>
                           </div>
                       </div>
                   </div>
@@ -782,56 +1120,60 @@
       </div>
 
       <!-- START MENU (Separated Floating Islands) -->
-      <div id="start-menu-container" class="absolute bottom-[80px] left-1/2 -translate-x-1/2 flex flex-row gap-4 z-[9995] h-[520px] items-stretch pointer-events-none">
+      <div id="start-menu-container" class="absolute flex gap-4 z-[9995] h-[520px] items-stretch pointer-events-none transition-all duration-500 var(--spring-easing)">
           
-          <div id="sm-rail" class="w-[60px] taskbar-flat rad-base py-4 flex flex-col justify-between items-center shrink-0 flyout-base flyout-hidden overflow-y-auto custom-scroll">
-              <button class="w-10 h-10 rad-base flex items-center justify-center transition-all active:scale-95 group theme-bg theme-bg-hover sm-step-3 shrink-0">
-                  <img src="user.png" class="w-8 h-8 rad-base group-hover:scale-110 transition-transform" onerror="this.src='https://cdn-icons-png.freepik.com/512/9131/9131478.png';">
+          <!-- Profile & System Actions Rail -->
+          <div id="sm-rail" class="w-[60px] taskbar-flat rad-base py-4 flex flex-col justify-between items-center shrink-0 flyout-base flyout-hidden overflow-y-auto custom-scroll border border-white/5">
+              <button class="w-10 h-10 rad-base flex items-center justify-center transition-all active:scale-95 group theme-bg theme-bg-hover sm-step-3 shrink-0 border border-transparent hover:border-white/5">
+                  <img src="user.png" class="w-8 h-8 rad-base group-hover:scale-110 transition-transform" onerror="this.src='https://wallpapers.com/images/high/user-profile-login-icon-kjjzz29apr1bilzr.png'; this.classList.add('fallback-avatar');">
               </button>
 
               <div class="flex flex-col gap-2 mt-auto">
-                  <button onclick="window.openSettings()" class="w-10 h-10 flex items-center justify-center rad-base theme-bg-hover transition-colors group active:scale-95 sm-step-3 shrink-0">
+                  <button onclick="window.openSettings()" class="w-10 h-10 flex items-center justify-center rad-base theme-bg-hover transition-colors group active:scale-95 sm-step-3 shrink-0 border border-transparent hover:border-white/5">
                       <i class="ph-bold ph-gear text-[18px] text-mica-contrast"></i>
                   </button>
-                  <button class="w-10 h-10 flex items-center justify-center rad-base theme-bg-hover transition-colors group active:scale-95 sm-step-3 shrink-0">
+                  <button class="w-10 h-10 flex items-center justify-center rad-base theme-bg-hover transition-colors group active:scale-95 sm-step-3 shrink-0 border border-transparent hover:border-white/5">
                       <i class="ph-bold ph-power text-[18px] text-mica-contrast group-hover:text-red-600 transition-colors"></i>
                   </button>
               </div>
           </div>
 
-          <div id="sm-apps" class="w-[380px] taskbar-flat rad-base p-5 flex flex-col shrink-0 flyout-base flyout-hidden overflow-y-auto custom-scroll">
-              <div class="w-full theme-bg theme-bg-hover transition-colors rad-base h-9 flex items-center px-3 mb-5 cursor-text sm-step-2 shrink-0">
-                  <i class="ph-bold ph-magnifying-glass text-mica-contrast opacity-70 text-[14px]"></i>
-                  <span class="ml-3 text-[12px] text-mica-contrast opacity-70 font-medium">Type here to search</span>
+          <!-- Apps Grid Area -->
+          <div id="sm-apps" class="w-[380px] taskbar-flat rad-base p-5 flex flex-col shrink-0 flyout-base flyout-hidden overflow-y-auto custom-scroll border border-white/5">
+              <div class="w-full theme-bg theme-bg-hover transition-colors rad-base h-9 flex items-center px-3 mb-5 cursor-text sm-step-2 shrink-0 border border-white/5" onclick="window.openSearchFlyout(event)">
+                  <div class="w-[20px] h-[20px] pointer-events-none search-icon-masked" draggable="false"></div>
+                  <span class="ml-3 text-[12px] text-mica-contrast opacity-70 font-medium pointer-events-none">Type here to search</span>
               </div>
 
               <div class="flex justify-between items-center mb-3 px-1 sm-step-2 shrink-0">
                   <h3 class="text-[13px] font-bold text-mica-contrast">Pinned</h3>
-                  <button class="text-[11px] font-semibold theme-bg theme-bg-hover px-2 py-1 rad-base transition-colors text-mica-contrast flex items-center gap-1 active:scale-95">All apps <i class="ph-bold ph-caret-right text-[10px]"></i></button>
+                  <button class="text-[11px] font-semibold theme-bg theme-bg-hover px-2 py-1 rad-base transition-colors text-mica-contrast flex items-center gap-1 active:scale-95 border border-transparent hover:border-white/5">All apps <i class="ph-bold ph-caret-right text-[10px]"></i></button>
               </div>
               
               <div class="grid grid-cols-5 gap-y-4 gap-x-2 mb-5 shrink-0">
-                  <div onclick="window.openSettings()" class="flex flex-col items-center gap-1.5 theme-bg-hover p-2 rad-base transition-colors cursor-pointer group active:scale-95 sm-step-3">
-                      <img src="https://img.icons8.com/?size=100&id=73FgXcRF4HNx&format=png&color=000000" class="w-[28px] h-[28px] pointer-events-none" draggable="false">
+                  <div onclick="window.openSettings()" class="flex flex-col items-center gap-1.5 theme-bg-hover p-2 rad-base transition-colors cursor-pointer group active:scale-95 sm-step-3 border border-transparent hover:border-white/5">
+                      <img src="https://img.icons8.com/?size=100&id=73FgXcRF4HNx&format=png&color=000000" class="w-[28px] h-[28px] pointer-events-none transition-transform group-hover:scale-105 glass-icon" draggable="false">
                       <span class="text-[11px] font-semibold text-mica-contrast">Settings</span>
                   </div>
               </div>
 
               <div class="flex justify-between items-center mb-3 px-1 sm-step-2 shrink-0">
                   <h3 class="text-[13px] font-bold text-mica-contrast">Recommended</h3>
-                  <button class="text-[11px] font-semibold theme-bg theme-bg-hover px-2 py-1 rad-base transition-colors text-mica-contrast flex items-center gap-1 active:scale-95">More <i class="ph-bold ph-caret-right text-[10px]"></i></button>
+                  <button class="text-[11px] font-semibold theme-bg theme-bg-hover px-2 py-1 rad-base transition-colors text-mica-contrast flex items-center gap-1 active:scale-95 border border-transparent hover:border-white/5">More <i class="ph-bold ph-caret-right text-[10px]"></i></button>
               </div>
 
-              <div class="flex flex-col items-center justify-center min-h-[140px] theme-bg-strong rad-base sm-step-2 border border-white/5 shrink-0">
-                  <i class="ph-duotone ph-folder-dashed text-[32px] text-mica-contrast mb-2 sm-step-3"></i>
+              <div class="flex flex-col items-center justify-center min-h-[140px] theme-bg-strong rad-base sm-step-2 shrink-0 border border-white/5">
+                  <i class="ph-duotone ph-folder-dashed text-[32px] text-mica-contrast mb-2 sm-step-3 opacity-60"></i>
                   <span class="text-[12px] font-semibold text-mica-contrast">No recent files</span>
-                  <span class="text-[11px] text-mica-contrast font-medium opacity-80">To show your recent files, open them.</span>
+                  <span class="text-[11px] text-mica-contrast font-medium opacity-60">To show your recent files, open them.</span>
               </div>
           </div>
 
-          <div id="sm-widgets" class="w-[300px] flex flex-col gap-4 shrink-0 flyout-base flyout-hidden overflow-y-auto custom-scroll pb-2" style="background: transparent !important; backdrop-filter: none !important;">
+          <!-- REBUILT WIDGETS SECTION (Unified Blur Base) -->
+          <div id="sm-widgets" class="w-[300px] taskbar-flat rad-base p-4 flex flex-col gap-4 shrink-0 flyout-base flyout-hidden overflow-y-auto custom-scroll border border-white/5">
               
-              <div class="h-[140px] taskbar-flat rad-base p-4 flex flex-col justify-between relative overflow-hidden shrink-0 group/update sm-step-1">
+              <!-- Windows Update Card -->
+              <div class="h-[140px] bg-black/10 rad-base p-4 flex flex-col justify-between relative overflow-hidden shrink-0 group/update sm-step-1 border border-white/5">
                   <div class="absolute inset-0 bg-sys-accent opacity-[0.1] pointer-events-none transition-colors duration-500"></div>
                   <i class="ph-duotone ph-arrows-clockwise text-[100px] text-sys-accent opacity-20 absolute -right-4 -bottom-4 pointer-events-none transition-all duration-700 group-hover/update:rotate-180 sm-step-3"></i>
                   
@@ -841,19 +1183,20 @@
                   </div>
                   
                   <div class="relative z-10 flex-1 flex flex-col justify-center sm-step-2">
-                      <p class="text-[15px] font-bold text-mica-contrast leading-tight">1H05 Rebuild Update</p>
-                      <p class="text-[11px] font-medium text-mica-contrast mt-0.5 theme-bg px-1.5 py-0.5 rad-base w-max">Build 040 (Stable)</p>
+                      <p class="text-[15px] font-bold text-mica-contrast leading-tight">1H06 "New Valley"</p>
+                      <p class="text-[11px] font-medium text-mica-contrast mt-0.5 theme-bg px-1.5 py-0.5 rad-base w-max border border-white/5">Build 060</p>
                   </div>
                   
                   <div class="flex items-center justify-between mt-auto relative z-10 pt-2 sm-step-2">
                       <span class="text-[10px] font-semibold text-mica-contrast opacity-70">Last checked: Today</span>
-                      <button class="bg-sys-accent hover:bg-sys-accent-hover text-white text-[11px] font-bold px-3 py-1.5 rad-base transition-colors flex items-center gap-1.5 active:scale-95 sm-step-3 shadow-md shadow-sys-accent/20">
+                      <button class="bg-sys-accent hover:bg-sys-accent-hover text-white text-[11px] font-bold px-3 py-1.5 rad-base transition-colors flex items-center gap-1.5 active:scale-95 sm-step-3 border border-white/10">
                           Check <i class="ph-bold ph-caret-right"></i>
                       </button>
                   </div>
               </div>
 
-              <div class="flex-1 min-h-[300px] taskbar-flat rad-base p-4 flex flex-col relative overflow-hidden sm-step-1">
+              <!-- Quick Personalization Card -->
+              <div class="flex-1 min-h-[300px] bg-black/10 rad-base p-4 flex flex-col relative overflow-hidden sm-step-1 border border-white/5">
                   <div class="absolute inset-0 bg-sys-accent opacity-[0.05] pointer-events-none transition-colors duration-500"></div>
                   
                   <div class="flex items-center justify-between mb-3 relative z-10 sm-step-2 shrink-0">
@@ -861,62 +1204,68 @@
                           <i class="ph-fill ph-palette text-sys-accent text-[16px] transition-colors duration-500 sm-step-3"></i>
                           <h4 class="text-[13px] font-bold text-mica-contrast">Personalization</h4>
                       </div>
-                      <button onclick="window.openSettings()" class="w-6 h-6 flex items-center justify-center rad-full theme-bg theme-bg-hover transition-colors text-mica-contrast active:scale-95 sm-step-3">
+                      <button onclick="window.openSettings()" class="w-6 h-6 flex items-center justify-center rad-full theme-bg theme-bg-hover transition-colors text-mica-contrast active:scale-95 sm-step-3 border border-white/5">
                           <i class="ph-bold ph-gear text-[13px]"></i>
                       </button>
                   </div>
 
-                  <div class="flex-1 flex flex-col gap-2 relative z-10">
+                  <div class="flex-1 flex flex-col gap-2 relative z-10 overflow-y-auto custom-scroll pr-1.5 -mr-1.5 pb-1">
                       <div class="theme-bg p-3 rad-base flex flex-col gap-2 sm-step-2 shrink-0 border border-white/5">
-                          <div class="w-full h-[60px] rad-base overflow-hidden relative group/preview cursor-pointer shadow-inner" onclick="window.openSettings()">
-                              <div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover/preview:scale-105" style="background-image: var(--current-wallpaper);"></div>
+                          <div class="w-full h-[60px] rad-base overflow-hidden relative group/preview cursor-pointer border border-white/5" onclick="window.openSettings()">
+                              <div id="sm-wallpaper-preview" class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover/preview:scale-105" style="background-image: var(--current-wallpaper);"></div>
                           </div>
                           
                           <div class="flex justify-between items-center mt-1">
                               <div class="relative w-full active:scale-95 transition-transform group" ondrop="window.handleWallpaperUpload(event)" ondragover="window.allowDrop(event)">
                                   <input type="file" id="wallpaper-upload-start" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" onchange="window.handleWallpaperUpload(event)">
-                                  <button class="w-full theme-bg-strong hover:bg-white/10 text-mica-contrast text-[11px] font-bold py-1.5 rad-base transition-all flex items-center justify-center gap-1.5 pointer-events-none sm-step-3 border border-white/5">
+                                  <button class="w-full theme-bg-strong hover:bg-white/10 text-mica-contrast text-[11px] font-bold py-1.5 rad-base transition-all flex items-center justify-center gap-1.5 pointer-events-none sm-step-3">
                                       Upload
                                   </button>
                               </div>
                           </div>
                       </div>
 
-                      <div class="theme-bg p-3 rad-base flex flex-col gap-3 mt-1 sm-step-2 shrink-0 border border-white/5">
-                          <div class="flex flex-col gap-1.5">
-                              <label class="text-[10px] font-bold text-mica-contrast opacity-80 uppercase tracking-wider">Accent Color</label>
-                              <div class="flex flex-wrap items-center gap-2 sm-step-3">
-                                  <label title="Custom Color" for="custom-color-picker-sm" class="relative w-4 h-4 rounded-full cursor-pointer active:scale-90 transition-transform flex items-center justify-center shadow-sm ring-1 ring-white/10 bg-white/10">
-                                      <i class="ph-bold ph-palette text-[9px] text-mica-contrast"></i>
+                      <div class="theme-bg p-3 rad-base flex flex-col gap-4 mt-1 sm-step-2 shrink-0 border border-white/5">
+                          <div class="flex items-center justify-between pb-1">
+                              <label class="section-label !mb-0 !border-none !pb-0">Colors</label>
+                              <button id="toggle-auto-color-sm" onclick="window.toggleAutoColor()" class="flex items-center gap-1 opacity-70 hover:opacity-100 transition-opacity active:scale-90" title="Auto-adapt to background">
+                                 <i class="ph-bold ph-magic-wand text-[12px] text-sys-accent"></i>
+                                 <span class="text-[9px] font-bold text-mica-contrast uppercase tracking-wider">Auto</span>
+                              </button>
+                          </div>
+
+                          <div class="flex flex-col gap-2">
+                              <div class="flex flex-wrap items-center gap-1.5 sm-step-3 bg-black/20 border border-white/5 p-1.5 rad-base">
+                                  <label title="Custom Color" for="custom-color-picker-sm" class="relative w-6 h-6 rad-full cursor-pointer active:scale-90 transition-transform flex items-center justify-center bg-white/10 hover:bg-white/20 group">
+                                      <i class="ph-bold ph-palette text-[10px] text-mica-contrast group-hover:text-sys-accent transition-colors"></i>
                                       <input type="color" id="custom-color-picker-sm" value="#006eff" class="opacity-0 absolute inset-0 w-full h-full cursor-pointer" oninput="window.setCustomOSColor(event)">
                                   </label>
-                                  <div class="h-3 w-[1px] bg-mica-contrast opacity-20 mx-0.5"></div>
-                                  <button onclick="window.setOSColor('blue')" class="w-4 h-4 rounded-full bg-[#006eff] active:scale-90 transition-all shadow-sm ring-1 ring-white/10"></button>
-                                  <button onclick="window.setOSColor('purple')" class="w-4 h-4 rounded-full bg-[#9333ea] active:scale-90 transition-all shadow-sm ring-1 ring-white/10"></button>
-                                  <button onclick="window.setOSColor('green')" class="w-4 h-4 rounded-full bg-[#10b981] active:scale-90 transition-all shadow-sm ring-1 ring-white/10"></button>
-                                  <button onclick="window.setOSColor('orange')" class="w-4 h-4 rounded-full bg-[#f97316] active:scale-90 transition-all shadow-sm ring-1 ring-white/10"></button>
+                                  <div class="h-4 w-[1px] bg-white/10 mx-0.5"></div>
+                                  <button onclick="window.setOSColor('blue')" class="w-6 h-6 rad-full bg-[#006eff] active:scale-90 transition-all border border-white/10"></button>
+                                  <button onclick="window.setOSColor('purple')" class="w-6 h-6 rad-full bg-[#9333ea] active:scale-90 transition-all border border-white/10"></button>
+                                  <button onclick="window.setOSColor('green')" class="w-6 h-6 rad-full bg-[#10b981] active:scale-90 transition-all border border-white/10"></button>
+                                  <button onclick="window.setOSColor('orange')" class="w-6 h-6 rad-full bg-[#f97316] active:scale-90 transition-all border border-white/10"></button>
                               </div>
                           </div>
 
-                          <div class="flex flex-col gap-1.5 pt-1">
-                              <label class="text-[10px] font-bold text-mica-contrast opacity-80 uppercase tracking-wider">Glass Color</label>
-                              <div class="flex flex-wrap items-center gap-2 sm-step-3">
-                                  <label title="Custom Mica Color" for="mica-color-picker-sm" class="relative w-4 h-4 rounded-full cursor-pointer active:scale-90 transition-transform flex items-center justify-center shadow-sm ring-1 ring-white/10 bg-white/10">
-                                      <i class="ph-bold ph-palette text-[9px] text-mica-contrast"></i>
+                          <div class="flex flex-col gap-2 pt-1 relative">
+                              <div class="flex flex-wrap items-center gap-1.5 sm-step-3 bg-black/20 border border-white/5 p-1.5 rad-base">
+                                  <label title="Custom Mica Color" for="mica-color-picker-sm" class="relative w-6 h-6 rad-full cursor-pointer active:scale-90 transition-transform flex items-center justify-center bg-white/10 hover:bg-white/20 group">
+                                      <i class="ph-bold ph-eyedropper text-[10px] text-mica-contrast group-hover:text-sys-accent transition-colors"></i>
                                       <input type="color" id="mica-color-picker-sm" value="#ffffff" class="opacity-0 absolute inset-0 w-full h-full cursor-pointer" oninput="window.setCustomMicaColor(event)">
                                   </label>
-                                  <div class="h-3 w-[1px] bg-mica-contrast opacity-20 mx-0.5"></div>
-                                  <button onclick="window.setMicaColor('#ffffff')" class="w-4 h-4 rounded-full bg-[#ffffff] active:scale-90 transition-all focus:outline-none shadow-sm ring-1 ring-white/10"></button>
-                                  <button onclick="window.setMicaColor('#e2e8f0')" class="w-4 h-4 rounded-full bg-[#e2e8f0] active:scale-90 transition-all focus:outline-none shadow-sm ring-1 ring-white/10"></button>
-                                  <button onclick="window.setMicaColor('#1e293b')" class="w-4 h-4 rounded-full bg-[#1e293b] active:scale-90 transition-all focus:outline-none shadow-sm ring-1 ring-white/10"></button>
-                                  <button onclick="window.setMicaColor('#000000')" class="w-4 h-4 rounded-full bg-[#000000] active:scale-90 transition-all focus:outline-none shadow-sm ring-1 ring-white/10"></button>
+                                  <div class="h-4 w-[1px] bg-white/10 mx-0.5"></div>
+                                  <button onclick="window.setMicaColor('#ffffff')" class="w-6 h-6 rad-full bg-[#ffffff] active:scale-90 transition-all border border-white/20"></button>
+                                  <button onclick="window.setMicaColor('#cbd5e1')" class="w-6 h-6 rad-full bg-[#cbd5e1] active:scale-90 transition-all border border-white/10"></button>
+                                  <button onclick="window.setMicaColor('#1e293b')" class="w-6 h-6 rad-full bg-[#1e293b] active:scale-90 transition-all border border-white/10"></button>
+                                  <button onclick="window.setMicaColor('#000000')" class="w-6 h-6 rad-full bg-[#000000] active:scale-90 transition-all border border-white/10"></button>
                               </div>
                           </div>
                           
-                          <div class="flex flex-col gap-1 mt-1 pt-1 border-t border-white/5">
-                              <label class="text-[10px] font-bold text-mica-contrast opacity-80 uppercase tracking-wider">Glass Opacity</label>
-                              <div class="flex items-center mt-1 sm-step-3">
-                                   <input title="Adjust base glass transparency" type="range" min="0" max="0.9" step="0.01" value="0.45" class="win-slider opacity-slider-sync w-full" oninput="window.setMicaAlpha(event)">
+                          <div class="flex flex-col gap-2 pt-2 relative">
+                              <div class="flex items-center sm-step-3 bg-black/20 border border-white/5 p-2 rad-base gap-2">
+                                  <i class="ph-fill ph-drop-half text-[14px] text-sys-accent"></i>
+                                  <input title="Adjust base glass transparency" type="range" min="0" max="0.9" step="0.01" value="0.45" class="win-slider opacity-slider-sync w-full" oninput="window.setMicaAlpha(event)">
                               </div>
                           </div>
                       </div>
@@ -928,7 +1277,7 @@
       </div>
 
       <!-- HORIZONTAL QUICK SETTINGS FLYOUT -->
-      <div id="quick-settings-flyout" class="absolute bottom-[80px] right-2 w-[260px] taskbar-flat rad-base p-5 flex flex-col flyout-right-base flyout-right-hidden z-[9995] shadow-2xl border border-white/10 sm-step-1">
+      <div id="quick-settings-flyout" class="absolute w-[320px] taskbar-flat rad-base p-5 flex flex-col flyout-right-base flyout-right-hidden z-[9995] sm-step-1 border border-white/5 transition-all duration-500 var(--spring-easing)">
           
           <!-- Header -->
           <div class="flex items-center justify-between mb-5 shrink-0 sm-step-2">
@@ -938,44 +1287,55 @@
                   </div>
                   <h3 class="text-[14px] font-bold text-mica-contrast">Quick Settings</h3>
               </div>
-              <button onclick="window.openSettings()" class="w-8 h-8 flex items-center justify-center rad-full theme-bg theme-bg-hover transition-all duration-300 text-mica-contrast active:scale-90 group border border-white/5">
+              <button onclick="window.openSettings()" class="w-8 h-8 flex items-center justify-center rad-full theme-bg theme-bg-hover transition-all duration-300 text-mica-contrast active:scale-90 group">
                   <i class="ph-bold ph-gear text-[15px] group-hover:rotate-90 transition-transform duration-500"></i>
               </button>
           </div>
 
-          <!-- Controls Grid -->
-          <div class="flex gap-3 relative z-10 shrink-0 sm-step-3">
-              
-              <!-- Brightness Control Group -->
-              <div class="flex-1 settings-card p-2.5 rad-base flex flex-col items-center gap-4 group/control hover:border-sys-accent/30 transition-colors">
-                  <div class="win-slider-vert-container mt-3">
-                      <input title="Brightness" type="range" id="brightness-slider" min="0" max="100" value="100" class="win-slider-vert group-hover/control:opacity-100 transition-opacity" oninput="window.updateBrightness(this)">
+          <!-- Windows 11 Style Action Grid -->
+          <div class="flex flex-col gap-3 mb-5 shrink-0 sm-step-3">
+              <!-- Night Light Toggle Tile -->
+              <div id="nl-main-btn" class="flex items-center w-full h-[52px] theme-bg rad-base border border-white/5 transition-colors group cursor-pointer">
+                  <div class="flex-1 flex items-center gap-3 px-4 h-full hover:bg-white/10 rounded-l-[6px] transition-colors active:scale-[0.98]" onclick="window.toggleNightLightState(event)">
+                       <i id="nl-icon" class="ph-bold ph-moon text-[18px] text-mica-contrast opacity-50 transition-colors"></i>
+                       <div class="flex flex-col justify-center">
+                           <span class="text-[12px] font-semibold text-mica-contrast leading-tight">Night light</span>
+                           <span id="nl-val-text" class="text-[10px] text-mica-contrast opacity-60 leading-tight mt-0.5">Off</span>
+                       </div>
                   </div>
-                  <div id="brightness-bg-layer" class="w-full h-12 rad-base flex items-center justify-center border border-white/5 transition-all duration-300 shadow-sm theme-bg cursor-pointer hover:bg-[rgba(var(--sys-accent-rgb),0.15)] active:scale-[0.94]">
-                      <i id="brightness-icon" class="ph-fill ph-sun text-[22px] transition-colors text-sys-accent"></i>
+                  <div class="w-[1px] h-6 bg-white/10"></div>
+                  <!-- Dropdown Expansion Carret -->
+                  <div class="w-10 h-full flex items-center justify-center hover:bg-white/10 rounded-r-[6px] transition-colors active:scale-95" onclick="window.toggleNightLightSlider(event)">
+                      <i class="ph-bold ph-caret-right text-[12px] text-mica-contrast opacity-70 transition-transform" id="nl-caret"></i>
                   </div>
               </div>
+          </div>
 
-              <!-- Night Light Control Group -->
-              <div class="flex-1 settings-card p-2.5 rad-base flex flex-col items-center gap-4 group/control hover:border-sys-accent/30 transition-colors">
-                  <div class="win-slider-vert-container mt-3">
-                      <input title="Night Light" type="range" id="nl-slider" min="0" max="100" value="0" class="win-slider-vert group-hover/control:opacity-100 transition-opacity" oninput="window.updateNightLight(this)">
-                  </div>
-                  <div id="nl-bg-layer" class="w-full h-12 rad-base flex items-center justify-center border border-white/5 transition-all duration-300 shadow-sm theme-bg cursor-pointer hover:bg-[rgba(var(--sys-accent-rgb),0.15)] active:scale-[0.94]">
-                      <i id="nl-icon" class="ph-bold ph-moon text-[22px] text-mica-contrast opacity-50 transition-colors"></i>
-                  </div>
+          <!-- Horizontal Sliders Area -->
+          <div class="flex flex-col gap-3 relative z-10 shrink-0 sm-step-3">
+              
+              <!-- Night Light Slider (Hidden by default, triggered by caret) -->
+              <div id="nl-slider-container" class="hidden items-center gap-4 w-full bg-black/10 p-3.5 rad-base border border-white/5">
+                  <i class="ph-fill ph-moon text-[18px] text-sys-accent opacity-80"></i>
+                  <input title="Night Light Intensity" type="range" id="nl-slider" min="0" max="100" value="0" class="win-slider flex-1" oninput="window.updateNightLight(this)">
+              </div>
+
+              <!-- Brightness Slider (Always visible) -->
+              <div class="flex items-center gap-4 w-full bg-black/10 p-3.5 rad-base border border-white/5">
+                  <i id="brightness-icon" class="ph-fill ph-sun text-[18px] text-sys-accent"></i>
+                  <input title="Brightness" type="range" id="brightness-slider" min="0" max="100" value="100" class="win-slider flex-1" oninput="window.updateBrightness(this)">
               </div>
 
           </div>
       </div>
 
       <!-- CONCEPT CALENDAR FLYOUT -->
-      <div id="calendar-flyout" class="absolute bottom-[80px] right-2 w-[360px] max-h-[560px] taskbar-flat rad-base p-0 flex flex-col flyout-right-base flyout-right-hidden z-[9995] overflow-y-auto custom-scroll">
+      <div id="calendar-flyout" class="absolute w-[360px] max-h-[560px] taskbar-flat rad-base p-0 flex flex-col flyout-right-base flyout-right-hidden z-[9995] overflow-y-auto custom-scroll transition-all duration-500 var(--spring-easing)">
           
           <div class="px-5 pt-6 pb-4 relative overflow-hidden sm-step-1 shrink-0">
               <div class="absolute top-0 right-0 w-32 h-32 bg-sys-accent opacity-[0.15] blur-3xl rounded-full pointer-events-none"></div>
               <div class="relative z-10 flex flex-col">
-                  <p id="cal-header-day" class="text-[13px] font-semibold text-mica-contrast opacity-70 uppercase tracking-wider mb-0.5">...</p>
+                  <p id="cal-header-day" class="section-label !border-none mb-0.5">...</p>
                   <h2 id="cal-header-date" class="text-[32px] font-bold text-mica-contrast leading-none tracking-tight">...</h2>
               </div>
           </div>
@@ -1003,10 +1363,10 @@
               </div>
           </div>
           
-          <div class="p-5 pt-4 theme-bg mt-auto sm-step-1 border-t border-white/5 shrink-0">
+          <div class="p-5 pt-4 theme-bg mt-auto sm-step-1 shrink-0 border-t border-white/5">
               <div class="flex justify-between items-center mb-3 sm-step-2">
                   <h4 id="agenda-title" class="text-[13px] font-bold text-mica-contrast">Today's Agenda</h4>
-                  <button class="text-[11px] font-semibold theme-bg-hover px-2 py-1 rad-base transition-colors text-mica-contrast active:scale-95 flex items-center gap-1 focus:outline-none ring-1 ring-white/10"><i class="ph-bold ph-plus"></i> Add</button>
+                  <button class="text-[11px] font-semibold theme-bg-hover px-2 py-1 rad-base transition-colors text-mica-contrast active:scale-95 flex items-center gap-1 focus:outline-none border border-transparent hover:border-white/5"><i class="ph-bold ph-plus"></i> Add</button>
               </div>
               <div id="agenda-content" class="flex flex-col gap-2 sm-step-3">
                   <!-- Dynamic content injected here -->
@@ -1014,34 +1374,43 @@
           </div>
       </div>
 
-      <!-- TASKBAR WITH PREMIUM HOVER -->
-      <div id="taskbar-wrapper" class="absolute bottom-0 left-0 w-full flex items-center transition-all duration-500 ease-[cubic-bezier(0.1,0.9,0.2,1.0)] tb-visible" ondblclick="window.hideTaskbar()" onclick="window.showTaskbar(event)">
+      <!-- TASKBAR WITH PREMIUM HOVER & K2 POSITIONS -->
+      <div id="taskbar-wrapper" class="absolute z-[9999] flex items-center transition-all duration-500 tb-visible layout-default" data-pos="bottom" ondblclick="window.hideTaskbar()" onclick="window.showTaskbar(event)">
             
-            <div id="tb-segment-about" class="taskbar-segment tb-reveal-visible pointer-events-auto h-[56px] taskbar-flat rad-base flex items-center px-2 shrink-0 justify-self-start">
-                <button id="tb-app-btn-about" onclick="window.openAbout(event)" class="taskbar-btn w-[44px] h-[44px] rad-base flex items-center justify-center group cursor-default focus:outline-none">
-                  <img src="https://img.icons8.com/?size=100&id=NzIdJDXpXX0B&format=png&color=000000" class="w-[24px] h-[24px] pointer-events-none opacity-90 group-hover:scale-105 transition-transform" draggable="false" alt="About">
+            <div id="tb-segment-about" class="taskbar-segment tb-reveal-visible pointer-events-auto taskbar-flat rad-base flex items-center justify-center shrink-0">
+                <button id="tb-app-btn-about" onclick="window.toggleAbout(event)" class="taskbar-btn app-expandable h-[44px] flex items-center rad-base group cursor-default focus:outline-none">
+                  <img src="https://img.icons8.com/?size=100&id=z8muZ3e2Mkh4&format=png&color=000000" class="w-[24px] h-[24px] pointer-events-none transition-transform shrink-0" draggable="false" alt="About">
+                  <span class="tb-app-text">About OS</span>
                 </button>
             </div>
 
-            <div id="tb-apps-segment" class="taskbar-segment tb-reveal-visible pointer-events-auto h-[56px] taskbar-flat rad-base flex items-center justify-center px-2 gap-1 z-10">
+            <div id="tb-apps-segment" class="taskbar-segment tb-reveal-visible pointer-events-auto taskbar-flat rad-base flex items-center justify-center z-10">
                 
                 <button id="tb-start" onclick="window.toggleStartMenu(event)" class="taskbar-btn w-[44px] h-[44px] flex items-center justify-center rad-base group shrink-0 cursor-default focus:outline-none">
                   <div class="start-logo-glow"></div>
                   <div class="start-logo-masked pointer-events-none relative z-10"></div>
                 </button>
 
+                <!-- TASKBAR SEARCH BUTTON (HIDDEN BY DEFAULT) -->
+                <div id="tb-search-btn" onclick="window.openSearchFlyout(event)" class="taskbar-btn hidden h-[44px] items-center rad-base shrink-0 cursor-text group focus:outline-none">
+                  <div class="w-[24px] h-[24px] pointer-events-none shrink-0 search-icon-masked" draggable="false"></div>
+                  <input type="text" id="tb-search-input" class="tb-search-text border-none outline-none w-full placeholder-mica-contrast" placeholder="Search apps, settings..." onkeydown="window.handleSearch(event)" oninput="window.handleSearchInput(event)" autocomplete="off">
+                </div>
+
                 <!-- TASK VIEW BUTTON -->
-                <button onclick="window.toggleTaskView(event)" class="taskbar-btn w-[44px] h-[44px] flex items-center justify-center rad-base shrink-0 cursor-default group focus:outline-none">
-                  <img src="https://img.icons8.com/?size=100&id=tMgGl6VfxCnN&format=png&color=000000" class="w-[24px] h-[24px] pointer-events-none transition-transform duration-300 group-hover:scale-105" draggable="false">
+                <button id="tb-taskview-btn" onclick="window.toggleTaskView(event)" class="taskbar-btn w-[44px] h-[44px] flex items-center justify-center rad-base shrink-0 cursor-default group focus:outline-none">
+                  <img src="https://img.icons8.com/?size=100&id=tMgGl6VfxCnN&format=png&color=000000" class="w-[24px] h-[24px] pointer-events-none transition-transform duration-300" draggable="false">
                 </button>
 
-                <button onclick="window.openSettings(event)" class="taskbar-btn w-[44px] h-[44px] flex items-center justify-center rad-base shrink-0 cursor-default group focus:outline-none">
-                  <img src="https://img.icons8.com/?size=100&id=73FgXcRF4HNx&format=png&color=000000" class="w-[24px] h-[24px] pointer-events-none transition-transform duration-300 group-hover:scale-105" draggable="false">
+                <!-- SETTINGS BUTTON -->
+                <button id="tb-settings-btn" onclick="window.toggleSettings(event)" class="taskbar-btn app-expandable h-[44px] flex items-center rad-base shrink-0 cursor-default group focus:outline-none">
+                  <img src="https://img.icons8.com/?size=100&id=73FgXcRF4HNx&format=png&color=000000" class="w-[24px] h-[24px] pointer-events-none transition-transform duration-300 shrink-0" draggable="false">
+                  <span class="tb-app-text">Settings</span>
                 </button>
 
             </div>
 
-            <div id="tb-segment-tray" class="taskbar-segment tb-reveal-visible pointer-events-auto h-[56px] taskbar-flat rad-base flex items-center px-2 shrink-0 justify-self-end">
+            <div id="tb-segment-tray" class="taskbar-segment tb-reveal-visible pointer-events-auto taskbar-flat rad-base flex items-center justify-center shrink-0">
                 
                 <button class="taskbar-btn flex items-center justify-center w-[24px] h-[42px] rad-base cursor-default focus:outline-none">
                     <i class="ph-bold ph-caret-up text-[14px] text-mica-contrast"></i>
@@ -1084,18 +1453,35 @@
     window.showTaskbar = showTaskbar;
     window.hideTaskbar = hideTaskbar;
     window.setTaskbarLayout = setTaskbarLayout;
+    window.setTaskbarPosition = setTaskbarPosition;
+    window.setSearchLayout = setSearchLayout;
     window.toggleCalendar = toggleCalendar;
     window.changeMonth = changeMonth;
     window.selectDate = selectDate;
+    
+    // App Logic Exports
     window.openSettings = openSettings;
     window.closeSettings = closeSettings;
+    window.minimizeSettings = minimizeSettings;
+    window.toggleSettings = toggleSettings;
+    window.switchSettingsTab = switchSettingsTab;
+
     window.openAbout = openAbout;
     window.closeAbout = closeAbout;
-    window.switchSettingsTab = switchSettingsTab;
+    window.minimizeAbout = minimizeAbout;
+    window.toggleAbout = toggleAbout;
+
     window.handleAppClick = handleAppClick;
     window.openSearchFlyout = openSearchFlyout;
     window.closeSearchFlyout = closeSearchFlyout;
     window.handleSearchInput = handleSearchInput;
+    window.toggleAutoColor = toggleAutoColor;
+    
+    // Quick Settings Logic Exports
+    window.toggleNightLightSlider = toggleNightLightSlider;
+    window.toggleNightLightState = toggleNightLightState;
+    
+    window.saveAccountDetails = saveAccountDetails;
 
     let isStartOpen = false;
     let isTaskbarVisible = true;
@@ -1109,6 +1495,22 @@
     
     // Layout State
     let currentTaskbarLayout = 'default';
+    let currentSearchLayout = 'top';
+    let currentTaskbarPosition = 'bottom';
+    let isAutoColorEnabled = false;
+
+    // App States
+    let isSettingsOpen = false;
+    let isSettingsMinimized = false;
+    let isAboutOpen = false;
+    let isAboutMinimized = false;
+    
+    // Account States
+    let currentUsername = "Administrator";
+    let currentPin = "";
+
+    const defaultWallpaper = 'https://4kwallpapers.com/images/wallpapers/windows-11-forest-landscape-scenery-sunrise-stock-day-light-2880x1800-5665.jpg';
+    let recentWallpapers = [defaultWallpaper];
 
     // --- High-Quality Wallpaper Storage (IndexedDB) ---
     const dbName = "Win12DB";
@@ -1138,8 +1540,13 @@
                 const file = e.target.result;
                 if (file) {
                     const url = URL.createObjectURL(file);
-                    document.documentElement.style.setProperty('--current-wallpaper', `url('${url}')`);
+                    window.setWallpaper(url); 
+                } else {
+                    window.setWallpaper(recentWallpapers[0] || defaultWallpaper);
                 }
+            };
+            request.onerror = () => {
+                window.setWallpaper(recentWallpapers[0] || defaultWallpaper);
             };
         });
     }
@@ -1152,7 +1559,13 @@
             micaColorRgb: document.documentElement.style.getPropertyValue('--mica-color-rgb'),
             micaAlpha: document.documentElement.style.getPropertyValue('--mica-base-alpha'),
             contrast: document.documentElement.style.getPropertyValue('--mica-contrast'),
-            taskbarLayout: currentTaskbarLayout
+            taskbarLayout: currentTaskbarLayout,
+            taskbarPosition: currentTaskbarPosition,
+            searchLayout: currentSearchLayout,
+            autoColor: isAutoColorEnabled,
+            recentWallpapers: recentWallpapers.filter(u => !u.startsWith('blob:')), 
+            username: currentUsername,
+            pin: currentPin
         };
         try {
             localStorage.setItem('win12_settings', JSON.stringify(settings));
@@ -1169,7 +1582,12 @@
                 if(settings.accent) document.documentElement.style.setProperty('--sys-accent', settings.accent);
                 if(settings.accentRgb) document.documentElement.style.setProperty('--sys-accent-rgb', settings.accentRgb);
                 if(settings.micaColorRgb) document.documentElement.style.setProperty('--mica-color-rgb', settings.micaColorRgb);
-                if(settings.contrast) document.documentElement.style.setProperty('--mica-contrast', settings.contrast);
+                if(settings.contrast) {
+                    document.documentElement.style.setProperty('--mica-contrast', settings.contrast);
+                    const isLightMode = settings.contrast === '#0f172a';
+                    const iconFilter = isLightMode ? 'brightness(0) opacity(0.8)' : 'brightness(0) invert(1) opacity(0.9)';
+                    document.documentElement.style.setProperty('--icon-filter', iconFilter);
+                }
                 
                 if(settings.micaAlpha) {
                     document.documentElement.style.setProperty('--mica-base-alpha', settings.micaAlpha);
@@ -1194,10 +1612,29 @@
                 }
 
                 if(settings.taskbarLayout) {
-                    const sel = document.getElementById('layout-select');
-                    if(sel) sel.value = settings.taskbarLayout;
                     currentTaskbarLayout = settings.taskbarLayout;
                 }
+                
+                if(settings.taskbarPosition) {
+                    currentTaskbarPosition = settings.taskbarPosition;
+                }
+
+                if(settings.searchLayout) {
+                    setSearchLayout(settings.searchLayout);
+                }
+
+                if(settings.autoColor !== undefined) {
+                    isAutoColorEnabled = settings.autoColor;
+                    syncAutoColorUI();
+                }
+
+                if(settings.recentWallpapers && settings.recentWallpapers.length > 0) {
+                    recentWallpapers = settings.recentWallpapers;
+                }
+                
+                if(settings.username) currentUsername = settings.username;
+                if(settings.pin !== undefined) currentPin = settings.pin;
+
             } catch(e) {
                 console.error("Failed to parse local storage settings", e);
             }
@@ -1206,7 +1643,45 @@
         }
 
         setTaskbarLayout(currentTaskbarLayout);
+        setTaskbarPosition(currentTaskbarPosition);
+        updateAccountUI();
         loadWallpaper();
+    }
+    
+    function updateAccountUI() {
+        const el1 = document.getElementById('login-username');
+        const el2 = document.getElementById('settings-sidebar-username');
+        const el3 = document.getElementById('settings-account-name');
+        if(el1) el1.innerText = currentUsername;
+        if(el2) el2.innerText = currentUsername;
+        if(el3) el3.innerText = currentUsername;
+    }
+
+    function saveAccountDetails() {
+        const newName = document.getElementById('input-new-username').value.trim();
+        const newPin = document.getElementById('input-new-pin').value.trim();
+        
+        if (newName) currentUsername = newName;
+        if (newPin) currentPin = newPin;
+        
+        updateAccountUI();
+        saveSettings();
+        
+        document.getElementById('input-new-username').value = '';
+        document.getElementById('input-new-pin').value = '';
+        
+        const btn = document.getElementById('btn-save-account');
+        if (btn) {
+            const originalText = btn.innerText;
+            btn.innerText = "Saved!";
+            btn.classList.add('bg-[#10b981]', 'border-[#10b981]');
+            btn.classList.remove('bg-sys-accent', 'border-white/10');
+            setTimeout(() => {
+                btn.innerText = originalText;
+                btn.classList.remove('bg-[#10b981]', 'border-[#10b981]');
+                btn.classList.add('bg-sys-accent', 'border-white/10');
+            }, 2000);
+        }
     }
 
     function rgbStrToHex(rgbStr) {
@@ -1215,7 +1690,7 @@
         return "#" + (1 << 24 | arr[0] << 16 | arr[1] << 8 | arr[2]).toString(16).slice(1);
     }
 
-    // --- Taskbar Configuration Engine ---
+    // --- Taskbar Configuration & Edge Adaptation Engine ---
     function updateTaskbarVisibility() {
         const wrapper = document.getElementById('taskbar-wrapper');
         if (!wrapper) return;
@@ -1229,33 +1704,170 @@
         }
     }
 
+    function updateFlyoutPositions() {
+        const sm = document.getElementById('start-menu-container');
+        const qs = document.getElementById('quick-settings-flyout');
+        const cal = document.getElementById('calendar-flyout');
+        const search = document.getElementById('search-flyout');
+
+        const removeClasses = (el) => {
+            if(!el) return;
+            el.classList.remove(
+                'bottom-[80px]', 'top-[80px]', 'left-[80px]', 'right-[80px]',
+                'bottom-[72px]', 'top-[72px]', 'left-[72px]', 'right-[72px]',
+                'left-1/2', '-translate-x-1/2', 'right-2', 'left-2', 'bottom-2', 'top-2',
+                'top-1/2', '-translate-y-1/2', 'flex-row', 'flex-row-reverse'
+            );
+        };
+
+        removeClasses(sm);
+        removeClasses(qs);
+        removeClasses(cal);
+        removeClasses(search);
+
+        const root = document.documentElement;
+
+        if (currentTaskbarPosition === 'bottom') {
+            root.style.setProperty('--flyout-x', '0px'); root.style.setProperty('--flyout-y', '30px');
+            root.style.setProperty('--step-x', '0px'); root.style.setProperty('--step-y', '20px');
+            root.style.setProperty('--tb-hide-x', '0px'); root.style.setProperty('--tb-hide-y', '52px');
+            root.style.setProperty('--tb-peek-x', '0px'); root.style.setProperty('--tb-peek-y', '46px');
+            
+            if(sm) sm.classList.add('bottom-[80px]', 'left-1/2', '-translate-x-1/2', 'flex-row');
+            if(qs) qs.classList.add('bottom-[80px]', 'right-2');
+            if(cal) cal.classList.add('bottom-[80px]', 'right-2');
+            if(search) search.classList.add(currentSearchLayout === 'top' ? 'top-[72px]' : 'bottom-[80px]', 'left-1/2', '-translate-x-1/2');
+        }
+        else if (currentTaskbarPosition === 'top') {
+            root.style.setProperty('--flyout-x', '0px'); root.style.setProperty('--flyout-y', '-30px');
+            root.style.setProperty('--step-x', '0px'); root.style.setProperty('--step-y', '-20px');
+            root.style.setProperty('--tb-hide-x', '0px'); root.style.setProperty('--tb-hide-y', '-52px');
+            root.style.setProperty('--tb-peek-x', '0px'); root.style.setProperty('--tb-peek-y', '-46px');
+
+            if(sm) sm.classList.add('top-[80px]', 'left-1/2', '-translate-x-1/2', 'flex-row');
+            if(qs) qs.classList.add('top-[80px]', 'right-2');
+            if(cal) cal.classList.add('top-[80px]', 'right-2');
+            if(search) search.classList.add(currentSearchLayout === 'top' ? 'top-[72px]' : 'top-[80px]', 'left-1/2', '-translate-x-1/2');
+        }
+        else if (currentTaskbarPosition === 'left') {
+            root.style.setProperty('--flyout-x', '-30px'); root.style.setProperty('--flyout-y', '0px');
+            root.style.setProperty('--step-x', '-20px'); root.style.setProperty('--step-y', '0px');
+            root.style.setProperty('--tb-hide-x', '-52px'); root.style.setProperty('--tb-hide-y', '0px');
+            root.style.setProperty('--tb-peek-x', '-46px'); root.style.setProperty('--tb-peek-y', '0px');
+
+            if(sm) sm.classList.add('left-[80px]', 'top-1/2', '-translate-y-1/2', 'flex-row');
+            if(qs) qs.classList.add('bottom-2', 'left-[80px]');
+            if(cal) cal.classList.add('bottom-2', 'left-[80px]');
+            if(search) search.classList.add(currentSearchLayout === 'top' ? 'top-[72px]' : 'left-[80px]', currentSearchLayout === 'top' ? 'left-1/2' : 'top-1/2', currentSearchLayout === 'top' ? '-translate-x-1/2' : '-translate-y-1/2');
+        }
+        else if (currentTaskbarPosition === 'right') {
+            root.style.setProperty('--flyout-x', '30px'); root.style.setProperty('--flyout-y', '0px');
+            root.style.setProperty('--step-x', '20px'); root.style.setProperty('--step-y', '0px');
+            root.style.setProperty('--tb-hide-x', '52px'); root.style.setProperty('--tb-hide-y', '0px');
+            root.style.setProperty('--tb-peek-x', '46px'); root.style.setProperty('--tb-peek-y', '0px');
+
+            if(sm) sm.classList.add('right-[80px]', 'top-1/2', '-translate-y-1/2', 'flex-row-reverse');
+            if(qs) qs.classList.add('bottom-2', 'right-[80px]');
+            if(cal) cal.classList.add('bottom-2', 'right-[80px]');
+            if(search) search.classList.add(currentSearchLayout === 'top' ? 'top-[72px]' : 'right-[80px]', currentSearchLayout === 'top' ? 'left-1/2' : 'top-1/2', currentSearchLayout === 'top' ? '-translate-x-1/2' : '-translate-y-1/2');
+        }
+    }
+
+    function setTaskbarPosition(pos) {
+        currentTaskbarPosition = pos;
+        const wrapper = document.getElementById('taskbar-wrapper');
+        if (wrapper) wrapper.setAttribute('data-pos', pos);
+        
+        ['bottom', 'top', 'left', 'right'].forEach(p => {
+            const btn = document.getElementById(`btn-edge-${p}`);
+            if (btn) {
+                if (p === pos) {
+                    btn.className = "p-2.5 rad-base flex flex-col items-center gap-3 transition-all active:scale-95 bg-[rgba(var(--sys-accent-rgb),0.15)] border border-sys-accent/50 group hover:bg-[rgba(var(--sys-accent-rgb),0.25)]";
+                } else {
+                    btn.className = "theme-bg p-2.5 rad-base flex flex-col items-center gap-3 transition-all active:scale-95 border border-transparent hover:bg-[rgba(255,255,255,0.1)] group";
+                }
+            }
+        });
+
+        updateSearchBarAvoidance();
+        updateFlyoutPositions();
+        
+        if(isStartOpen) toggleStartMenu();
+        if(isCalOpen) toggleCalendar();
+        if(isQsOpen) toggleQuickSettings();
+        if(isSearchOpen) closeSearchFlyout();
+        
+        saveSettings();
+    }
+
+    function updateSearchBarAvoidance() {
+        const searchBar = document.getElementById('desktop-search-bar');
+        if (!searchBar) return;
+        
+        if (currentSearchLayout === 'top' && currentTaskbarPosition === 'top') {
+            searchBar.style.top = '80px';
+        } else {
+            searchBar.style.top = '16px'; 
+        }
+    }
+
     function setTaskbarLayout(layout) {
         currentTaskbarLayout = layout;
         const wrapper = document.getElementById('taskbar-wrapper');
-        const appsSeg = document.getElementById('tb-apps-segment');
-        const aboutSeg = document.getElementById('tb-segment-about');
-        const traySeg = document.getElementById('tb-segment-tray');
-        
-        // Reset base wrapper classes
-        wrapper.className = 'absolute bottom-0 z-[9999] flex items-center transition-all duration-500 w-full left-0';
-        appsSeg.className = 'taskbar-segment tb-reveal-visible pointer-events-auto h-[56px] taskbar-flat rad-base flex items-center justify-center px-2 gap-1 z-10';
-        
-        // Re-enable individual flat backgrounds for children
-        document.querySelectorAll('.taskbar-segment').forEach(seg => {
-            seg.classList.remove('taskbar-flat-disabled');
-        });
+        const btnDef = document.getElementById('btn-layout-default');
+        const btnCls = document.getElementById('btn-layout-classic');
 
-        if (layout === 'default') {
-            wrapper.classList.add('px-2', 'pb-2', 'pt-2', 'justify-between');
-            appsSeg.classList.add('flex-1', 'mx-2'); // Stretches middle
-        } else if (layout === 'classic') {
-            wrapper.classList.add('px-4', 'pb-0', 'pt-0', 'justify-between', 'taskbar-flat');
-            appsSeg.classList.add('flex-1', 'mx-2', 'taskbar-flat-disabled');
-            aboutSeg.classList.add('taskbar-flat-disabled');
-            traySeg.classList.add('taskbar-flat-disabled');
+        if(btnDef && btnCls) {
+            if(layout === 'default') {
+                btnDef.className = "p-4 rounded-lg flex flex-col items-center gap-4 transition-all active:scale-95 bg-[rgba(var(--sys-accent-rgb),0.15)] hover:bg-[rgba(var(--sys-accent-rgb),0.25)] border border-sys-accent/40";
+                btnCls.className = "bg-white/[0.03] p-4 rounded-lg flex flex-col items-center gap-4 hover:bg-white/[0.08] transition-all active:scale-95 border border-white/10";
+            } else {
+                btnDef.className = "bg-white/[0.03] p-4 rounded-lg flex flex-col items-center gap-4 hover:bg-white/[0.08] transition-all active:scale-95 border border-white/10";
+                btnCls.className = "p-4 rounded-lg flex flex-col items-center gap-4 transition-all active:scale-95 bg-[rgba(var(--sys-accent-rgb),0.15)] hover:bg-[rgba(var(--sys-accent-rgb),0.25)] border border-sys-accent/40";
+            }
+        }
+        
+        if (wrapper) {
+            if (layout === 'default') {
+                wrapper.classList.remove('layout-classic');
+                wrapper.classList.add('layout-default');
+            } else {
+                wrapper.classList.remove('layout-default');
+                wrapper.classList.add('layout-classic');
+            }
         }
 
         updateTaskbarVisibility();
+        saveSettings();
+    }
+
+    function setSearchLayout(layout) {
+        currentSearchLayout = layout;
+        const topBar = document.getElementById('desktop-search-bar');
+        const tbBtn = document.getElementById('tb-search-btn');
+        const btnTop = document.getElementById('btn-search-top');
+        const btnTb = document.getElementById('btn-search-taskbar');
+
+        if(btnTop && btnTb) {
+            if(layout === 'top') {
+                btnTop.className = "p-4 rounded-lg flex flex-col items-center gap-4 transition-all active:scale-95 bg-[rgba(var(--sys-accent-rgb),0.15)] hover:bg-[rgba(var(--sys-accent-rgb),0.25)] border border-sys-accent/40";
+                btnTb.className = "bg-white/[0.03] p-4 rounded-lg flex flex-col items-center gap-4 hover:bg-white/[0.08] transition-all active:scale-95 border border-white/10";
+            } else {
+                btnTop.className = "bg-white/[0.03] p-4 rounded-lg flex flex-col items-center gap-4 hover:bg-white/[0.08] transition-all active:scale-95 border border-white/10";
+                btnTb.className = "p-4 rounded-lg flex flex-col items-center gap-4 transition-all active:scale-95 bg-[rgba(var(--sys-accent-rgb),0.15)] hover:bg-[rgba(var(--sys-accent-rgb),0.25)] border border-sys-accent/40";
+            }
+        }
+
+        if(layout === 'top') {
+            if(topBar) { topBar.classList.remove('hidden'); topBar.classList.add('flex'); }
+            if(tbBtn) { tbBtn.classList.add('hidden'); tbBtn.classList.remove('flex'); }
+        } else {
+            if(topBar) { topBar.classList.add('hidden'); topBar.classList.remove('flex'); }
+            if(tbBtn) { tbBtn.classList.remove('hidden'); tbBtn.classList.add('flex'); }
+        }
+        
+        updateSearchBarAvoidance();
+        updateFlyoutPositions();
         saveSettings();
     }
 
@@ -1269,14 +1881,17 @@
         if(isSearchOpen) closeSearchFlyout();
         
         const osRoot = document.getElementById('os-root');
+        const tbBtn = document.getElementById('tb-taskview-btn');
         if (!osRoot) return;
 
         isTaskViewOpen = !isTaskViewOpen;
         
         if(isTaskViewOpen) {
             osRoot.classList.add('task-view-active');
+            if (tbBtn) tbBtn.classList.add('app-open');
         } else {
             osRoot.classList.remove('task-view-active');
+            if (tbBtn) tbBtn.classList.remove('app-open');
         }
     }
 
@@ -1326,7 +1941,6 @@
             }
         }
         
-        // Compensate for the native -50% CSS transform
         const rect = currentDraggingApp.getBoundingClientRect();
         dragX = rect.left + (rect.width/2) - (window.innerWidth/2);
         dragY = rect.top + (rect.height/2) - (window.innerHeight/2);
@@ -1356,8 +1970,21 @@
         }
     }
 
-    // App Toggles
+    // --- App Lifecycle Toggles ---
     const settingsApp = document.getElementById('app-settings');
+    const aboutApp = document.getElementById('app-about');
+
+    function toggleSettings(e) {
+        if(e) e.stopPropagation();
+        if (isSettingsMinimized) {
+            openSettings();
+        } else if (isSettingsOpen) {
+            minimizeSettings();
+        } else {
+            openSettings();
+        }
+    }
+
     function openSettings(e) {
         if(e) e.stopPropagation();
         if(isStartOpen) toggleStartMenu();
@@ -1366,14 +1993,50 @@
         if(isTaskViewOpen) toggleTaskView();
         if(isSearchOpen) closeSearchFlyout();
         
+        const btn = document.getElementById('tb-settings-btn');
+        if(btn) {
+            btn.classList.add('app-open');
+            btn.classList.remove('app-minimized');
+        }
+
         if (settingsApp) {
             document.querySelectorAll('.app-window').forEach(app => app.style.zIndex = '15000');
             settingsApp.style.zIndex = '16000';
             settingsApp.classList.remove('app-window-hidden');
             settingsApp.classList.add('app-window-visible');
         }
+        
+        isSettingsOpen = true;
+        isSettingsMinimized = false;
     }
-    function closeSettings() {
+
+    function minimizeSettings(e) {
+        if(e) e.stopPropagation();
+        
+        const btn = document.getElementById('tb-settings-btn');
+        if(btn) {
+            btn.classList.add('app-minimized');
+            btn.classList.remove('app-open');
+        }
+
+        if (settingsApp) {
+            settingsApp.classList.remove('app-window-visible');
+            settingsApp.classList.add('app-window-hidden');
+        }
+        
+        isSettingsOpen = false;
+        isSettingsMinimized = true;
+    }
+
+    function closeSettings(e) {
+        if(e) e.stopPropagation();
+        
+        const btn = document.getElementById('tb-settings-btn');
+        if(btn) {
+            btn.classList.remove('app-open');
+            btn.classList.remove('app-minimized');
+        }
+
         if (settingsApp) {
             settingsApp.classList.remove('app-window-visible');
             settingsApp.classList.add('app-window-hidden');
@@ -1382,9 +2045,22 @@
                 settingsApp.style.setProperty('--drag-y', '0px');
             }, 300);
         }
+        
+        isSettingsOpen = false;
+        isSettingsMinimized = false;
     }
 
-    const aboutApp = document.getElementById('app-about');
+    function toggleAbout(e) {
+        if(e) e.stopPropagation();
+        if (isAboutMinimized) {
+            openAbout();
+        } else if (isAboutOpen) {
+            minimizeAbout();
+        } else {
+            openAbout();
+        }
+    }
+
     function openAbout(e) {
         if(e) e.stopPropagation();
         if(isStartOpen) toggleStartMenu();
@@ -1393,14 +2069,50 @@
         if(isTaskViewOpen) toggleTaskView();
         if(isSearchOpen) closeSearchFlyout();
         
+        const btn = document.getElementById('tb-app-btn-about');
+        if(btn) {
+            btn.classList.add('app-open');
+            btn.classList.remove('app-minimized');
+        }
+
         if (aboutApp) {
             document.querySelectorAll('.app-window').forEach(app => app.style.zIndex = '15000');
             aboutApp.style.zIndex = '16000';
             aboutApp.classList.remove('app-window-hidden');
             aboutApp.classList.add('app-window-visible');
         }
+        
+        isAboutOpen = true;
+        isAboutMinimized = false;
     }
-    function closeAbout() {
+
+    function minimizeAbout(e) {
+        if(e) e.stopPropagation();
+        
+        const btn = document.getElementById('tb-app-btn-about');
+        if(btn) {
+            btn.classList.add('app-minimized');
+            btn.classList.remove('app-open');
+        }
+
+        if (aboutApp) {
+            aboutApp.classList.remove('app-window-visible');
+            aboutApp.classList.add('app-window-hidden');
+        }
+        
+        isAboutOpen = false;
+        isAboutMinimized = true;
+    }
+
+    function closeAbout(e) {
+        if(e) e.stopPropagation();
+        
+        const btn = document.getElementById('tb-app-btn-about');
+        if(btn) {
+            btn.classList.remove('app-open');
+            btn.classList.remove('app-minimized');
+        }
+
         if (aboutApp) {
             aboutApp.classList.remove('app-window-visible');
             aboutApp.classList.add('app-window-hidden');
@@ -1409,24 +2121,32 @@
                 aboutApp.style.setProperty('--drag-y', '0px');
             }, 300);
         }
+        
+        isAboutOpen = false;
+        isAboutMinimized = false;
     }
 
     function switchSettingsTab(tabName) {
         document.querySelectorAll('#app-settings .nav-icon').forEach(el => el.classList.remove('text-sys-accent'));
-        document.querySelectorAll('#nav-system, #nav-personalization').forEach(el => {
-            el.classList.remove('font-bold', 'text-mica-contrast', 'bg-white/10', 'border-sys-accent');
-            el.classList.add('font-medium', 'opacity-70', 'border-transparent');
+        document.querySelectorAll('#nav-system, #nav-personalization, #nav-accounts').forEach(el => {
+            el.classList.remove('font-bold', 'text-mica-contrast', 'bg-white/10');
+            el.classList.add('font-medium', 'opacity-70');
+            const pill = el.querySelector('.nav-active-pill');
+            if(pill) pill.style.opacity = '0';
         });
 
         const activeNav = document.getElementById(`nav-${tabName}`);
         if(activeNav) {
-            activeNav.classList.remove('font-medium', 'opacity-70', 'border-transparent');
-            activeNav.classList.add('font-bold', 'text-mica-contrast', 'bg-white/10', 'border-sys-accent');
+            activeNav.classList.remove('font-medium', 'opacity-70');
+            activeNav.classList.add('font-bold', 'text-mica-contrast', 'bg-white/10');
             activeNav.querySelector('.nav-icon').classList.add('text-sys-accent');
+            const pill = activeNav.querySelector('.nav-active-pill');
+            if(pill) pill.style.opacity = '1';
         }
 
         document.getElementById('pane-system').classList.add('hidden');
         document.getElementById('pane-personalization').classList.add('hidden');
+        document.getElementById('pane-accounts').classList.add('hidden');
         
         const activePane = document.getElementById(`pane-${tabName}`);
         if(activePane) activePane.classList.remove('hidden');
@@ -1442,7 +2162,8 @@
         { id: 'quicksettings', title: 'Quick Settings', desc: 'Brightness & Display', icon: 'ph-sliders-horizontal', action: () => { toggleQuickSettings(); closeSearchFlyout(); } }
     ];
 
-    function openSearchFlyout() {
+    function openSearchFlyout(e) {
+        if(e) e.stopPropagation();
         if(isTaskViewOpen) return;
         isSearchOpen = true;
         
@@ -1450,29 +2171,57 @@
         if (isCalOpen) toggleCalendar();
         if (isQsOpen) toggleQuickSettings();
         
+        const tbBtn = document.getElementById('tb-search-btn');
+        if(tbBtn) tbBtn.classList.add('app-open');
+        
         const flyout = document.getElementById('search-flyout');
         if(flyout) {
             flyout.classList.remove('flyout-hidden');
             flyout.classList.add('flyout-visible');
         }
+        
+        setTimeout(() => {
+            if (currentSearchLayout === 'taskbar') {
+                const tbInput = document.getElementById('tb-search-input');
+                if(tbInput) tbInput.focus();
+            } else {
+                const topInput = document.getElementById('top-search-input');
+                if(topInput) topInput.focus();
+            }
+        }, 50);
     }
 
     function closeSearchFlyout() {
         isSearchOpen = false;
+        
+        const tbBtn = document.getElementById('tb-search-btn');
+        if(tbBtn) tbBtn.classList.remove('app-open');
+
         const flyout = document.getElementById('search-flyout');
-        const input = document.getElementById('top-search-input');
+        const topInput = document.getElementById('top-search-input');
+        const tbInput = document.getElementById('tb-search-input');
+
         if(flyout) {
             flyout.classList.remove('flyout-visible');
             flyout.classList.add('flyout-hidden');
         }
-        if(input) {
-            input.value = '';
-            handleSearchInput({target: input}); // reset back to default view
+        if(topInput) {
+            topInput.value = '';
+            handleSearchInput({target: topInput}); 
+        }
+        if(tbInput) {
+            tbInput.value = '';
         }
     }
 
     function handleSearchInput(e) {
         const val = e.target.value.trim().toLowerCase();
+        const topInput = document.getElementById('top-search-input');
+        const tbInput = document.getElementById('tb-search-input');
+        
+        if (topInput && topInput !== e.target) topInput.value = e.target.value;
+        if (tbInput && tbInput !== e.target) tbInput.value = e.target.value;
+
         const defaultView = document.getElementById('search-default-view');
         const resultsView = document.getElementById('search-results-view');
         const list = document.getElementById('local-search-list');
@@ -1493,13 +2242,13 @@
                     
                     el.className = `flex items-center p-2 rad-base cursor-pointer group transition-colors active:scale-[0.99] ${
                         isBestMatch 
-                        ? 'bg-[rgba(var(--sys-accent-rgb),0.1)] border-l-[3px] border-l-sys-accent border-y border-r border-white/5' 
-                        : 'hover:bg-[rgba(255,255,255,0.06)] border-l-[3px] border-transparent border-y border-r border-transparent'
+                        ? 'bg-[rgba(var(--sys-accent-rgb),0.1)]' 
+                        : 'hover:bg-[rgba(255,255,255,0.06)]'
                     }`;
                     
                     el.onclick = match.action;
                     el.innerHTML = `
-                        <div class="w-9 h-9 flex items-center justify-center text-[22px] ${isBestMatch ? 'text-sys-accent' : 'text-mica-contrast opacity-90'} transition-transform group-hover:scale-105 ml-1 drop-shadow-sm">
+                        <div class="w-9 h-9 flex items-center justify-center text-[22px] ${isBestMatch ? 'text-sys-accent' : 'text-mica-contrast opacity-90'} transition-transform group-hover:scale-105 ml-1">
                             <i class="ph-duotone ${match.icon}"></i>
                         </div>
                         <div class="flex flex-col flex-1 ml-3">
@@ -1534,7 +2283,7 @@
                 item.title.toLowerCase().includes(val) || item.desc.toLowerCase().includes(val)
             );
             if (matches.length > 0) {
-                matches[0].action(); // Open the best match on Enter
+                matches[0].action(); 
             }
         }
     }
@@ -1548,15 +2297,191 @@
         let b = bigint & 255;
         return `${r}, ${g}, ${b}`;
     }
+    
+    // --- Auto Color System ---
+    function toggleAutoColor() {
+        isAutoColorEnabled = !isAutoColorEnabled;
+        syncAutoColorUI();
+        if(isAutoColorEnabled) {
+            const bgUrl = document.documentElement.style.getPropertyValue('--current-wallpaper') || `url('${defaultWallpaper}')`;
+            extractColorFromWallpaper(bgUrl);
+        }
+        saveSettings();
+    }
+
+    function syncAutoColorUI() {
+        const toggleMain = document.getElementById('toggle-auto-color-main');
+        const knobMain = document.getElementById('knob-auto-color-main');
+        const toggleSm = document.getElementById('toggle-auto-color-sm');
+        
+        if(isAutoColorEnabled) {
+            if(toggleMain) { toggleMain.classList.add('bg-sys-accent'); toggleMain.classList.remove('bg-white/20'); }
+            if(knobMain) { knobMain.style.transform = 'translateX(20px)'; }
+            if(toggleSm) { toggleSm.classList.add('opacity-100'); toggleSm.classList.remove('opacity-70'); }
+        } else {
+            if(toggleMain) { toggleMain.classList.remove('bg-sys-accent'); toggleMain.classList.add('bg-white/20'); }
+            if(knobMain) { knobMain.style.transform = 'translateX(0px)'; }
+            if(toggleSm) { toggleSm.classList.remove('opacity-100'); toggleSm.classList.add('opacity-70'); }
+        }
+    }
+
+    function applyAutoColorValues(ar, ag, ab, gr, gg, gb) {
+        const hexAccent = "#" + (1 << 24 | ar << 16 | ag << 8 | ab).toString(16).slice(1);
+        const hexGlass = "#" + (1 << 24 | gr << 16 | gg << 8 | gb).toString(16).slice(1);
+        
+        document.documentElement.style.setProperty('--sys-accent', hexAccent);
+        document.documentElement.style.setProperty('--sys-accent-rgb', `${ar}, ${ag}, ${ab}`);
+        document.documentElement.style.setProperty('--mica-color-rgb', `${gr}, ${gg}, ${gb}`);
+        
+        const luminance = 0.299 * gr + 0.587 * gg + 0.114 * gb;
+        const isLightMode = luminance > 140;
+        
+        const contrastColor = isLightMode ? '#0f172a' : '#ffffff';
+        const iconFilter = isLightMode ? 'brightness(0) opacity(0.8)' : 'brightness(0) invert(1) opacity(0.9)';
+        
+        document.documentElement.style.setProperty('--mica-contrast', contrastColor);
+        document.documentElement.style.setProperty('--icon-filter', iconFilter);
+        
+        const cpm = document.getElementById('custom-color-picker-main');
+        const cps = document.getElementById('custom-color-picker-sm');
+        if(cpm) cpm.value = hexAccent;
+        if(cps) cps.value = hexAccent;
+        
+        const mcm = document.getElementById('mica-color-picker-main');
+        const mcs = document.getElementById('mica-color-picker-sm');
+        if(mcm) mcm.value = hexGlass;
+        if(mcs) mcs.value = hexGlass;
+        
+        const bSlider = document.getElementById('brightness-slider');
+        if(bSlider) updateBrightness(bSlider);
+        const nlSlider = document.getElementById('nl-slider');
+        if(nlSlider) updateNightLight(nlSlider);
+        
+        saveSettings();
+    }
+
+    function extractColorFromWallpaper(urlStr) {
+        const cleanUrl = urlStr.replace(/^url\(['"]?/, '').replace(/['"]?\)$/, '');
+        
+        const img = new Image();
+        img.crossOrigin = "Anonymous"; 
+        
+        img.onload = () => {
+            const canvas = document.createElement('canvas');
+            const size = 64;
+            canvas.width = size; 
+            canvas.height = size;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, size, size);
+            
+            try {
+                const data = ctx.getImageData(0, 0, size, size).data;
+                
+                let maxAccentScore = -1;
+                let bestAccent = { r: 0, g: 110, b: 255 };
+                
+                const buckets = {};
+                let maxBucketCount = 0;
+                let dominantColor = { r: 0, g: 0, b: 0 };
+                
+                let darkCount = 0;
+                let lightCount = 0;
+                let totalPixels = 0;
+                
+                for(let i=0; i<data.length; i+=16) { 
+                    let r=data[i], g=data[i+1], b=data[i+2], a=data[i+3];
+                    if (a < 128) continue;
+                    totalPixels++;
+                    
+                    let luma = 0.299*r + 0.587*g + 0.114*b;
+                    if (luma < 50) darkCount++; 
+                    if (luma > 200) lightCount++; 
+                    
+                    let minC = Math.min(r, g, b);
+                    let maxC = Math.max(r, g, b);
+                    let chroma = maxC - minC;
+                    
+                    let lightness = (maxC + minC) / 2;
+                    let score = (chroma * 2.5) - Math.abs(lightness - 128);
+
+                    if (score > maxAccentScore) {
+                        maxAccentScore = score;
+                        bestAccent = { r, g, b };
+                    }
+
+                    let qr = r >> 3;
+                    let qg = g >> 3;
+                    let qb = b >> 3;
+                    let key = (qr << 10) | (qg << 5) | qb;
+                    
+                    buckets[key] = (buckets[key] || 0) + 1;
+                    if (buckets[key] > maxBucketCount) {
+                        maxBucketCount = buckets[key];
+                        dominantColor = { r: (qr << 3) + 4, g: (qg << 3) + 4, b: (qb << 3) + 4 };
+                    }
+                }
+                
+                let accR = bestAccent.r, accG = bestAccent.g, accB = bestAccent.b;
+                if (maxAccentScore < 15) { 
+                    accR = dominantColor.r; accG = dominantColor.g; accB = dominantColor.b;
+                }
+                
+                const max = Math.max(accR, accG, accB);
+                if (max > 0 && max < 255) {
+                    const mult = 255 / max;
+                    accR = Math.floor(accR + (accR * mult - accR) * 0.4);
+                    accG = Math.floor(accG + (accG * mult - accG) * 0.4);
+                    accB = Math.floor(accB + (accB * mult - accB) * 0.4);
+                }
+
+                let darkRatio = darkCount / totalPixels;
+                let lightRatio = lightCount / totalPixels;
+
+                if (lightRatio > 0.35) {
+                    accR = Math.floor(accR * 0.85); accG = Math.floor(accG * 0.85); accB = Math.floor(accB * 0.85);
+                }
+                else if (darkRatio > 0.35) {
+                    accR = Math.min(255, Math.floor(accR * 1.3));
+                    accG = Math.min(255, Math.floor(accG * 1.3));
+                    accB = Math.min(255, Math.floor(accB * 1.3));
+                }
+                
+                let glassR = dominantColor.r, glassG = dominantColor.g, glassB = dominantColor.b;
+                let overallLuma = 0.299 * glassR + 0.587 * glassG + 0.114 * glassB;
+                
+                if (lightRatio > 0.35 || (lightRatio > darkRatio && overallLuma > 130)) {
+                    glassR = Math.floor(glassR * 0.15 + 255 * 0.85);
+                    glassG = Math.floor(glassG * 0.15 + 255 * 0.85);
+                    glassB = Math.floor(glassB * 0.15 + 255 * 0.85);
+                } else {
+                    glassR = Math.floor(glassR * 0.15 + 15 * 0.85);
+                    glassG = Math.floor(glassG * 0.15 + 23 * 0.85);
+                    glassB = Math.floor(glassB * 0.15 + 42 * 0.85);
+                }
+                
+                applyAutoColorValues(accR, accG, accB, glassR, glassG, glassB);
+            } catch(e) {
+                console.warn("Canvas CORS error. Falling back to default aesthetic color:", e);
+                applyAutoColorValues(60, 160, 200, 15, 23, 42); 
+            }
+        };
+        
+        img.onerror = () => {
+            console.warn("Image load failed. Falling back to default aesthetic color.");
+            applyAutoColorValues(60, 160, 200, 15, 23, 42); 
+        };
+        
+        img.src = cleanUrl;
+    }
 
     function setCustomOSColor(event) {
+        if(isAutoColorEnabled) toggleAutoColor(); 
         const hexColor = event.target.value;
         const rgbString = hexToRgbString(hexColor);
         const root = document.documentElement;
         root.style.setProperty('--sys-accent', hexColor);
         root.style.setProperty('--sys-accent-rgb', rgbString);
         
-        // Sync sliders directly
         const bSlider = document.getElementById('brightness-slider');
         if(bSlider) updateBrightness(bSlider);
         
@@ -1571,6 +2496,7 @@
     }
 
     function setOSColor(theme) {
+        if(isAutoColorEnabled) toggleAutoColor(); 
         const root = document.documentElement;
         const themes = {
             'blue': { hex: '#006eff', rgb: '0, 110, 255' },
@@ -1584,7 +2510,6 @@
         root.style.setProperty('--sys-accent', t.hex);
         root.style.setProperty('--sys-accent-rgb', t.rgb);
         
-        // Sync sliders
         const bSlider = document.getElementById('brightness-slider');
         if(bSlider) updateBrightness(bSlider);
         
@@ -1595,6 +2520,7 @@
     }
 
     function setCustomMicaColor(event) {
+        if(isAutoColorEnabled) toggleAutoColor(); 
         setMicaColor(event.target.value);
     }
 
@@ -1609,8 +2535,14 @@
 
         const rgb = rgbString.split(',').map(Number);
         const luminance = 0.299 * rgb[0] + 0.587 * rgb[1] + 0.114 * rgb[2];
-        const contrastColor = luminance > 150 ? '#0f172a' : '#ffffff';
+        const isLightMode = luminance > 150;
+        
+        const contrastColor = isLightMode ? '#0f172a' : '#ffffff';
+        const iconFilter = isLightMode ? 'brightness(0) opacity(0.8)' : 'brightness(0) invert(1) opacity(0.9)';
+        
         document.documentElement.style.setProperty('--mica-contrast', contrastColor);
+        document.documentElement.style.setProperty('--icon-filter', iconFilter);
+        
         saveSettings();
     }
 
@@ -1624,24 +2556,25 @@
 
     // --- Slider Engines ---
     function updateNightLight(slider) {
-        const val = slider.value;
+        const val = parseInt(slider.value);
         const valText = document.getElementById('nl-val-text');
-        if (valText) valText.innerText = val + '%';
+        
+        if (valText) valText.innerText = val > 0 ? `On • ${val}%` : 'Off';
         
         const icon = document.getElementById('nl-icon');
-        const bgLayer = document.getElementById('nl-bg-layer');
+        const bgLayer = document.getElementById('nl-main-btn');
 
         if (val > 0) {
-            if (icon) icon.className = 'ph-fill ph-moon text-[28px] transition-colors text-sys-accent';
+            if (icon) icon.className = 'ph-fill ph-moon text-[18px] transition-colors text-sys-accent';
             if (bgLayer) {
-                bgLayer.classList.add('theme-bg-strong');
-                bgLayer.classList.remove('theme-bg');
+                bgLayer.classList.add('theme-bg-strong', 'border-sys-accent/30');
+                bgLayer.classList.remove('theme-bg', 'border-white/5');
             }
         } else {
-            if (icon) icon.className = 'ph-bold ph-moon text-[28px] transition-colors text-mica-contrast opacity-50';
+            if (icon) icon.className = 'ph-bold ph-moon text-[18px] transition-colors text-mica-contrast opacity-50';
             if (bgLayer) {
-                bgLayer.classList.add('theme-bg');
-                bgLayer.classList.remove('theme-bg-strong');
+                bgLayer.classList.add('theme-bg', 'border-white/5');
+                bgLayer.classList.remove('theme-bg-strong', 'border-sys-accent/30');
             }
         }
 
@@ -1650,29 +2583,51 @@
     }
 
     function updateBrightness(slider) {
-        const val = slider.value;
-        const valText = document.getElementById('brightness-val-text');
-        if (valText) valText.innerText = val + '%';
-        
+        const val = parseInt(slider.value);
         const icon = document.getElementById('brightness-icon');
-        const bgLayer = document.getElementById('brightness-bg-layer');
 
         if (val > 0) {
-            if (icon) icon.className = 'ph-fill ph-sun text-[28px] transition-colors text-sys-accent';
-            if (bgLayer) {
-                bgLayer.classList.add('theme-bg-strong');
-                bgLayer.classList.remove('theme-bg');
-            }
+            if (icon) icon.className = 'ph-fill ph-sun text-[18px] transition-colors text-sys-accent';
         } else {
-            if (icon) icon.className = 'ph-bold ph-sun-dim text-[28px] transition-colors text-mica-contrast opacity-50';
-            if (bgLayer) {
-                bgLayer.classList.add('theme-bg');
-                bgLayer.classList.remove('theme-bg-strong');
-            }
+            if (icon) icon.className = 'ph-bold ph-sun-dim text-[18px] transition-colors text-mica-contrast opacity-50';
         }
 
         const overlay = document.getElementById('brightness-overlay');
         if(overlay) overlay.style.opacity = 0.75 - ((val / 100) * 0.75);
+    }
+    
+    let isNlSliderOpen = false;
+    function toggleNightLightSlider(e) {
+        if(e) e.stopPropagation();
+        const container = document.getElementById('nl-slider-container');
+        const caret = document.getElementById('nl-caret');
+        
+        isNlSliderOpen = !isNlSliderOpen;
+        
+        if(isNlSliderOpen) {
+            container.classList.remove('hidden');
+            container.classList.add('flex');
+            if(caret) caret.classList.add('rotate-90');
+        } else {
+            container.classList.add('hidden');
+            container.classList.remove('flex');
+            if(caret) caret.classList.remove('rotate-90');
+        }
+    }
+
+    function toggleNightLightState(e) {
+        if(e) e.stopPropagation();
+        const slider = document.getElementById('nl-slider');
+        if(!slider) return;
+        
+        if(slider.value > 0) {
+            slider.dataset.lastVal = slider.value;
+            slider.value = 0;
+        } else {
+            slider.value = slider.dataset.lastVal || 50;
+        }
+        
+        updateNightLight(slider);
     }
 
     // --- Taskbar Toggle Logic ---
@@ -1746,12 +2701,13 @@
 
         isStartOpen = !isStartOpen;
         
-        // Trigger Start Menu Icon Animation
-        const startLogo = document.querySelector('#tb-start .start-logo-masked');
-        if (startLogo) {
-            startLogo.classList.remove('start-click-run');
-            void startLogo.offsetWidth; // Trigger DOM reflow to restart animation
-            startLogo.classList.add('start-click-run');
+        const startBtn = document.getElementById('tb-start');
+        if (startBtn) {
+            if (isStartOpen) {
+                startBtn.classList.add('start-is-open');
+            } else {
+                startBtn.classList.remove('start-is-open');
+            }
         }
 
         const panels = ['sm-rail', 'sm-apps', 'sm-widgets'];
@@ -1818,7 +2774,7 @@
              agendaContent.innerHTML = `
                 <div class="flex items-stretch gap-3 group/event cursor-pointer active:scale-[0.98] transition-transform">
                   <div class="w-1 rad-base bg-sys-accent opacity-80 group-hover/event:opacity-100 transition-opacity"></div>
-                  <div class="flex-1 theme-bg-hover p-2.5 rad-base transition-colors ring-1 ring-white/5">
+                  <div class="flex-1 theme-bg-hover p-2.5 rad-base transition-colors">
                       <p class="text-[12px] font-bold text-mica-contrast leading-tight">Team Sync</p>
                       <p class="text-[11px] font-medium text-mica-contrast opacity-70 mt-0.5 flex items-center"><i class="ph-fill ph-video-camera mr-1"></i>10:00 AM</p>
                   </div>
@@ -1828,18 +2784,18 @@
             agendaContent.innerHTML = `
                 <div class="flex items-stretch gap-3 group/event cursor-pointer active:scale-[0.98] transition-transform">
                   <div class="w-1 rad-base bg-sys-accent opacity-80 group-hover/event:opacity-100 transition-opacity"></div>
-                  <div class="flex-1 theme-bg-hover p-2.5 rad-base transition-colors ring-1 ring-white/5">
+                  <div class="flex-1 theme-bg-hover p-2.5 rad-base transition-colors">
                       <p class="text-[12px] font-bold text-mica-contrast leading-tight">Focus Session</p>
                       <p class="text-[11px] font-medium text-mica-contrast opacity-70 mt-0.5 flex items-center"><i class="ph-fill ph-clock mr-1"></i>45 min</p>
                   </div>
-                  <button class="w-10 flex-shrink-0 flex items-center justify-center rad-base theme-bg-strong hover:bg-sys-accent hover:text-white text-mica-contrast transition-colors focus:outline-none ring-1 ring-white/5">
+                  <button class="w-10 flex-shrink-0 flex items-center justify-center rad-base theme-bg-strong hover:bg-sys-accent hover:text-white text-mica-contrast transition-colors focus:outline-none">
                       <i class="ph-fill ph-play text-[14px]"></i>
                   </button>
               </div>
             `;
         } else {
              agendaContent.innerHTML = `
-                <div class="flex items-center gap-3 theme-bg-hover p-2.5 rad-base transition-colors cursor-default active:scale-[0.98] ring-1 ring-white/5">
+                <div class="flex items-center gap-3 theme-bg-hover p-2.5 rad-base transition-colors cursor-default active:scale-[0.98]">
                   <div class="w-1 h-10 bg-sys-accent rad-base opacity-30"></div>
                   <div class="flex flex-col">
                       <span class="text-[13px] font-semibold text-mica-contrast">No events scheduled</span>
@@ -1908,15 +2864,62 @@
         }
     }
 
-    function setWallpaper(type) {
-        if (type === 'default') {
-            document.documentElement.style.setProperty('--current-wallpaper', "url('wallpaper.png')");
-            const wpUploadSettings = document.getElementById('wallpaper-upload-settings');
-            const wpUploadStart = document.getElementById('wallpaper-upload-start');
-            if (wpUploadSettings) wpUploadSettings.value = ''; 
-            if (wpUploadStart) wpUploadStart.value = ''; 
-            saveSettings();
-            
+    function renderRecentWallpapers() {
+        const list = document.getElementById('recent-wallpapers-list');
+        if (!list) return;
+        list.innerHTML = '';
+        
+        let currentUrl = document.documentElement.style.getPropertyValue('--current-wallpaper').replace(/^url\(['"]?/, '').replace(/['"]?\)$/, '');
+        if(!currentUrl) currentUrl = defaultWallpaper;
+
+        for(let i = 0; i < 5; i++) {
+            const url = recentWallpapers[i];
+            if (url) {
+                const isActive = currentUrl === url;
+                const btn = document.createElement('button');
+                btn.className = `w-full aspect-video rad-base bg-cover bg-center transition-all active:scale-95 overflow-hidden relative group border border-white/10`;
+                if(isActive) {
+                    btn.classList.add('z-10');
+                    btn.style.boxShadow = '0 0 0 2px var(--sys-accent)'; 
+                    btn.innerHTML = `<div class="absolute bottom-1 right-1 w-4 h-4 bg-sys-accent rad-full flex items-center justify-center"><i class="ph-bold ph-check text-[10px] text-white"></i></div>`;
+                } else {
+                    btn.classList.add('hover:opacity-80');
+                }
+                btn.style.backgroundImage = `url('${url}')`;
+                btn.onclick = () => window.setWallpaper(url);
+                list.appendChild(btn);
+            } else {
+                const placeholder = document.createElement('div');
+                placeholder.className = `w-full aspect-video rad-base bg-black/10 border border-white/5 flex items-center justify-center`;
+                list.appendChild(placeholder);
+            }
+        }
+    }
+
+    function setWallpaper(url) {
+        if (url === 'default') {
+            url = defaultWallpaper;
+        }
+
+        if (typeof url === 'string') {
+            recentWallpapers = recentWallpapers.filter(u => u !== url);
+            recentWallpapers.unshift(url);
+            if (recentWallpapers.length > 5) recentWallpapers.pop();
+        }
+
+        document.documentElement.style.setProperty('--current-wallpaper', `url('${url}')`);
+        
+        const preview1 = document.getElementById('settings-wallpaper-preview');
+        const preview2 = document.getElementById('sm-wallpaper-preview');
+        if(preview1) preview1.style.backgroundImage = `url('${url}')`;
+        if(preview2) preview2.style.backgroundImage = `url('${url}')`;
+        
+        if (isAutoColorEnabled) extractColorFromWallpaper(url);
+        
+        renderRecentWallpapers();
+        saveSettings();
+        
+        if (url === defaultWallpaper) {
             initDB(db => {
                 const tx = db.transaction(storeName, "readwrite");
                 tx.objectStore(storeName).delete("custom_wallpaper");
@@ -1936,7 +2939,7 @@
 
         if (file && file.type.startsWith('image/')) {
             const imageUrl = URL.createObjectURL(file);
-            document.documentElement.style.setProperty('--current-wallpaper', `url('${imageUrl}')`);
+            window.setWallpaper(imageUrl);
             saveWallpaper(file);
         }
     }
@@ -1994,14 +2997,15 @@
         const pinInput = document.getElementById('login-pin');
         if(!pinInput || !pinInput.value) return; 
 
+        if(currentPin && pinInput.value !== currentPin) {
+            pinInput.value = '';
+            pinInput.classList.add('animate-shake');
+            setTimeout(() => pinInput.classList.remove('animate-shake'), 400);
+            return;
+        }
+
         const inputArea = document.getElementById('login-input-area');
         if (inputArea) {
-            // FIX: Cancel the CSS animation lock first so our inline fade out logic isn't overridden
-            inputArea.style.animation = 'none';
-            void inputArea.offsetWidth; // trigger reflow
-            
-            // Clean fade out
-            inputArea.style.transition = 'all 0.4s ease';
             inputArea.style.opacity = '0';
             inputArea.style.transform = 'translateY(10px) scale(0.95)';
             inputArea.style.pointerEvents = 'none';
@@ -2049,7 +3053,7 @@
 
             setTimeout(() => { isSystemStarted = true; }, 1000);
             setTimeout(() => { if (loginOverlay) loginOverlay.style.display = 'none'; }, 1000);
-        }, 2500); // Extended delay to show the Welcome spinner over the background
+        }, 2500);
     }
 
     function initSystem() {
@@ -2057,8 +3061,8 @@
         setInterval(updateClock, 1000);
         
         loadSettings();
+        updateFlyoutPositions();
         
-        // Init Sliders
         const bSlider = document.getElementById('brightness-slider');
         if (bSlider) updateBrightness(bSlider);
         
@@ -2079,33 +3083,26 @@
             }
         });
 
-        // Smart UI dismissal handling.
         document.addEventListener('click', (e) => {
-            // Task View exit on background or app-window click
             if (isTaskViewOpen && (e.target.id === 'desktop-bg' || e.target.closest('.app-window'))) {
                 toggleTaskView();
                 return;
             }
 
-            // Ignore normal clicks inside interactive windows
             if (e.target.closest('.app-window') || e.target.closest('.task-view-blocker')) return;
 
-            // Handle Search Flyout Dismissal
-            if (isSearchOpen && !e.target.closest('#search-flyout') && !e.target.closest('#desktop-search-bar')) {
+            if (isSearchOpen && !e.target.closest('#search-flyout') && !e.target.closest('#desktop-search-bar') && !e.target.closest('#tb-search-btn')) {
                 closeSearchFlyout();
             }
 
-            // Handle Start Menu Dismissal
             if (isStartOpen && !e.target.closest('#start-menu-container') && !e.target.closest('#tb-start')) {
                 toggleStartMenu();
             }
 
-            // Handle Calendar Dismissal
             if (isCalOpen && !e.target.closest('#calendar-flyout') && !e.target.closest('#tb-app-btn-clock')) {
                 toggleCalendar();
             }
 
-            // Handle Quick Settings Dismissal
             if (isQsOpen && !e.target.closest('#quick-settings-flyout') && !e.target.closest('#tb-app-btn-tray')) {
                 toggleQuickSettings();
             }
