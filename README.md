@@ -1,20 +1,15 @@
-# Windows 12 conecpt:
+# Windows 12 Concept
 
-## Update schedule
+## Update Schedule
+Updates are released periodically, typically ranging from weekly to monthly.
 
-Around either an week, a month, or so per Update.
+## Feature Additions and Feedback
+Updates consist of both custom concepts and community-suggested improvements. I am fully committed to incorporating user feedback; however, suggestions received shortly before a release may be deferred to the subsequent update cycle.
 
-## Update additions and questions.
+The versioning system follows a specific format: internal updates are designated as "1H01," while community-contributed updates are labeled "1H10." Updates are deployed frequently, often every few hours.
 
-The update additions can be a custom idea I have or such.
-Will I listen to people for each update: YES, 100% new ideas I can put down on the table, BUT if it is to close to an update then it will be pushed to the update after that.
+For further information and updates, please visit the official YouTube channel:
+https://www.youtube.com/@Windows12-Website
 
-When I make updates it will be like "1H01", for user made updates, it would be "1H10".
-The me updates will be released every few hours or so.
-
-A youtube channel has been made for this very topic:
-https://www.youtube.com/@Sicricrosoft-FakeOfficial
-
-## Windows 12 realism:
-
-Every update will include either small or large changes based for realism or predictions.
+## Windows 12 Realism
+Each update introduces modifications, ranging from minor tweaks to major overhauls, grounded in realism and current design predictions.
