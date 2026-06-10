@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Windows 12</title>
-  
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://unpkg.com/@phosphor-icons/web"></script>
-  <link rel="icon" href="Favicon.png" type="image/png">
-  
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Windows 12</title>
+
+    <link rel="icon" href="Favicon.png" type="image/png"> 
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
     <style>
         /* ============================================================================
            1H06 REBUILD UPDATE - FOUNDATIONAL ARCHITECTURE
@@ -22,7 +22,7 @@
             --reveal-easing: cubic-bezier(0.3, 0, 0, 1);
             
             /* Centralized Border Radius (Sharper/Less Rounded) */
-            --os-radius: 6px;
+            --os-radius: 3px;
 
             /* Current Background */
             --current-wallpaper: url('https://4kwallpapers.com/images/wallpapers/windows-11-forest-landscape-scenery-sunrise-stock-day-light-2880x1800-5665.jpg');
@@ -47,7 +47,7 @@
             
             --mica-base: rgba(var(--mica-color-rgb), var(--mica-base-alpha)); 
             --mica-tint: rgba(var(--sys-accent-rgb), var(--mica-tint-alpha));
-            --mica-blur: blur(80px) saturate(150%); 
+            --mica-blur: blur(60px) saturate(250%); 
             
             /* Dynamic Icon Filter */
             --icon-filter: brightness(0) invert(1) opacity(0.9);
@@ -143,6 +143,33 @@
             transition: transform 0.3s cubic-bezier(0.2, 0.9, 0.4, 1), opacity 0.3s ease, background 0.4s ease;
         }
 
+        /* */
+        /* Dynamic readability styles for maximized window/taskbar transparency */
+        .transparency-max .text-mica-contrast,
+        .transparency-max .section-label,
+        .transparency-max .tb-app-text,
+        .transparency-max .js-tb-time,
+        .transparency-max .js-tb-date,
+        .transparency-max h1,
+        .transparency-max h2,
+        .transparency-max h3,
+        .transparency-max h4,
+        .transparency-max span:not(.nav-active-pill),
+        .transparency-max p,
+        .transparency-max i {
+            color: #ffffff !important;
+        }
+
+        .transparency-max .settings-card,
+        .transparency-max .taskbar-flat,
+        .transparency-max .flyout-base,
+        .transparency-max .flyout-right-base,
+        .transparency-max .app-window {
+            box-shadow: 0 30px 60px -10px rgba(0, 0, 0, 0.8), 
+                        inset 0 1px 1px rgba(255, 255, 255, 0.15), 
+                        0 0 0 1px rgba(0, 0, 0, 0.5) !important;
+        }
+
         /* UPDATE ICON MASKS & ANIMATIONS */
         .update-icon-yellow {
             background-color: #facc15 !important;
@@ -195,22 +222,22 @@
 
         /* UPGRADED SETTINGS CARDS (More Premium & Airy) */
         .settings-card {
-            background: linear-gradient(160deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.01) 100%);
-            backdrop-filter: blur(40px) saturate(150%);
-            -webkit-backdrop-filter: blur(40px) saturate(150%);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-top: 1px solid rgba(255, 255, 255, 0.18);
-            border-radius: 12px !important;
+            background: linear-gradient(160deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%);
+            backdrop-filter: blur(20px) saturate(150%);
+            -webkit-backdrop-filter: blur(20px) saturate(150%);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-top: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: var(--os-radius) !important;
             transition: background 0.4s ease, border-color 0.4s ease, transform 0.4s var(--spring-easing), box-shadow 0.4s ease;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.05);
         }
 
         .settings-card:hover {
-            background: linear-gradient(160deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.02) 100%);
-            border-color: rgba(255, 255, 255, 0.15);
-            border-top-color: rgba(255, 255, 255, 0.3);
+            background: linear-gradient(160deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%);
+            border-color: rgba(255, 255, 255, 0.1);
+            border-top-color: rgba(255, 255, 255, 0.2);
             transform: translateY(-1px);
-            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.08);
         }
 
         .section-label {
@@ -593,7 +620,9 @@
             background-color: var(--mica-base) !important;
             backdrop-filter: var(--mica-blur);
             -webkit-backdrop-filter: var(--mica-blur);
-            box-shadow: 0 30px 60px -10px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.25), inset 0 0 0 1px rgba(255, 255, 255, 0.08) !important;
+            border: 1px solid rgba(255, 255, 255, 0.06) !important;
+            border-top: 1px solid rgba(255, 255, 255, 0.15) !important;
+            box-shadow: 0 12px 36px -8px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.15) !important;
         }
 
         .taskbar-flat-disabled {
@@ -619,6 +648,7 @@
         }
 
         .app-window {
+            border-radius: var(--os-radius) !important;
             transition: transform 0.7s var(--spring-easing), opacity 0.5s ease, filter 0.5s ease;
         }
 
@@ -893,7 +923,8 @@
         }
 
         .custom-scroll::-webkit-scrollbar {
-            width: 6px;
+            width: 10px;
+            height: 10px;
         }
 
         .custom-scroll::-webkit-scrollbar-track {
@@ -901,13 +932,17 @@
         }
 
         .custom-scroll::-webkit-scrollbar-thumb {
-            background: rgba(var(--sys-accent-rgb), 0.3);
-            border-radius: var(--os-radius);
+            background: rgba(150, 150, 150, 0.4);
+            border-radius: 10px;
+            border: 3px solid transparent;
+            background-clip: content-box;
             transition: background 0.3s ease;
         }
 
         .custom-scroll::-webkit-scrollbar-thumb:hover {
-            background: rgba(var(--sys-accent-rgb), 0.7);
+            background: rgba(150, 150, 150, 0.7);
+            border: 3px solid transparent;
+            background-clip: content-box;
         }
 
         .start-logo-masked {
@@ -1131,6 +1166,7 @@
     </div>
 
     <!-- DESKTOP ENVIRONMENT -->
+    <!-- -->
     <div id="screen-desktop" class="absolute inset-0 overflow-hidden z-[10000]">
       
       <div id="desktop-bg" class="absolute inset-0 bg-cover bg-center z-[-3]" style="background-image: var(--current-wallpaper); transform: scale(1.1); filter: blur(0px);"></div>
@@ -1187,14 +1223,14 @@
 
       <!-- UPGRADED ABOUT WINDOW -->
       <div id="app-about" class="app-window app-window-hidden absolute top-1/2 left-1/2 w-[600px] h-[500px] rad-base flex flex-col z-[16000] overflow-hidden">
-          <div id="app-about-titlebar" class="h-[40px] w-full flex justify-between items-center px-4 select-none bg-black/5 cursor-move shrink-0 z-20 relative backdrop-blur-md">
+          <div id="app-about-titlebar" class="h-[40px] w-full flex justify-between items-center px-4 select-none bg-transparent cursor-move shrink-0 z-20 relative backdrop-blur-md">
               <div class="flex items-center gap-2 opacity-80 pointer-events-none">
                   <img src="https://img.icons8.com/?size=100&id=z8muZ3e2Mkh4&format=png&color=000000" class="w-[14px] h-[14px]" draggable="false">
                   <span class="text-[12px] font-semibold text-mica-contrast tracking-wide">System > About</span>
               </div>
               <div class="flex gap-1 cursor-default -mr-2 pointer-events-auto">
-                  <button onclick="window.minimizeAbout()" class="w-8 h-8 hover:bg-white/10 rad-base flex items-center justify-center text-mica-contrast transition-colors"><i class="ph-bold ph-minus text-[12px]"></i></button>
-                  <button onclick="window.closeAbout()" class="w-8 h-8 hover:bg-red-500 hover:text-white rad-base flex items-center justify-center text-mica-contrast transition-colors"><i class="ph-bold ph-x text-[12px]"></i></button>
+                  <button onclick="window.minimizeAbout()" class="w-11 h-8 hover:bg-white/10 rad-base flex items-center justify-center text-mica-contrast transition-colors"><i class="ph-bold ph-minus text-[12px]"></i></button>
+                  <button onclick="window.closeAbout()" class="w-11 h-8 hover:bg-red-500 hover:text-white rad-base flex items-center justify-center text-mica-contrast transition-colors"><i class="ph-bold ph-x text-[12px]"></i></button>
               </div>
           </div>
           
@@ -1205,7 +1241,7 @@
                       <div class="flex items-center gap-3 mb-1">
                           <h1 class="text-3xl font-display font-bold text-mica-contrast tracking-tight">Windows 12</h1>
                           <span class="px-2.5 py-1 theme-bg text-sys-accent text-[10px] font-bold rounded-full uppercase tracking-wider">(release)</span>
-                          <span class="px-2.5 py-1 bg-black/10 border border-white/10 text-mica-contrast opacity-80 text-[10px] font-bold rounded-full uppercase tracking-wider shadow-sm">Update KD104</span>
+                          <span class="px-2.5 py-1 bg-black/10 border border-white/10 text-mica-contrast opacity-80 text-[10px] font-bold rounded-full uppercase tracking-wider shadow-sm">Update KD114</span>
                       </div>
                       <p class="text-sm font-medium text-mica-contrast opacity-70">Version 1H06 "New Valley" (OS Build 060)</p>
                   </div>
@@ -1224,33 +1260,34 @@
               </div>
 
               <div class="mt-auto w-full flex justify-end pt-2 relative z-10">
-                  <button onclick="window.closeAbout()" class="theme-bg theme-bg-strong text-mica-contrast hover:bg-sys-accent hover:text-white px-8 py-2.5 text-xs font-bold rad-base transition-colors active:scale-95">Copy details</button>
+                  <button id="btn-copy-specs" onclick="window.copySpecsDetails()" class="theme-bg theme-bg-strong text-mica-contrast hover:bg-sys-accent hover:text-white px-8 py-2.5 text-xs font-bold rad-base transition-colors active:scale-95">Copy details</button>
               </div>
           </div>
       </div>
 
-      <!-- MAIN SETTINGS APP WINDOW (Styling Enhanced) -->
+      <!-- MAIN SETTINGS APP WINDOW -->
+      <!-- -->
       <div id="app-settings" class="app-window app-window-hidden absolute top-1/2 left-1/2 w-[940px] h-[650px] rad-base flex flex-col z-[15000]">
           
           <div class="task-view-blocker" onclick="window.toggleTaskView()"></div>
 
           <!-- Titlebar (Draggable Area) -->
-          <div id="app-settings-titlebar" class="h-[44px] w-full flex justify-between items-center px-4 select-none bg-black/5 cursor-move border-b border-white/5 backdrop-blur-md">
+          <div id="app-settings-titlebar" class="h-[44px] w-full flex justify-between items-center px-4 select-none bg-transparent cursor-move backdrop-blur-md relative z-20">
               <div class="flex items-center gap-2 opacity-80 pointer-events-none pl-1">
                   <i class="ph-bold ph-gear text-[15px] text-mica-contrast"></i>
                   <span class="text-[12px] font-semibold text-mica-contrast">Settings</span>
               </div>
               <div class="flex gap-1 cursor-default -mr-1">
-                  <button onclick="window.minimizeSettings()" class="w-9 h-9 hover:bg-white/10 rounded-md flex items-center justify-center text-mica-contrast transition-colors"><i class="ph-bold ph-minus text-[12px]"></i></button>
-                  <button class="w-9 h-9 hover:bg-white/10 rounded-md flex items-center justify-center text-mica-contrast transition-colors"><i class="ph-bold ph-square text-[12px]"></i></button>
-                  <button onclick="window.closeSettings()" class="w-9 h-9 hover:bg-red-500 hover:text-white rounded-md flex items-center justify-center text-mica-contrast transition-colors"><i class="ph-bold ph-x text-[12px]"></i></button>
+                  <button onclick="window.minimizeSettings()" class="w-11 h-8 hover:bg-white/10 rad-base flex items-center justify-center text-mica-contrast transition-colors"><i class="ph-bold ph-minus text-[12px]"></i></button>
+                  <button class="w-11 h-8 hover:bg-white/10 rad-base flex items-center justify-center text-mica-contrast transition-colors"><i class="ph-bold ph-square text-[12px]"></i></button>
+                  <button onclick="window.closeSettings()" class="w-11 h-8 hover:bg-red-500 hover:text-white rad-base flex items-center justify-center text-mica-contrast transition-colors"><i class="ph-bold ph-x text-[12px]"></i></button>
               </div>
           </div>
           
           <div class="flex-1 flex flex-row overflow-hidden relative">
               <!-- Sidebar Navigation -->
-              <div class="w-[280px] p-4 flex flex-col gap-1.5 bg-black/[0.15] border-r border-white/5 overflow-y-auto custom-scroll relative z-10">
-                 <div class="flex items-center gap-4 px-3 py-4 mb-4 rounded-xl cursor-pointer transition-all border border-transparent hover:bg-white/5 hover:border-white/10 shadow-sm mt-1 mx-1">
+              <div class="w-[280px] p-4 flex flex-col gap-1.5 bg-black/[0.03] overflow-y-auto custom-scroll relative z-10">
+                 <div class="flex items-center gap-4 px-3 py-4 mb-4 rad-base cursor-pointer transition-all border border-transparent hover:bg-white/5 hover:border-white/10 shadow-sm mt-1 mx-1">
                      <img src="user.png" class="w-12 h-12 rounded-full object-cover grayscale-[0.1] shadow-md border border-white/10" onerror="this.src='https://wallpapers.com/images/high/user-profile-login-icon-kjjzz29apr1bilzr.png'; this.classList.add('fallback-avatar');">
                      <div class="flex flex-col">
                          <span id="settings-sidebar-username" class="text-[14px] font-bold text-mica-contrast leading-tight">Administrator</span>
@@ -1259,15 +1296,15 @@
                  </div>
                  
                  <!-- Nav Items (Elevated look) -->
-                 <button onclick="window.switchSettingsTab('system')" id="nav-system" class="relative flex items-center gap-3.5 text-left px-5 py-3 text-[13px] font-bold text-mica-contrast bg-white/[0.08] border border-white/5 rounded-[10px] transition-all group overflow-hidden shadow-sm mx-1">
+                 <button onclick="window.switchSettingsTab('system')" id="nav-system" class="relative flex items-center gap-3.5 text-left px-5 py-3 text-[13px] font-bold text-mica-contrast bg-white/[0.08] border border-white/5 rad-base transition-all group overflow-hidden shadow-sm mx-1">
                      <div class="nav-active-pill absolute left-0 top-1/2 -translate-y-1/2 w-[4px] h-[18px] bg-sys-accent rounded-r-full transition-opacity opacity-100 shadow-[0_0_8px_var(--sys-accent)]"></div>
                      <i class="ph-fill ph-laptop text-[18px] text-sys-accent nav-icon transition-transform group-hover:scale-110 drop-shadow-sm"></i> System
                  </button>
-                 <button onclick="window.switchSettingsTab('personalization')" id="nav-personalization" class="relative flex items-center gap-3.5 text-left px-5 py-3 text-[13px] font-medium text-mica-contrast opacity-70 hover:opacity-100 hover:bg-white/5 rounded-[10px] transition-all group overflow-hidden border border-transparent hover:border-white/5 mx-1">
+                 <button onclick="window.switchSettingsTab('personalization')" id="nav-personalization" class="relative flex items-center gap-3.5 text-left px-5 py-3 text-[13px] font-medium text-mica-contrast opacity-70 hover:opacity-100 hover:bg-white/5 rad-base transition-all group overflow-hidden border border-transparent hover:border-white/5 mx-1">
                      <div class="nav-active-pill absolute left-0 top-1/2 -translate-y-1/2 w-[4px] h-[18px] bg-sys-accent rounded-r-full transition-opacity opacity-0 shadow-[0_0_8px_var(--sys-accent)]"></div>
                      <i class="ph-fill ph-palette text-[18px] nav-icon transition-transform group-hover:scale-110"></i> Personalization
                  </button>
-                 <button onclick="window.switchSettingsTab('accounts')" id="nav-accounts" class="relative flex items-center gap-3.5 text-left px-5 py-3 text-[13px] font-medium text-mica-contrast opacity-70 hover:opacity-100 hover:bg-white/5 rounded-[10px] transition-all group overflow-hidden border border-transparent hover:border-white/5 mx-1">
+                 <button onclick="window.switchSettingsTab('accounts')" id="nav-accounts" class="relative flex items-center gap-3.5 text-left px-5 py-3 text-[13px] font-medium text-mica-contrast opacity-70 hover:opacity-100 hover:bg-white/5 rad-base transition-all group overflow-hidden border border-transparent hover:border-white/5 mx-1">
                      <div class="nav-active-pill absolute left-0 top-1/2 -translate-y-1/2 w-[4px] h-[18px] bg-sys-accent rounded-r-full transition-opacity opacity-0 shadow-[0_0_8px_var(--sys-accent)]"></div>
                      <i class="ph-fill ph-user text-[18px] nav-icon transition-transform group-hover:scale-110"></i> Accounts
                  </button>
@@ -1284,10 +1321,10 @@
                       <div class="flex items-center gap-6 settings-card p-7 relative overflow-hidden">
                           <img src="https://img.icons8.com/?size=100&id=12226&format=png&color=000000" class="w-[76px] h-[76px] pointer-events-none transition-transform duration-500 relative z-10 glass-icon drop-shadow-md">
                           <div class="flex flex-col relative z-10 flex-1">
-                              <h2 class="text-[24px] font-bold text-mica-contrast tracking-tight leading-tight mb-1">Windows 12 Preview</h2>
+                              <h2 class="text-[24px] font-bold text-mica-contrast tracking-tight leading-tight mb-1">Windows 12 1H06</h2>
                               <p class="text-[13px] text-mica-contrast opacity-70 font-medium">1H06 "New Valley" (Build 060)</p>
                           </div>
-                          <button class="px-6 py-2.5 bg-black/20 hover:bg-black/40 text-mica-contrast text-[13px] font-semibold rounded-lg transition-colors active:scale-95 relative z-10 border border-white/10 shadow-sm backdrop-blur-md">Rename PC</button>
+                          <button class="px-6 py-2.5 bg-black/20 hover:bg-black/40 text-mica-contrast text-[13px] font-semibold rad-base transition-colors active:scale-95 relative z-10 border border-white/10 shadow-sm backdrop-blur-md">Rename PC</button>
                       </div>
 
                       <!-- OS Specs Card -->
@@ -1317,6 +1354,7 @@
                   </div>
 
                   <!-- PERSONALIZATION PANE -->
+                  <!-- -->
                   <div id="pane-personalization" class="flex flex-col gap-6 transition-opacity duration-300 hidden max-w-2xl mx-auto w-full pb-10">
                       <h1 class="text-[32px] font-bold text-mica-contrast mb-2 tracking-tight">Personalization</h1>
                       
@@ -1324,10 +1362,10 @@
                       <div class="settings-card p-7 flex flex-col gap-5">
                           <div class="flex justify-between items-center mb-1">
                               <h3 class="text-[15px] font-bold text-mica-contrast flex items-center gap-3"><i class="ph-fill ph-image text-sys-accent text-[20px] drop-shadow-sm"></i> Background</h3>
-                              <button onclick="window.setWallpaper('default')" class="text-[11px] font-bold text-sys-accent hover:text-sys-accent-hover transition-colors bg-sys-accent/10 hover:bg-sys-accent/20 px-4 py-1.5 rounded-full">Restore default</button>
+                              <button onclick="window.setWallpaper('default')" class="text-[11px] font-bold text-sys-accent hover:text-sys-accent-hover transition-colors bg-sys-accent/10 hover:bg-sys-accent/20 px-4 py-1.5 rad-base">Restore default</button>
                           </div>
                           
-                          <div class="w-full h-[200px] rounded-[10px] overflow-hidden relative bg-black/20 border border-white/10 shadow-inner">
+                          <div class="w-full h-[200px] rad-base overflow-hidden relative bg-black/20 border border-white/10 shadow-inner">
                               <div id="settings-wallpaper-preview" class="absolute inset-0 bg-cover bg-center transition-transform hover:scale-105 duration-700" style="background-image: var(--current-wallpaper);"></div>
                           </div>
 
@@ -1338,13 +1376,13 @@
                               </div>
                           </div>
 
-                          <div class="flex items-center justify-between mt-3 p-5 rounded-[10px] bg-black/10 border border-white/5 transition-colors hover:bg-black/20 group" ondrop="window.handleWallpaperUpload(event)" ondragover="window.allowDrop(event)">
+                          <div class="flex items-center justify-between mt-3 p-5 rad-base bg-black/10 border border-white/5 transition-colors hover:bg-black/20 group" ondrop="window.handleWallpaperUpload(event)" ondragover="window.allowDrop(event)">
                               <div class="flex flex-col">
                                   <span class="text-[14px] font-bold text-mica-contrast mb-0.5">Choose a photo</span>
                                   <span class="text-[12px] text-mica-contrast opacity-60 font-medium">You can also drag and drop an image here</span>
                               </div>
                               <div class="relative">
-                                  <button class="bg-white/10 group-hover:bg-white/20 text-mica-contrast text-[13px] font-semibold px-5 py-2 rounded-lg transition-colors border border-white/10 active:scale-95 pointer-events-none shadow-sm">
+                                  <button class="bg-white/10 group-hover:bg-white/20 text-mica-contrast text-[13px] font-semibold px-5 py-2 rad-base transition-colors border border-white/10 active:scale-95 pointer-events-none shadow-sm">
                                       Browse files
                                   </button>
                                   <input type="file" id="wallpaper-upload-main" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" onchange="window.handleWallpaperUpload(event)">
@@ -1359,7 +1397,7 @@
                           <div class="flex flex-col gap-3">
                               <label class="section-label">Behavior</label>
                               <div class="grid grid-cols-2 gap-4">
-                                  <button id="btn-layout-default" onclick="window.setTaskbarLayout('default')" class="p-4 rounded-[10px] flex flex-col items-center gap-4 transition-all active:scale-95 bg-[rgba(var(--sys-accent-rgb),0.15)] hover:bg-[rgba(var(--sys-accent-rgb),0.25)] border border-sys-accent/40 shadow-sm">
+                                  <button id="btn-layout-default" onclick="window.setTaskbarLayout('default')" class="p-4 rad-base flex flex-col items-center gap-4 transition-all active:scale-95 bg-[rgba(var(--sys-accent-rgb),0.15)] hover:bg-[rgba(var(--sys-accent-rgb),0.25)] border border-sys-accent/40 shadow-sm">
                                       <div class="w-full h-10 bg-black/30 rounded-md flex items-end justify-center gap-1 pb-1 overflow-hidden border border-white/5">
                                           <div class="w-4 h-5 bg-white/20 rounded-sm"></div>
                                           <div class="w-16 h-5 bg-sys-accent rounded-sm shadow-[0_0_8px_var(--sys-accent)]"></div>
@@ -1367,7 +1405,7 @@
                                       </div>
                                       <span class="text-[12px] font-bold text-mica-contrast">Split Islands</span>
                                   </button>
-                                  <button id="btn-layout-classic" onclick="window.setTaskbarLayout('classic')" class="bg-white/[0.03] p-4 rounded-[10px] flex flex-col items-center gap-4 hover:bg-white/[0.08] transition-all active:scale-95 border border-white/10 shadow-sm">
+                                  <button id="btn-layout-classic" onclick="window.setTaskbarLayout('classic')" class="bg-white/[0.03] p-4 rad-base flex flex-col items-center gap-4 hover:bg-white/[0.08] transition-all active:scale-95 border border-white/10 shadow-sm">
                                       <div class="w-full h-10 bg-black/20 rounded-md flex items-end justify-center px-4 overflow-hidden border border-white/5">
                                           <div class="w-full h-5 bg-white/10 rounded-t-md flex items-center justify-center gap-1">
                                               <div class="w-16 h-3 bg-white/20 rounded-sm"></div>
@@ -1411,14 +1449,14 @@
                           <div class="flex flex-col gap-3 mt-2 pt-5 border-t border-white/5 relative">
                               <label class="section-label">Search Box Visibility</label>
                               <div class="grid grid-cols-2 gap-4">
-                                  <button id="btn-search-top" onclick="window.setSearchLayout('top')" class="p-4 rounded-[10px] flex flex-col items-center gap-4 transition-all active:scale-95 bg-[rgba(var(--sys-accent-rgb),0.15)] hover:bg-[rgba(var(--sys-accent-rgb),0.25)] border border-sys-accent/40 shadow-sm">
+                                  <button id="btn-search-top" onclick="window.setSearchLayout('top')" class="p-4 rad-base flex flex-col items-center gap-4 transition-all active:scale-95 bg-[rgba(var(--sys-accent-rgb),0.15)] hover:bg-[rgba(var(--sys-accent-rgb),0.25)] border border-sys-accent/40 shadow-sm">
                                       <div class="w-full h-10 bg-black/30 rounded-md flex items-center px-4 border border-white/5 shadow-inner">
                                           <div class="w-[16px] h-[16px] search-icon-masked"></div>
                                           <div class="w-16 h-1 bg-white/20 rounded-full ml-3"></div>
                                       </div>
                                       <span class="text-[12px] font-bold text-mica-contrast">Desktop Top Bar</span>
                                   </button>
-                                  <button id="btn-search-taskbar" onclick="window.setSearchLayout('taskbar')" class="bg-white/[0.03] p-4 rounded-[10px] flex flex-col items-center gap-4 hover:bg-white/[0.08] transition-all active:scale-95 border border-white/10 shadow-sm">
+                                  <button id="btn-search-taskbar" onclick="window.setSearchLayout('taskbar')" class="bg-white/[0.03] p-4 rad-base flex flex-col items-center gap-4 hover:bg-white/[0.08] transition-all active:scale-95 border border-white/10 shadow-sm">
                                       <div class="w-full h-10 bg-black/10 rounded-md flex items-center justify-center gap-2 border border-white/5">
                                           <div class="w-5 h-5 bg-white/10 rounded-sm"></div>
                                           <div class="bg-white/10 p-1.5 rounded-sm"><div class="w-[16px] h-[16px] search-icon-masked"></div></div>
@@ -1431,13 +1469,14 @@
                       </div>
 
                       <!-- Colors & Glass Module -->
+                      <!-- -->
                       <div class="settings-card p-7 flex flex-col gap-6">
                           <div class="flex items-center justify-between mb-1">
                               <h3 class="text-[15px] font-bold text-mica-contrast flex items-center gap-3"><i class="ph-fill ph-drop text-sys-accent text-[20px] drop-shadow-sm"></i> Colors & Glass</h3>
                           </div>
                           
                           <!-- Auto Adapt Toggle -->
-                          <div class="flex items-center justify-between p-5 rounded-[10px] bg-black/10 border border-white/5 hover:bg-white/5 transition-colors cursor-pointer shadow-sm" onclick="window.toggleAutoColor()">
+                          <div class="flex items-center justify-between p-5 rad-base bg-black/10 border border-white/5 hover:bg-white/5 transition-colors cursor-pointer shadow-sm" onclick="window.toggleAutoColor()">
                               <div class="flex flex-col">
                                   <span class="text-[14px] font-bold text-mica-contrast mb-0.5">Auto-adapt color & glass</span>
                                   <span class="text-[12px] text-mica-contrast opacity-60 font-medium">Extract system theme from current background</span>
@@ -1449,7 +1488,7 @@
 
                           <div class="flex flex-col gap-3 mt-1">
                               <label class="section-label">OS Accent Color</label>
-                              <div class="bg-black/20 p-4 rounded-[10px] flex items-center gap-4 border border-white/5 shadow-inner">
+                              <div class="bg-black/20 p-4 rad-base flex items-center gap-4 border border-white/5 shadow-inner">
                                   <label title="Custom Color" for="custom-color-picker-main" class="relative w-10 h-10 rounded-full cursor-pointer hover:scale-105 active:scale-95 transition-all flex items-center justify-center bg-white/10 hover:bg-white/20 group overflow-hidden border border-white/10 shadow-sm">
                                       <i class="ph-bold ph-palette text-[18px] text-mica-contrast group-hover:text-sys-accent transition-colors relative z-10"></i>
                                       <input type="color" id="custom-color-picker-main" value="#006eff" class="opacity-0 absolute inset-0 w-full h-full cursor-pointer z-20" oninput="window.setCustomOSColor(event)">
@@ -1468,7 +1507,7 @@
 
                           <div class="flex flex-col gap-3 pt-5 border-t border-white/5 relative">
                               <label class="section-label">Mica Glass Base</label>
-                              <div class="bg-black/20 p-4 rounded-[10px] flex items-center gap-4 border border-white/5 shadow-inner">
+                              <div class="bg-black/20 p-4 rad-base flex items-center gap-4 border border-white/5 shadow-inner">
                                   <label title="Custom Mica Color" for="mica-color-picker-main" class="relative w-10 h-10 rounded-full cursor-pointer hover:scale-105 active:scale-95 transition-all flex items-center justify-center bg-white/10 hover:bg-white/20 group overflow-hidden border border-white/10 shadow-sm">
                                       <i class="ph-bold ph-eyedropper text-[18px] text-mica-contrast group-hover:text-sys-accent transition-colors relative z-10"></i>
                                       <input type="color" id="mica-color-picker-main" value="#ffffff" class="opacity-0 absolute inset-0 w-full h-full cursor-pointer z-20" oninput="window.setCustomMicaColor(event)">
@@ -1485,8 +1524,8 @@
 
                           <div class="flex flex-col gap-3 pt-5 border-t border-white/5 relative">
                               <label class="section-label">Transparency Engine</label>
-                              <div class="flex items-center gap-5 bg-black/10 p-5 rounded-[10px] border border-white/5 shadow-sm">
-                                  <div class="w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center shadow-inner border border-white/5">
+                              <div class="flex items-center gap-5 bg-black/10 p-5 rad-base border border-white/5 shadow-sm">
+                                  <div class="w-10 h-10 rad-base bg-white/5 flex items-center justify-center shadow-inner border border-white/5">
                                       <i class="ph-fill ph-drop-half text-[20px] text-sys-accent drop-shadow-sm"></i>
                                   </div>
                                   <input title="Adjust base glass transparency" type="range" min="0" max="0.9" step="0.01" value="0.45" class="win-slider opacity-slider-sync flex-1" oninput="window.setMicaAlpha(event)">
@@ -1514,16 +1553,16 @@
                           
                           <div class="flex flex-col gap-3">
                               <label class="section-label">Change Username</label>
-                              <input type="text" id="input-new-username" placeholder="Enter new username" class="bg-black/20 border border-white/10 text-mica-contrast text-[14px] px-4 py-3 rounded-[10px] focus:border-sys-accent transition-colors placeholder-mica-contrast placeholder-opacity-40 outline-none w-full max-w-sm shadow-inner">
+                              <input type="text" id="input-new-username" placeholder="Enter new username" class="bg-black/20 border border-white/10 text-mica-contrast text-[14px] px-4 py-3 rad-base focus:border-sys-accent transition-colors placeholder-mica-contrast placeholder-opacity-40 outline-none w-full max-w-sm shadow-inner">
                           </div>
 
                           <div class="flex flex-col gap-3 pt-5 border-t border-white/5 relative">
                               <label class="section-label">Change Password / PIN</label>
-                              <input type="password" id="input-new-pin" placeholder="Enter new secure PIN" class="bg-black/20 border border-white/10 text-mica-contrast text-[14px] px-4 py-3 rounded-[10px] focus:border-sys-accent transition-colors placeholder-mica-contrast placeholder-opacity-40 outline-none w-full max-w-sm shadow-inner">
+                              <input type="password" id="input-new-pin" placeholder="Enter new secure PIN" class="bg-black/20 border border-white/10 text-mica-contrast text-[14px] px-4 py-3 rad-base focus:border-sys-accent transition-colors placeholder-mica-contrast placeholder-opacity-40 outline-none w-full max-w-sm shadow-inner">
                           </div>
 
                           <div class="flex justify-start mt-3">
-                              <button id="btn-save-account" onclick="window.saveAccountDetails()" class="px-8 py-2.5 bg-sys-accent hover:bg-sys-accent-hover text-white text-[13px] font-bold rounded-[10px] transition-colors active:scale-95 shadow-lg border border-white/10">Save Credentials</button>
+                              <button id="btn-save-account" onclick="window.saveAccountDetails()" class="px-8 py-2.5 bg-sys-accent hover:bg-sys-accent-hover text-white text-[13px] font-bold rad-base transition-colors active:scale-95 shadow-lg border border-white/10">Save Credentials</button>
                           </div>
                       </div>
                   </div>
@@ -1531,7 +1570,8 @@
           </div>
       </div>
 
-      <!-- START MENU (Separated Floating Islands) -->
+      <!-- START MENU -->
+      <!-- -->
       <div id="start-menu-container" class="absolute flex gap-4 z-[9995] h-[520px] items-stretch pointer-events-none transition-all duration-500 var(--spring-easing)">
           
           <div id="sm-rail" class="w-[60px] taskbar-flat rad-base py-4 flex flex-col justify-between items-center shrink-0 flyout-base flyout-hidden overflow-y-auto custom-scroll border border-white/5 shadow-2xl">
@@ -1814,7 +1854,7 @@
             </div>
 
             <div id="tb-segment-tray" class="taskbar-segment tb-reveal-visible pointer-events-auto taskbar-flat rad-base flex items-center justify-center shrink-0">
-                <!-- TRAY EXPAND ARROW (UPDATE LOGIC HOOK) -->
+                <!-- TRAY EXPAND ARROW -->
                 <button onclick="window.toggleTrayFlyout(event)" class="taskbar-btn flex items-center justify-center w-[24px] h-[42px] rad-base cursor-default focus:outline-none group">
                     <i class="ph-bold ph-caret-up text-[14px] text-mica-contrast group-hover:-translate-y-0.5 transition-transform"></i>
                 </button>
@@ -1836,6 +1876,7 @@
   </div>
 
   <script>
+    /* */
     // System Lifecycle
     window.dismissLockScreen = dismissLockScreen;
     window.triggerWelcome = triggerWelcome;
@@ -1895,6 +1936,7 @@
     window.closeUpdateModal = closeUpdateModal;
     window.installUpdate = installUpdate;
     window.scheduleUpdate = scheduleUpdate;
+    window.copySpecsDetails = copySpecsDetails;
 
     let isStartOpen = false;
     let isTaskbarVisible = true;
@@ -1960,6 +2002,33 @@
                 window.setWallpaper(recentWallpapers[0] || defaultWallpaper); 
             };
         });
+    }
+
+    // Spec Copier Engine
+    function copySpecsDetails() {
+        const details = `Device specs:\nDevice name: DESKTOP-W12-PREVIEW\nVersion: 1H06 "New Valley"\nOS build: 060\nUpdate Badge: KD104UX (User Experience Update)`;
+        
+        // Dynamic clipboard allocation inside frames
+        const tempTextArea = document.createElement("textarea");
+        tempTextArea.value = details;
+        document.body.appendChild(tempTextArea);
+        tempTextArea.select();
+        try {
+            document.execCommand('copy');
+            const btn = document.getElementById('btn-copy-specs');
+            if (btn) {
+                const prev = btn.innerText;
+                btn.innerText = "Specs Copied!";
+                btn.style.backgroundColor = "rgba(16, 185, 129, 0.2)";
+                setTimeout(() => {
+                    btn.innerText = prev;
+                    btn.style.backgroundColor = "";
+                }, 2000);
+            }
+        } catch (err) {
+            console.error("Iframe Clipboard block bypassed with structural error", err);
+        }
+        document.body.removeChild(tempTextArea);
     }
 
     // --- Update Checking Engine ---
@@ -2155,6 +2224,7 @@
         }
     }
 
+    /* */
     function loadSettings() {
         const saved = localStorage.getItem('win12_settings');
         if (saved) {
@@ -2177,10 +2247,21 @@
                     document.documentElement.style.setProperty('--icon-filter', iconFilter);
                 }
                 if (settings.micaAlpha) {
+                    const alphaValue = parseFloat(settings.micaAlpha);
                     document.documentElement.style.setProperty('--mica-base-alpha', settings.micaAlpha);
                     document.querySelectorAll('.opacity-slider-sync').forEach(slider => { 
                         slider.value = settings.micaAlpha; 
                     });
+
+                    // Evaluate initial alpha threshold on boot load
+                    const osRoot = document.getElementById('os-root');
+                    if (osRoot) {
+                        if (alphaValue <= 0.2) {
+                            osRoot.classList.add('transparency-max');
+                        } else {
+                            osRoot.classList.remove('transparency-max');
+                        }
+                    }
                 }
                 if (settings.accent) {
                     const m1 = document.getElementById('custom-color-picker-main');
@@ -2452,11 +2533,11 @@
 
         if (btnDef && btnCls) {
             if(layout === 'default') {
-                btnDef.className = "p-4 rounded-[10px] flex flex-col items-center gap-4 transition-all active:scale-95 bg-[rgba(var(--sys-accent-rgb),0.15)] hover:bg-[rgba(var(--sys-accent-rgb),0.25)] border border-sys-accent/40 shadow-sm";
-                btnCls.className = "bg-white/[0.03] p-4 rounded-[10px] flex flex-col items-center gap-4 hover:bg-white/[0.08] transition-all active:scale-95 border border-white/10 shadow-sm";
+                btnDef.className = "p-4 rad-base flex flex-col items-center gap-4 transition-all active:scale-95 bg-[rgba(var(--sys-accent-rgb),0.15)] hover:bg-[rgba(var(--sys-accent-rgb),0.25)] border border-sys-accent/40 shadow-sm";
+                btnCls.className = "bg-white/[0.03] p-4 rad-base flex flex-col items-center gap-4 hover:bg-white/[0.08] transition-all active:scale-95 border border-white/10 shadow-sm";
             } else {
-                btnDef.className = "bg-white/[0.03] p-4 rounded-[10px] flex flex-col items-center gap-4 hover:bg-white/[0.08] transition-all active:scale-95 border border-white/10 shadow-sm";
-                btnCls.className = "p-4 rounded-[10px] flex flex-col items-center gap-4 transition-all active:scale-95 bg-[rgba(var(--sys-accent-rgb),0.15)] hover:bg-[rgba(var(--sys-accent-rgb),0.25)] border border-sys-accent/40 shadow-sm";
+                btnDef.className = "bg-white/[0.03] p-4 rad-base flex flex-col items-center gap-4 hover:bg-white/[0.08] transition-all active:scale-95 border border-white/10 shadow-sm";
+                btnCls.className = "p-4 rad-base flex flex-col items-center gap-4 transition-all active:scale-95 bg-[rgba(var(--sys-accent-rgb),0.15)] hover:bg-[rgba(var(--sys-accent-rgb),0.25)] border border-sys-accent/40 shadow-sm";
             }
         }
         
@@ -2483,11 +2564,11 @@
 
         if (btnTop && btnTb) {
             if (layout === 'top') {
-                btnTop.className = "p-4 rounded-[10px] flex flex-col items-center gap-4 transition-all active:scale-95 bg-[rgba(var(--sys-accent-rgb),0.15)] hover:bg-[rgba(var(--sys-accent-rgb),0.25)] border border-sys-accent/40 shadow-sm";
-                btnTb.className = "bg-white/[0.03] p-4 rounded-[10px] flex flex-col items-center gap-4 hover:bg-white/[0.08] transition-all active:scale-95 border border-white/10 shadow-sm";
+                btnTop.className = "p-4 rad-base flex flex-col items-center gap-4 transition-all active:scale-95 bg-[rgba(var(--sys-accent-rgb),0.15)] hover:bg-[rgba(var(--sys-accent-rgb),0.25)] border border-sys-accent/40 shadow-sm";
+                btnTb.className = "bg-white/[0.03] p-4 rad-base flex flex-col items-center gap-4 hover:bg-white/[0.08] transition-all active:scale-95 border border-white/10 shadow-sm";
             } else {
-                btnTop.className = "bg-white/[0.03] p-4 rounded-[10px] flex flex-col items-center gap-4 hover:bg-white/[0.08] transition-all active:scale-95 border border-white/10 shadow-sm";
-                btnTb.className = "p-4 rounded-[10px] flex flex-col items-center gap-4 transition-all active:scale-95 bg-[rgba(var(--sys-accent-rgb),0.15)] hover:bg-[rgba(var(--sys-accent-rgb),0.25)] border border-sys-accent/40 shadow-sm";
+                btnTop.className = "bg-white/[0.03] p-4 rad-base flex flex-col items-center gap-4 hover:bg-white/[0.08] transition-all active:scale-95 border border-white/10 shadow-sm";
+                btnTb.className = "p-4 rad-base flex flex-col items-center gap-4 transition-all active:scale-95 bg-[rgba(var(--sys-accent-rgb),0.15)] hover:bg-[rgba(var(--sys-accent-rgb),0.25)] border border-sys-accent/40 shadow-sm";
             }
         }
 
@@ -3402,11 +3483,23 @@
         saveSettings();
     }
 
+    /* */
     function setMicaAlpha(event) {
-        document.documentElement.style.setProperty('--mica-base-alpha', event.target.value);
+        const alphaVal = parseFloat(event.target.value);
+        document.documentElement.style.setProperty('--mica-base-alpha', alphaVal);
         document.querySelectorAll('.opacity-slider-sync').forEach(slider => { 
             slider.value = event.target.value; 
         });
+
+        // Trigger maximum transparency readability class on system workspace root
+        const osRoot = document.getElementById('os-root');
+        if (osRoot) {
+            if (alphaVal <= 0.2) {
+                osRoot.classList.add('transparency-max');
+            } else {
+                osRoot.classList.remove('transparency-max');
+            }
+        }
         saveSettings();
     }
 
