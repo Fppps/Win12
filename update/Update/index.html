@@ -1,0 +1,2471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Windows 12 (1H07 "Build 080")</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    
+    <style>
+        :root {
+            /* Core Radii & Glass */
+            --os-radius: 6px; 
+            --mica-blur: blur(100px) saturate(140%); 
+            
+            /* Live Colors */
+            --glass-r: 255;
+            --glass-g: 255;
+            --glass-b: 255;
+            --glass-opacity: 0.7;
+            --main-color: rgba(var(--glass-r), var(--glass-g), var(--glass-b), var(--glass-opacity));
+            --accent-color: #0078D4;
+            --accent-gradient: linear-gradient(135deg, var(--accent-color) 0%, color-mix(in srgb, var(--accent-color) 70%, transparent) 100%);
+            
+            /* Dynamic Theme Variables */
+            --text-main: #1a1a1a;
+            --text-muted: rgba(0,0,0,0.6);
+            --element-bg: rgba(255,255,255,0.5);
+            --element-hover: rgba(255,255,255,0.7);
+            --border-color: transparent; 
+            --glass-reflection: inset 0 0 0 1px rgba(255,255,255,0.1); 
+            --lum-invert: 0;
+
+            /* Global Shadows */
+            --shadow-window: 0 12px 36px rgba(0, 0, 0, 0.08);
+            --shadow-dropdown: 0 8px 24px rgba(0, 0, 0, 0.1);
+            --shadow-panel: 0 4px 16px rgba(0, 0, 0, 0.08);
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
+
+            /* Wallpaper */
+            --wallpaper: url("https://wallpapercave.com/wp/wp12636488.png");
+            --logo-url: url("https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/90f023db-b08d-4a61-b05e-5569a1a574d8/dj97nm1-a27540de-52a0-419b-99ab-36afcc63ecb4.png/v1/fill/w_894,h_894/windows_12_logo__variant_2__by_sextothepowerpointer_dj97nm1-pre.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9MTEyNiIsInBhdGgiOiIvZi85MGYwMjNkYi1iMDhkLTRhNjEtYjA1ZS01NTY5YTFhNTc0ZDgvZGo5N25tMS1hMjc1NDBkZS01MmEwLTQxOWItOTlhYi0zNmFmY2M2M2VjYjQucG5nIiwid2lkdGgiOiI8PTExMjYifV1dLCJhdWQiOlsidXJuOnNlcnZpY2U6aW1hZ2Uub3BlcmF0aW9ucyJdfQ.cWP8i-Xf1K-zT4gzY-IfQfK2IP1lL71KRKm1vLkFw4c");
+        }
+
+        body.no-shadows {
+            --shadow-window: none;
+            --shadow-dropdown: none;
+            --shadow-panel: none;
+            --shadow-sm: none;
+        }
+        
+        body {
+            background-image: var(--wallpaper);
+            background-color: #1a1a1a; 
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            margin: 0;
+            height: 100vh;
+            overflow: hidden; 
+            font-family: "Segoe UI", "Segoe UI Variable", "Segoe UI Web (West European)", sans-serif;
+            user-select: none; 
+            color: var(--text-main);
+        }
+
+        /* --- Dynamic Utilities --- */
+        .text-main { color: var(--text-main); transition: color 0.2s; }
+        .text-muted { color: var(--text-muted); transition: color 0.2s; }
+        .bg-dynamic { background-color: var(--element-bg); transition: background-color 0.2s; }
+        .bg-dynamic-hover:hover { background-color: var(--element-hover); }
+
+        .text-gradient {
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: transparent;
+        }
+
+        /* --- Scrollbar & Overflows --- */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(128,128,128,0.2); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+        /* --- OS Authentication Overlay (Lock & Login) --- */
+        .auth-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #ffffff;
+            transition: opacity 0.5s ease, visibility 0.5s;
+            background-image: var(--wallpaper);
+            background-color: #1a1a1a;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .auth-bg {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0);
+            transition: background 0.5s ease, backdrop-filter 0.5s ease, -webkit-backdrop-filter 0.5s ease;
+            z-index: -1;
+        }
+
+        .lock-view {
+            position: absolute;
+            top: 15%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.4s ease;
+            cursor: default;
+        }
+
+        .lock-time { font-size: 5.5rem; font-weight: 500; text-shadow: 0 2px 14px rgba(0,0,0,0.4); line-height: 1; }
+        .lock-date { font-size: 1.5rem; font-weight: 400; text-shadow: 0 2px 10px rgba(0,0,0,0.4); margin-top: 10px; }
+
+        .login-view {
+            position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%, calc(-50% + 20px)) scale(0.95);
+            display: flex; flex-direction: column; align-items: center;
+            opacity: 0; pointer-events: none;
+            transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.4s ease;
+        }
+
+        .user-avatar-container { margin-bottom: 20px; }
+        .user-avatar {
+            width: 130px; height: 130px; border-radius: 50%; object-fit: cover;
+            box-shadow: var(--shadow-panel); border: 3px solid rgba(255, 255, 255, 0.2);
+            transition: border-color 0.3s ease;
+        }
+        .login-view:focus-within .user-avatar { border-color: var(--accent-color); }
+
+        .user-name { font-size: 1.6rem; font-weight: 600; margin-bottom: 20px; text-shadow: 0 2px 8px rgba(0,0,0,0.5); }
+
+        .pin-container { position: relative; display: flex; align-items: center; justify-content: center; }
+        .win-pin-input {
+            background: rgba(0, 0, 0, 0.3); backdrop-filter: blur(16px);
+            border: 1px solid transparent; border-bottom: 2px solid var(--accent-color);
+            border-radius: 4px; padding: 8px 40px 8px 16px;
+            font-size: 16px; text-align: center; color: #ffffff;
+            letter-spacing: 3px; outline: none; width: 260px;
+            box-shadow: var(--shadow-sm); transition: background 0.2s, border-bottom-color 0.2s;
+        }
+        .win-pin-input:focus { background: rgba(0, 0, 0, 0.5); }
+        .win-pin-input::placeholder { color: rgba(255, 255, 255, 0.6); letter-spacing: normal; font-size: 14px; }
+        .win-pin-submit {
+            position: absolute; right: 4px; background: transparent; border: none;
+            color: rgba(255,255,255,0.7); width: 32px; height: 32px;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; border-radius: 4px; transition: background 0.2s, color 0.2s;
+        }
+        .win-pin-submit:hover { background: rgba(255, 255, 255, 0.2); color: white; }
+
+        .auth-overlay.state-login .auth-bg { background: rgba(0, 0, 0, 0.25); backdrop-filter: blur(30px) saturate(150%); }
+        .auth-overlay.state-login .lock-view { transform: translateY(-100px); opacity: 0; pointer-events: none; }
+        .auth-overlay.state-login .login-view { transform: translate(-50%, -50%) scale(1); opacity: 1; pointer-events: auto; }
+        .auth-overlay.state-unlocked { opacity: 0; visibility: hidden; pointer-events: none; }
+
+        /* --- OS Window styles --- */
+        .os-window {
+            position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%, -50%) scale(0.95);
+            background: var(--main-color);
+            backdrop-filter: var(--mica-blur);
+            -webkit-backdrop-filter: var(--mica-blur);
+            border-radius: var(--os-radius);
+            box-shadow: var(--shadow-window), var(--glass-reflection);
+            z-index: 50; opacity: 0; pointer-events: none;
+            transition: opacity 0.2s ease, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            overflow: hidden; border: none;
+        }
+        .os-window.show { opacity: 1; pointer-events: auto; transform: translate(-50%, -50%) scale(1); }
+        .os-window.show.minimized {
+            opacity: 0; pointer-events: none;
+            transform: translate(-50%, calc(-50% + 120px)) scale(0.85);
+        }
+
+        .window-header {
+            display: flex; justify-content: space-between; align-items: center;
+            height: 40px; cursor: default; background: transparent; 
+        }
+        .window-title { padding-left: 16px; font-size: 13px; font-weight: 500; color: var(--text-main); display: flex; align-items: center; gap: 10px; pointer-events: none; }
+        .window-controls { display: flex; height: 100%; }
+        .win-btn { width: 48px; height: 100%; display: flex; align-items: center; justify-content: center; color: var(--text-main); transition: background 0.1s; cursor: pointer; }
+        .win-btn:hover { background: var(--element-hover); }
+        .win-btn-close:hover { background: #e81123; color: white; }
+        .win-btn svg { width: 11px; height: 11px; fill: currentColor; }
+        .resize-handle { position: absolute; background: transparent; z-index: 9999; }
+
+        /* --- Desktop Search Bar --- */
+        .desktop-search-container {
+            position: absolute; top: 10px; left: 50%;
+            transform: translateX(-50%);
+            background: var(--main-color);
+            backdrop-filter: var(--mica-blur);
+            -webkit-backdrop-filter: var(--mica-blur);
+            box-shadow: var(--shadow-panel), var(--glass-reflection);
+            z-index: 45; overflow: hidden; border-radius: 22px; 
+            width: 320px; height: 44px; display: flex; align-items: center; padding: 0 16px;
+            transition: width 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.35s ease;
+        }
+        .desktop-search-container:hover, .desktop-search-container:focus-within {
+            width: 550px; 
+            box-shadow: var(--shadow-dropdown), var(--glass-reflection);
+        }
+        .real-search-input {
+            flex-grow: 1; margin: 0 12px; background: transparent; border: none;
+            outline: none; color: var(--text-main); font-size: 14px; width: 100%;
+        }
+        .real-search-input::placeholder { color: var(--text-muted); font-weight: 500; }
+
+        /* --- Dynamic Search Dropdown --- */
+        .search-dropdown {
+            position: absolute; left: 0; right: 0;
+            background: var(--main-color); backdrop-filter: var(--mica-blur);
+            border-radius: var(--os-radius); padding: 6px;
+            opacity: 0; pointer-events: none; transition: opacity 0.2s, transform 0.2s;
+            z-index: 100; display: flex; flex-direction: column; gap: 4px;
+            box-shadow: var(--shadow-dropdown), var(--glass-reflection);
+            transform: translateY(-5px);
+        }
+        .search-dropdown.show { opacity: 1; pointer-events: auto; transform: translateY(0); }
+        #desktop-search-anchor .search-dropdown { top: calc(100% + 8px); }
+        #taskbar-search-anchor .search-dropdown { bottom: calc(100% + 12px); transform: translateY(5px); }
+        #taskbar-search-anchor .search-dropdown.show { transform: translateY(0); }
+
+        /* --- Desktop Watermark --- */
+        .desktop-watermark {
+            position: absolute; bottom: 80px; right: 20px;
+            font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.6);
+            pointer-events: none; z-index: 5; user-select: none; text-align: right;
+            text-shadow: 0 1px 4px rgba(0,0,0,0.3);
+            display: none; /* Hidden per user request */
+        }
+
+        /* --- Keyframes --- */
+        @keyframes fadeSlideUp { 0% { opacity: 0; transform: translateX(-50%) translateY(20px); } 100% { opacity: 1; transform: translateX(-50%) translateY(0); } }
+        @keyframes quickSettingsUp { 0% { opacity: 0; transform: translateY(20px); } 100% { opacity: 1; transform: translateY(0); } }
+        @keyframes calendarUp { 0% { opacity: 0; transform: translateY(20px); } 100% { opacity: 1; transform: translateY(0); } }
+
+        /* --- Unified Start Menu System --- */
+        .start-menu-container {
+            position: absolute; bottom: 70px; left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            width: 560px; height: 600px; 
+            opacity: 0; pointer-events: none;
+            display: flex; flex-direction: column; z-index: 60;
+            transition: opacity 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+        .start-menu-container.show { opacity: 1; pointer-events: auto; transform: translateX(-50%) translateY(0); }
+        
+        .start-panel {
+            background: var(--main-color); backdrop-filter: var(--mica-blur); -webkit-backdrop-filter: var(--mica-blur);
+            border-radius: var(--os-radius);
+            box-shadow: var(--shadow-window), var(--glass-reflection);
+            border: none;
+        }
+        
+        .app-grid-item {
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            gap: 6px; padding: 12px 8px; border-radius: var(--os-radius);
+            cursor: pointer; transition: background 0.1s;
+        }
+        .app-grid-item:hover { background: var(--element-hover); }
+        .app-grid-item img, .app-grid-item i { transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        .app-grid-item:hover img, .app-grid-item:hover i { transform: scale(1.15); }
+
+        .news-card { background: rgba(var(--glass-r), var(--glass-g), var(--glass-b), 0.85); transition: all 0.2s; }
+        .news-card:hover { background: rgba(var(--glass-r), var(--glass-g), var(--glass-b), 0.95); }
+
+        /* --- Taskbar --- */
+        .taskbar {
+            display: flex; padding: 5px; width: 99%; justify-content: space-between;
+            align-items: center; box-sizing: border-box; position: absolute; bottom: 6px; left: 50%;
+            transform: translateX(-50%); z-index: 10; gap: 6px; transition: all 0.3s ease;
+        }
+        .left-taskbar, .Middle-taskbar, .Right-taskbar {
+            border-radius: var(--os-radius);
+            background: var(--main-color); backdrop-filter: var(--mica-blur); -webkit-backdrop-filter: var(--mica-blur); 
+            box-shadow: var(--shadow-panel), var(--glass-reflection);
+            transition: all 0.3s ease; height: 54px; 
+        }
+        .left-taskbar { width: 130px; display: flex; align-items: center; padding-left: 6px; }
+        .Right-taskbar { width: 130px; }
+        .Middle-taskbar { min-width: 560px; width: max-content; padding: 0 16px; display: flex; align-items: center; justify-content: center; gap: 4px; } 
+
+        .taskbar.unified {
+            background: var(--main-color); backdrop-filter: var(--mica-blur);
+            border-radius: calc(var(--os-radius) + 2px);
+            box-shadow: var(--shadow-panel), var(--glass-reflection);
+            padding: 0 10px;
+        }
+        .taskbar.unified .left-taskbar, .taskbar.unified .Middle-taskbar, .taskbar.unified .Right-taskbar {
+            background: transparent !important; box-shadow: none !important; border: none !important; backdrop-filter: none !important;
+        }
+
+        .in-taskbar-mode {
+            position: relative !important; top: auto !important; left: auto !important; transform: none !important; 
+            height: 42px !important; width: 240px !important; border-radius: 21px !important; 
+            box-shadow: none !important; background: var(--element-bg) !important; margin-left: 12px;
+        }
+        .in-taskbar-mode:hover, .in-taskbar-mode:focus-within { width: 300px !important; background: var(--element-hover) !important; }
+
+        /* --- Start Button, Masks & Dynamic Hover --- */
+        .start-button {
+            width: 46px; height: 46px; border-radius: var(--os-radius);
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; transition: background-color 0.2s ease; margin-right: 4px;
+        }
+        .start-button:hover { background-color: var(--element-hover); }
+        .start-icon, .about-logo-mask {
+            border-radius: var(--os-radius); background: var(--accent-gradient);
+            -webkit-mask-image: var(--logo-url); -webkit-mask-size: contain; -webkit-mask-repeat: no-repeat; -webkit-mask-position: center;
+            mask-image: var(--logo-url); mask-size: contain; mask-repeat: no-repeat; mask-position: center;
+        }
+        .start-icon { width: 28px; height: 28px; transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), filter 0.3s ease; }
+        .start-button:hover .start-icon { transform: scale(1.15) translateY(-2px); filter: brightness(1.2) drop-shadow(0 4px 12px var(--accent-color)); }
+        .start-button:active .start-icon { transform: scale(0.95) translateY(0); }
+        
+        .recent-wp-thumb { transition: transform 0.15s, box-shadow 0.15s; }
+        .recent-wp-thumb:hover { transform: scale(1.05); }
+        .recent-wp-thumb.active { box-shadow: 0 0 0 2px var(--accent-color), 0 4px 10px rgba(0,0,0,0.2); }
+
+        /* --- Taskbar App Hover Preview --- */
+        .taskbar-preview {
+            position: fixed;
+            bottom: 70px; 
+            z-index: 100;
+            background: var(--main-color);
+            backdrop-filter: var(--mica-blur);
+            -webkit-backdrop-filter: var(--mica-blur);
+            border-radius: var(--os-radius);
+            box-shadow: var(--shadow-dropdown), var(--glass-reflection);
+            padding: 10px;
+            opacity: 0;
+            pointer-events: none;
+            /* translateX(-50%) allows absolute centering over the dynamic left calculation */
+            transform: translateX(-50%) translateY(10px);
+            transition: opacity 0.2s ease, transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .taskbar-preview.show-preview {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+            pointer-events: auto;
+        }
+
+        /* --- Form Controls --- */
+        .win-card {
+            background: var(--element-bg); border-radius: var(--os-radius); padding: 20px; 
+            margin-bottom: 16px; transition: background 0.2s;
+        }
+        .win-card:hover { background: var(--element-hover); }
+
+        .win-slider {
+            -webkit-appearance: none; appearance: none;
+            width: 100%; height: 4px;
+            background: var(--element-bg); border-radius: 4px; outline: none; margin: 0;
+        }
+        .win-slider::-webkit-slider-thumb {
+            -webkit-appearance: none; appearance: none;
+            width: 18px; height: 18px; border-radius: 50%;
+            background: var(--accent-color);
+            cursor: pointer; border: 4px solid #ffffff;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            transition: transform 0.15s cubic-bezier(0.2, 0.8, 0.2, 1), border-width 0.15s;
+        }
+        .win-slider::-webkit-slider-thumb:hover { transform: scale(1.15); border-width: 3px; }
+
+        /* --- Windows Toggle Switch --- */
+        .win-toggle {
+            position: relative; display: inline-block; width: 44px; height: 22px;
+        }
+        .win-toggle input { opacity: 0; width: 0; height: 0; }
+        .win-toggle-slider {
+            position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
+            background-color: var(--element-bg); transition: .3s; border-radius: 22px;
+        }
+        .win-toggle-slider:before {
+            position: absolute; content: ""; height: 14px; width: 14px; left: 4px; bottom: 4px;
+            background-color: var(--text-muted); transition: .3s cubic-bezier(0.2, 0.8, 0.2, 1); border-radius: 50%;
+        }
+        .win-toggle input:checked + .win-toggle-slider { background-color: var(--accent-color); }
+        .win-toggle input:checked + .win-toggle-slider:before { transform: translateX(22px); background-color: #ffffff; }
+
+        .color-preset-btn {
+            width: 24px; height: 24px; border-radius: 50%;
+            transition: transform 0.15s;
+        }
+        .color-preset-btn:hover { transform: scale(1.15); }
+
+        /* --- Quick Settings Panel --- */
+        .quick-settings-panel {
+            position: absolute; bottom: 70px; right: 12px;
+            width: 320px; padding: 18px;
+            background: var(--main-color); backdrop-filter: var(--mica-blur); -webkit-backdrop-filter: var(--mica-blur);
+            border-radius: var(--os-radius); box-shadow: var(--shadow-dropdown), var(--glass-reflection);
+            opacity: 0; pointer-events: none; z-index: 45;
+        }
+        .quick-settings-panel.show { opacity: 1; pointer-events: auto; animation: quickSettingsUp 0.25s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
+
+        /* --- Calendar Panel --- */
+        .calendar-panel {
+            position: absolute; bottom: 70px; right: 12px;
+            width: 340px; padding: 18px 12px;
+            background: var(--main-color); backdrop-filter: var(--mica-blur); -webkit-backdrop-filter: var(--mica-blur);
+            border-radius: var(--os-radius); box-shadow: var(--shadow-dropdown), var(--glass-reflection);
+            opacity: 0; pointer-events: none; z-index: 45;
+        }
+        .calendar-panel.show { opacity: 1; pointer-events: auto; animation: calendarUp 0.25s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
+    </style>
+</head>
+<body>
+    <div id="brightness-overlay" style="position: fixed; inset: 0; background: rgba(0,0,0,0); pointer-events: none; z-index: 99999; transition: background 0.1s;"></div>
+    
+    <div class="auth-overlay" id="auth-overlay">
+        <div class="auth-bg" onclick="showLogin()"></div>
+        <div class="lock-view" id="lock-view" onclick="showLogin()">
+            <div id="lock-time" class="lock-time">12:00 PM</div>
+            <div id="lock-date" class="lock-date">Monday, June 1</div>
+        </div>
+        <div class="login-view">
+            <div class="user-avatar-container">
+                <img src="user.png" alt="User Profile" class="user-avatar" onerror="this.src='https://placehold.co/150x150/3a7bd5/ffffff?text=User'">
+            </div>
+            <div class="user-name">Administrator</div>
+            <div class="pin-container">
+                <input type="password" id="pin-input" class="win-pin-input" maxlength="4" placeholder="Enter PIN" onkeydown="if(event.key === 'Enter') handleLogin()">
+                <button id="login-btn" class="win-pin-submit" onclick="handleLogin()" title="Sign in">
+                    <i class="ph ph-arrow-right text-lg"></i>
+                </button>
+            </div>
+            <div id="pin-error" class="text-[13px] text-red-200 mt-2 hidden font-medium bg-red-900/40 px-3 py-1 rounded">Incorrect PIN. Try again.</div>
+        </div>
+    </div>
+    
+    <div id="desktop-search-anchor">
+        <div class="desktop-search-container group" id="main-search-bar">
+            <i class="ph ph-magnifying-glass text-muted text-[18px] font-bold shrink-0"></i>
+            <input type="text" class="real-search-input" placeholder="Search Windows apps, commands..." onkeydown="handleSearchEnter(event)" oninput="handleSearchInput(event)">
+            <div id="search-dropdown" class="search-dropdown"></div>
+        </div>
+    </div>
+
+    <!-- Desktop Watermark (Hidden) -->
+    <div class="desktop-watermark hidden">
+        Windows 12 - 1H07 build 080
+    </div>
+
+    <!-- About OS App -->
+    <div class="os-window flex flex-col" id="about-os-window" style="width: 480px; height: 380px;">
+        <div class="window-header">
+            <div class="window-title">
+                <img src="https://img.icons8.com/?size=100&id=VQOfeAx5KWTK&format=png&color=000000" class="w-5 h-5 opacity-80">
+                About OS
+            </div>
+            <div class="window-controls">
+                <div class="win-btn win-btn-minimize" onclick="minimizeApp('about-os-window'); event.stopPropagation();" title="Minimize">
+                    <svg viewBox="0 0 10 10"><path d="M1,5 L9,5" stroke="currentColor" stroke-width="1.2"/></svg>
+                </div>
+                <div class="win-btn win-btn-close" onclick="closeApp('about-os-window'); event.stopPropagation();">
+                    <svg viewBox="0 0 10 10"><path d="M1,1 L9,9 M9,1 L1,9" stroke="currentColor" stroke-width="1.5"/></svg>
+                </div>
+            </div>
+        </div>
+        <div class="p-8 bg-transparent flex-grow flex flex-col">
+            <div class="flex items-center gap-5 mb-8">
+                <!-- Applied --os-radius here to mask -->
+                <div class="w-20 h-20 shadow-md about-logo-mask" style="border-radius: var(--os-radius);"></div>
+                <div>
+                    <h2 class="text-3xl font-semibold text-main">Windows 12</h2>
+                </div>
+            </div>
+            <div class="space-y-4 mb-8 flex-grow text-[14px] text-main">
+                <div class="grid grid-cols-3 gap-2 pb-2"><span class="font-medium text-muted">Edition</span><span class="col-span-2">Windows 12</span></div>
+                <div class="grid grid-cols-3 gap-2 pb-2"><span class="font-medium text-muted">Version</span><span class="col-span-2">1H07</span></div>
+                <div class="grid grid-cols-3 gap-2 pb-2"><span class="font-medium text-muted">OS Build</span><span class="col-span-2">080</span></div>
+            </div>
+            <div class="flex items-center gap-4">
+                <button onclick="copyOSDetails()" class="px-6 py-2.5 bg-dynamic bg-dynamic-hover rounded text-main font-medium transition active:scale-95">Copy Details</button>
+                <span id="copy-toast" class="text-green-600 font-medium opacity-0 transition-opacity">Copied!</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dog Easter Egg Window -->
+    <div class="os-window flex flex-col" id="dog-window" style="width: 360px; height: 420px;">
+        <div class="window-header">
+            <div class="window-title">
+                <i class="ph ph-dog text-accent text-lg" style="color: var(--accent-color)"></i>
+                dog
+            </div>
+            <div class="window-controls">
+                <div class="win-btn win-btn-close" onclick="closeApp('dog-window'); event.stopPropagation();">
+                    <svg viewBox="0 0 10 10"><path d="M1,1 L9,9 M9,1 L1,9" stroke="currentColor" stroke-width="1.5"/></svg>
+                </div>
+            </div>
+        </div>
+        <div class="bg-transparent flex-grow flex flex-col p-6 items-center justify-center">
+            <img src="https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&q=80&w=400" alt="Cute Dog" class="w-full h-56 object-cover shadow-md mb-6" style="border-radius: var(--os-radius);" onerror="this.src='https://placehold.co/400x300/ffb000/ffffff?text=Cute+Dog'">
+            <p class="text-[15px] font-semibold text-main">You found the secret dog! 🐶</p>
+            <p class="text-[13px] text-muted mt-2">Press K 3 times to toggle this window.</p>
+        </div>
+    </div>
+
+    <!-- Settings App -->
+    <div class="os-window flex flex-col" id="settings-window" style="width: 850px; height: 600px; max-width: 95vw;">
+        <div class="window-header">
+            <div class="window-title">
+                <img src="https://img.icons8.com/?size=100&id=s5NUIabJrb4C&format=png&color=000000" class="w-5 h-5 opacity-80">
+                Settings
+            </div>
+            <div class="window-controls">
+                <div class="win-btn win-btn-minimize" onclick="minimizeApp('settings-window'); event.stopPropagation();" title="Minimize">
+                    <svg viewBox="0 0 10 10"><path d="M1,5 L9,5" stroke="currentColor" stroke-width="1.2"/></svg>
+                </div>
+                <div class="win-btn win-btn-close" onclick="closeApp('settings-window'); event.stopPropagation();">
+                    <svg viewBox="0 0 10 10"><path d="M1,1 L9,9 M9,1 L1,9" stroke="currentColor" stroke-width="1.5"/></svg>
+                </div>
+            </div>
+        </div>
+        
+        <div class="flex flex-grow h-0">
+            <!-- Sidebar -->
+            <div class="w-[240px] p-4 flex flex-col gap-2 bg-dynamic shrink-0">
+                <div class="flex items-center gap-4 p-3 mb-4 rounded-lg bg-dynamic-hover cursor-pointer transition">
+                    <img src="user.png" alt="Profile" class="w-12 h-12 rounded-full object-cover shadow-sm" onerror="this.src='https://placehold.co/100x100/3a7bd5/ffffff?text=U'">
+                    <div>
+                        <div class="text-[14px] font-semibold text-main">Administrator</div>
+                        <div class="text-[12px] text-muted">Local Account</div>
+                    </div>
+                </div>
+                
+                <button id="sidebar-btn-personalization" onclick="switchSettingsTab('personalization')" class="w-full text-left p-2.5 text-[14px] font-medium bg-dynamic-hover cursor-pointer flex items-center gap-3 text-main transition relative rounded-md">
+                    <div class="sidebar-indicator absolute left-0 top-1.5 bottom-1.5 w-1 rounded-r-full" style="background: var(--accent-color);"></div>
+                    <i class="ph ph-paint-brush text-[18px]" style="color: var(--accent-color);"></i>
+                    Personalization
+                </button>
+
+                <button id="sidebar-btn-updates" onclick="switchSettingsTab('updates')" class="w-full text-left p-2.5 text-[14px] font-medium cursor-pointer flex items-center gap-3 text-main transition relative rounded-md">
+                    <div class="sidebar-indicator absolute left-0 top-1.5 bottom-1.5 w-1 rounded-r-full hidden" style="background: var(--accent-color);"></div>
+                    <i class="ph ph-arrow-counter-clockwise text-[18px]" style="color: var(--accent-color);"></i>
+                    Updates
+                </button>
+                
+                <button id="sidebar-btn-time" onclick="switchSettingsTab('time')" class="w-full text-left p-2.5 text-[14px] font-medium cursor-pointer flex items-center gap-3 text-main transition relative rounded-md">
+                    <div class="sidebar-indicator absolute left-0 top-1.5 bottom-1.5 w-1 rounded-r-full hidden" style="background: var(--accent-color);"></div>
+                    <i class="ph ph-clock text-[18px]" style="color: var(--accent-color);"></i>
+                    Date & time
+                </button>
+
+                <button id="sidebar-btn-taskbar" onclick="switchSettingsTab('taskbar')" class="w-full text-left p-2.5 text-[14px] font-medium cursor-pointer flex items-center gap-3 text-main transition relative rounded-md">
+                    <div class="sidebar-indicator absolute left-0 top-1.5 bottom-1.5 w-1 rounded-r-full hidden" style="background: var(--accent-color);"></div>
+                    <i class="ph ph-rows text-[18px]" style="color: var(--accent-color);"></i>
+                    Taskbar
+                </button>
+            </div>
+            
+            <!-- Tab Contents -->
+            <div class="flex-grow p-8 overflow-y-auto bg-transparent">
+                <!-- PERSONALIZATION TAB -->
+                <div id="settings-tab-personalization">
+                    <h1 class="text-3xl font-semibold text-main mb-6">Personalization</h1>
+                    
+                    <div class="w-full h-56 rounded-xl mb-8 relative overflow-hidden flex items-center justify-center" style="background-image: var(--wallpaper); background-size: cover; background-position: center;">
+                        <div class="w-[300px] h-[160px] shadow-xl flex flex-row rounded-lg overflow-hidden relative z-10" style="background: var(--main-color); backdrop-filter: var(--mica-blur); box-shadow: var(--shadow-panel), var(--glass-reflection);">
+                            <div class="w-[30%] h-full bg-dynamic p-3 flex flex-col gap-2">
+                                <div class="w-full h-1.5 rounded-full bg-dynamic"></div>
+                                <div class="w-3/4 h-1.5 rounded-full bg-dynamic"></div>
+                            </div>
+                            <div class="w-[70%] h-full p-4 flex flex-col gap-3">
+                                <div class="w-1/2 h-2 rounded-full bg-dynamic"></div>
+                                <div class="flex-grow rounded bg-dynamic mt-1 p-2 flex items-end justify-end">
+                                    <div class="w-8 h-3 rounded-[3px] shadow-sm" style="background: var(--accent-gradient);"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="absolute bottom-2 left-1/2 -translate-x-1/2 w-[80%] h-[30px] flex items-center justify-center rounded-[var(--os-radius)]" style="background: var(--main-color); backdrop-filter: var(--mica-blur); box-shadow: var(--shadow-sm), var(--glass-reflection);">
+                             <div class="w-4 h-4 rounded-[3px] shadow-sm" style="background: var(--accent-gradient);"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3 text-[14px] font-semibold text-main ml-1">Background</div>
+                    
+                    <div class="win-card">
+                        <div class="flex justify-between items-center mb-5">
+                            <div class="flex items-center gap-4">
+                                <i class="ph ph-image text-2xl text-main"></i>
+                                <div>
+                                    <div class="font-medium text-[14px] text-main">Personalize your background</div>
+                                    <div class="text-[12px] text-muted">Choose a picture from your computer</div>
+                                </div>
+                            </div>
+                            <label class="px-4 py-2 bg-dynamic bg-dynamic-hover cursor-pointer text-[13px] font-medium transition text-main rounded">
+                                Browse photos
+                                <input type="file" class="hidden" accept="image/*" id="wallpaper-upload">
+                            </label>
+                        </div>
+                        
+                        <div class="mt-4 pt-4 border-t border-dynamic">
+                            <div class="text-[13px] font-medium text-muted mb-3">Recent images</div>
+                            <div class="flex gap-3 flex-wrap" id="recent-wallpapers-container">
+                                <!-- JS -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3 mt-6 text-[14px] font-semibold text-main ml-1">Colors & Glass</div>
+
+                    <div class="win-card flex flex-col p-0 overflow-hidden">
+                        <div class="flex justify-between items-center p-5 cursor-pointer hover:bg-dynamic transition-colors" onclick="toggleColorAccordion('main')">
+                            <div class="flex items-center gap-4">
+                                <i class="ph ph-palette text-2xl text-main"></i>
+                                <div>
+                                    <div class="font-medium text-[14px] text-main">Automatic color mode</div>
+                                    <div class="text-[12px] text-muted">Automatically pick colors from background</div>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-4">
+                                <label class="win-toggle" onclick="event.stopPropagation()">
+                                    <input type="checkbox" id="main-color-auto-toggle" onchange="handleColorToggle(this.checked)">
+                                    <span class="win-toggle-slider"></span>
+                                </label>
+                                <div id="main-color-accordion-caret" class="transition-transform duration-300 p-1">
+                                    <i class="ph ph-caret-down text-main text-lg transition-opacity duration-300" id="main-color-caret-icon"></i>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div id="main-manual-colors-panel" class="hidden flex-col p-5 pt-0 gap-6 border-t border-dynamic mt-1">
+                            <div class="flex justify-between items-start mt-4">
+                                <div class="flex-grow">
+                                    <div class="font-medium text-[14px] text-main">OS Accent Color</div>
+                                    <div class="text-[12px] text-muted mb-3">Used for Start Menu and Active Icons</div>
+                                    <div class="flex flex-wrap gap-2">
+                                        <button class="color-preset-btn" style="background: #0078D4" onclick="setManualColor('accent', '#0078D4')"></button>
+                                        <button class="color-preset-btn" style="background: #E81123" onclick="setManualColor('accent', '#E81123')"></button>
+                                        <button class="color-preset-btn" style="background: #107C10" onclick="setManualColor('accent', '#107C10')"></button>
+                                        <button class="color-preset-btn" style="background: #68217A" onclick="setManualColor('accent', '#68217A')"></button>
+                                        <button class="color-preset-btn" style="background: #FF8C00" onclick="setManualColor('accent', '#FF8C00')"></button>
+                                        
+                                        <div class="relative color-preset-btn flex items-center justify-center bg-dynamic-hover bg-transparent" title="Custom color">
+                                            <i class="ph ph-plus text-main text-[12px] font-bold"></i>
+                                            <input type="color" id="accent-color-picker" class="absolute inset-0 opacity-0 cursor-pointer h-full w-full scale-150" value="#0078D4">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex justify-between items-start">
+                                <div class="flex-grow">
+                                    <div class="font-medium text-[14px] text-main">Glass Material Color</div>
+                                    <div class="text-[12px] text-muted mb-3">Base color for windows and taskbar</div>
+                                    <div class="flex flex-wrap gap-2">
+                                        <button class="color-preset-btn" style="background: #ffffff" onclick="setManualColor('glass', '#ffffff')"></button>
+                                        <button class="color-preset-btn" style="background: #e5e5e5" onclick="setManualColor('glass', '#e5e5e5')"></button>
+                                        <button class="color-preset-btn" style="background: #fdf5e6" onclick="setManualColor('glass', '#fdf5e6')"></button>
+                                        <button class="color-preset-btn" style="background: #e6f3ff" onclick="setManualColor('glass', '#e6f3ff')"></button>
+                                        <button class="color-preset-btn" style="background: #202020" onclick="setManualColor('glass', '#202020')"></button>
+                                        <div class="relative color-preset-btn flex items-center justify-center bg-dynamic-hover bg-transparent" title="Custom color">
+                                            <i class="ph ph-plus text-main text-[12px] font-bold"></i>
+                                            <input type="color" id="glass-color-picker" class="absolute inset-0 opacity-0 cursor-pointer h-full w-full scale-150" value="#ffffff">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="win-card mb-4">
+                        <div class="flex justify-between items-center mb-1">
+                            <div class="font-medium text-[14px] text-main">Glass Transparency</div>
+                            <span class="text-[13px] text-muted font-medium" id="transparency-val">70%</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <i class="ph ph-drop-half-bottom text-muted text-lg"></i>
+                            <input type="range" id="transparency-slider" class="win-slider flex-grow" min="0.1" max="1" step="0.01" value="0.7">
+                            <i class="ph ph-drop text-main text-lg drop-shadow-sm"></i>
+                        </div>
+                    </div>
+
+                    <div class="mb-3 mt-6 text-[14px] font-semibold text-main ml-1">Visual Effects</div>
+
+                    <div class="win-card flex justify-between items-center">
+                        <div class="flex items-center gap-4">
+                            <i class="ph ph-app-window text-2xl text-main"></i>
+                            <div>
+                                <div class="font-medium text-[14px] text-main">Window Shadows</div>
+                                <div class="text-[12px] text-muted">Enable drop shadows on windows and elements</div>
+                            </div>
+                        </div>
+                        <label class="win-toggle">
+                            <input type="checkbox" id="shadow-toggle" onchange="handleShadowToggle(this.checked)" checked>
+                            <span class="win-toggle-slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- UPDATES TAB -->
+                <div id="settings-tab-updates" class="hidden">
+                    <h1 class="text-3xl font-semibold text-main mb-8">Windows Update</h1>
+
+                    <div class="win-card">
+                        <div class="flex items-center justify-between mb-2">
+                            <div class="flex items-center gap-6">
+                                <div class="relative w-16 h-16 flex-shrink-0 flex items-center justify-center">
+                                    <img id="update-main-icon" src="https://img.icons8.com/?size=100&id=l9jAYs17iNqZ&format=png&color=000000" class="w-12 h-12 transition-all duration-300">
+                                    <img id="update-check-icon" src="https://img.icons8.com/?size=100&id=70yRC8npwT3d&format=png&color=000000" class="absolute bottom-0 right-0 w-6 h-6 bg-dynamic rounded-full p-[2px] shadow-sm">
+                                    <img id="update-available-icon" src="https://img.icons8.com/?size=100&id=dKMGP5XqWxob&format=png&color=000000" class="absolute bottom-0 right-0 w-6 h-6 bg-dynamic rounded-full p-[2px] shadow-sm hidden">
+                                </div>
+                                <div>
+                                    <h2 id="update-status-title" class="text-lg font-semibold text-main">You're up to date</h2>
+                                    <p id="update-status-desc" class="text-[13px] text-muted mt-1">Last checked: Today</p>
+                                </div>
+                            </div>
+                            <div class="flex flex-col gap-3 items-end">
+                                <button id="btn-check-updates" onclick="triggerUpdateCheck()" class="px-5 py-2 text-white font-medium transition active:scale-95 text-[13px] shadow-sm" style="background: var(--accent-gradient); border-radius: var(--os-radius);">Check for updates</button>
+                                <button id="btn-install-update" onclick="installSystemUpdate()" class="px-5 py-2 bg-green-600 hover:bg-green-700 text-white font-medium transition active:scale-95 text-[13px] shadow-sm hidden" style="border-radius: var(--os-radius);">Install Update</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DATE & TIME TAB -->
+                <div id="settings-tab-time" class="hidden">
+                    <h1 class="text-3xl font-semibold text-main mb-6">Date & time</h1>
+                    
+                    <div class="mb-8 pl-1">
+                        <div id="settings-current-time" class="text-4xl font-semibold text-main mb-1">12:00 PM</div>
+                        <div id="settings-current-date" class="text-[14px] text-muted font-medium">Monday, June 1, 2026</div>
+                    </div>
+                    
+                    <div class="win-card flex flex-col p-0 overflow-hidden mb-4">
+                        <div class="flex justify-between items-center p-5 cursor-pointer hover:bg-dynamic transition-colors" onclick="toggleTimeAccordion()">
+                            <div class="flex items-center gap-4">
+                                <i class="ph ph-clock text-2xl text-main"></i>
+                                <div>
+                                    <div class="font-medium text-[14px] text-main">Set time automatically</div>
+                                    <div class="text-[12px] text-muted">Fetch local time zone based on location</div>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-4">
+                                <label class="win-toggle" onclick="event.stopPropagation()">
+                                    <input type="checkbox" id="time-auto-toggle" onchange="handleTimeModeToggle(this.checked)">
+                                    <span class="win-toggle-slider"></span>
+                                </label>
+                                <div id="time-accordion-caret" class="transition-transform duration-300 p-1">
+                                    <i class="ph ph-caret-down text-main text-lg transition-opacity duration-300" id="time-caret-icon"></i>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div id="time-sub-panel" class="hidden flex-col p-5 pt-0 gap-6 border-t border-dynamic mt-1">
+                            <div class="flex justify-between items-center mt-4">
+                                <div class="flex items-center gap-4">
+                                    <i class="ph ph-clock-counter-clockwise text-xl text-main"></i>
+                                    <div>
+                                        <div class="font-medium text-[14px] text-main">24-hour time</div>
+                                        <div class="text-[12px] text-muted">Use a 24-hour format (e.g. 13:00)</div>
+                                    </div>
+                                </div>
+                                <label class="win-toggle" onclick="event.stopPropagation()">
+                                    <input type="checkbox" id="time-24h-toggle" onchange="handle24HourToggle(this.checked)">
+                                    <span class="win-toggle-slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="win-card flex justify-between items-center">
+                        <div class="flex items-center gap-4">
+                            <i class="ph ph-calendar-blank text-2xl text-main"></i>
+                            <div>
+                                <div class="font-medium text-[14px] text-main">Set date automatically</div>
+                                <div class="text-[12px] text-muted">Use natural system calendar date</div>
+                            </div>
+                        </div>
+                        <label class="win-toggle">
+                            <!-- Removed checked by default per request -->
+                            <input type="checkbox" id="date-auto-toggle" onchange="handleDateModeToggle(this.checked)">
+                            <span class="win-toggle-slider"></span>
+                        </label>
+                    </div>
+                    
+                    <p class="text-[12px] text-muted mt-4 pl-1">
+                        Note: These are teasers for 1H08 multi-country support and these are not placeholders at all!
+                    </p>
+                </div>
+                
+                <!-- TASKBAR TAB -->
+                <div id="settings-tab-taskbar" class="hidden">
+                    <h1 class="text-3xl font-semibold text-main mb-6">Taskbar</h1>
+                    
+                    <div class="win-card">
+                        <div class="flex justify-between items-center mb-6">
+                            <div>
+                                <div class="font-medium text-[15px] text-main">Taskbar layout</div>
+                                <div class="text-[13px] text-muted">Choose between unified or separated segments</div>
+                            </div>
+                            <div class="relative grid grid-cols-2 bg-dynamic p-1 shadow-inner w-56 rounded-[var(--os-radius)]">
+                                <div id="tb-layout-indicator" class="absolute top-1 bottom-1 w-[calc(50%-4px)] bg-dynamic transition-transform duration-300 ease-out shadow-sm rounded-[calc(var(--os-radius)-2px)]" style="left: 4px;"></div>
+                                <button id="btn-tb-separated" class="relative z-10 py-1 text-[13px] font-medium transition-colors text-main" onclick="setTaskbarLayout('separated')">Separated</button>
+                                <button id="btn-tb-unified" class="relative z-10 py-1 text-[13px] font-medium transition-colors text-muted" onclick="setTaskbarLayout('unified')">Unified</button>
+                            </div>
+                        </div>
+                        
+                        <div class="w-full h-[1px] bg-dynamic my-5"></div>
+                        
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <div class="font-medium text-[15px] text-main">Search location</div>
+                                <div class="text-[13px] text-muted">Place search on the desktop or in the taskbar</div>
+                            </div>
+                            <div class="relative grid grid-cols-2 bg-dynamic p-1 shadow-inner w-56 rounded-[var(--os-radius)]">
+                                <div id="search-loc-indicator" class="absolute top-1 bottom-1 w-[calc(50%-4px)] bg-dynamic transition-transform duration-300 ease-out shadow-sm rounded-[calc(var(--os-radius)-2px)]" style="left: 4px;"></div>
+                                <button id="btn-search-desktop" class="relative z-10 py-1 text-[13px] font-medium transition-colors text-main" onclick="setSearchLocation('desktop')">Desktop</button>
+                                <button id="btn-search-taskbar" class="relative z-10 py-1 text-[13px] font-medium transition-colors text-muted" onclick="setSearchLocation('taskbar')">Taskbar</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Start Menu Container (Unified Layout) -->
+    <div class="start-menu-container start-panel" id="start-menu">
+        
+        <!-- HEADER: User, Toggle, Power -->
+        <div class="flex justify-between items-center p-4 w-full shrink-0 border-b border-transparent" style="background: rgba(var(--glass-r), var(--glass-g), var(--glass-b), 0.15); box-shadow: 0 2px 8px rgba(0,0,0,0.02);">
+            <div class="flex items-center gap-3 px-2">
+                <img src="user.png" class="w-10 h-10 rounded-full object-cover shadow-sm cursor-pointer hover:scale-110 transition duration-200" onerror="this.src='https://placehold.co/100x100/3a7bd5/ffffff?text=U'" title="Administrator">
+                <span class="text-[14px] font-semibold text-main">Administrator</span>
+            </div>
+            <div class="flex items-center gap-1">
+                <button id="sm-toggle-btn" class="w-10 h-10 hover:bg-dynamic flex items-center justify-center cursor-pointer transition rounded-md" title="Toggle Appearance Settings" onclick="toggleStartView()">
+                    <i id="sm-toggle-icon" class="ph-bold ph-caret-right text-[20px] text-main drop-shadow-sm transition-transform duration-300"></i>
+                </button>
+                <div class="w-10 h-10 hover:bg-dynamic flex items-center justify-center cursor-pointer transition rounded-md" title="Power" onclick="location.reload()">
+                    <i class="ph ph-power text-[20px] text-main drop-shadow-sm"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- VIEW 1: Apps Content -->
+        <div id="sm-apps-view" class="flex flex-col w-full p-6 flex-grow overflow-y-auto">
+            <div class="flex justify-between items-center mb-4 px-1 mt-1">
+                <h2 class="text-[14px] font-semibold text-main">Pinned</h2>
+            </div>
+            
+            <div class="grid grid-cols-4 gap-y-5 gap-x-2 px-1 mb-2 shrink-0">
+                <div class="app-grid-item" onclick="openApp('settings-window')">
+                    <img src="https://img.icons8.com/?size=100&id=s5NUIabJrb4C&format=png&color=000000" class="w-8 h-8 drop-shadow-sm">
+                    <span class="text-[11px] font-medium text-main mt-1">Settings</span>
+                </div>
+                <div class="app-grid-item" onclick="openApp('about-os-window')">
+                    <img src="https://img.icons8.com/?size=100&id=VQOfeAx5KWTK&format=png&color=000000" class="w-8 h-8 drop-shadow-sm">
+                    <span class="text-[11px] font-medium text-main mt-1">About OS</span>
+                </div>
+            </div>
+
+            <!-- PHYSICAL 20px GAP -->
+            <div style="height: 20px;" class="shrink-0 w-full"></div>
+
+            <!-- BOTTOM NEWS PANEL -->
+            <div class="flex justify-between items-center mb-4 mt-auto px-1 shrink-0">
+                <h2 class="text-[14px] font-semibold text-main flex items-center gap-1">Windows 12 News <i class="ph-bold ph-caret-right text-muted text-sm ml-1"></i></h2>
+            </div>
+            
+            <div class="flex flex-row justify-center gap-4 shrink-0 pb-2">
+                <!-- News Separated Div 1 -->
+                <div class="news-card p-5 flex flex-col gap-2 transition cursor-pointer border border-transparent hover:border-dynamic shadow-sm min-h-[140px] justify-center" style="width: 275px; border-radius: var(--os-radius);">
+                    <div class="text-[11px] font-bold tracking-widest text-muted uppercase">News</div>
+                    <h3 class="text-[13px] font-semibold text-main leading-snug">Windows 12 1H08 Plans</h3>
+                    <ul class="text-[12px] text-muted list-disc pl-4 mt-1 space-y-1">
+                        <li>Update <b>1H08</b> will likely have the ability to have translations for the site,</li>
+                        <li>Could have HDR lighting.</li>
+                        <li>Maybe a more secure login using a code with a cipher+key using a bitwise operation cipher + Rot13 cipher to do it.</li>
+                    </ul>
+                </div>
+                
+                <!-- News Separated Div 2 -->
+                <div class="news-card p-5 flex flex-col gap-2 transition cursor-pointer border border-transparent hover:border-dynamic shadow-sm min-h-[140px] justify-center" style="width: 275px; border-radius: var(--os-radius);">
+                    <div class="text-[11px] font-bold tracking-widest text-muted uppercase">Note</div>
+                    <h3 class="text-[13px] font-semibold text-main leading-snug">Why the long breaks</h3>
+                    <p class="text-[12px] text-muted mt-1 leading-relaxed">
+                        The reason for the long breaks is mainly because of life being difficult; That doesn't mean I am quiting windows 12 at all. But I still do need people to work on windows 12 for me aswell it is a project that I love to work on but what I said makes it hard to do so; what used to be mere hours or minutes turned to weeks or even a month, im very sorry for that.
+                    </p>
+                </div>
+            </div>
+        </div> <!-- End of sm-apps-view -->
+        
+        <!-- VIEW 2: Colors & Glass Quick Settings -->
+        <div id="sm-colors-view" class="flex flex-col w-full p-6 flex-grow overflow-y-auto hidden">
+            <div class="flex justify-between items-center mb-5 px-1 mt-1">
+                <h2 class="text-[14px] font-semibold text-main">Quick Appearance</h2>
+                <i class="ph ph-sliders-horizontal text-lg text-muted"></i>
+            </div>
+            
+            <div class="bg-dynamic p-4 rounded-lg mb-4 flex flex-col gap-3">
+                <div class="flex justify-between items-center text-[12px] font-medium text-main">
+                    <span class="flex items-center gap-2"><i class="ph ph-drop-half-bottom text-muted text-sm"></i> Glass Transparency</span>
+                    <span id="sm-transparency-val" class="text-muted">70%</span>
+                </div>
+                <input type="range" id="sm-transparency-slider" class="win-slider w-full !my-0" min="0.1" max="1" step="0.01" value="0.7">
+            </div>
+
+            <div class="bg-dynamic p-0 rounded-lg mb-4 flex flex-col overflow-hidden">
+                <div class="flex justify-between items-center p-4 cursor-pointer hover:bg-dynamic transition-colors" onclick="toggleColorAccordion('sm')">
+                    <div class="text-[12px] font-medium text-main flex items-center gap-2"><i class="ph ph-palette text-muted text-sm"></i> Auto Color</div>
+                    <div class="flex items-center gap-3">
+                        <label class="win-toggle" onclick="event.stopPropagation()">
+                            <input type="checkbox" id="sm-color-auto-toggle" onchange="handleColorToggle(this.checked)">
+                            <span class="win-toggle-slider"></span>
+                        </label>
+                        <div id="sm-color-accordion-caret" class="transition-transform duration-300">
+                            <i class="ph ph-caret-down text-main text-lg transition-opacity duration-300" id="sm-color-caret-icon"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="sm-manual-colors-panel" class="hidden flex-col p-4 pt-0 gap-6 border-t border-dynamic mt-1">
+                    <div class="flex flex-col gap-2 mt-2">
+                        <div class="text-[11px] font-medium text-muted">Accent</div>
+                        <div class="flex gap-2">
+                            <button class="color-preset-btn" style="background: #0078D4" onclick="setManualColor('accent', '#0078D4')"></button>
+                            <button class="color-preset-btn" style="background: #E81123" onclick="setManualColor('accent', '#E81123')"></button>
+                            <button class="color-preset-btn" style="background: #107C10" onclick="setManualColor('accent', '#107C10')"></button>
+                            <button class="color-preset-btn" style="background: #68217A" onclick="setManualColor('accent', '#68217A')"></button>
+                            <button class="color-preset-btn" style="background: #FF8C00" onclick="setManualColor('accent', '#FF8C00')"></button>
+                        </div>
+                    </div>
+                    
+                    <div class="flex flex-col gap-2">
+                        <div class="text-[11px] font-medium text-muted">Glass Surface</div>
+                        <div class="flex gap-2">
+                            <button class="color-preset-btn" style="background: #ffffff" onclick="setManualColor('glass', '#ffffff')"></button>
+                            <button class="color-preset-btn" style="background: #e5e5e5" onclick="setManualColor('glass', '#e5e5e5')"></button>
+                            <button class="color-preset-btn" style="background: #fdf5e6" onclick="setManualColor('glass', '#fdf5e6')"></button>
+                            <button class="color-preset-btn" style="background: #e6f3ff" onclick="setManualColor('glass', '#e6f3ff')"></button>
+                            <button class="color-preset-btn" style="background: #202020" onclick="setManualColor('glass', '#202020')"></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> <!-- End of sm-colors-view -->
+    </div> <!-- End of start-menu-container -->
+
+    <!-- Taskbar Hover Preview Flyout -->
+    <!-- Added cursor-pointer and robust hover tracking to allow clicking into the app -->
+    <div id="taskbar-preview" class="taskbar-preview cursor-pointer" onmouseenter="clearTimeout(previewTimeout)" onmouseleave="hidePreview()">
+        <div class="flex items-center gap-2 px-1 mb-1">
+            <img id="preview-icon" src="" class="w-[14px] h-[14px]">
+            <span id="preview-title" class="text-[12px] font-medium text-main"></span>
+        </div>
+        <!-- Added explicit box-shadow class to make the window visually pop off the flyout. hover:brightness adds interactive touch. -->
+        <div id="preview-content-container" class="relative overflow-hidden rounded-md transition-all hover:brightness-110" style="border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 8px 24px rgba(0,0,0,0.2);">
+            <div id="taskbar-preview-content" class="origin-top-left transition-all pointer-events-none"></div>
+        </div>
+    </div>
+
+    <!-- Taskbar -->
+    <div class="taskbar" id="main-taskbar">
+        <div class="left-taskbar">
+            <!-- About OS Taskbar Icon -->
+            <div class="relative w-10 h-10 hover:bg-dynamic flex items-center justify-center rounded-md cursor-pointer transition" onclick="toggleApp('about-os-window')" onmouseenter="showPreview('about-os-window', this)" onmouseleave="hidePreview()" title="About OS">
+                <img src="https://img.icons8.com/?size=100&id=VQOfeAx5KWTK&format=png&color=000000" class="w-[28px] h-[28px]">
+                <div id="ind-about" class="indicator absolute bottom-0 left-1/2 -translate-x-1/2 h-[3px] rounded-full transition-all duration-300 w-0 opacity-0 pointer-events-none"></div>
+            </div>
+        </div>
+        <div class="Middle-taskbar">
+            <!-- Start Button -->
+            <div class="start-button" id="start-button">
+                <div class="start-icon"></div>
+            </div>
+            <!-- Settings App Taskbar Icon -->
+            <div class="relative w-10 h-10 hover:bg-dynamic flex items-center justify-center rounded-md cursor-pointer transition" onclick="toggleApp('settings-window')" onmouseenter="showPreview('settings-window', this)" onmouseleave="hidePreview()" title="Settings">
+                <img src="https://img.icons8.com/?size=100&id=s5NUIabJrb4C&format=png&color=000000" class="w-[28px] h-[28px]">
+                <div id="ind-settings" class="indicator absolute bottom-0 left-1/2 -translate-x-1/2 h-[3px] rounded-full transition-all duration-300 w-0 opacity-0 pointer-events-none"></div>
+            </div>
+            <!-- Taskbar Search Anchor -->
+            <div id="taskbar-search-anchor"></div>
+        </div>
+        
+        <div class="Right-taskbar flex items-center justify-end pr-3 gap-2">
+            <!-- Quick Settings Icon -->
+            <div class="w-8 h-8 flex items-center justify-center rounded hover:bg-dynamic transition-colors cursor-pointer" onclick="toggleQuickSettings(event)">
+                <i class="ph ph-faders-horizontal text-[18px] text-main"></i>
+            </div>
+            <!-- Authentic Windows Clock UI (Triggers Calendar) -->
+            <div class="flex flex-col items-end justify-center px-2 py-0.5 text-[11px] font-medium text-main cursor-pointer hover:bg-dynamic transition-colors rounded leading-[1.2]" onclick="toggleCalendar(event)">
+                <span id="tb-time">12:00 PM</span>
+                <span id="tb-date">6/1/2026</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Settings Panel -->
+    <div class="quick-settings-panel flex flex-col" id="quick-settings">
+        <h3 class="text-[14px] font-semibold text-main mb-4 px-1">Quick Settings</h3>
+        
+        <!-- Brightness (Horizontally aligned for proper look) -->
+        <div class="bg-dynamic p-3 rounded-lg mb-4 flex flex-row items-center gap-4">
+            <i class="ph-fill ph-sun text-main text-lg w-5 text-center shrink-0"></i>
+            <input type="range" id="brightness-slider" class="win-slider flex-grow !my-0" min="20" max="100" value="100" oninput="setBrightness(this.value)">
+        </div>
+
+        <!-- Night Mode -->
+        <div class="flex flex-col gap-2">
+            <div class="flex items-stretch h-11">
+                <button id="nl-main-btn" class="flex-grow flex items-center justify-center gap-3 bg-dynamic bg-dynamic-hover rounded-l-md transition-colors" onclick="toggleNightMode()">
+                    <i class="ph-fill ph-moon text-[18px] text-main" id="nl-main-icon"></i>
+                    <span class="text-[13px] font-medium text-main" id="nl-main-text">Night light</span>
+                </button>
+                <button id="nl-chev-btn" class="w-10 flex items-center justify-center bg-dynamic bg-dynamic-hover rounded-r-md transition-colors ml-[1px]" onclick="toggleNightSlider()">
+                    <i class="ph ph-caret-down text-main" id="nl-chev-icon"></i>
+                </button>
+            </div>
+            
+            <!-- Night slider (Horizontally aligned) -->
+            <div id="night-slider-container" class="hidden p-3 bg-dynamic rounded-md mt-1 items-center gap-4">
+                <i class="ph-fill ph-moon text-main text-lg w-5 text-center shrink-0"></i>
+                <input type="range" id="night-slider" class="win-slider flex-grow !my-0" min="0" max="1" step="0.01" value="0" oninput="setNightMode(this.value)">
+            </div>
+        </div>
+    </div>
+
+    <!-- Calendar Panel -->
+    <div class="calendar-panel flex flex-col" id="calendar-panel">
+        <div class="flex items-center justify-between mb-4 px-2">
+            <h3 class="text-[15px] font-semibold text-main" id="cal-month-year">July 2026</h3>
+            <div class="flex gap-1">
+                <button class="w-8 h-8 rounded-md hover:bg-dynamic flex items-center justify-center transition" onclick="prevMonth()">
+                    <i class="ph ph-caret-up text-main"></i>
+                </button>
+                <button class="w-8 h-8 rounded-md hover:bg-dynamic flex items-center justify-center transition" onclick="nextMonth()">
+                    <i class="ph ph-caret-down text-main"></i>
+                </button>
+            </div>
+        </div>
+        
+        <div class="grid grid-cols-7 gap-1 text-center mb-2 px-2">
+            <div class="text-[11px] font-semibold text-muted">Su</div>
+            <div class="text-[11px] font-semibold text-muted">Mo</div>
+            <div class="text-[11px] font-semibold text-muted">Tu</div>
+            <div class="text-[11px] font-semibold text-muted">We</div>
+            <div class="text-[11px] font-semibold text-muted">Th</div>
+            <div class="text-[11px] font-semibold text-muted">Fr</div>
+            <div class="text-[11px] font-semibold text-muted">Sa</div>
+        </div>
+        
+        <div class="grid grid-cols-7 gap-1 px-2 pb-1" id="cal-grid">
+            <!-- Javascript populated calendar cells -->
+        </div>
+    </div>
+
+    <script>
+        // --- State Variables ---
+        let recentWallpapers = []; 
+        let accentColorMode = 'auto'; 
+        let shadowsEnabled = true;
+        let baseGlassR = 255, baseGlassG = 255, baseGlassB = 255;
+        let glassOpacity = 0.7;
+        let baseAccentColor = '#0078D4';
+        let nightModeLevel = 0;
+        let taskbarLayout = 'separated';
+        let searchLocation = 'desktop';
+        
+        // Date & Time specific state
+        let autoTimeEnabled = false; // Default off (Universal Time UTC)
+        let autoDateEnabled = false; // Default off (Universal Date UTC)
+        let use24HourTime = false;   // Default off (12-hour AM/PM)
+
+        // --- Window Management Engine ---
+        function openApp(id) {
+            const win = document.getElementById(id);
+            if(!win) return;
+            win.classList.remove('minimized');
+            win.classList.add('show');
+            updateAppIndicator(id, 'open');
+            bringToFront(win);
+            
+            const sm = document.getElementById('start-menu');
+            if(sm) sm.classList.remove('show');
+        }
+
+        function closeApp(id) {
+            const win = document.getElementById(id);
+            if(!win) return;
+            win.classList.remove('show');
+            win.classList.remove('minimized');
+            updateAppIndicator(id, 'closed');
+            
+            // Immediately hide preview since app is dead
+            const previewPanel = document.getElementById('taskbar-preview');
+            if(previewPanel) previewPanel.classList.remove('show-preview');
+        }
+
+        function minimizeApp(id) {
+            const win = document.getElementById(id);
+            if(!win) return;
+            win.classList.add('minimized');
+            updateAppIndicator(id, 'minimized');
+            
+            // Immediately hide preview since they just minimized it
+            const previewPanel = document.getElementById('taskbar-preview');
+            if(previewPanel) previewPanel.classList.remove('show-preview');
+        }
+
+        function toggleApp(id) {
+            const win = document.getElementById(id);
+            if(!win) return;
+            
+            if(win.classList.contains('show')) {
+                if(win.classList.contains('minimized')) {
+                    openApp(id);
+                } else {
+                    minimizeApp(id);
+                }
+            } else {
+                openApp(id);
+            }
+        }
+
+        function bringToFront(element) {
+            document.querySelectorAll('.os-window').forEach(w => w.style.zIndex = 50);
+            element.style.zIndex = 51;
+        }
+
+        function updateAppIndicator(id, state) {
+            let indId;
+            if(id === 'settings-window') indId = 'ind-settings';
+            if(id === 'about-os-window') indId = 'ind-about';
+            
+            const ind = document.getElementById(indId);
+            if(!ind) return;
+            
+            // Base classes
+            ind.className = 'indicator absolute bottom-0 left-1/2 -translate-x-1/2 h-[3px] rounded-full transition-all duration-300 pointer-events-none';
+            ind.style.background = 'var(--accent-color)';
+            ind.style.boxShadow = '0 0 10px 1px var(--accent-color)'; // Glowing App Indicator effect
+            
+            if (state === 'open') {
+                ind.classList.add('w-[16px]', 'opacity-100');
+            } else if (state === 'minimized') {
+                ind.classList.add('w-[6px]', 'opacity-60');
+            } else {
+                ind.classList.add('w-0', 'opacity-0');
+            }
+        }
+
+        // --- Taskbar Live Hover Preview ---
+        let previewTimeout;
+
+        function showPreview(id, element) {
+            clearTimeout(previewTimeout);
+            const win = document.getElementById(id);
+            // Only show preview if the window is currently open or minimized
+            if(!win || (!win.classList.contains('show'))) return; 
+            
+            const previewPanel = document.getElementById('taskbar-preview');
+            const previewContent = document.getElementById('taskbar-preview-content');
+            const previewTitle = document.getElementById('preview-title');
+            const previewIcon = document.getElementById('preview-icon');
+            
+            previewContent.innerHTML = '';
+            
+            if(id === 'settings-window') {
+                previewTitle.textContent = "Settings";
+                previewIcon.src = "https://img.icons8.com/?size=100&id=s5NUIabJrb4C&format=png&color=000000";
+            } else if(id === 'about-os-window') {
+                previewTitle.textContent = "About OS";
+                previewIcon.src = "https://img.icons8.com/?size=100&id=VQOfeAx5KWTK&format=png&color=000000";
+            }
+
+            // Interactive Click Support
+            previewPanel.onclick = function(e) {
+                e.stopPropagation();
+                openApp(id);
+                if(previewPanel) previewPanel.classList.remove('show-preview');
+            };
+
+            // Clone Window DOM for Live Snapshot
+            const clone = win.cloneNode(true);
+            clone.style.position = 'relative';
+            clone.style.left = '0';
+            clone.style.top = '0';
+            clone.style.transform = 'none'; 
+            clone.style.opacity = '1';
+            clone.classList.remove('minimized'); 
+            clone.style.pointerEvents = 'none';
+            
+            // Fix bounds and shadows so it scales nicely without clipping overflow
+            clone.style.width = win.offsetWidth + 'px';
+            clone.style.height = win.offsetHeight + 'px';
+            clone.style.margin = '0';
+            clone.style.boxShadow = 'none'; // Stripped original shadow to prevent clipping during scale
+            
+            clone.removeAttribute('id');
+            clone.querySelectorAll('*').forEach(el => el.removeAttribute('id'));
+            clone.querySelectorAll('.resize-handle').forEach(el => el.style.display = 'none');
+
+            // Hardcode scale for preview
+            const scale = 0.22;
+            previewContent.style.transform = `scale(${scale})`;
+            previewContent.style.width = win.offsetWidth + 'px';
+            previewContent.style.height = win.offsetHeight + 'px';
+            
+            previewContent.appendChild(clone);
+            
+            const container = document.getElementById('preview-content-container');
+            const scaledWidth = win.offsetWidth * scale;
+            const scaledHeight = win.offsetHeight * scale;
+            container.style.width = scaledWidth + 'px';
+            container.style.height = scaledHeight + 'px';
+
+            const rect = element.getBoundingClientRect();
+            let centerLeft = rect.left + (rect.width / 2);
+            
+            // Calculate total preview width: scaled content + padding (10px on each side = 20px)
+            const previewTotalWidth = scaledWidth + 20;
+            const marginFromEdge = 10; // 10px minimal clearance from screen edge
+            
+            // Bound clamping logic (stops clipping off edge of screen)
+            if (centerLeft - (previewTotalWidth / 2) < marginFromEdge) {
+                centerLeft = (previewTotalWidth / 2) + marginFromEdge;
+            } else if (centerLeft + (previewTotalWidth / 2) > window.innerWidth - marginFromEdge) {
+                centerLeft = window.innerWidth - (previewTotalWidth / 2) - marginFromEdge;
+            }
+
+            previewPanel.style.left = centerLeft + 'px';
+            previewPanel.classList.add('show-preview');
+        }
+
+        function hidePreview() {
+            // Increased timeout so users can comfortably move mouse from taskbar into the preview
+            previewTimeout = setTimeout(() => {
+                const previewPanel = document.getElementById('taskbar-preview');
+                if(previewPanel) {
+                    previewPanel.classList.remove('show-preview');
+                }
+            }, 250); 
+        }
+
+        // --- Search Capabilities ---
+        const systemSearchData = [
+            { title: "Settings", type: "System App", icon: "ph-gear", action: () => openApp('settings-window') },
+            { title: "About OS", type: "System App", icon: "ph-info", action: () => openApp('about-os-window') },
+            { title: "Secret Dog", type: "Easter Egg", icon: "ph-dog", action: () => { openApp('dog-window'); } },
+            { title: "Lock Screen", type: "Command", icon: "ph-lock", action: showLogin },
+            { title: "Restart", type: "Command", icon: "ph-power", action: () => location.reload() }
+        ];
+
+        // --- Calendar Engine ---
+        let currentCalendarDate = new Date();
+
+        function renderCalendar() {
+            // Adjust visualization so calendar renders natively to what setting is enabled
+            let calD = new Date(currentCalendarDate);
+            if (!autoDateEnabled) {
+                calD = new Date(currentCalendarDate.getTime() + currentCalendarDate.getTimezoneOffset() * 60000);
+            }
+
+            const year = calD.getFullYear();
+            const month = calD.getMonth();
+
+            const firstDay = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0);
+            const daysInMonth = lastDay.getDate();
+            const startingDay = firstDay.getDay(); 
+
+            const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+            document.getElementById('cal-month-year').textContent = `${monthNames[month]} ${year}`;
+
+            const grid = document.getElementById('cal-grid');
+            grid.innerHTML = '';
+
+            // Previous month days
+            const prevMonthLastDay = new Date(year, month, 0).getDate();
+            for (let i = startingDay - 1; i >= 0; i--) {
+                grid.appendChild(createDayCell(prevMonthLastDay - i, true));
+            }
+
+            // Current month days
+            const today = new Date();
+            let refToday = new Date(today);
+            if (!autoDateEnabled) refToday = new Date(today.getTime() + today.getTimezoneOffset() * 60000);
+
+            for (let i = 1; i <= daysInMonth; i++) {
+                const isToday = refToday.getDate() === i && refToday.getMonth() === month && refToday.getFullYear() === year;
+                grid.appendChild(createDayCell(i, false, isToday));
+            }
+
+            // Next month days
+            const totalCells = startingDay + daysInMonth;
+            let nextDays = 1;
+            for (let i = totalCells; i < 42; i++) {
+                grid.appendChild(createDayCell(nextDays++, true));
+            }
+        }
+
+        function createDayCell(day, isOtherMonth, isToday = false) {
+            const div = document.createElement('div');
+            div.className = `flex items-center justify-center w-[40px] h-[40px] rounded-full text-[13px] transition-colors cursor-default select-none mx-auto`;
+
+            if (isToday) {
+                div.className += ` text-white font-semibold shadow-sm`;
+                div.style.background = 'var(--accent-gradient)';
+                div.style.border = '1px solid rgba(255,255,255,0.2)';
+            } else if (isOtherMonth) {
+                div.className += ` text-muted hover:bg-dynamic-hover`;
+            } else {
+                div.className += ` text-main hover:bg-dynamic-hover font-medium`;
+            }
+            div.textContent = day;
+            return div;
+        }
+
+        function prevMonth() {
+            currentCalendarDate.setMonth(currentCalendarDate.getMonth() - 1);
+            renderCalendar();
+        }
+
+        function nextMonth() {
+            currentCalendarDate.setMonth(currentCalendarDate.getMonth() + 1);
+            renderCalendar();
+        }
+
+        function toggleCalendar(e) {
+            e.stopPropagation();
+            const cal = document.getElementById('calendar-panel');
+            if (cal.classList.contains('show')) {
+                cal.classList.remove('show');
+            } else {
+                document.getElementById('quick-settings').classList.remove('show');
+                document.getElementById('start-menu').classList.remove('show');
+                
+                cal.classList.add('show');
+                currentCalendarDate = new Date(); 
+                renderCalendar();
+            }
+        }
+
+        function handleSearchInput(e) {
+            const query = e.target.value.toLowerCase().trim();
+            const dropdown = document.getElementById('search-dropdown');
+            
+            if (!query) {
+                dropdown.classList.remove('show');
+                return;
+            }
+            
+            const results = systemSearchData.filter(item => item.title.toLowerCase().includes(query) || item.type.toLowerCase().includes(query));
+            dropdown.innerHTML = '';
+            
+            if (results.length > 0) {
+                results.forEach(res => {
+                    const el = document.createElement('div');
+                    el.className = "flex items-center gap-3 p-2 rounded hover:bg-dynamic cursor-pointer text-main transition";
+                    el.innerHTML = `<i class="ph ${res.icon} text-xl" style="color: var(--accent-color);"></i><div class="flex flex-col"><span class="text-[13px] font-medium">${res.title}</span><span class="text-[11px] text-muted">${res.type}</span></div>`;
+                    el.onclick = () => {
+                        res.action();
+                        dropdown.classList.remove('show');
+                        e.target.value = '';
+                    };
+                    dropdown.appendChild(el);
+                });
+            } else {
+                dropdown.innerHTML = '<div class="p-3 text-[13px] text-muted text-center">No apps or commands found</div>';
+            }
+            dropdown.classList.add('show');
+        }
+
+        function handleSearchEnter(e) {
+            if (e.key === 'Enter') {
+                const query = e.target.value.trim().toLowerCase();
+                const dropdown = document.getElementById('search-dropdown');
+                if (query !== '') {
+                    const results = systemSearchData.filter(item => item.title.toLowerCase().includes(query) || item.type.toLowerCase().includes(query));
+                    if (results.length > 0) results[0].action();
+                    e.target.value = '';
+                    e.target.blur();
+                    dropdown.classList.remove('show');
+                }
+            }
+        }
+
+        function hexToRgb(hex) {
+            const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+            return result ? { r: parseInt(result[1], 16), g: parseInt(result[2], 16), b: parseInt(result[3], 16) } : null;
+        }
+
+        function rgbToHex(r, g, b) {
+            return "#" + (1 << 24 | r << 16 | g << 8 | b).toString(16).slice(1).toUpperCase();
+        }
+
+        const idbConfig = { dbName: 'Win12_OS', storeName: 'wallpapers', version: 1 };
+        
+        const initDB = () => new Promise((resolve, reject) => {
+            const req = indexedDB.open(idbConfig.dbName, idbConfig.version);
+            req.onupgradeneeded = (e) => {
+                const db = e.target.result;
+                if(!db.objectStoreNames.contains(idbConfig.storeName)) {
+                    db.createObjectStore(idbConfig.storeName);
+                }
+            };
+            req.onsuccess = () => resolve(req.result);
+            req.onerror = () => reject(req.error);
+        });
+
+        async function saveRecentsToIDB(recentsArr) {
+            try {
+                const toSave = recentsArr.map(item => {
+                    if (item.type === 'file') return { type: 'file', file: item.file, accent: item.accent };
+                    return { type: 'url', url: item.url, accent: item.accent };
+                });
+                const db = await initDB();
+                const tx = db.transaction(idbConfig.storeName, 'readwrite');
+                tx.objectStore(idbConfig.storeName).put(toSave, 'recents_list');
+            } catch(e) {}
+        }
+
+        async function loadRecentsFromIDB() {
+            try {
+                const db = await initDB();
+                return new Promise((resolve) => {
+                    const tx = db.transaction(idbConfig.storeName, 'readonly');
+                    const req = tx.objectStore(idbConfig.storeName).get('recents_list');
+                    req.onsuccess = () => resolve(req.result || null);
+                    req.onerror = () => resolve(null);
+                });
+            } catch(e) { return null; }
+        }
+
+        async function initializeSystem() {
+            try {
+                accentColorMode = localStorage.getItem('win12_colormode') || 'auto';
+                const storedShadows = localStorage.getItem('win12_shadows');
+                if (storedShadows !== null) shadowsEnabled = (storedShadows === 'true');
+                
+                const storedGlass = localStorage.getItem('win12_glassrgb');
+                if (storedGlass) {
+                    const parsed = JSON.parse(storedGlass);
+                    baseGlassR = parsed.r; baseGlassG = parsed.g; baseGlassB = parsed.b;
+                }
+                const storedOpacity = localStorage.getItem('win12_glassopacity');
+                if (storedOpacity) glassOpacity = parseFloat(storedOpacity);
+
+                const storedAccent = localStorage.getItem('win12_accentcolor');
+                if (storedAccent) baseAccentColor = storedAccent;
+                
+                const storedLayout = localStorage.getItem('win12_taskbarlayout');
+                if (storedLayout) taskbarLayout = storedLayout;
+
+                const storedSearchLoc = localStorage.getItem('win12_searchloc');
+                if (storedSearchLoc) searchLocation = storedSearchLoc;
+                
+                const storedAutoTime = localStorage.getItem('win12_autotime');
+                if (storedAutoTime !== null) autoTimeEnabled = (storedAutoTime === 'true');
+                
+                const storedAutoDate = localStorage.getItem('win12_autodate');
+                if (storedAutoDate !== null) autoDateEnabled = (storedAutoDate === 'true');
+                
+                const stored24h = localStorage.getItem('win12_24hour');
+                if (stored24h !== null) use24HourTime = (stored24h === 'true');
+                
+            } catch(e) {}
+
+            commitColors();
+            setTaskbarLayout(taskbarLayout, false);
+            setSearchLocation(searchLocation, false);
+            
+            const shadowTog = document.getElementById('shadow-toggle');
+            if(shadowTog) shadowTog.checked = shadowsEnabled;
+            handleShadowToggle(shadowsEnabled, false);
+            
+            const timeAutoToggle = document.getElementById('time-auto-toggle');
+            if (timeAutoToggle) timeAutoToggle.checked = autoTimeEnabled;
+            
+            const dateAutoToggle = document.getElementById('date-auto-toggle');
+            if (dateAutoToggle) dateAutoToggle.checked = autoDateEnabled;
+            
+            const time24Toggle = document.getElementById('time-24h-toggle');
+            if (time24Toggle) time24Toggle.checked = use24HourTime;
+
+            const transSlider = document.getElementById('transparency-slider');
+            const smTransSlider = document.getElementById('sm-transparency-slider');
+            
+            if(transSlider) {
+                transSlider.value = glassOpacity;
+                const el1 = document.getElementById('transparency-val');
+                if (el1) el1.textContent = Math.round(glassOpacity * 100) + '%';
+                updateSliderFill(transSlider);
+            }
+            if(smTransSlider) {
+                smTransSlider.value = glassOpacity;
+                const el2 = document.getElementById('sm-transparency-val');
+                if (el2) el2.textContent = Math.round(glassOpacity * 100) + '%';
+                updateSliderFill(smTransSlider);
+            }
+            
+            const glassColorPicker = document.getElementById('glass-color-picker');
+            if(glassColorPicker) glassColorPicker.value = rgbToHex(baseGlassR, baseGlassG, baseGlassB);
+            
+            const accentColorPicker = document.getElementById('accent-color-picker');
+            if(accentColorPicker) accentColorPicker.value = baseAccentColor;
+
+            let recents = [];
+            try {
+                const idbRecents = await loadRecentsFromIDB();
+                if (idbRecents && idbRecents.length > 0) {
+                    recents = idbRecents.map(item => {
+                        if (item.type === 'file' && item.file) {
+                            return { type: 'file', file: item.file, url: URL.createObjectURL(item.file), accent: item.accent || '#0078D4' };
+                        }
+                        return { type: 'url', url: item.url, accent: item.accent || '#0078D4' };
+                    });
+                }
+            } catch (e) {}
+
+            if (recents.length === 0) {
+                recents = [{ type: 'url', url: "https://wallpapercave.com/wp/wp12636488.png", accent: '#0078D4' }];
+            }
+
+            recentWallpapers = recents;
+            applyWallpaper(recentWallpapers[0], false);
+            
+            setColorMode(accentColorMode, false);
+            renderRecentWallpapers();
+            renderCalendar();
+
+            const savedPin = localStorage.getItem('win12_pin');
+            const pinInput = document.getElementById('pin-input');
+            const loginBtn = document.getElementById('login-btn');
+            
+            if (pinInput && loginBtn) {
+                if (!savedPin) {
+                    pinInput.placeholder = "Create 4-digit PIN";
+                    loginBtn.title = "Create PIN";
+                } else {
+                    pinInput.placeholder = "Enter PIN";
+                    loginBtn.title = "Sign in";
+                }
+            }
+        }
+
+        function handleTimeModeToggle(isChecked) {
+            autoTimeEnabled = isChecked;
+            localStorage.setItem('win12_autotime', isChecked);
+            updateClocks();
+        }
+
+        function handleDateModeToggle(isChecked) {
+            autoDateEnabled = isChecked;
+            localStorage.setItem('win12_autodate', isChecked);
+            updateClocks();
+            renderCalendar();
+        }
+        
+        function handle24HourToggle(isChecked) {
+            use24HourTime = isChecked;
+            localStorage.setItem('win12_24hour', isChecked);
+            updateClocks();
+        }
+
+        function updateClocks() {
+            const now = new Date();
+            
+            let h = autoTimeEnabled ? now.getHours() : now.getUTCHours();
+            let m = autoTimeEnabled ? now.getMinutes() : now.getUTCMinutes();
+            
+            let displayH = h;
+            let ampm = '';
+            
+            if (!use24HourTime) {
+                ampm = h >= 12 ? ' PM' : ' AM';
+                displayH = h % 12; 
+                displayH = displayH ? displayH : 12; 
+            } else {
+                displayH = displayH < 10 ? '0' + displayH : displayH;
+            }
+            
+            let displayM = m < 10 ? '0' + m : m;
+            const timeStr = `${displayH}:${displayM}${ampm}`;
+            
+            const dMonth = autoDateEnabled ? now.getMonth() : now.getUTCMonth();
+            const dDate = autoDateEnabled ? now.getDate() : now.getUTCDate();
+            const dYear = autoDateEnabled ? now.getFullYear() : now.getUTCFullYear();
+            
+            const tbDateStr = `${dMonth + 1}/${dDate}/${dYear}`;
+            
+            const dateTz = autoDateEnabled ? undefined : 'UTC';
+            const lockDateStr = now.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', timeZone: dateTz });
+            const settingsDateStr = now.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric', timeZone: dateTz });
+
+            const lockTimeEl = document.getElementById('lock-time');
+            const lockDateEl = document.getElementById('lock-date');
+            if (lockTimeEl) lockTimeEl.textContent = timeStr;
+            if (lockDateEl) lockDateEl.textContent = lockDateStr;
+
+            const tbTimeEl = document.getElementById('tb-time');
+            const tbDateEl = document.getElementById('tb-date');
+            if (tbTimeEl) tbTimeEl.textContent = timeStr;
+            if (tbDateEl) tbDateEl.textContent = tbDateStr;
+            
+            const stTimeEl = document.getElementById('settings-current-time');
+            const stDateEl = document.getElementById('settings-current-date');
+            if (stTimeEl) stTimeEl.textContent = timeStr;
+            if (stDateEl) stDateEl.textContent = settingsDateStr;
+            
+            if (now.getHours() === 0 && now.getMinutes() === 0 && now.getSeconds() === 0) {
+                renderCalendar();
+            }
+        }
+        setInterval(updateClocks, 1000);
+        updateClocks();
+
+        const startButton = document.getElementById('start-button');
+        const startMenu = document.getElementById('start-menu');
+
+        if (startButton && startMenu) {
+            startButton.addEventListener('click', (e) => {
+                startMenu.classList.toggle('show');
+                const cal = document.getElementById('calendar-panel');
+                if (cal) cal.classList.remove('show');
+                const qs = document.getElementById('quick-settings');
+                if (qs) qs.classList.remove('show');
+                e.stopPropagation(); 
+            });
+        }
+
+        document.addEventListener('click', (e) => {
+            if (startMenu && startMenu.classList.contains('show') && !startMenu.contains(e.target) && !e.target.closest('.start-button')) {
+                startMenu.classList.remove('show');
+            }
+            const qs = document.getElementById('quick-settings');
+            if (qs && qs.classList.contains('show') && !qs.contains(e.target) && !e.target.closest('.Right-taskbar')) {
+                qs.classList.remove('show');
+            }
+            const sd = document.getElementById('search-dropdown');
+            if (sd && sd.classList.contains('show') && !e.target.closest('#main-search-bar') && !e.target.closest('#taskbar-search-anchor')) {
+                sd.classList.remove('show');
+            }
+            const cal = document.getElementById('calendar-panel');
+            if (cal && cal.classList.contains('show') && !cal.contains(e.target) && !e.target.closest('.Right-taskbar')) {
+                cal.classList.remove('show');
+            }
+        });
+
+        function showLogin() {
+            const authEl = document.getElementById('auth-overlay');
+            if(authEl) {
+                authEl.classList.add('state-login');
+                setTimeout(() => {
+                    const pinInput = document.getElementById('pin-input');
+                    if (pinInput) pinInput.focus();
+                }, 500);
+            }
+        }
+
+        function handleLogin() {
+            const pinInput = document.getElementById('pin-input');
+            const errorMsg = document.getElementById('pin-error');
+            if (!pinInput || !errorMsg) return;
+            
+            const enteredPin = pinInput.value;
+            const savedPin = localStorage.getItem('win12_pin');
+
+            if (!savedPin) {
+                if (enteredPin.length >= 4) {
+                    localStorage.setItem('win12_pin', enteredPin);
+                    unlockSystem();
+                } else {
+                    errorMsg.textContent = "PIN must be at least 4 characters.";
+                    errorMsg.classList.remove('hidden');
+                }
+            } else {
+                if (enteredPin === savedPin) {
+                    unlockSystem();
+                } else {
+                    errorMsg.textContent = "Incorrect PIN. Try again.";
+                    errorMsg.classList.remove('hidden');
+                    pinInput.value = "";
+                }
+            }
+        }
+
+        function unlockSystem() {
+            const authEl = document.getElementById('auth-overlay');
+            if(authEl) {
+                const pinError = document.getElementById('pin-error');
+                if (pinError) pinError.classList.add('hidden');
+                authEl.classList.add('state-unlocked');
+            }
+        }
+
+        function makeDraggable(element, handle) {
+            let isDragging = false;
+            let startX, startY, initialLeft, initialTop;
+
+            if (handle) {
+                handle.addEventListener('mousedown', (e) => {
+                    isDragging = true;
+                    document.querySelectorAll('.os-window').forEach(w => w.style.zIndex = 50);
+                    element.style.zIndex = 51;
+                    const rect = element.getBoundingClientRect();
+                    element.style.transform = 'none';
+                    element.style.left = rect.left + 'px';
+                    element.style.top = rect.top + 'px';
+                    startX = e.clientX; startY = e.clientY;
+                    initialLeft = rect.left; initialTop = rect.top;
+                    document.addEventListener('mousemove', drag);
+                    document.addEventListener('mouseup', stopDrag);
+                });
+            }
+
+            function drag(e) {
+                if (!isDragging) return;
+                element.style.left = (initialLeft + (e.clientX - startX)) + 'px';
+                element.style.top = (initialTop + (e.clientY - startY)) + 'px';
+            }
+            function stopDrag() {
+                isDragging = false;
+                document.removeEventListener('mousemove', drag);
+                document.removeEventListener('mouseup', stopDrag);
+            }
+        }
+
+        function makeResizable(element) {
+            const directions = ['t', 'b', 'l', 'r', 'tl', 'tr', 'bl', 'br'];
+            const cursors = { t: 'ns-resize', b: 'ns-resize', l: 'ew-resize', r: 'ew-resize', tl: 'nwse-resize', tr: 'nesw-resize', bl: 'nesw-resize', br: 'nwse-resize' };
+
+            directions.forEach(dir => {
+                const handle = document.createElement('div');
+                handle.className = `resize-handle resize-${dir}`;
+                handle.style.position = 'absolute';
+                handle.style.cursor = cursors[dir];
+                handle.style.zIndex = '9999';
+
+                const thickness = '8px'; const cornerSize = '16px';
+                if (dir === 't') { handle.style.top = '0'; handle.style.left = cornerSize; handle.style.right = cornerSize; handle.style.height = thickness; }
+                else if (dir === 'b') { handle.style.bottom = '0'; handle.style.left = cornerSize; handle.style.right = cornerSize; handle.style.height = thickness; }
+                else if (dir === 'l') { handle.style.left = '0'; handle.style.top = cornerSize; handle.style.bottom = cornerSize; handle.style.width = thickness; }
+                else if (dir === 'r') { handle.style.right = '0'; handle.style.top = cornerSize; handle.style.bottom = cornerSize; handle.style.width = thickness; }
+                else if (dir === 'tl') { handle.style.top = '0'; handle.style.left = '0'; handle.style.width = cornerSize; handle.style.height = cornerSize; }
+                else if (dir === 'tr') { handle.style.top = '0'; handle.style.right = '0'; handle.style.width = cornerSize; handle.style.height = cornerSize; }
+                else if (dir === 'bl') { handle.style.bottom = '0'; handle.style.left = '0'; handle.style.width = cornerSize; handle.style.height = cornerSize; }
+                else if (dir === 'br') { handle.style.bottom = '0'; handle.style.right = '0'; handle.style.width = cornerSize; handle.style.height = cornerSize; }
+
+                element.appendChild(handle);
+
+                let isResizing = false;
+                let startX, startY, startWidth, startHeight, startLeft, startTop;
+
+                handle.addEventListener('mousedown', (e) => {
+                    isResizing = true; e.preventDefault(); e.stopPropagation();
+                    document.querySelectorAll('.os-window').forEach(w => w.style.zIndex = 50);
+                    element.style.zIndex = 51;
+
+                    const rect = element.getBoundingClientRect();
+                    element.style.transform = 'none';
+                    element.style.left = rect.left + 'px'; element.style.top = rect.top + 'px';
+                    startX = e.clientX; startY = e.clientY;
+                    startWidth = rect.width; startHeight = rect.height;
+                    startLeft = rect.left; startTop = rect.top;
+
+                    function resize(ev) {
+                        if (!isResizing) return;
+                        const dx = ev.clientX - startX; const dy = ev.clientY - startY;
+                        let newWidth = startWidth, newHeight = startHeight, newLeft = startLeft, newTop = startTop;
+                        const minWidth = 300, minHeight = 200;
+
+                        if (dir.includes('r')) newWidth = Math.max(minWidth, startWidth + dx);
+                        else if (dir.includes('l')) { const targetWidth = startWidth - dx; if (targetWidth >= minWidth) { newWidth = targetWidth; newLeft = startLeft + dx; } }
+                        if (dir.includes('b')) newHeight = Math.max(minHeight, startHeight + dy);
+                        else if (dir.includes('t')) { const targetHeight = startHeight - dy; if (targetHeight >= minHeight) { newHeight = targetHeight; newTop = startTop + dy; } }
+
+                        element.style.width = newWidth + 'px'; element.style.height = newHeight + 'px';
+                        element.style.left = newLeft + 'px'; element.style.top = newTop + 'px';
+                    }
+
+                    function stopResize() {
+                        isResizing = false;
+                        document.removeEventListener('mousemove', resize);
+                        document.removeEventListener('mouseup', stopResize);
+                    }
+                    document.addEventListener('mousemove', resize);
+                    document.addEventListener('mouseup', stopResize);
+                });
+            });
+        }
+
+        document.querySelectorAll('.os-window').forEach(win => {
+            const header = win.querySelector('.window-header');
+            if (header) makeDraggable(win, header);
+            makeResizable(win); 
+        });
+
+        let kStreak = 0; let kTimeout;
+        document.addEventListener('keydown', (e) => {
+            const authEl = document.getElementById('auth-overlay');
+            if (document.activeElement.id === 'pin-input' || document.activeElement.classList.contains('real-search-input')) return; 
+            if (authEl && !authEl.classList.contains('state-unlocked') && !authEl.classList.contains('state-login')) { showLogin(); return; }
+            
+            if (e.key === 'Meta') {
+                const sm = document.getElementById('start-menu');
+                if (sm) sm.classList.toggle('show');
+                const qs = document.getElementById('quick-settings');
+                if (qs && qs.classList.contains('show')) qs.classList.remove('show');
+                const cal = document.getElementById('calendar-panel');
+                if (cal && cal.classList.contains('show')) cal.classList.remove('show');
+                return;
+            }
+
+            if (e.key.toLowerCase() === 'k') {
+                kStreak++; clearTimeout(kTimeout);
+                if (kStreak === 3) {
+                    openApp('dog-window');
+                    kStreak = 0;
+                } else { kTimeout = setTimeout(() => kStreak = 0, 1000); }
+            }
+        });
+
+        function switchSettingsTab(tabName) {
+            const tabs = ['personalization', 'updates', 'time', 'taskbar'];
+            tabs.forEach(t => {
+                const pane = document.getElementById(`settings-tab-${t}`);
+                const btn = document.getElementById(`sidebar-btn-${t}`);
+                if (t === tabName) {
+                    if(pane) pane.classList.remove('hidden');
+                    if(btn) {
+                        btn.classList.add('bg-dynamic-hover');
+                        const indicator = btn.querySelector('.sidebar-indicator');
+                        if (indicator) indicator.classList.remove('hidden');
+                    }
+                } else {
+                    if(pane) pane.classList.add('hidden');
+                    if(btn) {
+                        btn.classList.remove('bg-dynamic-hover');
+                        const indicator = btn.querySelector('.sidebar-indicator');
+                        if (indicator) indicator.classList.add('hidden');
+                    }
+                }
+            });
+        }
+
+        function copyOSDetails() {
+            const details = "Edition: Windows 12\nVersion: 1H07\nOS Build: 080";
+            const textArea = document.createElement("textarea");
+            textArea.value = details; textArea.style.position = "fixed"; textArea.style.opacity = "0";
+            document.body.appendChild(textArea); textArea.focus(); textArea.select();
+            try {
+                document.execCommand('copy');
+                const toast = document.getElementById('copy-toast');
+                if (toast) {
+                    toast.style.opacity = '1'; setTimeout(() => toast.style.opacity = '0', 2000);
+                }
+            } catch (err) {}
+            textArea.remove();
+        }
+
+        const gPicker = document.getElementById('glass-color-picker');
+        if (gPicker) {
+            gPicker.addEventListener('input', function(e) { setManualColor('glass', e.target.value); });
+        }
+        
+        const aPicker = document.getElementById('accent-color-picker');
+        if (aPicker) {
+            aPicker.addEventListener('input', function(e) { setManualColor('accent', e.target.value); });
+        }
+
+        function setManualColor(type, hex) {
+            handleColorToggle(false, false); // Turn off auto colors
+            if (type === 'accent') {
+                baseAccentColor = hex;
+                const acPicker = document.getElementById('accent-color-picker');
+                if (acPicker) acPicker.value = hex;
+                
+                // Update open indicators live
+                document.querySelectorAll('.indicator').forEach(ind => {
+                    ind.style.background = hex;
+                    ind.style.boxShadow = `0 0 10px 1px ${hex}`;
+                });
+            } else if (type === 'glass') {
+                const rgb = hexToRgb(hex);
+                if (rgb) {
+                    baseGlassR = rgb.r; baseGlassG = rgb.g; baseGlassB = rgb.b;
+                    const gcPicker = document.getElementById('glass-color-picker');
+                    if (gcPicker) gcPicker.value = hex;
+                }
+            }
+            commitColors(true);
+        }
+
+        function updateSliderFill(slider) {
+            const val = ((slider.value - slider.min) / (slider.max - slider.min)) * 100;
+            slider.style.background = `linear-gradient(to right, var(--accent-color) ${val}%, var(--element-bg) ${val}%)`;
+        }
+
+        function handleTransparencyInput(e) {
+            glassOpacity = parseFloat(e.target.value);
+            const el1 = document.getElementById('transparency-val');
+            const el2 = document.getElementById('sm-transparency-val');
+            if(el1) el1.textContent = Math.round(glassOpacity * 100) + '%';
+            if(el2) el2.textContent = Math.round(glassOpacity * 100) + '%';
+            
+            const s1 = document.getElementById('transparency-slider');
+            const s2 = document.getElementById('sm-transparency-slider');
+            if(s1 && e.target !== s1) { s1.value = glassOpacity; updateSliderFill(s1); }
+            if(s2 && e.target !== s2) { s2.value = glassOpacity; updateSliderFill(s2); }
+            
+            updateSliderFill(e.target);
+            commitColors(true);
+        }
+
+        const tSlider = document.getElementById('transparency-slider');
+        if (tSlider) tSlider.addEventListener('input', handleTransparencyInput);
+        
+        const smSlider = document.getElementById('sm-transparency-slider');
+        if (smSlider) smSlider.addEventListener('input', handleTransparencyInput);
+
+        // --- TOGGLE LOGIC: Accordions and Checkboxes ---
+        function toggleColorAccordion(source) {
+            const prefix = source === 'main' ? 'main' : 'sm';
+            const panel = document.getElementById(`${prefix}-manual-colors-panel`);
+            const caret = document.getElementById(`${prefix}-color-accordion-caret`);
+            
+            if (panel && caret) {
+                if (panel.classList.contains('hidden')) {
+                    panel.classList.remove('hidden');
+                    panel.classList.add('flex');
+                    caret.style.transform = 'rotate(180deg)';
+                } else {
+                    panel.classList.add('hidden');
+                    panel.classList.remove('flex');
+                    caret.style.transform = 'rotate(0deg)';
+                }
+            }
+        }
+        
+        function toggleTimeAccordion() {
+            const panel = document.getElementById('time-sub-panel');
+            const caret = document.getElementById('time-accordion-caret');
+            
+            if (panel && caret) {
+                if (panel.classList.contains('hidden')) {
+                    panel.classList.remove('hidden');
+                    panel.classList.add('flex');
+                    caret.style.transform = 'rotate(180deg)';
+                } else {
+                    panel.classList.add('hidden');
+                    panel.classList.remove('flex');
+                    caret.style.transform = 'rotate(0deg)';
+                }
+            }
+        }
+
+        function handleColorToggle(isChecked, triggerApply = true) {
+            const mode = isChecked ? 'auto' : 'manual';
+            setColorMode(mode, triggerApply);
+        }
+
+        function handleShadowToggle(isChecked, save = true) {
+            shadowsEnabled = isChecked;
+            const toggle = document.getElementById('shadow-toggle');
+            if (toggle) toggle.checked = isChecked;
+            
+            if (isChecked) {
+                document.body.classList.remove('no-shadows');
+            } else {
+                document.body.classList.add('no-shadows');
+            }
+            if (save) localStorage.setItem('win12_shadows', isChecked);
+        }
+
+        function setColorMode(mode, triggerApply = true) {
+            accentColorMode = mode;
+            const isAuto = (mode === 'auto');
+            
+            const mainToggle = document.getElementById('main-color-auto-toggle');
+            const smToggle = document.getElementById('sm-color-auto-toggle');
+            if (mainToggle) mainToggle.checked = isAuto;
+            if (smToggle) smToggle.checked = isAuto;
+
+            const mainIcon = document.getElementById('main-color-caret-icon');
+            const smIcon = document.getElementById('sm-color-caret-icon');
+            
+            if (isAuto) {
+                if (mainIcon) mainIcon.classList.remove('opacity-50');
+                if (smIcon) smIcon.classList.remove('opacity-50');
+            } else {
+                if (mainIcon) mainIcon.classList.add('opacity-50');
+                if (smIcon) smIcon.classList.add('opacity-50');
+            }
+
+            localStorage.setItem('win12_colormode', mode);
+            if(triggerApply) applyThemeColors();
+        }
+
+        // --- Layout Control Methods ---
+        function setTaskbarLayout(layout, save=true) {
+            taskbarLayout = layout;
+            const tb = document.getElementById('main-taskbar');
+            const ind = document.getElementById('tb-layout-indicator');
+            const bSep = document.getElementById('btn-tb-separated');
+            const bUni = document.getElementById('btn-tb-unified');
+            
+            if (layout === 'unified') {
+                if(tb) tb.classList.add('unified');
+                if(ind) ind.style.transform = 'translateX(100%)';
+                if(bUni) { bUni.classList.add('text-main'); bUni.classList.remove('text-muted'); }
+                if(bSep) { bSep.classList.add('text-muted'); bSep.classList.remove('text-main'); }
+            } else {
+                if(tb) tb.classList.remove('unified');
+                if(ind) ind.style.transform = 'translateX(0)';
+                if(bSep) { bSep.classList.add('text-main'); bSep.classList.remove('text-muted'); }
+                if(bUni) { bUni.classList.add('text-muted'); bUni.classList.remove('text-main'); }
+            }
+            if(save) localStorage.setItem('win12_taskbarlayout', layout);
+        }
+
+        function setSearchLocation(loc, save=true) {
+            searchLocation = loc;
+            const searchBar = document.getElementById('main-search-bar');
+            const deskAnchor = document.getElementById('desktop-search-anchor');
+            const tbAnchor = document.getElementById('taskbar-search-anchor');
+            
+            const ind = document.getElementById('search-loc-indicator');
+            const bDesk = document.getElementById('btn-search-desktop');
+            const bTb = document.getElementById('btn-search-taskbar');
+
+            if (loc === 'taskbar') {
+                if(searchBar) {
+                    searchBar.classList.add('in-taskbar-mode');
+                    if(tbAnchor) tbAnchor.appendChild(searchBar);
+                }
+                if(ind) ind.style.transform = 'translateX(100%)';
+                if(bTb) { bTb.classList.add('text-main'); bTb.classList.remove('text-muted'); }
+                if(bDesk) { bDesk.classList.add('text-muted'); bDesk.classList.remove('text-main'); }
+            } else {
+                if(searchBar) {
+                    searchBar.classList.remove('in-taskbar-mode');
+                    if(deskAnchor) deskAnchor.appendChild(searchBar);
+                }
+                if(ind) ind.style.transform = 'translateX(0)';
+                if(bDesk) { bDesk.classList.add('text-main'); bDesk.classList.remove('text-muted'); }
+                if(bTb) { bTb.classList.add('text-muted'); bTb.classList.remove('text-main'); }
+            }
+            if(save) localStorage.setItem('win12_searchloc', loc);
+        }
+
+        function toggleQuickSettings(e) {
+            e.stopPropagation();
+            const qs = document.getElementById('quick-settings');
+            if(qs) {
+                if(qs.classList.contains('show')) {
+                    qs.classList.remove('show');
+                } else {
+                    document.getElementById('start-menu').classList.remove('show');
+                    const cal = document.getElementById('calendar-panel');
+                    if (cal) cal.classList.remove('show');
+                    qs.classList.add('show');
+                }
+            }
+        }
+
+        function toggleStartView() {
+            const appsView = document.getElementById('sm-apps-view');
+            const colorsView = document.getElementById('sm-colors-view');
+            const toggleIcon = document.getElementById('sm-toggle-icon');
+
+            if (appsView.classList.contains('hidden')) {
+                // Switch to Apps View
+                colorsView.classList.add('hidden');
+                appsView.classList.remove('hidden');
+                if (toggleIcon) toggleIcon.style.transform = 'rotate(0deg)';
+            } else {
+                // Switch to Colors View
+                appsView.classList.add('hidden');
+                colorsView.classList.remove('hidden');
+                if (toggleIcon) toggleIcon.style.transform = 'rotate(180deg)';
+            }
+        }
+
+        function toggleNightMode() {
+            if (nightModeLevel > 0) {
+                setNightMode(0);
+            } else {
+                setNightMode(0.5);
+                const sliderContainer = document.getElementById('night-slider-container');
+                if (sliderContainer) {
+                    sliderContainer.classList.remove('hidden');
+                    sliderContainer.classList.add('flex');
+                }
+            }
+        }
+
+        function setNightMode(val) {
+            nightModeLevel = parseFloat(val);
+            const slider = document.getElementById('night-slider');
+            if (slider) {
+                slider.value = val;
+                updateSliderFill(slider);
+            }
+            
+            const mainBtn = document.getElementById('nl-main-btn');
+            const mainIcon = document.getElementById('nl-main-icon');
+            const mainText = document.getElementById('nl-main-text');
+            const chevBtn = document.getElementById('nl-chev-btn');
+            
+            if (mainBtn && chevBtn) {
+                if (nightModeLevel > 0) {
+                    mainBtn.style.background = 'var(--accent-color)';
+                    chevBtn.style.background = 'var(--accent-color)';
+                    mainBtn.classList.remove('bg-dynamic', 'bg-dynamic-hover');
+                    chevBtn.classList.remove('bg-dynamic', 'bg-dynamic-hover');
+                    
+                    if(mainIcon) { mainIcon.classList.remove('text-main'); mainIcon.style.color = '#ffffff'; }
+                    if(mainText) { mainText.classList.remove('text-main'); mainText.style.color = '#ffffff'; }
+                    const chevIcon = document.getElementById('nl-chev-icon');
+                    if(chevIcon) { chevIcon.classList.remove('text-main'); chevIcon.style.color = '#ffffff'; }
+                } else {
+                    mainBtn.style.background = '';
+                    chevBtn.style.background = '';
+                    mainBtn.classList.add('bg-dynamic', 'bg-dynamic-hover');
+                    chevBtn.classList.add('bg-dynamic', 'bg-dynamic-hover');
+                    
+                    if(mainIcon) { mainIcon.classList.add('text-main'); mainIcon.style.color = ''; }
+                    if(mainText) { mainText.classList.add('text-main'); mainText.style.color = ''; }
+                    const chevIcon = document.getElementById('nl-chev-icon');
+                    if(chevIcon) { chevIcon.classList.add('text-main'); chevIcon.style.color = ''; }
+                }
+            }
+            commitColors(false); 
+        }
+
+        function toggleNightSlider() {
+            const container = document.getElementById('night-slider-container');
+            if(container) {
+                container.classList.toggle('hidden');
+                container.classList.toggle('flex'); 
+            }
+        }
+
+        function setBrightness(val) {
+            const overlay = document.getElementById('brightness-overlay');
+            const darkness = 1 - (val / 100);
+            if(overlay) overlay.style.background = `rgba(0,0,0,${darkness})`;
+            const bs = document.getElementById('brightness-slider');
+            if(bs) updateSliderFill(bs);
+        }
+
+        // --- ENHANCED LUMINANCE ENGINE ---
+        function commitColors(save = false) {
+            let r = baseGlassR, g = baseGlassG, b = baseGlassB;
+            let acc = baseAccentColor;
+            
+            let baseLum = (0.299 * r + 0.587 * g + 0.114 * b);
+            let rgbAcc = hexToRgb(acc);
+            let aR = rgbAcc ? rgbAcc.r : 0, aG = rgbAcc ? rgbAcc.g : 120, aB = rgbAcc ? rgbAcc.b : 212;
+
+            if (baseLum > 80 && nightModeLevel > 0) {
+                let factor = 1 - (nightModeLevel * 0.65); 
+                r = Math.floor(r * factor);
+                g = Math.floor(g * factor);
+                b = Math.floor(b * factor);
+                aR = Math.floor(aR * factor);
+                aG = Math.floor(aG * factor);
+                aB = Math.floor(aB * factor);
+                acc = rgbToHex(aR, aG, aB);
+            }
+
+            document.documentElement.style.setProperty('--glass-r', r);
+            document.documentElement.style.setProperty('--glass-g', g);
+            document.documentElement.style.setProperty('--glass-b', b);
+            document.documentElement.style.setProperty('--glass-opacity', glassOpacity);
+            document.documentElement.style.setProperty('--accent-color', acc);
+            document.documentElement.style.setProperty('--main-color', `rgba(${r}, ${g}, ${b}, ${glassOpacity})`);
+            
+            const lum = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+            
+            if (lum > 0.55) { 
+                document.documentElement.style.setProperty('--text-main', '#1a1a1a');
+                document.documentElement.style.setProperty('--text-muted', 'rgba(0,0,0,0.6)');
+                document.documentElement.style.setProperty('--element-bg', 'rgba(255,255,255,0.5)');
+                document.documentElement.style.setProperty('--element-hover', 'rgba(255,255,255,0.7)');
+                document.documentElement.style.setProperty('--lum-invert', '0');
+            } else { 
+                document.documentElement.style.setProperty('--text-main', '#ffffff');
+                document.documentElement.style.setProperty('--text-muted', 'rgba(255,255,255,0.7)');
+                document.documentElement.style.setProperty('--element-bg', 'rgba(255,255,255,0.08)');
+                document.documentElement.style.setProperty('--element-hover', 'rgba(255,255,255,0.15)');
+                document.documentElement.style.setProperty('--lum-invert', '1');
+            }
+            
+            const gcp = document.getElementById('glass-color-picker');
+            if(gcp) gcp.value = rgbToHex(baseGlassR, baseGlassG, baseGlassB);
+            
+            const acp = document.getElementById('accent-color-picker');
+            if(acp) acp.value = baseAccentColor;
+            
+            // Sync indicators
+            document.querySelectorAll('.indicator').forEach(ind => {
+                ind.style.background = acc;
+                ind.style.boxShadow = `0 0 10px 1px ${acc}`;
+            });
+            
+            const s1 = document.getElementById('transparency-slider');
+            const s2 = document.getElementById('sm-transparency-slider');
+            if(s1) updateSliderFill(s1);
+            if(s2) updateSliderFill(s2);
+            const ns = document.getElementById('night-slider');
+            if(ns) updateSliderFill(ns);
+            const bs = document.getElementById('brightness-slider');
+            if(bs) updateSliderFill(bs);
+
+            if(save) {
+                localStorage.setItem('win12_glassrgb', JSON.stringify({r: baseGlassR, g: baseGlassG, b: baseGlassB}));
+                localStorage.setItem('win12_glassopacity', glassOpacity);
+                localStorage.setItem('win12_accentcolor', baseAccentColor);
+                
+                if (recentWallpapers.length > 0) {
+                    recentWallpapers[0].accent = baseAccentColor;
+                    saveRecentsToIDB(recentWallpapers);
+                    renderRecentWallpapers();
+                }
+            }
+        }
+
+        function renderRecentWallpapers() {
+            const container = document.getElementById('recent-wallpapers-container');
+            if(!container) return;
+            container.innerHTML = '';
+            
+            const rootStyles = getComputedStyle(document.documentElement);
+            let activeUrl = rootStyles.getPropertyValue('--wallpaper').trim();
+            activeUrl = activeUrl.replace(/^url\(["']?/, '').replace(/["']?\)$/, '');
+            
+            recentWallpapers.forEach(wpObj => {
+                const itemWrapper = document.createElement('div');
+                itemWrapper.className = "relative group cursor-pointer";
+
+                const thumb = document.createElement('div');
+                thumb.className = "recent-wp-thumb w-[110px] h-[76px] bg-cover bg-center rounded-md border-2 border-transparent transition-all relative overflow-hidden group-hover:shadow-sm";
+                if(wpObj.url === activeUrl) thumb.classList.add('active');
+                
+                thumb.style.backgroundImage = `url("${wpObj.url}")`;
+                thumb.onclick = () => applyWallpaper(wpObj, true);
+
+                const mockWindow = document.createElement('div');
+                mockWindow.className = "absolute right-1 top-1 bottom-1 w-[55%] rounded shadow-sm p-1.5 flex flex-col pointer-events-none transition-colors";
+                mockWindow.style.background = "var(--main-color)";
+                mockWindow.style.backdropFilter = "var(--mica-blur)";
+
+                mockWindow.innerHTML = `
+                    <div class="flex flex-col gap-[3px] mt-0.5">
+                        <div class="h-[2px] w-[90%] rounded-full" style="background: var(--text-muted)"></div>
+                        <div class="h-[2px] w-[100%] rounded-full" style="background: var(--text-muted)"></div>
+                        <div class="h-[2px] w-[100%] rounded-full" style="background: var(--text-muted)"></div>
+                        <div class="h-[2px] w-[70%] rounded-full" style="background: var(--text-muted)"></div>
+                    </div>
+                    <div class="mt-auto self-end w-4 h-[6px] rounded-[1.5px] shadow-sm transition-colors border border-black/10" style="background: ${wpObj.accent || 'var(--accent-gradient)'};"></div>
+                `;
+                
+                thumb.appendChild(mockWindow);
+                itemWrapper.appendChild(thumb);
+                container.appendChild(itemWrapper);
+            });
+        }
+
+        async function applyWallpaper(wpObj, updateRecents = true) {
+            document.documentElement.style.setProperty('--wallpaper', `url("${wpObj.url}")`);
+            
+            if (updateRecents) {
+                recentWallpapers = recentWallpapers.filter(w => w.url !== wpObj.url);
+                recentWallpapers.unshift(wpObj);
+                
+                if (recentWallpapers.length > 4) {
+                    const removed = recentWallpapers.pop();
+                    if(removed.type === 'file' && removed.url.startsWith('blob:')) {
+                        URL.revokeObjectURL(removed.url); 
+                    }
+                } 
+                await saveRecentsToIDB(recentWallpapers);
+            }
+            
+            renderRecentWallpapers();
+            applyThemeColors();
+        }
+
+        const wpUploadBtn = document.getElementById('wallpaper-upload');
+        if (wpUploadBtn) {
+            wpUploadBtn.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (!file) return;
+                const blobUrl = URL.createObjectURL(file);
+                applyWallpaper({ type: 'file', file: file, url: blobUrl, accent: baseAccentColor }, true);
+            });
+        }
+
+        function applyThemeColors() {
+            if (accentColorMode === 'manual') {
+                commitColors(false);
+                return;
+            }
+
+            const rootStyles = getComputedStyle(document.documentElement);
+            let wallpaperUrl = rootStyles.getPropertyValue('--wallpaper').trim();
+            wallpaperUrl = wallpaperUrl.replace(/^url\(["']?/, '').replace(/["']?\)$/, '');
+
+            const img = new Image();
+            
+            if (wallpaperUrl.startsWith('blob:') || wallpaperUrl.startsWith('data:')) {
+                img.removeAttribute('crossOrigin');
+                img.src = wallpaperUrl;
+            } else {
+                img.crossOrigin = "Anonymous"; 
+                if (wallpaperUrl.startsWith('http')) {
+                    img.src = "https://corsproxy.io/?" + encodeURIComponent(wallpaperUrl);
+                } else {
+                    img.src = wallpaperUrl; 
+                }
+            }
+
+            img.onerror = function() {
+                baseGlassR = 255; baseGlassG = 255; baseGlassB = 255;
+                baseAccentColor = '#0078D4';
+                commitColors(true);
+            };
+
+            img.onload = function() {
+                const canvas = document.createElement('canvas');
+                canvas.width = 64; 
+                canvas.height = 64;
+                const ctx = canvas.getContext('2d', { willReadFrequently: true });
+                
+                try {
+                    ctx.drawImage(img, 0, 0, 64, 64);
+                    const data = ctx.getImageData(0, 0, 64, 64).data;
+                    
+                    let rGlass = 0, gGlass = 0, bGlass = 0;
+                    let rAccent = 0, gAccent = 0, bAccent = 0;
+                    let totalAccentWeight = 0;
+
+                    for (let i = 0; i < data.length; i += 4) {
+                        let pr = data[i], pg = data[i + 1], pb = data[i + 2];
+                        
+                        rGlass += pr; gGlass += pg; bGlass += pb;
+
+                        let max = Math.max(pr, pg, pb);
+                        let min = Math.min(pr, pg, pb);
+                        let saturation = max === 0 ? 0 : (max - min) / max;
+                        let weight = 1 + (saturation * 4); 
+
+                        rAccent += pr * weight; gAccent += pg * weight; bAccent += pb * weight;
+                        totalAccentWeight += weight;
+                    }
+
+                    let numPixels = data.length / 4;
+                    let gray = Math.floor(0.299 * (rGlass / numPixels) + 0.587 * (gGlass / numPixels) + 0.114 * (bGlass / numPixels));
+                    
+                    baseGlassR = gray;
+                    baseGlassG = gray;
+                    baseGlassB = gray;
+                    
+                    if (gray > 100) {
+                        baseGlassR = Math.min(255, Math.floor(baseGlassR * 1.15));
+                        baseGlassG = Math.min(255, Math.floor(baseGlassG * 1.15));
+                        baseGlassB = Math.min(255, Math.floor(baseGlassB * 1.15));
+                    }
+
+                    rAccent = Math.floor(rAccent / totalAccentWeight);
+                    gAccent = Math.floor(gAccent / totalAccentWeight);
+                    bAccent = Math.floor(bAccent / totalAccentWeight);
+
+                    let maxColor = Math.max(rAccent, gAccent, bAccent);
+                    let minColor = Math.min(rAccent, gAccent, bAccent);
+                    let chroma = maxColor - minColor;
+                    
+                    let aR = rAccent, aG = gAccent, aB = bAccent;
+                    if (chroma > 5) { 
+                        let mult = 255 / (maxColor || 1);
+                        aR = Math.min(255, Math.floor(rAccent * mult * 0.8 + rAccent * 0.2));
+                        aG = Math.min(255, Math.floor(gAccent * mult * 0.8 + gAccent * 0.2));
+                        aB = Math.min(255, Math.floor(bAccent * mult * 0.8 + bAccent * 0.2));
+                    } else {
+                        aR = 0; aG = 120; aB = 212; 
+                    }
+                    baseAccentColor = rgbToHex(aR, aG, aB);
+
+                    commitColors(true);
+                } catch (e) {
+                    baseGlassR = 255; baseGlassG = 255; baseGlassB = 255;
+                    baseAccentColor = '#0078D4';
+                    commitColors(true); 
+                }
+            };
+        }
+
+        async function triggerUpdateCheck() {
+            const mainIcon = document.getElementById('update-main-icon');
+            const checkIcon = document.getElementById('update-check-icon');
+            const availableIcon = document.getElementById('update-available-icon');
+            const statusTitle = document.getElementById('update-status-title');
+            const statusDesc = document.getElementById('update-status-desc');
+            const installBtn = document.getElementById('btn-install-update');
+            const checkBtn = document.getElementById('btn-check-updates');
+
+            if(checkIcon) checkIcon.classList.add('hidden');
+            if(availableIcon) availableIcon.classList.add('hidden');
+            if(installBtn) installBtn.classList.add('hidden');
+            if(mainIcon) mainIcon.classList.add('animate-spin');
+            
+            if(statusTitle) statusTitle.textContent = "Checking for updates...";
+            if(statusDesc) statusDesc.textContent = "Searching Update/index.html...";
+            
+            if (checkBtn) {
+                checkBtn.disabled = true;
+                checkBtn.classList.add('opacity-50', 'pointer-events-none');
+            }
+
+            try {
+                const response = await fetch("Update/index.html", { cache: "no-store" });
+                if(mainIcon) mainIcon.classList.remove('animate-spin');
+                if (checkBtn) {
+                    checkBtn.disabled = false;
+                    checkBtn.classList.remove('opacity-50', 'pointer-events-none');
+                }
+
+                if (response.ok) {
+                    if(availableIcon) availableIcon.classList.remove('hidden');
+                    if(installBtn) installBtn.classList.remove('hidden');
+                    if(statusTitle) statusTitle.textContent = "Updates are available";
+                    if(statusDesc) statusDesc.textContent = "Windows 12 Update package found locally at Update/index.html.";
+                } else {
+                    if(checkIcon) checkIcon.classList.remove('hidden');
+                    if(statusTitle) statusTitle.textContent = "You're up to date";
+                    if(statusDesc) statusDesc.textContent = `No updates found. Update/index.html was not found (HTTP ${response.status}).`;
+                }
+            } catch (error) {
+                if(mainIcon) mainIcon.classList.remove('animate-spin');
+                if(checkBtn) {
+                    checkBtn.disabled = false;
+                    checkBtn.classList.remove('opacity-50', 'pointer-events-none');
+                }
+                if(checkIcon) checkIcon.classList.remove('hidden');
+                if(statusTitle) statusTitle.textContent = "You're up to date";
+                if(statusDesc) statusDesc.textContent = "Checked folder. No local update package detected at Update/index.html.";
+            }
+        }
+
+        function installSystemUpdate() {
+            window.location.href = "Update/index.html";
+        }
+
+        // Boot system
+        initializeSystem();
+    </script>
+</body>
+</html>
