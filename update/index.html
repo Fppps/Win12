@@ -2034,7 +2034,7 @@
     // --- Update Checking Engine ---
     async function checkForUpdates() {
         try {
-            const response = await fetch('update/index.html');
+            const response = await fetch('Update/index.html');
             if(response.ok) {
                 hasSystemUpdate = true;
             } else {
