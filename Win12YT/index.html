@@ -147,11 +147,18 @@
             
             <!-- Left Column: Video & Metadata -->
             <div class="flex-1 w-full flex flex-col">
-                <!-- Video Container -->
-                <div class="w-full bg-black rounded-2xl overflow-hidden aspect-video relative flex items-center justify-center z-10 group shadow-[0_4px_30px_rgba(0,0,0,0.5)] border border-[#272727]">
+                <!-- Enhanced Video Container -->
+                <div class="w-full bg-black rounded-2xl overflow-hidden shadow-[0_4px_30px_rgba(0,0,0,0.5)] border border-[#272727] aspect-video relative flex items-center justify-center z-10 group">
                     <video id="main-video-player" controls playsinline preload="auto" class="w-full h-full object-contain outline-none bg-black">
                         Your browser does not support the video tag.
                     </video>
+                    
+                    <!-- NEW: Missing Video Error Overlay -->
+                    <div id="video-error-msg" class="absolute inset-0 bg-[#0f0f0f] flex flex-col items-center justify-center text-center p-4 z-20 hidden">
+                        <span class="material-symbols-outlined text-5xl mb-3 text-[#aaaaaa]">error</span>
+                        <p class="text-white font-bold text-lg">Video file not found</p>
+                        <p class="text-[#aaaaaa] text-sm mt-2 max-w-md">The browser couldn't load the video. Make sure <span id="missing-file-name" class="font-mono text-blue-400 bg-[#272727] px-1 rounded"></span> is placed inside your project folder.</p>
+                    </div>
                 </div>
                 
                 <!-- Video Title -->
@@ -503,6 +510,11 @@
         const videoCountDisplay = document.getElementById('video-count-display');
         const playerModal = document.getElementById('player-modal');
         const mainVideoPlayer = document.getElementById('main-video-player');
+        
+        // NEW: Error overlay elements
+        const videoErrorMsg = document.getElementById('video-error-msg');
+        const missingFileName = document.getElementById('missing-file-name');
+        
         const playerTitle = document.getElementById('player-title');
         const playerDate = document.getElementById('player-date');
         const playerDescription = document.getElementById('player-description');
@@ -659,6 +671,17 @@
             
             playerDescription.innerHTML = formattedDescription;
             
+            // Hide error overlay by default when opening a new video
+            videoErrorMsg.classList.add('hidden');
+            videoErrorMsg.classList.remove('flex');
+            
+            // If the video fails to load (like a 404 missing file), show the friendly error
+            mainVideoPlayer.onerror = function() {
+                videoErrorMsg.classList.remove('hidden');
+                videoErrorMsg.classList.add('flex');
+                missingFileName.innerText = video.filePath;
+            };
+            
             mainVideoPlayer.src = video.filePath;
             mainVideoPlayer.muted = false;
             mainVideoPlayer.volume = 1.0;
@@ -666,11 +689,16 @@
             
             mainVideoPlayer.play().catch(e => {
                 console.log("Autoplay prevented by browser:", e);
+                // Also show error if play fails due to missing source
+                if(e.name === 'NotSupportedError') {
+                    videoErrorMsg.classList.remove('hidden');
+                    videoErrorMsg.classList.add('flex');
+                    missingFileName.innerText = video.filePath;
+                }
             });
             
             playerModal.classList.remove('hidden');
             playerModal.classList.add('flex');
-            // Hide main app scrollbar
             document.body.style.overflow = 'hidden'; 
             
             // Render the sidebar items
