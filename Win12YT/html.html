@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Windows 12 - Concept YT channel Archive</title>
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="shortcut icon" href="logo.png" type="image/png">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        yt: {
+                            bg: '#0f0f0f',
+                            surface: '#272727',
+                            hover: '#3f3f3f',
+                            text: '#f1f1f1',
+                            textMuted: '#aaaaaa'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Material Symbols -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #0f0f0f;
+            color: #f1f1f1;
+            font-family: 'Roboto', 'Arial', sans-serif;
+            margin: 0;
+            overflow-x: hidden;
+        }
+        
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+
+        /* Modern thin scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #717171;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a0a0a0;
+        }
+
+        .line-clamp-2 {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;  
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body class="bg-[#0f0f0f] text-[#f1f1f1] h-screen flex flex-col overflow-hidden">
+
+    <div class="flex flex-1 overflow-hidden w-full">
+        
+        <!-- Scrollable Channel Page -->
+        <main class="flex-1 overflow-y-auto relative bg-[#0f0f0f] w-full">
+            
+            <!-- Channel Banner -->
+            <div class="max-w-[1280px] mx-auto px-4 md:px-12 pt-6">
+                <div class="w-full h-32 sm:h-48 md:h-56 bg-[#272727] rounded-2xl overflow-hidden relative">
+                    <img src="Banner.png" alt="Channel Banner" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/1280x256/272727/555555?text=Custom+Banner+Image'">
+                </div>
+            </div>
+
+            <div class="max-w-[1280px] mx-auto px-4 md:px-12 pt-6 pb-2">
+                <div class="flex flex-col md:flex-row items-center md:items-start gap-6">
+                    <!-- Avatar -->
+                    <div class="w-32 h-32 sm:w-[160px] sm:h-[160px] shrink-0">
+                        <img src="Logo.png" alt="Channel Logo" class="w-full h-full rounded-full object-cover" onerror="this.src='https://placehold.co/200x200/3b82f6/ffffff?text=Logo'">
+                    </div>
+                    
+                    <!-- Channel Details -->
+                    <div class="flex flex-col items-center md:items-start text-center md:text-left mt-2 flex-1">
+                        <h1 class="text-3xl sm:text-4xl font-bold mb-1 text-white">WebWindows</h1>
+                        <div class="flex flex-wrap items-center justify-center md:justify-start gap-1.5 text-[#aaaaaa] text-sm mb-2 font-normal">
+                            <span class="font-medium text-white">@Windows12-Website</span>
+                            <span>•</span>
+                            <span id="video-count-display">0 videos</span>
+                        </div>
+                        
+                        <p class="text-[#aaaaaa] text-[14px] mb-4 max-w-2xl md:text-left leading-relaxed">==============NOTE=============<br>Site GitHub URL: https://github.com/Fppps/Win12<br>WebWindows is a fan-made Windows 12 concept website project. It is not affiliated with, endorsed by, sponsored by, or connected to Microsoft.</p>
+                        
+                        <!-- Actions -->
+                        <div class="flex items-center gap-3">
+                            <a href="https://github.com/Fppps/Win12" target="_blank" rel="noopener noreferrer" class="bg-[#272727] text-white text-[14px] font-medium px-4 py-2 rounded-full hover:bg-[#3f3f3f] transition-colors flex items-center gap-2">
+                                <span class="material-symbols-outlined text-[18px]">link</span> GitHub
+                            </a>
+                            <a href="https://fppps.github.io/Win12/" target="_blank" rel="noopener noreferrer" class="bg-[#272727] text-white text-[14px] font-medium px-4 py-2 rounded-full hover:bg-[#3f3f3f] transition-colors flex items-center gap-2">
+                                <span class="material-symbols-outlined text-[18px]">link</span> Website
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="max-w-[1280px] mx-auto px-4 md:px-12 mt-4">
+                <nav class="flex gap-8 text-[15px] font-medium text-[#aaaaaa] border-b border-[#303030]" id="main-tabs">
+                    <button id="tab-btn-videos" onclick="switchTab('videos')" class="py-3 text-white border-b-[3px] border-white transition-colors">Videos</button>
+                    <button id="tab-btn-community" onclick="switchTab('community')" class="py-3 hover:text-white transition-colors border-b-[3px] border-transparent">Community</button>
+                </nav>
+            </div>
+
+            <!-- TAB CONTENT: VIDEOS -->
+            <div id="tab-content-videos" class="block">
+                <div class="max-w-[1280px] mx-auto px-4 md:px-12 py-6">
+                    <div id="video-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-10">
+                        <!-- Videos injected here -->
+                    </div>
+                    
+                    <!-- Empty State -->
+                    <div id="empty-state" class="hidden flex-col items-center justify-center py-20 text-center">
+                        <span class="material-symbols-outlined text-6xl text-[#3f3f3f] mb-4">videocam_off</span>
+                        <h2 class="text-xl font-bold mb-2">No videos yet</h2>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB CONTENT: COMMUNITY -->
+            <div id="tab-content-community" class="hidden">
+                <div class="max-w-[850px] mx-auto px-4 md:px-12 py-6" id="community-grid">
+                    <!-- Community posts injected here -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div id="player-modal" class="fixed inset-0 bg-[#0f0f0f] z-[100] flex-col hidden opacity-0 transition-opacity duration-300 overflow-y-auto">
+        
+        <!-- Video Player Layout Container -->
+        <div class="max-w-[1600px] w-full mx-auto p-4 lg:p-8 flex flex-col lg:flex-row gap-8 items-start pt-8">
+            
+            <!-- Left Column: Video & Metadata -->
+            <div class="flex-1 w-full flex flex-col">
+                <!-- Video Container -->
+                <div class="w-full bg-black rounded-2xl overflow-hidden aspect-video relative flex items-center justify-center z-10 group shadow-[0_4px_30px_rgba(0,0,0,0.5)] border border-[#272727]">
+                    <video id="main-video-player" controls playsinline preload="auto" class="w-full h-full object-contain outline-none bg-black">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+                
+                <!-- Video Title -->
+                <h2 id="player-title" class="text-2xl font-bold text-[#f1f1f1] mt-5 line-clamp-2">Video Title</h2>
+                
+                <!-- Action Row (Channel Only) -->
+                <div class="flex flex-wrap items-center justify-between mt-3 gap-y-4 gap-x-2">
+                    <!-- Channel Info (Now acts as Back Button) -->
+                    <div class="flex items-center gap-4 cursor-pointer group" onclick="closePlayerModal()" title="Back to Channel">
+                        <img src="Logo.png" class="w-11 h-11 rounded-full object-cover group-hover:opacity-80 transition-opacity" onerror="this.src='https://placehold.co/100x100/3b82f6/ffffff?text=L'">
+                        <div class="flex flex-col mr-4">
+                            <span class="font-bold text-[#f1f1f1] text-[16px] leading-tight group-hover:text-blue-400 transition-colors">WebWindows</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Description Box -->
+                <div class="bg-[#272727]/80 mt-4 p-5 rounded-2xl transition-colors hover:bg-[#2f2f2f]" id="description-box">
+                    <div class="font-semibold text-[#f1f1f1] mb-2.5 text-[15px] flex items-center gap-2">
+                        <span id="player-date"></span>
+                    </div>
+                    <div id="player-description" class="whitespace-pre-wrap break-words text-[#e5e5e5] text-[14.5px] leading-[1.6]"></div>
+                </div>
+            </div>
+
+            <!-- Right Column: Related Videos Sidebar -->
+            <div class="w-full lg:w-[380px] shrink-0 flex flex-col gap-4" id="related-videos-sidebar">
+                <!-- Related videos injected here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ==========================================
+        // 1. DATA: JSON CONFIGURATIONS
+        // ==========================================
+
+        const myVideosJSON = [
+                {
+                videoId: "Video0",
+                thumbnailId: "thumbnail0",
+                title: "Windows 12 1H01: Features, fixes, & addtions",
+                date: "2026-04-11",
+                description: `
+                The GitHub of the app: https://fppps.github.io/Win12/update/index.html
+                The Main page: https://github.com/Fppps/Win12
+
+                ===========Note==========
+                First video? Nuh, 0th video.
+                `
+            },
+                {
+                videoId: "Video1",
+                thumbnailId: "thumbnail1",
+                title: "HUGE update with Windows 12 1H02 - bug fixes, new features, and new layouts.",
+                date: "2026-04-11",
+                description: `
+                The GitHub of the app: https://fppps.github.io/Win12/update/index.html
+                The Main page: https://github.com/Fppps/Win12
+
+                ===========Note==========
+                Oh no! AI alert!
+                `
+            },
+                {
+                videoId: "Video2",
+                thumbnailId: "thumbnail2",
+                title: "Windows 12 1H03 Official release - No bugs, New layouts, and new features.",
+                date: "2026-04-11",
+                description: `
+                The GitHub of the app: https://fppps.github.io/Win12/update/index.html
+                The Main page: https://github.com/Fppps/Win12
+
+                ===========Note==========
+                Old video go brrr
+                `
+            },
+                {
+                videoId: "Video3",
+                thumbnailId: "thumbnail3",
+                title: "New Windows 12 build 1H04 - very few bugs, New layouts, and new Additions.",
+                date: "2026-04-11",
+                description: `
+                The GitHub of the app: https://fppps.github.io/Win12/update/index.html
+                The Main page: https://github.com/Fppps/Win12
+
+                ===========Note==========
+                Ur cool!
+                `
+            },
+                {
+                videoId: "Video4",
+                thumbnailId: "thumbnail4",
+                title: "Windows 12 Site 1H04 Update 2.0 - New additions and new features.",
+                date: "2026-04-24",
+                description: `
+                The GitHub repository for the application is accessible at the following link: https://fppps.github.io/Win12/ (1H04 doesn't exist anymore). 
+                For further information, please visit the main page at: https://github.com/Fppps/Win12.
+
+                ===========Note==========
+                It is important to clarify that the title may not accurately reflect the content; it is intended solely for entertainment purposes.   
+                `
+            },
+                {
+                videoId: "Video5",
+                thumbnailId: "thumbnail5",
+                title: "(Website) New Windows 12 build 040 update 1H05 - All New layouts, and new Additions.",
+                date: "2026-04-30",
+                description: `
+                The GitHub of the app: https://fppps.github.io/Win12/update/index.html
+                The Main page: https://github.com/Fppps/Win12
+                This is a Website, not a real OS, no ISO either.
+
+                ===========Note==========
+                And this 1H05 update, as I can tell, will update (2026-07-15: Still will for now).
+                If you find issues, go to "https://github.com/Fppps/Win12/issues" to make one.
+                `
+            },
+                {
+                videoId: "Video6",
+                thumbnailId: "thumbnail6",
+                title: "(Website) New Windows 12 version 1H05 Update 2.0 – All New styling in Build 040",
+                date: "2026-04-30",
+                description: `
+                The GitHub of the app: https://fppps.github.io/Win12/update/index.html
+                The Main page: https://github.com/Fppps/Win12
+
+                ===========Note==========
+                And this 1H05 update, as I can tell, will update.
+                If you find issues, go to "https://github.com/Fppps/Win12/issues" to make one.
+                `
+            },
+                {
+                videoId: "Video7",
+                thumbnailId: "thumbnail7",
+                title: "(Read description) New Windows 12 version 1H06 - All New styling, features, & additions!",
+                date: "2026-05-02",
+                description: `
+                The GitHub for the build: https://github.com/Fppps/Win12/releases/tag/1H06_045
+                The Main page: https://github.com/Fppps/Win12
+
+                ===========Note==========
+                If you find issues, go to "https://github.com/Fppps/Win12/issues" to make one.
+                `
+            },
+                {
+                videoId: "Video8",
+                thumbnailId: "thumbnail8",
+                title: "(Read description) New Windows 12 version 1H06 UPDATE - All New styling, features, & additions!",
+                date: "2026-05-3",
+                description: `
+                The GitHub for the build: https://github.com/Fppps/Win12/releases/tag/1H06_045 (this is the link to 050)
+                The Main page: https://github.com/Fppps/Win12
+
+                ===========Note==========
+                If you find issues, go to "https://github.com/Fppps/Win12/issues" to make one.
+                `
+            },
+                {
+                videoId: "Video9",
+                thumbnailId: "thumbnail9",
+                title: "(Read description) Windows 12 version 1H06 release — Adds new styles & labels (Build 060).",
+                date: "2026-06-5",
+                description: `
+                The GitHub for the build: https://fppps.github.io/Win12/update/index.html
+                The Main page: https://github.com/Fppps/Win12
+
+                ===========Note==========
+                If you find issues, go here: "https://github.com/Fppps/Win12/issues" to make one.
+                If you just wanna talk, go here: https://github.com/Fppps/Win12/discussions
+                `
+            },
+                {
+                // Explicit IDs for files (will point to videos/Video1.mp4 and videos/thumbnail1.png)
+                videoId: "Video10",
+                thumbnailId: "thumbnail10",
+                title: "Windows 12 KD104 Update — Upgraded Settings UI & New Updater UI",
+                date: "2026-06-8",
+                description: `
+                Release: "https://fppps.github.io/Win12/update/index.html"
+                Become a contributor here: "https://github.com/Fppps/Win12/discussions/categories/contribution-requests"
+                Windows 12 history: "https://fppps.github.io/Win12/Main-site/web.html"
+
+                ======ABOUT-WINDOWS-12=======
+                Windows 12 is a custom site by me to give an idea of what Windows 12 will look like, and also to give something that users can interact with instead of other channels only showing concept videos and nothing like that to interact with, but I am making a Windows 12 that users CAN interact with.`
+            },
+            {
+                // Explicit IDs for files (will point to videos/Video1.mp4 and videos/thumbnail1.png)
+                videoId: "Video11",
+                thumbnailId: "thumbnail11",
+                title: "Windows 12 Version Upgrade — From 1H05 to 1H06",
+                date: "2026-06-9",
+                description: `Release: "https://fppps.github.io/Win12/update/index.html"
+                Become a contributor here: "https://github.com/Fppps/Win12/discussions/categories/contribution-requests" 
+                Windows 12 history: "https://fppps.github.io/Win12/Main-site/web.html"
+
+                ======ABOUT-WINDOWS-12=======
+                Windows 12 is a custom site by me to give an idea of what Windows 12 will look like, and also to give something that users can interact with instead of other channels only showing concept videos and nothing like that to interact with, but I am making a Windows 12 that users CAN interact with.
+               
+                ==========NOTE==========
+                I am not with Microsoft in any way gang.`
+            },
+            {
+                videoId: "Video12",
+                thumbnailId: "thumbnail12",
+                title: "Windows 12 1H07 Build — New updates option & whole OS changes.",
+                date: "2026-06-24",
+                description: `The GitHub for the build: https://github.com/Fppps/Win12/releases/tag/KD105_alpha_build
+                The Main page: https://github.com/Fppps/Win12
+                Windows 12 history: "https://fppps.github.io/Win12/Main-site/web.html"
+
+                ===========Note==========
+                If you find issues, go here: "https://github.com/Fppps/Win12/issues" to make one.
+                If you just wanna talk, go here: https://github.com/Fppps/Win12/discussions`
+            },
+            {
+                videoId: "Video13",
+                thumbnailId: "thumbnail13",
+                title: "Windows 12 KD105 — New UX, UI & User features",
+                date: "2026-7-14",
+                description: `The GitHub for the build: https://github.com/Fppps/Win12/releases/tag/KD105_1H07_075
+                The Main page: https://github.com/Fppps/Win12
+                If you find issues, go here: "https://github.com/Fppps/Win12/issues" to make one.
+                If you just wanna talk, go here: https://github.com/Fppps/Win12/discussions`
+            },
+            {
+                videoId: "Video14",
+                thumbnailId: "thumbnail14",
+                title: "Windows 12 1H07 KD105 — UX & UI changes",
+                date: "2026-7-14",
+                description: `The GitHub for the build: https://github.com/Fppps/Win12/releases/tag/KD105_Release
+                The Main page: https://github.com/Fppps/Win12
+                Windows 12 history: "https://fppps.github.io/Win12/Main-site/web.html"
+                Windows 12 current update page: "https://fppps.github.io/Win12/update/Update/index.html"
+                
+                ===========Note==========
+                If you just wanna talk, go here: https://github.com/Fppps/Win12/discussions`
+            }
+        ];
+
+        // Community JSON
+        const myCommunityJSON = [
+            {
+                id: "post_1",
+                content: "Welcome to windows 12 archive so that if the main gets removed, this will stay in existence!",
+
+                date: "2026-07-15T07:50:00Z"
+            }
+        ];
+
+
+        // ==========================================
+        // 2. HELPER FUNCTIONS (Time and LocalStorage)
+        // ==========================================
+
+        // Converts exact timestamps into "5 minutes ago", "2 days ago", etc.
+        function timeSince(dateString) {
+            const date = new Date(dateString);
+            const seconds = Math.floor((new Date() - date) / 1000);
+            
+            let interval = seconds / 31536000;
+            if (interval >= 1) return Math.floor(interval) + (Math.floor(interval) === 1 ? " year ago" : " years ago");
+            
+            interval = seconds / 2592000;
+            if (interval >= 1) return Math.floor(interval) + (Math.floor(interval) === 1 ? " month ago" : " months ago");
+            
+            // ADDED: Calculates weeks
+            interval = seconds / 604800; 
+            if (interval >= 1) return Math.floor(interval) + (Math.floor(interval) === 1 ? " week ago" : " weeks ago");
+            
+            interval = seconds / 86400;
+            if (interval >= 1) return Math.floor(interval) + (Math.floor(interval) === 1 ? " day ago" : " days ago");
+            
+            interval = seconds / 3600;
+            if (interval >= 1) return Math.floor(interval) + (Math.floor(interval) === 1 ? " hour ago" : " hours ago");
+            
+            interval = seconds / 60;
+            if (interval >= 1) return Math.floor(interval) + (Math.floor(interval) === 1 ? " minute ago" : " minutes ago");
+            
+            if (seconds < 5) return "Just now";
+            return Math.floor(seconds) + " seconds ago";
+        }
+
+        // Pull stored timestamps out of the browser memory
+        const appMemory = JSON.parse(localStorage.getItem('webWindows_Timestamps')) || {
+            videos: {},
+            community: {}
+        };
+
+        function saveAppMemory() {
+            localStorage.setItem('webWindows_Timestamps', JSON.stringify(appMemory));
+        }
+
+        // ==========================================
+        // 3. UI RENDERING & LOGIC
+        // ==========================================
+
+        // Map Videos and apply exact timestamps using the custom JSON IDs
+        let videoList = myVideosJSON.map((video, index) => {
+            const num = index + 1;
+            
+            // Look for the provided videoId in the JSON, otherwise fallback to "vid_X"
+            const memoryId = video.videoId || `vid_${num}`; 
+            let calculatedTime = "";
+
+            // Check if user manually forced a date
+            if (video.date) {
+                calculatedTime = new Date(video.date).toISOString();
+            } else {
+                // If we've never seen this video ID before, mark the exact time right now
+                if (!appMemory.videos[memoryId]) {
+                    appMemory.videos[memoryId] = new Date().toISOString();
+                    saveAppMemory();
+                }
+                calculatedTime = appMemory.videos[memoryId];
+            }
+
+            // Construct file paths based on the explicit IDs provided in the JSON
+            const vFileName = video.videoId ? `${video.videoId}.mp4` : `Video${num}.mp4`;
+            const tFileName = video.thumbnailId ? `${video.thumbnailId}.png` : `thumbnail${num}.png`;
+
+            return {
+                id: num,
+                title: video.title,
+                description: video.description || "No description provided.",
+                filePath: `videos/${vFileName}`,
+                thumbnail: `videos/${tFileName}`, 
+                timeAgo: timeSince(calculatedTime),
+                duration: "--:--"
+            };
+        });
+
+        // Elements
+        const grid = document.getElementById('video-grid');
+        const emptyState = document.getElementById('empty-state');
+        const videoCountDisplay = document.getElementById('video-count-display');
+        const playerModal = document.getElementById('player-modal');
+        const mainVideoPlayer = document.getElementById('main-video-player');
+        const playerTitle = document.getElementById('player-title');
+        const playerDate = document.getElementById('player-date');
+        const playerDescription = document.getElementById('player-description');
+        
+        function switchTab(tabId) {
+            const btnVideos = document.getElementById('tab-btn-videos');
+            const btnComm = document.getElementById('tab-btn-community');
+            const contentVideos = document.getElementById('tab-content-videos');
+            const contentComm = document.getElementById('tab-content-community');
+
+            if (tabId === 'videos') {
+                btnVideos.classList.add('text-white', 'border-white');
+                btnVideos.classList.remove('border-transparent');
+                btnComm.classList.remove('text-white', 'border-white');
+                btnComm.classList.add('border-transparent');
+                
+                contentVideos.classList.remove('hidden');
+                contentComm.classList.add('hidden');
+            } else if (tabId === 'community') {
+                btnComm.classList.add('text-white', 'border-white');
+                btnComm.classList.remove('border-transparent');
+                btnVideos.classList.remove('text-white', 'border-white');
+                btnVideos.classList.add('border-transparent');
+                
+                contentComm.classList.remove('hidden');
+                contentVideos.classList.add('hidden');
+                
+                renderCommunity(); // Re-render to ensure live timestamps update
+            }
+        }
+
+        function updateUI() {
+            grid.innerHTML = '';
+            
+            if (videoList.length === 0) {
+                grid.classList.add('hidden');
+                emptyState.classList.remove('hidden');
+                emptyState.classList.add('flex');
+            } else {
+                grid.classList.remove('hidden');
+                emptyState.classList.add('hidden');
+                emptyState.classList.remove('flex');
+                
+                [...videoList].reverse().forEach(video => {
+                    const card = document.createElement('div');
+                    card.className = 'group cursor-pointer flex flex-col gap-3';
+                    card.onclick = () => playVideo(video);
+                    
+                    card.innerHTML = `
+                        <!-- Thumbnail Area -->
+                        <div class="relative w-full aspect-video rounded-xl overflow-hidden bg-[#272727]">
+                            <img src="${video.thumbnail}" alt="${video.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200" onerror="this.src='https://placehold.co/1280x720/1f2937/ffffff?text=Missing+Thumbnail'">
+                            <div id="duration-${video.id}" class="absolute bottom-1.5 right-1.5 bg-black/80 text-white text-[11px] font-medium px-1 rounded">
+                                ${video.duration}
+                            </div>
+                        </div>
+                        
+                        <!-- Metadata Area -->
+                        <div class="flex gap-3 items-start">
+                            <div class="flex flex-col overflow-hidden">
+                                <h3 class="text-[#f1f1f1] font-medium text-[16px] line-clamp-2 leading-tight group-hover:text-blue-400 transition-colors">${video.title}</h3>
+                                <div class="text-[#aaaaaa] text-sm mt-1 flex flex-col">
+                                    <span class="hover:text-white transition-colors">WebWindows</span>
+                                    <div class="flex items-center gap-1 mt-0.5 text-[12px]">
+                                        <span>${video.timeAgo}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    grid.appendChild(card);
+                    
+                    // Fetch real duration
+                    const tempVideo = document.createElement('video');
+                    tempVideo.src = video.filePath;
+                    tempVideo.addEventListener('loadedmetadata', function() {
+                        const totalSeconds = this.duration;
+                        if (!isNaN(totalSeconds)) {
+                            const mins = Math.floor(totalSeconds / 60);
+                            const secs = Math.floor(totalSeconds % 60).toString().padStart(2, '0');
+                            const durationEl = document.getElementById(`duration-${video.id}`);
+                            if (durationEl) {
+                                durationEl.innerText = `${mins}:${secs}`;
+                            }
+                        }
+                    });
+                });
+            }
+
+            // Update Header count
+            videoCountDisplay.innerText = `${videoList.length} video${videoList.length !== 1 ? 's' : ''}`;
+        }
+
+        function renderCommunity() {
+            const commContainer = document.getElementById('community-grid');
+            if(!commContainer) return;
+            
+            commContainer.innerHTML = '';
+            
+            if (myCommunityJSON.length === 0) {
+                commContainer.innerHTML = `<p class="text-center text-[#aaaaaa] py-10">No community posts yet.</p>`;
+                return;
+            }
+
+            // Reverse to show newest at the top
+            [...myCommunityJSON].reverse().forEach(post => {
+                let calculatedTime = "";
+
+                // Check for hardcoded manual date, else rely on local memory
+                if (post.date) {
+                    calculatedTime = new Date(post.date).toISOString();
+                } else {
+                    if (!appMemory.community[post.id]) {
+                        appMemory.community[post.id] = new Date().toISOString();
+                        saveAppMemory();
+                    }
+                    calculatedTime = appMemory.community[post.id];
+                }
+                
+                const timeStr = timeSince(calculatedTime);
+                
+                // Clean up any code indentation spaces so it aligns perfectly to the left edge
+                const cleanedContent = (post.content || "").split('\n').map(line => line.trim()).join('\n').trim();
+                
+                const card = document.createElement('div');
+                card.className = 'bg-[#0f0f0f] border border-[#303030] rounded-xl p-4 sm:p-5 mb-5 shadow-sm';
+                card.innerHTML = `
+                    <div class="flex gap-3 mb-4 items-center">
+                        <img src="Logo.png" onerror="this.src='https://placehold.co/100x100/3b82f6/ffffff?text=L'" class="w-10 h-10 rounded-full object-cover">
+                        <div class="flex flex-col">
+                            <span class="font-medium text-white text-[15px] leading-tight">WebWindows</span>
+                            <span class="text-xs text-[#aaaaaa]">${timeStr}</span>
+                        </div>
+                    </div>
+                    <p class="text-[15px] text-[#f1f1f1] whitespace-pre-wrap leading-relaxed">${cleanedContent}</p>
+                `;
+                commContainer.appendChild(card);
+            });
+        }
+
+        function playVideo(video) {
+            playerTitle.innerText = video.title;
+            playerDate.innerText = video.timeAgo;
+            
+            // Clean up template literal indentation spaces so it aligns perfectly to the left edge
+            let rawDescription = video.description || "No description provided.";
+            let cleanedDescription = rawDescription.split('\n').map(line => line.trim()).join('\n').trim();
+            
+            const urlRegex = /(https?:\/\/[^\s]+|www\.[^\s]+)/g;
+            let formattedDescription = cleanedDescription.replace(urlRegex, function(url) {
+                let cleanUrl = url.replace(/["']/g, ""); 
+                return `<a href="${cleanUrl}" target="_blank" rel="noopener noreferrer" class="text-[#3ea6ff] font-medium hover:text-[#6ebcff] hover:underline transition-colors" onclick="event.stopPropagation()">${url}</a>`;
+            });
+            
+            playerDescription.innerHTML = formattedDescription;
+            
+            mainVideoPlayer.src = video.filePath;
+            mainVideoPlayer.muted = false;
+            mainVideoPlayer.volume = 1.0;
+            mainVideoPlayer.currentTime = 0;
+            
+            mainVideoPlayer.play().catch(e => {
+                console.log("Autoplay prevented by browser:", e);
+            });
+            
+            playerModal.classList.remove('hidden');
+            playerModal.classList.add('flex');
+            // Hide main app scrollbar
+            document.body.style.overflow = 'hidden'; 
+            
+            // Render the sidebar items
+            renderRelatedVideos(video.id);
+
+            void playerModal.offsetWidth;
+            playerModal.classList.remove('opacity-0');
+        }
+
+        function renderRelatedVideos(currentVideoId) {
+            const sidebar = document.getElementById('related-videos-sidebar');
+            sidebar.innerHTML = '';
+            
+            // Filter out the currently playing video
+            const relatedVideos = videoList.filter(v => v.id !== currentVideoId);
+            
+            relatedVideos.forEach(v => {
+                const card = document.createElement('div');
+                card.className = 'flex gap-2 cursor-pointer group';
+                // Switch out the video when clicking the sidebar item
+                card.onclick = () => {
+                    document.getElementById('player-modal').scrollTo(0, 0);
+                    playVideo(v);
+                };
+                
+                card.innerHTML = `
+                    <div class="relative w-[168px] aspect-video rounded-xl overflow-hidden bg-[#272727] shrink-0">
+                        <img src="${v.thumbnail}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200" onerror="this.src='https://placehold.co/1280x720/1f2937/ffffff?text=Missing'">
+                        <div class="absolute bottom-1 right-1 bg-black/80 text-white text-[11px] font-medium px-1 rounded">
+                            ${v.duration}
+                        </div>
+                    </div>
+                    <div class="flex flex-col py-1 pr-2">
+                        <h3 class="text-[#f1f1f1] font-medium text-[14px] line-clamp-2 leading-tight group-hover:text-blue-400 transition-colors">${v.title}</h3>
+                        <div class="text-[#aaaaaa] text-[12px] mt-1 flex flex-col">
+                            <span>WebWindows</span>
+                            <span>${v.timeAgo}</span>
+                        </div>
+                    </div>
+                `;
+                sidebar.appendChild(card);
+            });
+        }
+
+        function closePlayerModal() {
+            mainVideoPlayer.pause();
+            mainVideoPlayer.src = "";
+            playerModal.classList.add('opacity-0');
+            
+            setTimeout(() => {
+                playerModal.classList.add('hidden');
+                playerModal.classList.remove('flex');
+            }, 300);
+        }
+
+        // Initialize UI
+        updateUI();
+
+    </script>
+</body>
+</html>
