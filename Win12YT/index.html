@@ -675,26 +675,47 @@
             videoErrorMsg.classList.add('hidden');
             videoErrorMsg.classList.remove('flex');
             
-            // If the video fails to load (like a 404 missing file), show the friendly error
+            // NEW: Smart Fallback System for Video Paths
+            // Create a list of common naming variations to try automatically
+            const baseId = video.videoId || `Video${video.id}`;
+            const possiblePaths = [
+                video.filePath, // 1. Try exact match first (e.g. Video0.mp4)
+                `videos/${baseId.toLowerCase()}.mp4`, // 2. Try lowercase (e.g. video0.mp4)
+                `videos/${baseId}.webm`, // 3. Try WebM format
+                `videos/${baseId.toLowerCase()}.webm`, // 4. Try lowercase WebM
+                `videos/${baseId}.mkv`, // 5. Try MKV format
+                `videos/${baseId}.mov`  // 6. Try MOV format
+            ];
+            
+            // Remove any accidental duplicates
+            const uniquePaths = [...new Set(possiblePaths)];
+            let currentAttempt = 0;
+            
+            // If the video fails to load, try the next path in the list
             mainVideoPlayer.onerror = function() {
-                videoErrorMsg.classList.remove('hidden');
-                videoErrorMsg.classList.add('flex');
-                missingFileName.innerText = video.filePath;
+                currentAttempt++;
+                if (currentAttempt < uniquePaths.length) {
+                    // Silently try the next variation
+                    mainVideoPlayer.src = uniquePaths[currentAttempt];
+                    // Catch autoplay errors quietly during retry
+                    mainVideoPlayer.play().catch(() => {}); 
+                } else {
+                    // If ALL fallbacks fail, finally show the error message
+                    videoErrorMsg.classList.remove('hidden');
+                    videoErrorMsg.classList.add('flex');
+                    missingFileName.innerText = `${video.filePath} (or .webm, .mkv, etc.)`;
+                }
             };
             
-            mainVideoPlayer.src = video.filePath;
+            // Start with the first attempt
+            mainVideoPlayer.src = uniquePaths[0];
             mainVideoPlayer.muted = false;
             mainVideoPlayer.volume = 1.0;
             mainVideoPlayer.currentTime = 0;
             
             mainVideoPlayer.play().catch(e => {
                 console.log("Autoplay prevented by browser:", e);
-                // Also show error if play fails due to missing source
-                if(e.name === 'NotSupportedError') {
-                    videoErrorMsg.classList.remove('hidden');
-                    videoErrorMsg.classList.add('flex');
-                    missingFileName.innerText = video.filePath;
-                }
+                // Note: The onerror handler above will catch real file-missing errors.
             });
             
             playerModal.classList.remove('hidden');
