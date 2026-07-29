@@ -1,5 +1,7 @@
 # Contributing to Windows 12 Concept (Win12)
 
+### AS THE DEV FOR THIS. THIS WAS MADE WITH ME NOT KNOWING!!!!
+
 Thanks for your interest in contributing! This project is an interactive, fan-made concept/mock-up of a hypothetical "Windows 12." It is **not affiliated with, endorsed by, or sponsored by Microsoft** or any other company whose products may be referenced or visually styled within this concept. All trademarks, product names, and logos belong to their respective owners and are used here purely for non-commercial, conceptual, and educational purposes.
 
 ## Before You Start
