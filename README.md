@@ -1,6 +1,6 @@
 # Windows 12 Concept
 This is a fan-made project where I & other people theroize and bring stuff into this Concept to see what Microsoft could add to their future Windows product if it comes out.
-I wouldn't check the Contributing on this because this thing just puts 66% of it into mainly 1 thing, so yeah....
+I wouldn't check the Contributing tab on this because this thing just puts 66% of it into mainly 1 thing, so yeah....
 
 ## About me:
 I'm a 2011 Gen Z / Gen Alpha. I have ADHD, Autism, anxiety & depression. I'm very good at punctuation, as you can tell during this constitutional-looking thing. I'm not mainly a person who writes professionally without putting stuff like this in here to not make you bored, because I get it; it's boring reading through stuff like this, so I put a little twist to not make it boring.
