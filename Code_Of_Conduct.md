@@ -10,9 +10,9 @@ For any person who comments here, **MUST** agree to these rules:
 
 - **Rule 2A:** Sending/Posting rude, hateful, or falsely alleged comments is **NOT** allowed here for members.
 
-- **Rule 3A:** Sending/Posting NSFW, Nude, or suggestive content is **NOT** allowed here for members.
+- **Rule 3A:** Sending/Posting NSFW, Nude, or suggestive content or comments is **NOT** allowed here for members.
 
-- **Rule 4A:** Sending/Posting racist, genderphobic, or anti-religious content is **NOT** allowed here for members.
+- **Rule 4A:** Sending/Posting racist, genderphobic, or anti-religious content or comments is **NOT** allowed here for members.
 
 If any member fails to follow the rules will be reported or banned here forever.
 
@@ -32,9 +32,9 @@ For any Contributor who comments here, **MUST** agree to these rules:
 
 - **Rule 2A:** Sending/Posting rude, hateful, or falsely alleged comments is **NOT** allowed here for contributors.
 
-- **Rule 3A:** Sending/Posting NSFW, Nude, or suggestive content is **NOT** allowed here for contributors.
+- **Rule 3A:** Sending/Posting NSFW, Nude, or suggestive content or comments is **NOT** allowed here for contributors.
 
-- **Rule 4A:** Sending/Posting racist, genderphobic, or anti-religious content is **NOT** allowed here for contributors.
+- **Rule 4A:** Sending/Posting racist, genderphobic, or anti-religious content or comments is **NOT** allowed here for contributors.
 
 If any contributor fails to follow the rules will be reported or banned here forever.
 
