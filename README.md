@@ -26,7 +26,7 @@ To contribute, go to: "https://github.com/Fppps/Win12/discussions/categories/con
 
 **Introduction Rules:**
 - You must have an introduction of who you are.
-- You can include your real name if you feel comfortable doing so;
+- You can include your real name if you feel comfortable doing so.
 - Give at least a 1-paragraph description of your job for the website, ~20 words per sentence.
 - You may give your gender (Any is accepted) to us if you feel comfortable doing so.
 
