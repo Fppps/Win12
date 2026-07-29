@@ -18,7 +18,8 @@ I'm not saying that you can't make your own icons one day and replace all of the
 Unlike the old version of this saying "Updates are deployed frequently, often every few hours.", I honestly upload builds whenever I have time & versions whenever the last build is released; But I mainly upload stuff moderately quickly or a little quickly; So it doesn't take like 2 months to make a build or version; it is honestly 1 Month - 2 weeks per version but 1 week - 2 days per build.
 
 ## Contributing:
-To contribute, go to: "https://github.com/Fppps/Win12/discussions/categories/contribution-requests" to make a request. (Scroll to section
+To contribute, go to: "https://github.com/Fppps/Win12/discussions/categories/contribution-requests" to make a request.
+It would really help to make this less AI-heavy & more human driven :)
 
 **Main Rules:**
 - You may give it a professional look in your message so when other people look at it, they might have a chance to make a request.
@@ -48,9 +49,11 @@ This section is for versioning, build & KD systems.
 Our versioning system has 2 main components: Version number & Month when it will be released.
 With the addition of an "H" in there to separate them to make it cleaner.
 
-**Example:** 8H08; Where "8" is the versiob & "08" is the month. 
+**Example:** 8H08; Where "8" is the version & "08" is the month. 
 
 Any version can have the same month with it; no rules are saying that 1 version needs a different month.
+
+For any people who adds ideas into the app, the version numbering doesn't use the users to tell who or who didn't make the version anymore.
 
 ## Build system:
 
@@ -60,9 +63,13 @@ The Year & version go like this: 26 (year) 0 (version).
 The Full system is 260000, where 26 (Year), 0 (version), & 000 (Build number).
 The build we are currently on is: 268095.
 
+For any people who adds ideas into the app, you may add a dot on the build then put a sub build of like ".1" and higher, but above 10, do not change the build number Like this: 268095.10, to 268095.11. It would help alot.
+
 ## KD system:
 The KD system is not a new thing added at all; it was added in 7H07 (or KD107).
 The KD system is another version of the version system where it just counts up like this: KD108, KD109, & KD200; it resets every update series & that is just the numbers you see. "1" is the first update series, and "2" is the second one, and it goes on forever. It keeps it from going above 9, and those numbers are the versions of the app.
+
+For any people who adds ideas into the app, the KD numbering doesn't use the users to tell who or who didn't make the verion.
 
 # Section 4:
 This is mainly for newcomers, kinda.
