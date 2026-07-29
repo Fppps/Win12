@@ -22,7 +22,7 @@ Thanks for your interest in contributing! This project is an interactive, fan-ma
 
 1. **Keep it conceptual.** Do not use actual Microsoft assets, proprietary icons, or copyrighted resources you don't have rights to use. Recreate visuals from scratch in the spirit of the concept.
 2. **Stay realistic.** Designs should be grounded in plausible UI/UX patterns and current design predictions rather than purely fantastical ideas.
-3. **No real branding claims.** Do not add language '**EDIT BY DEV: So uh `Build: 269095` already broke that rule**', metadata, or assets '**EDIT BY DEV: What type of assets?**' that imply this project is an official Microsoft product or affiliated with Microsoft in any way.
+3. **No real branding claims.** Do not add language '*EDIT BY DEV: So uh `Build: 268095` already broke that rule*', metadata, or assets '*EDIT BY DEV: What type of assets?*' that imply this project is an official Microsoft product or affiliated with Microsoft in any way.
 4. **One concern per pull request.** Keep PRs focused (a single feature, fix, or improvement) to make review easier.
 5. **Match existing style.** Follow the existing code formatting and folder structure (e.g. `Main-site/`, `update/`) unless your change is restructuring those intentionally — explain why if so.
 
