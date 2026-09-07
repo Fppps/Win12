@@ -4,7 +4,7 @@ Welcome to the Code Of Conduct! This is for members only.
 # Section 1 out of 4:
 This is about how people should act here...
 ## Commenting:
-For any person who comments here, **MUST** agree to these rules:
+Any person who comments here, **MUST** agree to these rules:
 
 - **Rule 1A:** Sending rude, hateful, falsely alleged, or discouraging comments is **NOT** allowed here for members.
 
@@ -15,6 +15,9 @@ For any person who comments here, **MUST** agree to these rules:
 - **Rule 4A:** Sending racist, genderphobic, or anti-religious comments is **NOT** allowed here for members.
 
 If any member fails to follow the rules will be reported or banned here forever.
+
+## Issuing:
+For any person raising an issue, do NOT make it in discussions; make it in the "issues" section.
 
 ### MORE SOON!!
 
