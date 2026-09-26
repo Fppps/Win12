@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VilotGRI — VilotNI 2</title>
+  <style>
+    :root {
+      --bg: #101012;
+      --surface: #151517;
+      --surface-2: #1a1a1d;
+      --surface-3: #202024;
+      --text: #f5f5f6;
+      --muted: #a3a3ab;
+      --faint: #6f6f78;
+      --line: #2a2a2f;
+      --line-strong: #3a3a40;
+      --accent: #8300FB;
+      --accent-2: #FE0070;
+      --header: rgba(16, 16, 18, 0.93);
+      --danger: #ff5d72;
+      --radius-sm: 10px;
+      --radius-md: 14px;
+      --radius-lg: 22px;
+      --max: 1180px;
+    }
+
+    body.light {
+      --bg: #f7f7f8;
+      --surface: #ffffff;
+      --surface-2: #f1f1f3;
+      --surface-3: #e8e8ec;
+      --text: #17171a;
+      --muted: #5f5f68;
+      --faint: #92929b;
+      --line: #dedee3;
+      --line-strong: #c8c8cf;
+      --header: rgba(247, 247, 248, 0.93);
+    }
+
+    * { box-sizing: border-box; }
+    html { background: var(--bg); }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      -webkit-font-smoothing: antialiased;
+      transition: background 160ms ease, color 160ms ease;
+    }
+
+    button, a, input { font: inherit; }
+    a { color: inherit; text-decoration: none; }
+    button { color: inherit; }
+
+    .top-rule {
+      position: fixed;
+      inset: 0 0 auto 0;
+      height: 2px;
+      z-index: 100;
+      background: var(--accent);
+    }
+
+    .site-header {
+      position: fixed;
+      inset: 2px 0 auto 0;
+      height: 66px;
+      z-index: 90;
+      border-bottom: 1px solid var(--line);
+      background: var(--header);
+      backdrop-filter: blur(18px);
+    }
+
+    .header-inner {
+      width: min(var(--max), calc(100% - 36px));
+      height: 100%;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 11px;
+      width: fit-content;
+      cursor: pointer;
+    }
+
+    .brand-mark {
+      width: 31px;
+      height: 31px;
+      border-radius: 9px;
+      background: var(--text);
+      color: var(--bg);
+      display: grid;
+      place-items: center;
+      flex: 0 0 31px;
+    }
+
+    .brand-mark svg { width: 17px; height: 17px; }
+    .brand-copy { display: grid; line-height: 1.08; }
+    .brand-copy strong { font-size: 14px; font-weight: 700; letter-spacing: -0.02em; }
+    .brand-copy span {
+      margin-top: 3px;
+      color: var(--faint);
+      font: 600 8px/1 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .main-nav {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      padding: 4px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--surface);
+    }
+
+    .nav-link {
+      border: 0;
+      border-radius: 8px;
+      background: transparent;
+      color: var(--muted);
+      padding: 7px 10px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+      white-space: nowrap;
+      transition: background 120ms ease, color 120ms ease;
+    }
+
+    .nav-link:hover { color: var(--text); }
+    .nav-link.active { background: var(--surface-2); color: var(--text); }
+
+    .header-actions {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .icon-btn, .button, .button-quiet {
+      border: 1px solid var(--line);
+      background: var(--surface);
+      color: var(--text);
+      cursor: pointer;
+      transition: border-color 120ms ease, background 120ms ease, transform 120ms ease;
+    }
+
+    .icon-btn:hover, .button:hover, .button-quiet:hover { border-color: var(--line-strong); }
+    .icon-btn:active, .button:active, .button-quiet:active { transform: translateY(1px); }
+
+    .icon-btn {
+      width: 35px;
+      height: 35px;
+      border-radius: 10px;
+      display: grid;
+      place-items: center;
+    }
+    .icon-btn svg { width: 16px; height: 16px; }
+
+    .button, .button-quiet {
+      min-height: 35px;
+      border-radius: 10px;
+      padding: 0 13px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .button {
+      border-color: var(--text);
+      background: var(--text);
+      color: var(--bg);
+    }
+    .button:hover { opacity: 0.9; border-color: var(--text); }
+    .button svg, .button-quiet svg { width: 14px; height: 14px; }
+
+    .mobile-toggle { display: none; }
+    .mobile-menu { display: none; }
+
+    main { min-height: 100vh; padding-top: 68px; }
+    .view { display: none; }
+    .view.active { display: block; animation: appear 170ms ease both; }
+    @keyframes appear { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: none; } }
+
+    .page {
+      width: min(var(--max), calc(100% - 36px));
+      margin: 0 auto;
+      padding: 72px 0 96px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--faint);
+      font: 700 10px/1 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+    }
+    .eyebrow::before {
+      content: "";
+      width: 16px;
+      height: 2px;
+      background: var(--accent);
+    }
+
+    h1, h2, h3, p { margin-top: 0; }
+    h1 {
+      margin-bottom: 22px;
+      max-width: 900px;
+      font-size: clamp(46px, 7vw, 88px);
+      line-height: 0.99;
+      letter-spacing: -0.055em;
+      font-weight: 720;
+    }
+    h2 {
+      margin-bottom: 12px;
+      font-size: clamp(30px, 4.8vw, 54px);
+      line-height: 1.02;
+      letter-spacing: -0.045em;
+      font-weight: 700;
+    }
+    h3 {
+      margin-bottom: 8px;
+      font-size: 16px;
+      line-height: 1.25;
+      letter-spacing: -0.02em;
+      font-weight: 700;
+    }
+
+    .lede {
+      max-width: 680px;
+      color: var(--muted);
+      font-size: 17px;
+      line-height: 1.65;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(300px, 0.8fr);
+      gap: 72px;
+      align-items: end;
+      min-height: calc(100vh - 68px - 80px);
+      padding-top: 86px;
+    }
+
+    .hero-copy { padding-bottom: 58px; }
+    .hero-copy .eyebrow { margin-bottom: 24px; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 30px; }
+
+    .hero-meta {
+      align-self: stretch;
+      border-left: 1px solid var(--line);
+      padding: 12px 0 58px 34px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+    }
+
+    .meta-label {
+      color: var(--faint);
+      font: 700 9px/1 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+    }
+    .meta-value {
+      margin-top: 7px;
+      font-size: 22px;
+      line-height: 1.15;
+      font-weight: 650;
+      letter-spacing: -0.03em;
+    }
+    .meta-value.date { font-size: clamp(30px, 5vw, 55px); }
+    .meta-row { padding: 18px 0; border-top: 1px solid var(--line); }
+    .meta-row:first-child { border-top: 0; }
+    #release-countdown { color: var(--muted); font: 600 11px/1.4 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+
+    .section-head {
+      display: grid;
+      grid-template-columns: 180px minmax(0, 1fr);
+      gap: 40px;
+      padding-bottom: 28px;
+      border-bottom: 1px solid var(--line);
+      margin-bottom: 42px;
+    }
+    .section-head .lede { font-size: 15px; max-width: 650px; }
+
+    .grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; }
+    .panel {
+      background: var(--surface);
+      padding: 26px;
+      min-height: 170px;
+    }
+    .panel-number {
+      margin-bottom: 30px;
+      color: var(--faint);
+      font: 700 9px/1 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      letter-spacing: 0.08em;
+    }
+    .panel p { color: var(--muted); font-size: 13px; line-height: 1.6; margin-bottom: 0; }
+
+    .statement {
+      padding: 36px 0 0;
+      display: grid;
+      grid-template-columns: minmax(0, 0.75fr) minmax(0, 1.25fr);
+      gap: 70px;
+    }
+    .statement p { color: var(--muted); line-height: 1.75; font-size: 14px; }
+    .quote {
+      margin: 0;
+      padding-left: 22px;
+      border-left: 2px solid var(--accent);
+      font-size: clamp(22px, 3vw, 34px);
+      line-height: 1.25;
+      letter-spacing: -0.035em;
+      font-weight: 630;
+    }
+    .quote small {
+      display: block;
+      margin-top: 16px;
+      color: var(--faint);
+      font: 700 9px/1 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .person {
+      display: grid;
+      grid-template-columns: 56px minmax(0,1fr);
+      gap: 18px;
+      align-items: start;
+      padding: 26px 0;
+      border-top: 1px solid var(--line);
+    }
+    .person:first-of-type { border-top: 0; }
+    .person-mark {
+      width: 56px;
+      height: 56px;
+      display: grid;
+      place-items: center;
+      border-radius: 14px;
+      background: var(--surface-2);
+      border: 1px solid var(--line);
+      font-size: 16px;
+      font-weight: 750;
+    }
+    .person-role { color: var(--faint); font: 700 9px/1 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 9px; }
+    .person p { color: var(--muted); font-size: 13px; line-height: 1.6; max-width: 680px; margin-bottom: 0; }
+
+    .teaser-header {
+      display: grid;
+      grid-template-columns: minmax(0,1fr) 270px;
+      gap: 60px;
+      align-items: end;
+      padding-bottom: 34px;
+      border-bottom: 1px solid var(--line);
+    }
+    .teaser-date {
+      border-left: 1px solid var(--line);
+      padding-left: 24px;
+    }
+    .teaser-date .date {
+      margin-top: 8px;
+      font-size: 38px;
+      line-height: 1;
+      font-weight: 700;
+      letter-spacing: -0.04em;
+    }
+
+    .spec-list { margin-top: 0; }
+    .spec-row {
+      display: grid;
+      grid-template-columns: 52px 240px minmax(0,1fr);
+      gap: 20px;
+      align-items: start;
+      padding: 22px 0;
+      border-bottom: 1px solid var(--line);
+    }
+    .spec-index { color: var(--faint); font: 700 9px/1.6 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    .spec-title { font-size: 13px; font-weight: 700; letter-spacing: -0.01em; }
+    .spec-copy { color: var(--muted); font-size: 13px; line-height: 1.58; }
+
+    .teaser-note {
+      margin-top: 28px;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 14px 16px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--surface);
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.55;
+    }
+    .teaser-note::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      margin-top: 4px;
+      border-radius: 2px;
+      background: var(--accent-2);
+      flex: 0 0 8px;
+    }
+
+    .timeline {
+      border-top: 1px solid var(--line);
+      margin-top: 10px;
+    }
+    .timeline-row {
+      display: grid;
+      grid-template-columns: 180px 160px minmax(0,1fr);
+      gap: 20px;
+      padding: 22px 0;
+      border-bottom: 1px solid var(--line);
+      align-items: start;
+    }
+    .timeline-date { font: 700 11px/1.4 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; color: var(--text); }
+    .timeline-name { font-size: 12px; font-weight: 700; }
+    .timeline-copy { color: var(--muted); font-size: 12px; line-height: 1.5; }
+    .timeline-row.current .timeline-date { color: var(--accent-2); }
+
+    .footer {
+      border-top: 1px solid var(--line);
+      padding: 28px 0;
+      color: var(--faint);
+      font-size: 10px;
+    }
+    .footer-inner {
+      width: min(var(--max), calc(100% - 36px));
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+    .footer strong { color: var(--muted); font-weight: 650; }
+
+    .appearance-popover {
+      position: fixed;
+      right: max(18px, calc((100vw - var(--max)) / 2));
+      top: 76px;
+      z-index: 120;
+      width: 230px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--surface);
+      box-shadow: 0 18px 48px rgba(0,0,0,.24);
+      display: none;
+    }
+    .appearance-popover.open { display: block; }
+    .appearance-title { margin: 2px 3px 10px; font-size: 11px; font-weight: 700; }
+    .theme-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+    .theme-option {
+      min-height: 54px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--bg);
+      color: var(--muted);
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      gap: 5px;
+      padding: 8px;
+      font-size: 10px;
+      font-weight: 650;
+    }
+    .theme-option.active { border-color: var(--line-strong); color: var(--text); background: var(--surface-2); }
+    .theme-preview { width: 30px; height: 17px; border-radius: 5px; border: 1px solid #6b6b73; }
+    .theme-preview.dark { background: #121214; }
+    .theme-preview.light { background: #f7f7f8; }
+
+    @media (max-width: 900px) {
+      .header-inner { grid-template-columns: 1fr auto; }
+      .main-nav { display: none; }
+      .mobile-toggle { display: grid; }
+      .desktop-launch { display: none; }
+      .hero { grid-template-columns: 1fr; gap: 0; min-height: auto; }
+      .hero-copy { padding-bottom: 38px; }
+      .hero-meta { border-left: 0; border-top: 1px solid var(--line); padding: 20px 0 0; }
+      .section-head { grid-template-columns: 1fr; gap: 12px; }
+      .statement { grid-template-columns: 1fr; gap: 34px; }
+      .teaser-header { grid-template-columns: 1fr; gap: 24px; }
+      .teaser-date { border-left: 0; border-top: 1px solid var(--line); padding: 20px 0 0; }
+      .spec-row { grid-template-columns: 36px 180px minmax(0,1fr); }
+      .timeline-row { grid-template-columns: 120px 140px minmax(0,1fr); }
+      .grid-3 { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 680px) {
+      .page { width: min(100% - 24px, var(--max)); padding: 48px 0 72px; }
+      .header-inner { width: calc(100% - 24px); }
+      h1 { font-size: clamp(42px, 15vw, 64px); }
+      .grid-2 { grid-template-columns: 1fr; }
+      .spec-row { grid-template-columns: 32px minmax(0,1fr); gap: 12px; }
+      .spec-copy { grid-column: 2; }
+      .timeline-row { grid-template-columns: 1fr; gap: 6px; }
+      .timeline-copy { margin-top: 4px; }
+      .footer-inner { width: calc(100% - 24px); flex-direction: column; align-items: flex-start; }
+      .brand-copy span { display: none; }
+      .appearance-popover { right: 12px; left: 12px; width: auto; }
+      .mobile-menu {
+        position: fixed;
+        inset: 68px 0 auto 0;
+        z-index: 85;
+        padding: 12px;
+        border-bottom: 1px solid var(--line);
+        background: var(--bg);
+      }
+      .mobile-menu.open { display: grid; gap: 5px; }
+      .mobile-menu .nav-link { text-align: left; padding: 10px 11px; }
+      .footer { padding-bottom: 80px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="top-rule"></div>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <button class="brand" onclick="App.navigate('overview')" aria-label="VilotGRI home" style="border:0;background:transparent;color:inherit;padding:0;">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M12 3 4.5 7 12 11l7.5-4L12 3Z" stroke-linejoin="round"/>
+            <path d="m4.5 12 7.5 4 7.5-4M4.5 17l7.5 4 7.5-4" stroke-linejoin="round"/>
+          </svg>
+        </span>
+        <span class="brand-copy"><strong>VilotGRI</strong><span>Independent systems lab</span></span>
+      </button>
+
+      <nav class="main-nav" aria-label="Primary navigation">
+        <button class="nav-link active" data-view="overview" onclick="App.navigate('overview')">Overview</button>
+        <button class="nav-link" data-view="about" onclick="App.navigate('about')">About</button>
+        <button class="nav-link" data-view="team" onclick="App.navigate('team')">Team</button>
+        <button class="nav-link" data-view="vilotni" onclick="App.navigate('vilotni')">VilotNI 2</button>
+        <button class="nav-link" data-view="roadmap" onclick="App.navigate('roadmap')">Roadmap</button>
+      </nav>
+
+      <div class="header-actions">
+        <button class="icon-btn" onclick="App.toggleAppearance(event)" aria-label="Appearance" title="Appearance">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 3a9 9 0 1 0 9 9 7 7 0 0 1-9-9Z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <a class="button desktop-launch" href="main_website/Index.html">Open workspace
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 17 17 7M8 7h9v9" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <button class="icon-btn mobile-toggle" onclick="App.toggleMobileMenu()" aria-label="Menu">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 8h14M5 16h14" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div id="mobile-menu" class="mobile-menu">
+    <button class="nav-link" onclick="App.mobileNavigate('overview')">Overview</button>
+    <button class="nav-link" onclick="App.mobileNavigate('about')">About</button>
+    <button class="nav-link" onclick="App.mobileNavigate('team')">Team</button>
+    <button class="nav-link" onclick="App.mobileNavigate('vilotni')">VilotNI 2</button>
+    <button class="nav-link" onclick="App.mobileNavigate('roadmap')">Roadmap</button>
+    <a class="button" href="main_website/Index.html" style="margin-top:6px;">Open workspace</a>
+  </div>
+
+  <div id="appearance-popover" class="appearance-popover" onclick="event.stopPropagation()">
+    <div class="appearance-title">Appearance</div>
+    <div class="theme-grid">
+      <button id="theme-dark" class="theme-option" onclick="App.setTheme('dark')"><span class="theme-preview dark"></span>Dark</button>
+      <button id="theme-light" class="theme-option" onclick="App.setTheme('light')"><span class="theme-preview light"></span>Light</button>
+    </div>
+  </div>
+
+  <main>
+    <section id="view-overview" class="view active">
+      <div class="page hero">
+        <div class="hero-copy">
+          <div class="eyebrow">VilotGRI / 2026</div>
+          <h1>Software built to be understood.</h1>
+          <p class="lede">VilotGRI is an independent browser-native software project focused on transparent systems, fast local execution, and tools that can evolve without hiding how they work.</p>
+          <div class="hero-actions">
+            <a href="main_website/Index.html" class="button">Open workspace</a>
+            <button class="button-quiet" onclick="App.navigate('vilotni')">View VilotNI 2 release</button>
+          </div>
+        </div>
+        <aside class="hero-meta" aria-label="Release information">
+          <div class="meta-row">
+            <div class="meta-label">Release date</div>
+            <div class="meta-value date">09.30.26</div>
+          </div>
+          <div class="meta-row">
+            <div class="meta-label">Project</div>
+            <div class="meta-value">VilotNI 2</div>
+          </div>
+          <div class="meta-row">
+            <div class="meta-label">Status</div>
+            <div class="meta-value" style="font-size:16px;">Release</div>
+            <div id="release-countdown" style="margin-top:7px;"></div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section id="view-about" class="view">
+      <div class="page">
+        <div class="section-head">
+          <div class="eyebrow">About</div>
+          <div><h2>Built from the system outward.</h2><p class="lede">The project is organized around explicit components, visible behavior, and direct control over how each part of the software works.</p></div>
+        </div>
+
+        <div class="grid-3">
+          <article class="panel"><div class="panel-number">01 / STRUCTURE</div><h3>Modular by design</h3><p>Major behaviors are separated into focused files and data layers instead of being buried inside one catch-all runtime.</p></article>
+          <article class="panel"><div class="panel-number">02 / LOCALITY</div><h3>Browser-native execution</h3><p>The workspace is designed to run directly in the browser, keeping the implementation inspectable and close to the user.</p></article>
+          <article class="panel"><div class="panel-number">03 / CONTROL</div><h3>Behavior you can inspect</h3><p>Rules, model state, interface behavior, and supporting data are kept visible so the system can be changed deliberately.</p></article>
+        </div>
+
+        <div class="statement">
+          <div><div class="eyebrow">Why it exists</div></div>
+          <div>
+            <p>VilotGRI was started by WATS (Whitty At The South) as a self-directed software project with one recurring idea: build useful systems without making the implementation feel inaccessible.</p>
+            <blockquote class="quote">“As the founder of Avlaora™, I'm not here to force users to use anything behind a paywall; I'm here to previde available & free apps to any person at any time.”<small>Core founding principle</small></blockquote>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="view-team" class="view">
+      <div class="page">
+        <div class="section-head">
+          <div class="eyebrow">Team</div>
+          <div><h2>Independent development.</h2><p class="lede">One project, one builder, and a system that is being iterated in public.</p></div>
+        </div>
+        <div class="person">
+          <div class="person-mark">W</div>
+          <div>
+            <div class="person-role">Lead developer</div>
+            <h3>WATS <span style="color:var(--faint);font-weight:500;">(Whitty At The South)</span></h3>
+            <p>Responsible for the full platform, from model architecture and browser compute to interface systems, persistent chat behavior, release experiments, and the overall product direction.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="view-vilotni" class="view">
+      <div class="page">
+        <div class="teaser-header">
+          <div>
+            <div class="eyebrow">VilotNI 2 / Release</div>
+            <h2 style="margin-top:18px;">A look at the next system.</h2>
+            <p class="lede">VilotNI 2 releases on September 30 with a larger reasoning architecture, stricter answer confidence, expanded language handling, persistent conversation features, and a cleaner product interface.</p>
+          </div>
+          <div class="teaser-date">
+            <div class="meta-label">Release date</div>
+            <div class="date">Sept 30</div>
+            <div style="margin-top:7px;color:var(--faint);font:700 10px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;">2026</div>
+          </div>
+        </div>
+
+        <div class="spec-list">
+          <div class="spec-row"><div class="spec-index">01</div><div class="spec-title">6M-neuron RSL core</div><div class="spec-copy">A substantially larger recurrent/self-learning runtime that keeps the existing learned-state architecture while expanding the model's working capacity.</div></div>
+          <div class="spec-row"><div class="spec-index">02</div><div class="spec-title">Confidence-gated responses</div><div class="spec-copy">Responses are evaluated before they are shown. Lower-confidence candidates remain internal while the system continues searching for a stronger answer.</div></div>
+          <div class="spec-row"><div class="spec-index">03</div><div class="spec-title">Focused evidence search</div><div class="spec-copy">Query planning, evidence retrieval, and candidate ranking are separated so straightforward prompts can reach relevant knowledge before broader recovery search is needed.</div></div>
+          <div class="spec-row"><div class="spec-index">04</div><div class="spec-title">Language rule data</div><div class="spec-copy">Grammar, punctuation, query patterns, semantic relations, context behavior, and lexical definition indexes now live in dedicated rule/data layers.</div></div>
+          <div class="spec-row"><div class="spec-index">05</div><div class="spec-title">Context-aware follow-ups</div><div class="spec-copy">Short prompts such as “Why?” can resolve against the active conversation instead of being treated like incomplete standalone questions.</div></div>
+          <div class="spec-row"><div class="spec-index">06</div><div class="spec-title">Product interface</div><div class="spec-copy">Saved chats, account preferences, model defaults, appearance settings, and a unified response presentation are being brought into the same workspace.</div></div>
+        </div>
+
+        <div class="teaser-note">VilotNI 2 is the current release line. Development will continue after launch, and this page reflects the September 30 public release.</div>
+
+        <div style="margin-top:30px;display:flex;gap:9px;flex-wrap:wrap;">
+          <a href="main_website/Index.html" class="button">Open workspace</a>
+          <button class="button-quiet" onclick="App.navigate('roadmap')">View roadmap</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="view-roadmap" class="view">
+      <div class="page">
+        <div class="section-head">
+          <div class="eyebrow">Roadmap</div>
+          <div><h2>Release schedule.</h2><p class="lede">The current VilotNI release and the next-generation dates already on the calendar.</p></div>
+        </div>
+
+        <div class="timeline">
+                              <div class="timeline-row current"><div class="timeline-date">SEP 30, 2026</div><div class="timeline-name">VilotNI 2 Release</div><div class="timeline-copy">Public release of the VilotNI 2 architecture, language systems, confidence search, persistent chats, and redesigned interface.</div></div>
+          <div class="timeline-row"><div class="timeline-date">OCT 3, 2026</div><div class="timeline-name">VilotNI 3 Teaser</div><div class="timeline-copy">First public preview of the next VilotNI generation.</div></div>
+          <div class="timeline-row"><div class="timeline-date">OCT 7, 2026</div><div class="timeline-name">VilotNI 3 Release</div><div class="timeline-copy">Planned public release of VilotNI 3.</div></div>
+        </div>
+
+        <div class="teaser-note" style="margin-top:24px;">Development dates describe the current plan and may change as the project evolves.</div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner"><div><strong>VilotGRI</strong> / VilotNI 2</div><div>Developed by WATS (Whitty At The South)</div></div>
+  </footer>
+
+  <script>
+    const App = {
+      currentView: 'overview',
+      theme: 'dark',
+
+      init() {
+        this.setTheme(localStorage.getItem('vilotgri_theme') || 'dark');
+        const initial = location.hash.replace('#','') || 'overview';
+        this.render(initial);
+        this.initCountdown();
+        window.addEventListener('hashchange', () => this.render(location.hash.replace('#','') || 'overview'));
+        document.addEventListener('click', (e) => {
+          const pop = document.getElementById('appearance-popover');
+          if (pop && !pop.contains(e.target)) pop.classList.remove('open');
+        });
+      },
+
+      navigate(view) {
+        if (location.hash === `#${view}`) this.render(view);
+        else location.hash = view;
+      },
+
+      mobileNavigate(view) {
+        document.getElementById('mobile-menu')?.classList.remove('open');
+        this.navigate(view);
+      },
+
+      render(view) {
+        const target = document.getElementById(`view-${view}`) ? view : 'overview';
+        document.querySelectorAll('.view').forEach(el => el.classList.toggle('active', el.id === `view-${target}`));
+        document.querySelectorAll('.nav-link[data-view]').forEach(el => el.classList.toggle('active', el.dataset.view === target));
+        this.currentView = target;
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      },
+
+      toggleMobileMenu() {
+        document.getElementById('mobile-menu')?.classList.toggle('open');
+      },
+
+      toggleAppearance(event) {
+        event?.stopPropagation();
+        document.getElementById('appearance-popover')?.classList.toggle('open');
+      },
+
+      setTheme(mode) {
+        this.theme = mode === 'light' ? 'light' : 'dark';
+        document.body.classList.toggle('light', this.theme === 'light');
+        localStorage.setItem('vilotgri_theme', this.theme);
+        document.getElementById('theme-dark')?.classList.toggle('active', this.theme === 'dark');
+        document.getElementById('theme-light')?.classList.toggle('active', this.theme === 'light');
+      },
+
+      initCountdown() {
+        const el = document.getElementById('release-countdown');
+        if (!el) return;
+        const release = new Date('2026-09-30T00:00:00');
+        const update = () => {
+          const ms = release - new Date();
+          if (ms <= 0) {
+            el.textContent = 'Released';
+            return;
+          }
+          const d = Math.floor(ms / 86400000);
+          const h = Math.floor((ms % 86400000) / 3600000);
+          const m = Math.floor((ms % 3600000) / 60000);
+          el.textContent = `${d}d ${h}h ${m}m remaining`;
+        };
+        update();
+        setInterval(update, 30000);
+      }
+    };
+
+    document.addEventListener('DOMContentLoaded', () => App.init());
+  </script>
+</body>
+</html>
