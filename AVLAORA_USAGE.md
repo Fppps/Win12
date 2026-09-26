@@ -8,6 +8,8 @@ Avlaora is **not being represented as a federally registered trademark**, and th
 
 This document may change as Avlaora grows.
 
+Anything before Sep 7, 2026 are not under the trademark policy & can be used freely but anything below should still need to be used though.
+
 ---
 
 # 1. What is Avlaora?
