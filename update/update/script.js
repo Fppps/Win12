@@ -1,30 +1,3 @@
-
-
-index.html
-HTML
-
-script.js
-Code
-Can you delete the "(Preview)" elements for the version only & their translated forms?
-
-Worked for 45s
-Done. I removed the “(Preview)” suffix from the build/version value in every translated form and changed the translation key from systemBuildPreview to systemBuildCode. The unrelated feature preview labels remain unchanged. The JavaScript also passes node --check.
-
-
-index.html
-HTML
-
-script.js
-Code
-Can you make script.js a txt b/c it hates wanting to download?
-Yep. I converted it to a .txt file without changing the contents.
-
-
-script.txt
-Document
-
-
-
 const translations = {
     "en-US": {
         restarting: "Restarting",
@@ -3681,7 +3654,7 @@ const systemInfoValueTranslations = {
     "en-US": {
         win12: "Windows 12",
         systemVersionCode: "9H09",
-        systemBuildCode: "269120",
+        systemBuildPreview: "269120",
         systemKdCode: "KD109",
         kdVersion: "KD version",
         experience: "Experience",
@@ -3690,7 +3663,7 @@ const systemInfoValueTranslations = {
     "en-GB": {
         win12: "Windows 12",
         systemVersionCode: "9H09",
-        systemBuildCode: "269120",
+        systemBuildPreview: "269120",
         systemKdCode: "KD109",
         kdVersion: "KD version",
         experience: "Experience",
@@ -3699,7 +3672,7 @@ const systemInfoValueTranslations = {
     "es-ES": {
         win12: "Windows 12",
         systemVersionCode: "9H09",
-        systemBuildCode: "269120",
+        systemBuildPreview: "269120",
         systemKdCode: "KD109",
         kdVersion: "Versión de KD",
         experience: "Experiencia",
@@ -3708,7 +3681,7 @@ const systemInfoValueTranslations = {
     "fr-FR": {
         win12: "Windows 12",
         systemVersionCode: "9H09",
-        systemBuildCode: "269120",
+        systemBuildPreview: "269120",
         systemKdCode: "KD109",
         kdVersion: "Version KD",
         experience: "Expérience",
@@ -3717,7 +3690,7 @@ const systemInfoValueTranslations = {
     "de-DE": {
         win12: "Windows 12",
         systemVersionCode: "9H09",
-        systemBuildCode: "269120",
+        systemBuildPreview: "269120",
         systemKdCode: "KD109",
         kdVersion: "KD-Version",
         experience: "Erfahrung",
@@ -3726,7 +3699,7 @@ const systemInfoValueTranslations = {
     "ja-JP": {
         win12: "Windows 12",
         systemVersionCode: "9H09",
-        systemBuildCode: "269120",
+        systemBuildPreview: "269120",
         systemKdCode: "KD109",
         kdVersion: "KD バージョン",
         experience: "エクスペリエンス",
@@ -3735,7 +3708,7 @@ const systemInfoValueTranslations = {
     "pt-BR": {
         win12: "Windows 12",
         systemVersionCode: "9H09",
-        systemBuildCode: "269120",
+        systemBuildPreview: "269120",
         systemKdCode: "KD109",
         kdVersion: "Versão KD",
         experience: "Experiência",
@@ -3744,7 +3717,7 @@ const systemInfoValueTranslations = {
     "it-IT": {
         win12: "Windows 12",
         systemVersionCode: "9H09",
-        systemBuildCode: "269120",
+        systemBuildPreview: "269120",
         systemKdCode: "KD109",
         kdVersion: "Versione KD",
         experience: "Esperienza",
@@ -3753,7 +3726,7 @@ const systemInfoValueTranslations = {
     "ko-KR": {
         win12: "Windows 12",
         systemVersionCode: "9H09",
-        systemBuildCode: "269120",
+        systemBuildPreview: "269120",
         systemKdCode: "KD109",
         kdVersion: "KD 버전",
         experience: "환경",
@@ -3762,7 +3735,7 @@ const systemInfoValueTranslations = {
     "zh-CN": {
         win12: "Windows 12",
         systemVersionCode: "9H09",
-        systemBuildCode: "269120",
+        systemBuildPreview: "269120",
         systemKdCode: "KD109",
         kdVersion: "KD 版本",
         experience: "体验",
@@ -3771,7 +3744,7 @@ const systemInfoValueTranslations = {
     "ru-RU": {
         win12: "Windows 12",
         systemVersionCode: "9H09",
-        systemBuildCode: "269120",
+        systemBuildPreview: "269120",
         systemKdCode: "KD109",
         kdVersion: "Версия KD",
         experience: "Возможности",
@@ -3780,7 +3753,7 @@ const systemInfoValueTranslations = {
     "ar-SA": {
         win12: "ويندوز 12",
         systemVersionCode: "9H09",
-        systemBuildCode: "269120",
+        systemBuildPreview: "269120",
         systemKdCode: "KD109",
         kdVersion: "إصدار KD",
         experience: "التجربة",
@@ -3789,7 +3762,7 @@ const systemInfoValueTranslations = {
     "hi-IN": {
         win12: "विंडोज़ 12",
         systemVersionCode: "9H09",
-        systemBuildCode: "269120",
+        systemBuildPreview: "269120",
         systemKdCode: "KD109",
         kdVersion: "KD संस्करण",
         experience: "अनुभव",
@@ -6483,7 +6456,7 @@ function applyLanguageDirection(langCode = currentLang) {
             const details = [
                 `${resolveTranslation('edition')}: ${resolveTranslation('win12')}`,
                 `${resolveTranslation('version')}: ${resolveTranslation('systemVersionCode')}`,
-                `${resolveTranslation('osBuild')}: ${resolveTranslation('systemBuildCode')}`,
+                `${resolveTranslation('osBuild')}: ${resolveTranslation('systemBuildPreview')}`,
                 `${resolveTranslation('kdVersion')}: ${resolveTranslation('systemKdCode')}`,
                 `${resolveTranslation('experience')}: ${resolveTranslation('developerPreviewPack')}`
             ].join('\n');
