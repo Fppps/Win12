@@ -1526,11 +1526,11 @@
                 lockScreen: "Lock Screen",
                 restartCmd: "Restart",
                 checkingUpdates: "Checking for updates...",
-                searchingUpdate: "Searching Update/index.html...",
+                searchingUpdate: "Searching for updates...",
                 updatesAvailable: "Updates are available",
-                updateFoundLocally: "Windows 12 Update package found locally at Update/index.html.",
-                noUpdatesFound: "No updates found. Update/index.html was not found (HTTP ",
-                noLocalUpdate: "Checked folder. No local update package detected at Update/index.html.",
+                updateFoundLocally: "Windows 12 Update package found locally at update/index.html.",
+                noUpdatesFound: "No updates found.",
+                noLocalUpdate: "Checked folder. No local update package detected at update/index.html.",
                 administrator: "Administrator",
                 accountName: "Account Name",
                 localAccount: "Local Account",
@@ -3138,10 +3138,10 @@
             if (installButton) installButton.classList.add('hidden');
 
             try {
-                const response = await fetch('Update/index.html', { cache: 'no-store' });
+                const response = await fetch('update/index.html', { cache: 'no-store' });
                 if (response.ok) {
                     if (title) title.textContent = dict.updatesAvailable || 'Updates are available';
-                    if (description) description.textContent = dict.updateFoundLocally || 'Windows 12 Update package found locally at Update/index.html.';
+                    if (description) description.textContent = dict.updateFoundLocally || 'Windows 12 Update package found locally at update/index.html.';
                     if (checkIcon) checkIcon.classList.add('hidden');
                     if (availableIcon) availableIcon.classList.remove('hidden');
                     if (installButton) installButton.classList.remove('hidden');
@@ -3151,7 +3151,7 @@
                 }
             } catch (error) {
                 if (title) title.textContent = dict.upToDate || "You're up to date";
-                if (description) description.textContent = dict.noLocalUpdate || 'Checked folder. No local update package detected at Update/index.html.';
+                if (description) description.textContent = dict.noLocalUpdate || 'Checked folder. No local update package detected at update/index.html.';
             }
         }
 
