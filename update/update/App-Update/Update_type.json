@@ -1,13 +1,13 @@
 {
-    "Version": "9",
+    "Version": "10",
     "Status": "Verified",
-    "Update_type": "UI/UX update",
+    "Update_type": "10H10 Build",
     
     "Updates": [
         {
             "Update_name": "Windows 12 UI/UX Update",
-            "Build": "269120",
-            "Description": "New overhaul of the Windows interface, including a redesigned Start menu, improved taskbar functionality, & enhanced window management features."
+            "Build": "2610126",
+            "Description": "Update 10H10 Build 2610125 introduces a fresh interface with a new Search flyout, new Settings page & more."
         }
     ]
 }
