@@ -5197,72 +5197,116 @@ function applyLanguageDirection(langCode = currentLang) {
             }, 2500);
         }
 
+        // A verified package remains actionable after the confirmation dialog is closed.
+        // Do not enable navigation when any manifest/security detector has rejected it.
+        let verifiedManualUpdate = null;
+        let manualUpdateChecking = false;
+
         async function triggerUpdateCheck() {
+            if (manualUpdateChecking) return;
+            if (verifiedManualUpdate) {
+                applyUpdateAndRestart();
+                return;
+            }
+
             const btn = document.getElementById('btn-check-updates');
             const statusText = document.getElementById('update-status-text');
             const dict = translations[currentLang] || translations['en-US'];
+            manualUpdateChecking = true;
 
             if (btn) {
-                btn.textContent = dict.checkingUpdates || "Checking for updates...";
+                btn.textContent = dict.checkingUpdates || 'Checking for updates...';
+                btn.disabled = true;
+                btn.setAttribute('aria-busy', 'true');
                 btn.classList.add('opacity-50', 'pointer-events-none');
             }
-
             if (statusText) {
                 statusText.classList.add('hidden');
+                statusText.classList.add('text-red-500');
+                statusText.classList.remove('text-main');
                 statusText.textContent = '';
             }
 
             try {
                 const scan = await runUpdaterSecurityScan({ source: 'manual' });
-
-                if (scan.accepted) {
-                    showUpdateModal();
+                if (scan?.accepted) {
+                    verifiedManualUpdate = scan;
+                    if (statusText) {
+                        statusText.textContent = 'Update verified. Select Update now to continue.';
+                        statusText.classList.replace('text-red-500', 'text-main');
+                        statusText.classList.remove('hidden');
+                    }
+                    showUpdateModal(scan);
                 } else if (statusText) {
-                    statusText.textContent = scan.noPackage
-                        ? (dict.noLocalUpdate || "No local update package detected.")
-                        : `Update bypassed: ${scan.reason}`;
+                    statusText.textContent = scan?.noPackage
+                        ? (dict.noLocalUpdate || 'No local update package detected.')
+                        : `Update bypassed: ${scan?.reason || 'Validation failed.'}`;
                     statusText.classList.remove('hidden');
                 }
             } catch (error) {
                 console.warn('Updater Security: manual scan failed.', error);
                 if (statusText) {
-                    statusText.textContent = dict.noLocalUpdate || "No local update package detected.";
+                    statusText.textContent = normalizeUpdaterText(error?.message) || (dict.noLocalUpdate || 'No local update package detected.');
                     statusText.classList.remove('hidden');
                 }
             } finally {
+                manualUpdateChecking = false;
                 if (btn) {
-                    btn.textContent = dict.checkUpdates || "Check for updates";
+                    btn.textContent = verifiedManualUpdate ? 'Update now' : (dict.checkUpdates || 'Check for updates');
+                    btn.disabled = false;
+                    btn.removeAttribute('aria-busy');
                     btn.classList.remove('opacity-50', 'pointer-events-none');
                 }
             }
         }
 
-        function showUpdateModal() {
+        function showUpdateModal(scan = verifiedManualUpdate) {
+            if (!scan?.accepted) return;
             const overlay = document.getElementById('update-modal-overlay');
             const box = document.getElementById('update-modal-box');
-            if (overlay && box) {
-                overlay.classList.remove('opacity-0', 'pointer-events-none');
-                overlay.classList.add('opacity-100', 'pointer-events-auto');
-                box.classList.remove('scale-95');
-                box.classList.add('scale-100');
+            if (!overlay || !box) return;
+            const details = document.getElementById('update-modal-name');
+            if (details) {
+                const entry = getManifestUpdates(scan.manifest)[0];
+                const name = normalizeUpdaterText(entry?.Update_name) || 'WebWindows update';
+                const build = normalizeUpdaterText(entry?.Build);
+                details.textContent = build ? `${name} (Build ${build})` : name;
             }
+            overlay.setAttribute('aria-hidden', 'false');
+            overlay.classList.remove('opacity-0', 'pointer-events-none');
+            overlay.classList.add('opacity-100', 'pointer-events-auto');
+            box.classList.remove('scale-95');
+            box.classList.add('scale-100');
+            document.getElementById('update-modal-confirm')?.focus({ preventScroll: true });
         }
 
         function closeUpdateModal() {
             const overlay = document.getElementById('update-modal-overlay');
             const box = document.getElementById('update-modal-box');
-            if (overlay && box) {
-                overlay.classList.add('opacity-0', 'pointer-events-none');
-                overlay.classList.remove('opacity-100', 'pointer-events-auto');
-                box.classList.add('scale-95');
-                box.classList.remove('scale-100');
-            }
+            if (!overlay || !box) return;
+            overlay.setAttribute('aria-hidden', 'true');
+            overlay.classList.add('opacity-0', 'pointer-events-none');
+            overlay.classList.remove('opacity-100', 'pointer-events-auto');
+            box.classList.add('scale-95');
+            box.classList.remove('scale-100');
+            document.getElementById('btn-check-updates')?.focus({ preventScroll: true });
         }
 
         function applyUpdateAndRestart() {
+            // This navigates to the verified local update page, not an arbitrary
+            // URL from the JSON manifest. Installation is handled by that page.
+            if (!verifiedManualUpdate?.accepted || manualUpdateChecking) return;
             closeUpdateModal();
-            triggerRestart(false, 'App-Update/index.html');
+            triggerRestart(false, updaterPackagePaths.page);
         }
+
+        document.addEventListener('keydown', event => {
+            if (event.key === 'Escape' &&
+                document.getElementById('update-modal-overlay')?.getAttribute('aria-hidden') === 'false') {
+                event.preventDefault();
+                closeUpdateModal();
+            }
+        });
 
         function getDynamicPositionalClass(popupId) {
             if (tbPosition === 'bottom') return tbAlignment === 'start' ? 'pos-bottom-start' : 'pos-bottom-center';
