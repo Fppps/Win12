@@ -6459,6 +6459,28 @@
         <div class="text-[24px] font-normal tracking-wide" id="restart-text" data-i18n="restarting">Restarting</div>
     </div>
 
+    <!-- Verified 9H09 update confirmation: appears only after security validation. -->
+    <div id="update-modal-overlay" role="presentation" aria-hidden="true"
+         class="fixed inset-0 z-[90000] flex items-center justify-center p-4 bg-black/50 opacity-0 pointer-events-none transition-opacity duration-200">
+        <div id="update-modal-box" role="dialog" aria-modal="true" aria-labelledby="update-modal-title"
+             aria-describedby="update-modal-description"
+             class="w-full max-w-[440px] p-6 rounded-[8px] scale-95 transition-transform duration-200"
+             style="background:var(--main-color); color:var(--text-main); border:1px solid var(--border-color); box-shadow:var(--shadow-window); backdrop-filter:var(--mica-blur); -webkit-backdrop-filter:var(--mica-blur)">
+            <div class="flex items-start gap-3 mb-4">
+                <i class="ph ph-arrows-clockwise text-[26px] text-main" aria-hidden="true"></i>
+                <div class="min-w-0">
+                    <h2 id="update-modal-title" class="text-[19px] font-semibold text-main">Update ready</h2>
+                    <p id="update-modal-description" class="text-[13px] text-muted mt-1">A local update package passed verification. You can continue to its update page.</p>
+                </div>
+            </div>
+            <p id="update-modal-name" class="text-[13px] text-main mb-5 break-words"></p>
+            <div class="flex justify-end items-center flex-wrap gap-2">
+                <button type="button" class="win-btn-secondary" onclick="closeUpdateModal()">Not now</button>
+                <button type="button" class="win-btn-primary" id="update-modal-confirm" onclick="applyUpdateAndRestart()">Continue to update</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Toast Notification Container -->
     <div id="toast-container" role="region" aria-label="Notifications" aria-live="polite" aria-atomic="false"></div>
 
@@ -8284,4 +8306,3 @@
 
     <script src="script.js"></script>
 </body>
-</html>
