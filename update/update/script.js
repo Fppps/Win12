@@ -8606,15 +8606,14 @@ function applyLanguageDirection(langCode = currentLang) {
 
             for (let index = 0; index < updates.length; index++) {
                 const update = updates[index];
-                const name = normalizeUpdaterText(update.Update_name);
+                // Update_name is the manifest's display label. It is checked for
+                // validity by validateUpdateMetadata(), but does not have to match
+                // the HTML page's title, visible text, or update-name metadata.
                 const build = normalizeUpdaterText(update.Build);
                 const description = normalizeUpdaterText(update.Description);
 
-                // Explicit metadata is preferred when the update page provides it.
-                // Otherwise the detector falls back to exact normalized page text.
-                const nameMatches = html.explicit.name
-                    ? html.explicit.name.toLowerCase() === name.toLowerCase()
-                    : htmlContainsExactUpdaterValue(html.documentText, htmlText, name);
+                // Only Build and Description must agree with the update page.
+                // Explicit metadata is preferred; otherwise check page text.
                 const buildMatches = html.explicit.build
                     ? html.explicit.build === build
                     : htmlContainsExactUpdaterValue(html.documentText, htmlText, build, 'build');
@@ -8622,9 +8621,6 @@ function applyLanguageDirection(langCode = currentLang) {
                     ? html.explicit.description.toLowerCase() === description.toLowerCase()
                     : htmlContainsExactUpdaterValue(html.documentText, htmlText, description);
 
-                if (!nameMatches) {
-                    return { ok: false, reason: `Update_name does not match App-Update/index.html for entry ${index + 1}.` };
-                }
                 if (!buildMatches) {
                     return { ok: false, reason: `Build does not match App-Update/index.html for entry ${index + 1}.` };
                 }
@@ -8838,7 +8834,7 @@ function applyLanguageDirection(langCode = currentLang) {
                 setUpdateTypeState(resolveTranslation('defUpdateTypePassed'), 'ready');
             }
 
-            // Detector 2: JSON fields must be sane and agree with the update HTML.
+            // Detector 2: JSON metadata must be valid; only Build and Description must match HTML.
             if (searchEnabled) {
                 const metadataCheck = validateManifestAgainstHtml(data, htmlText);
                 if (!metadataCheck.ok) {
