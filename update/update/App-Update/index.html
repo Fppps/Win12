@@ -3494,13 +3494,185 @@
     white-space:normal;
   }
 }
+
+/* ================================================================
+  10H10 adaptive Settings window. Breakpoints track the SETTINGS
+  window's own width rather than the browser viewport. Preserves
+  the user's Mica glass colors and borderless cards.
+   ================================================================ */
+#settings-window {
+  container-name: ww10-settings;
+  container-type:inline-size;
+}
+#settings-window .ww-settings-layout {position:relative;min-height:0;min-width:0;overflow:hidden;}
+#settings-window .ww-settings-content {
+  flex:1 1 0;min-width:0;min-height:0;overflow-x:hidden;overflow-y:auto;
+  overscroll-behavior:contain;scrollbar-gutter:stable;
+}
+#settings-window .ww-settings-side {min-height:0;min-width:0;overscroll-behavior:contain;}
+#settings-window .ww-settings-page, #settings-window .ww11-home-page {min-width:0;max-width:100%;}
+#settings-window .ww-settings-page *,#settings-window .ww-settings-page *::before,
+#settings-window .ww-settings-page *::after {box-sizing:border-box;}
+#settings-window .ww11-home-link>span:nth-child(2),
+#settings-window .ww9-update-row-text,
+#settings-window .ww9-heading-copy,
+#settings-window .ww10-insider-option-copy {min-width:0;}
+#settings-window .ww9-update-row-text, #settings-window .ww10-history-details {overflow-wrap:anywhere;}
+#settings-window .ww-settings-line>div:first-child {min-width:0;}
+#settings-window .ww-settings-inline {min-width:0;max-width:100%;}
+#settings-window .ww11-home-explore,
+#settings-window .ww9-position-grid,
+#settings-window .ww9-search-grid,
+#settings-window .ww-settings-choices {min-width:0;}
+#settings-window .ww10-settings-menu-button {
+  display:none;flex:0 0 38px;width:38px;height:36px;align-items:center;justify-content:center;
+  padding:0;margin:0 8px 0 -7px;border:0;background:transparent;
+  border-radius:7px;color:var(--text-primary);cursor:pointer;
+  transition:background-color .16s ease;
+}
+#settings-window .ww10-settings-menu-button:hover,
+#settings-window .ww10-settings-menu-button[aria-expanded="true"] {background:var(--control-hover);}
+#settings-window .ww10-settings-menu-button:focus-visible {outline:2px solid var(--text-secondary);outline-offset:-2px;}
+#settings-window .ww10-settings-nav-scrim {display:none;}
+
+@container ww10-settings (max-width: 940px) {
+  #settings-window .ww-settings-side {flex:0 0 210px;width:210px;padding:13px 10px 18px;}
+  #settings-window .ww-profile-header {gap:10px;padding:6px 4px 15px;min-height:0;}
+  #settings-window .ww-profile-avatar,#settings-window .ww-profile-fallback {width:43px;height:43px;flex-basis:43px;}
+  #settings-window .ww-profile-header b {font-size:12px;max-width:120px;}
+  #settings-window .ww11-search-wrap {margin:0 1px 13px;}
+  #settings-window .ww-settings-nav button {gap:9px;padding:10px 9px;}
+  #settings-window .ww-settings-nav button>span:last-child {display:inline;}
+  #settings-window .ww-settings-content {padding:22px 23px 32px;}
+  #settings-window .ww11-device-banner {gap:12px;margin-bottom:22px;flex-wrap:wrap;}
+  #settings-window .ww11-device-preview {flex-shrink:0;}
+  #settings-window .ww11-device-status {margin-left:0;}
+  #settings-window .ww11-home-explore {grid-template-columns:minmax(0,1fr);}
+  #settings-window .ww9-position-grid {grid-template-columns:repeat(2,minmax(0,1fr));}
+  #settings-window .ww9-search-grid {grid-template-columns:repeat(2,minmax(0,1fr));}
+  #settings-window .ww-settings-choices {grid-template-columns:repeat(2,minmax(0,1fr));}
+  #settings-window .ww-settings-preview-row,#settings-window .ww-glass-studio {grid-template-columns:minmax(0,1fr);}
+  #settings-window .ww-settings-page h1,#settings-window .ww9-unified-heading h1 {font-size:clamp(24px,3.1cqw,30px);}
+  #settings-window .ww-settings-line {gap:12px;padding:13px 14px;}
+  #settings-window .ww9-update-hero {gap:16px;}
+  #settings-window .ww9-update-hero-icon {width:56px;height:56px;flex-basis:56px;}
+  #settings-window .ww9-update-hero-icon img {width:56px;height:56px;}
+  #settings-window .ww9-update-hero-body h1 {font-size:25px;}
+  #settings-window .ww10-insider-options-body {padding:16px 17px;}
+}
+@container ww10-settings (max-width: 720px) {
+  #settings-window .ww10-settings-menu-button {display:inline-flex;}
+  #settings-window .ww-settings-layout {isolation:isolate;}
+  #settings-window .ww-settings-side {
+    position:absolute!important;left:0;top:0;bottom:0;z-index:12;
+    flex:none!important;width:min(280px,calc(100cqw - 48px))!important;
+    max-width:calc(100% - 48px)!important;height:100%;
+    padding:15px 14px 22px!important;overflow-y:auto!important;overflow-x:visible!important;
+    background:var(--mica-surface)!important;
+    backdrop-filter:var(--mica-blur);-webkit-backdrop-filter:var(--mica-blur);
+    box-shadow:10px 0 32px rgba(0,0,0,.14)!important;
+    transform:translateX(-105%);visibility:hidden;pointer-events:none;
+    transition:transform .23s cubic-bezier(.22,1,.36,1),visibility 0s linear .23s;
+  }
+  #settings-window.ww10-settings-nav-open .ww-settings-side {
+    transform:translateX(0);visibility:visible;pointer-events:auto;
+    transition:transform .23s cubic-bezier(.22,1,.36,1),visibility 0s;
+  }
+  #settings-window .ww-settings-side .ww-profile-header {justify-content:flex-start;}
+  #settings-window .ww-settings-side .ww-profile-header>div:last-child {display:block;min-width:0;}
+  #settings-window .ww-settings-side .ww11-search-wrap {display:block;margin:0 2px 17px;}
+  #settings-window .ww-settings-side .ww-settings-nav button {justify-content:flex-start;padding:11px 12px;}
+  #settings-window .ww-settings-side .ww-settings-nav button>span:last-child {display:inline!important;}
+  #settings-window .ww-settings-side .ww-settings-nav button .ww-sidebar-icon {flex:0 0 20px;}
+  #settings-window .ww10-settings-nav-scrim {
+    display:block;position:absolute;inset:0;width:100%;height:100%;z-index:11;
+    background:rgba(0,0,0,.24);border:0;border-radius:0;
+    opacity:0;pointer-events:none;visibility:hidden;cursor:default;
+    transition:opacity .23s ease,visibility 0s linear .23s;
+  }
+  #settings-window.ww10-settings-nav-open .ww10-settings-nav-scrim {
+    opacity:1;pointer-events:auto;visibility:visible;
+    transition:opacity .23s ease,visibility 0s;
+  }
+  #settings-window .ww-settings-content {width:100%;padding:20px 19px 28px;}
+  #settings-window .ww11-device-banner {align-items:flex-start;}
+  #settings-window .ww11-home-explore {grid-template-columns:repeat(2,minmax(0,1fr));}
+  #settings-window .ww-settings-page h1,#settings-window .ww9-unified-heading h1 {font-size:27px;}
+  #settings-window .ww-settings-choices {grid-template-columns:repeat(2,minmax(0,1fr));}
+  #settings-window .ww9-search-grid {grid-template-columns:repeat(2,minmax(0,1fr));}
+  #settings-window .ww9-position-grid {grid-template-columns:repeat(2,minmax(0,1fr));}
+}
+@container ww10-settings (max-width: 525px) {
+  #settings-window .ww-settings-content {padding:15px 13px 24px;scrollbar-gutter:auto;}
+  #settings-window .ww11-device-banner {gap:12px;margin-bottom:18px;}
+  #settings-window .ww11-device-preview {width:98px;height:67px;flex-basis:98px;}
+  #settings-window .ww11-device-status {flex-basis:100%;font-size:11px;}
+  #settings-window .ww11-device-details {gap:4px;}
+  #settings-window .ww11-device-details strong {font-size:15px;}
+  #settings-window .ww11-home-explore {grid-template-columns:minmax(0,1fr);gap:8px;}
+  #settings-window .ww11-home-link {padding:11px 9px;min-height:70px;}
+  #settings-window .ww11-home-link-icon {flex-basis:28px;width:28px;height:28px;}
+  #settings-window .ww-settings-page h1,#settings-window .ww9-unified-heading h1 {font-size:24px;letter-spacing:-.35px;}
+  #settings-window .ww9-page-heading {gap:8px!important;margin-bottom:15px;}
+  #settings-window .ww9-page-heading p {font-size:11px;}
+  #settings-window .ww-settings-line {flex-wrap:wrap;align-items:flex-start;gap:10px;padding:11px 12px;}
+  #settings-window .ww-settings-line>div:first-child {flex:1 1 160px;}
+  #settings-window .ww-settings-inline {display:flex;flex-wrap:wrap;gap:8px;width:100%;}
+  #settings-window .ww-settings-inline .ww-settings-input {flex:1 1 130px;min-width:0;}
+  #settings-window .ww-choice {max-width:100%;min-width:140px;width:100%;}
+  #settings-window .ww-settings-preview-row {grid-template-columns:minmax(0,1fr);}
+  #settings-window #ww-wallpaper-preview {min-height:145px;}
+  #settings-window .ww9-update-hero {align-items:center;gap:12px;padding:5px 0;}
+  #settings-window .ww9-update-hero-icon {width:45px;height:45px;flex-basis:45px;}
+  #settings-window .ww9-update-hero-icon img {width:45px;height:45px;}
+  #settings-window .ww9-update-hero-body h1 {font-size:22px;margin-bottom:5px;}
+  #settings-window .ww9-update-hero-body #ww-check-updates {max-width:100%;}
+  #settings-window .ww9-available-item {grid-template-columns:minmax(0,1fr)!important;gap:5px;padding:13px!important;}
+  #settings-window .ww9-available-item-status {text-align:left!important;white-space:normal!important;}
+  #settings-window .ww9-update-page #ww-history .ww10-history-item {grid-template-columns:minmax(0,1fr);gap:4px;}
+  #settings-window .ww9-update-page #ww-history .ww10-history-status {justify-self:start;text-align:left;white-space:normal;}
+  #settings-window .ww9-update-system-row {grid-template-columns:minmax(0,1fr);gap:4px;padding:10px 13px;}
+  #settings-window .ww10-insider-experience {padding:14px!important;}
+  #settings-window .ww10-insider-options-body {padding:13px 10px!important;}
+  #settings-window .ww10-insider-radio-row {padding:10px 4px!important;gap:9px;}
+  #settings-window .ww10-insider-advanced-header {padding:12px!important;gap:10px;}
+  #settings-window .ww10-insider-release-row > label:first-child {padding:12px!important;}
+  #settings-window .ww10-insider-release-row > .ww10-insider-release-control {min-width:90px!important;padding:8px!important;gap:5px;}
+  #settings-window #ww10-early-updates-card .ww10-early-description {padding:12px!important;min-height:75px;gap:9px;}
+  #settings-window #ww10-early-updates-card .ww10-update-switch-control {flex:0 0 78px!important;min-height:75px;padding:5px;gap:4px;}
+  #settings-window .ww10-toggle-well {flex:0 0 64px!important;min-width:64px!important;}
+  #settings-window .ww9-time-date-control {flex:0 0 64px!important;}
+  #settings-window .ww9-time-flyout-main {gap:9px;padding:12px!important;}
+  #settings-window .ww9-time-date-copy,#settings-window .ww9-time-language-card {padding:11px!important;gap:9px;}
+  #settings-window .ww9-time-clock {font-size:32px;}
+}
+@container ww10-settings (max-width: 400px) {
+  #settings-window .ww-settings-content {padding:12px 10px 20px;}
+  #settings-window .ww11-device-banner {gap:8px;}
+  #settings-window .ww11-device-preview {width:78px;height:54px;flex-basis:78px;}
+  #settings-window .ww9-position-grid,#settings-window .ww-settings-choices {gap:6px;}
+  #settings-window .ww9-search-grid {grid-template-columns:minmax(0,1fr);}
+  #settings-window .ww9-update-hero-icon {width:36px;height:36px;flex-basis:36px;}
+  #settings-window .ww9-update-hero-icon img {width:36px;height:36px;}
+  #settings-window .ww9-update-hero-body h1 {font-size:20px;}
+  #settings-window .ww-settings-nav button {font-size:12px;}
+}
+#settings-window.ww10-settings-short .ww-settings-content {padding-top:12px;padding-bottom:14px;}
+#settings-window.ww10-settings-short .ww11-device-banner {margin-bottom:13px;}
+#settings-window.ww10-settings-short .ww-settings-page h1 {margin-bottom:13px;}
+#settings-window.ww10-settings-short .ww9-page-heading {margin-bottom:13px;}
+@media(prefers-reduced-motion:reduce) {
+ #settings-window .ww-settings-side,
+ #settings-window .ww10-settings-nav-scrim {transition:none!important;}
+}
+
 </style>
 </head>
 <body>
   <main id="desktop" aria-label="Windows desktop"></main>
   <div id="desktop-watermark" aria-hidden="true">
     <span>Windows 12 — 10H10</span>
-    <span>Build 2610125.beta-release — version 10H10</span>
+    <span>Build 2610125.experimental — version 10H10</span>
   </div>
   <nav id="taskbar" aria-label="Windows taskbar">
     <div class="taskbar-left">
@@ -3607,6 +3779,7 @@
  <!-- The 9H09 Settings app adapted to the native 10H10 Mica window system. -->
 <section aria-labelledby="ww-settings-window-title" aria-modal="false" hidden="" id="settings-window" role="dialog">
 <header class="ww-settings-titlebar" id="ww-settings-titlebar">
+<button type="button" id="ww10-settings-navigation-toggle" class="ww10-settings-menu-button" aria-label="Open Settings navigation" aria-expanded="false" aria-controls="ww10-settings-navigation" title="Navigation menu"><svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 6.5h16M4 12h16M4 17.5h16"/></svg></button>
 <span class="ww-settings-title" data-ww-i18n="settings" id="ww-settings-window-title"><span class="ww-title-icon" aria-hidden="true"><img src="https://img.icons8.com/?size=100&amp;id=s5NUIabJrb4C&amp;format=png" data-icons8-src="https://img.icons8.com/?size=100&amp;id=s5NUIabJrb4C&amp;format=png" alt=""  /><i class="ph ph-gear-six ww-icons8-fallback" aria-hidden="true"></i></span>Settings</span>
 <div class="ww-settings-controls">
 <button aria-label="Minimize settings" class="ww-settings-window-btn" id="ww-settings-minimize" title="Minimize" type="button"><svg class="ww10-window-control-symbol" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14"/></svg></button>
@@ -3615,7 +3788,8 @@
 </div>
 </header>
 <div class="ww-settings-layout">
-<aside class="ww-settings-side">
+<button type="button" class="ww10-settings-nav-scrim" id="ww10-settings-nav-scrim" aria-label="Close Settings navigation" tabindex="-1"></button>
+<aside class="ww-settings-side" id="ww10-settings-navigation" aria-label="Settings navigation">
 <div class="ww-profile-header" role="group" aria-label="Local account">
 <div aria-hidden="true" class="ww-profile-fallback" id="ww-profile-fallback">A</div>
 <img alt="Profile" class="ww-profile-avatar" hidden="" id="ww-profile-sidebar-image"/>
