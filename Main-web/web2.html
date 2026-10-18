@@ -1436,17 +1436,157 @@ body {background:var(--surface);font-size:15px;}
   #site-channels .download-legend {font-size:11px;}
 }
 
+/* Embedded 10H10 release notes design */
+/* 10H10 notes are an integrated Avlaora page, not a second microsite.
+   Shared header, footer, dark materials, typography and editorial widths are reused. */
+body.release-notes-active { background:#1a1a1a; }
+#site-release-notes {
+  --notes-panel:#252525;
+  --notes-line:#414141;
+  --notes-body:#c9c9c9;
+  --notes-muted:#bcbcbc;
+  min-height:80vh;
+  background:#1a1a1a;
+  color:#f7f7f7;
+  color-scheme:dark;
+  font-family:var(--font);
+  -webkit-font-smoothing:antialiased;
+}
+#site-release-notes *,#site-release-notes *::before,#site-release-notes *::after { box-sizing:border-box; }
+#site-release-notes .shell { width:min(calc(100% - 112px),var(--editorial-width)); margin-inline:auto; }
+#site-release-notes a { color:#e9e9e9; text-decoration:none; }
+#site-release-notes a:hover { color:#fff; text-decoration:underline; text-underline-offset:4px; }
+#site-release-notes a:focus-visible,#site-release-notes summary:focus-visible {
+  outline:2px solid #e8e8e8;outline-offset:3px;
+}
+#site-release-notes h1,#site-release-notes h2,#site-release-notes h3,#site-release-notes p { margin-top:0; }
+/* Same wallpaper and broad typography used in Channel Insights. The wallpaper is not tinted. */
+#site-release-notes .hero {
+  position:relative;isolation:isolate;
+  background:#202020 var(--wallpaper-channel) center / cover no-repeat;
+  border-bottom:1px solid #3d3d3d;
+  color:#fff;
+}
+#site-release-notes .hero-inner { padding:52px 0 72px; }
+#site-release-notes .crumbs {display:flex;flex-wrap:wrap;align-items:center;gap:11px;margin-bottom:42px;font-size:12px;color:#d4d4d4;text-shadow:0 1px 7px #000;}
+#site-release-notes .crumbs a { color:#f6f6f6; }
+#site-release-notes .crumbs span[aria-hidden] {color:#c6c6c6;}
+#site-release-notes .hero-row {display:grid;grid-template-columns:minmax(0,1fr) 280px;gap:clamp(32px,4vw,64px);align-items:end;}
+#site-release-notes .eyebrow {display:flex;gap:12px;align-items:center;font-size:11px;font-weight:650;letter-spacing:.13em;text-transform:uppercase;color:#e5e5e5;margin-bottom:22px;text-shadow:0 1px 8px #000;}
+#site-release-notes .eyebrow::before { content:"";width:17px;height:2px;background:#dedede;flex:none; }
+#site-release-notes h1 {color:#fff;font-size:clamp(45px,5vw,70px);font-weight:600;line-height:1.08;letter-spacing:-.05em;margin-bottom:24px;max-width:850px;text-shadow:0 2px 15px rgba(0,0,0,.75);}
+#site-release-notes .lede {font-size:17px;line-height:1.7;color:#f1f1f1;margin-bottom:24px;max-width:760px;text-shadow:0 2px 11px #000;}
+#site-release-notes .hero-tags {display:flex;flex-wrap:wrap;gap:9px;align-items:center;}
+#site-release-notes .hero-tags span {padding:7px 11px;border:1px solid rgba(255,255,255,.29);border-radius:3px;background:rgba(30,30,30,.72);color:#f1f1f1;font-size:11px;font-weight:650;-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);}
+#site-release-notes .build-summary {background:rgba(30,30,30,.87);border:1px solid rgba(255,255,255,.3);border-radius:6px;padding:24px 23px;box-shadow:0 12px 37px rgba(0,0,0,.22);-webkit-backdrop-filter:blur(22px);backdrop-filter:blur(22px);}
+#site-release-notes .summary-label {font-size:11px;font-weight:700;color:#dedede;letter-spacing:.105em;text-transform:uppercase;margin-bottom:20px;}
+#site-release-notes .build-summary dl {display:grid;gap:10px;margin:0;}
+#site-release-notes .build-summary dl div {display:flex;align-items:baseline;justify-content:space-between;gap:10px;padding:0 0 10px;border-bottom:1px solid rgba(255,255,255,.15);}
+#site-release-notes .build-summary dl div:last-child {border-bottom:0;padding-bottom:0;}
+#site-release-notes dt {font-size:12px;color:#c3c3c3;}
+#site-release-notes dd {font-size:12px;font-weight:650;color:#fff;text-align:right;margin:0;}
+#site-release-notes .status-dot {display:inline-block;width:7px;height:7px;border-radius:50%;background:#3cce80;margin-right:7px;vertical-align:1px;}
+/* Article structure follows the same neutral open layout as the channel/news views. */
+#site-release-notes .doc-layout {display:grid;grid-template-columns:200px minmax(0,1fr) 190px;gap:clamp(26px,3.5vw,48px);align-items:start;padding-top:63px;padding-bottom:100px;}
+#site-release-notes .toc {position:sticky;top:103px;padding:0 14px 16px 0;border-right:1px solid var(--notes-line);}
+#site-release-notes .toc-title {font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#bdbdbd;margin:5px 0 18px 11px;}
+#site-release-notes .toc nav {display:grid;gap:4px;}
+#site-release-notes .toc a {display:block;min-height:40px;padding:11px 11px;border-radius:4px;font-size:13px;line-height:1.3;color:#bfbfbf;transition:background .15s,color .15s;}
+#site-release-notes .toc a:hover,#site-release-notes .toc a:focus-visible {background:#303030;color:#fff;text-decoration:none;}
+#site-release-notes .toc a[aria-current="location"] {color:#fff;background:#323232;font-weight:650;}
+#site-release-notes main {min-width:0;}
+#site-release-notes main section {scroll-margin-top:106px;}
+#site-release-notes main h2 {font-size:clamp(27px,2.5vw,34px);line-height:1.25;font-weight:600;letter-spacing:-.037em;margin:0 0 22px;color:#fff;}
+#site-release-notes main h3 {font-size:19px;line-height:1.4;font-weight:600;letter-spacing:-.02em;margin:25px 0 11px;color:#f4f4f4;}
+#site-release-notes main p {font-size:15px;line-height:1.78;color:var(--notes-body);margin:0 0 19px;}
+#site-release-notes main .article-intro {font-size:16px;color:#e2e2e2;line-height:1.78;}
+#site-release-notes .doc-section {padding-bottom:40px;margin-bottom:45px;border-bottom:1px solid #414141;}
+#site-release-notes .doc-section:last-of-type {border-bottom:0;margin-bottom:0;padding-bottom:0;}
+#site-release-notes .keyline {border-left:3px solid #d7d7d7;background:#252525;padding:21px 23px;margin:28px 0 26px;}
+#site-release-notes .keyline strong {display:block;font-size:15px;color:#fff;margin-bottom:8px;}
+#site-release-notes .keyline p {font-size:14px;margin:0;color:#d2d2d2;}
+#site-release-notes .highlight-list {list-style:none;padding:0;margin:0;display:grid;gap:0;}
+#site-release-notes .highlight-list li {display:grid;grid-template-columns:20px minmax(0,1fr);gap:14px;align-items:start;padding:14px 0;border-bottom:1px solid #333;font-size:14px;line-height:1.7;color:#d4d4d4;}
+#site-release-notes .highlight-list li:last-child {border-bottom:0;}
+#site-release-notes .highlight-list strong {color:#fff;}
+#site-release-notes .check {display:grid;place-items:center;width:20px;height:20px;border:1px solid #777;border-radius:50%;font-size:12px;color:#fff;margin-top:2px;}
+#site-release-notes .feature-grid {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:28px;row-gap:7px;margin-top:26px;}
+#site-release-notes .feature-card {background:transparent;border:0;border-top:1px solid #616161;border-radius:0;padding:20px 2px 22px 0;}
+#site-release-notes .feature-card .category {font-size:10px;color:#b8b8b8;font-weight:700;letter-spacing:.11em;text-transform:uppercase;}
+#site-release-notes .feature-card h3 {font-size:19px;line-height:1.3;margin:14px 0 9px;}
+#site-release-notes .feature-card p {font-size:13px;line-height:1.7;margin:0;color:#c7c7c7;}
+#site-release-notes .comparison-scroll {overflow-x:auto;border:1px solid #474747;border-radius:5px;margin:25px 0 20px;scrollbar-color:#686868 #272727;}
+#site-release-notes table {border-collapse:collapse;width:100%;min-width:590px;text-align:left;font-size:13px;line-height:1.6;color:#d7d7d7;}
+#site-release-notes th,#site-release-notes td {padding:16px 17px;border-bottom:1px solid #414141;vertical-align:top;}
+#site-release-notes thead {background:#323232;}
+#site-release-notes thead th {color:#fff;font-weight:650;}
+#site-release-notes tbody th {background:#252525;color:#f1f1f1;font-weight:600;width:23%;}
+#site-release-notes tbody tr:last-child>* {border-bottom:0;}
+#site-release-notes th:nth-child(2),#site-release-notes td:nth-child(2) {width:37%;}
+#site-release-notes td:nth-child(3) {width:40%;}
+#site-release-notes .fine-print {color:#aeb0b2!important;font-size:12px!important;line-height:1.7!important;}
+#site-release-notes .small-flag {background:#242424;border-left:3px solid #7e7e7e;padding:20px 22px;margin:21px 0 24px;font-size:14px;color:#c9c9c9;line-height:1.7;}
+#site-release-notes .small-flag strong {color:#fff;}
+#site-release-notes .next-links {display:flex;flex-wrap:wrap;gap:12px;margin-top:27px;}
+#site-release-notes .action-primary,#site-release-notes .action-secondary {display:inline-flex;justify-content:center;align-items:center;gap:9px;min-height:44px;padding:11px 18px;border:1px solid transparent;border-radius:4px;font-size:13px;font-weight:650;text-decoration:none;transition:background .16s,border-color .16s;}
+#site-release-notes .action-primary {background:#0067b8;color:#fff;}
+#site-release-notes .action-primary:hover {background:#005a9e;color:#fff;text-decoration:none;}
+#site-release-notes .action-secondary {background:#2b2b2b;color:#f3f3f3;border-color:#7c7c7c;}
+#site-release-notes .action-secondary:hover {background:#393939;color:#fff;text-decoration:none;}
+#site-release-notes .sidefacts {position:sticky;top:103px;border-left:1px solid #484848;padding:5px 0 4px 20px;}
+#site-release-notes .sidefacts h2 {font-size:14px;line-height:1.4;font-weight:600;margin:0 0 13px;}
+#site-release-notes .sidefacts p {font-size:12px;line-height:1.75;color:#bcbcbc;margin:0 0 16px;}
+#site-release-notes .sidefacts a {display:block;color:#f1f1f1;font-size:12px;font-weight:600;line-height:1.5;}
+#site-release-notes .sidefacts hr {border:0;border-top:1px solid #444;margin:17px 0;}
+#site-release-notes .mobile-toc {display:none;}
+@media(max-width:1100px) {
+  #site-release-notes .doc-layout {grid-template-columns:195px minmax(0,1fr);gap:38px;}
+  #site-release-notes .sidefacts {display:none;}
+  #site-release-notes .hero-row {grid-template-columns:minmax(0,1fr) 260px;gap:30px;}
+}
+@media(max-width:820px) {
+  #site-release-notes .shell {width:min(calc(100% - 48px),var(--editorial-width));}
+  #site-release-notes .hero-inner {padding:42px 0 56px;}
+  #site-release-notes .crumbs {margin-bottom:32px;}
+  #site-release-notes .hero-row {grid-template-columns:1fr;gap:26px;}
+  #site-release-notes h1 {font-size:clamp(44px,6.6vw,60px);}
+  #site-release-notes .build-summary {max-width:460px;}
+  #site-release-notes .doc-layout {grid-template-columns:168px minmax(0,1fr);gap:27px;padding:49px 0 75px;}
+  #site-release-notes .toc {top:92px;}
+  #site-release-notes .feature-grid {column-gap:19px;}
+}
+@media(max-width:660px) {
+  #site-release-notes .shell {width:calc(100% - 38px);}
+  #site-release-notes .hero-inner {padding:30px 0 48px;}
+  #site-release-notes .crumbs {margin-bottom:27px;font-size:11px;}
+  #site-release-notes .eyebrow {font-size:10px;line-height:1.5;margin-bottom:18px;}
+  #site-release-notes h1 {font-size:clamp(39px,10vw,54px);}
+  #site-release-notes .lede {font-size:15px;}
+  #site-release-notes .build-summary {max-width:100%;padding:20px;}
+  #site-release-notes .doc-layout {display:block;padding-top:32px;padding-bottom:63px;}
+  #site-release-notes .toc {display:none;}
+  #site-release-notes .mobile-toc {display:block;border:1px solid #464646;border-radius:5px;background:#252525;margin:0 0 35px;}
+  #site-release-notes .mobile-toc summary {padding:15px 17px;font-size:13px;font-weight:600;cursor:pointer;}
+  #site-release-notes .mobile-toc nav {display:grid;gap:2px;padding:0 10px 12px;}
+  #site-release-notes .mobile-toc nav a {padding:10px 8px;color:#d6d6d6;font-size:13px;border-radius:4px;}
+  #site-release-notes .mobile-toc nav a[aria-current="location"] {background:#383838;color:#fff;font-weight:650;}
+  #site-release-notes .feature-grid {grid-template-columns:1fr;}
+  #site-release-notes .doc-section {padding-bottom:34px;margin-bottom:36px;}
+  #site-release-notes .next-links {flex-direction:column;align-items:stretch;}
+  #site-release-notes main section {scroll-margin-top:86px;}
+}
+@media(prefers-reduced-motion:reduce) {#site-release-notes * {scroll-behavior:auto;}}
 </style>
 </head>
 <body>
 <header class="site-header">
 <div class="container header-inner">
-<a aria-label="Avalora home" class="brand" href="#top">
+<a aria-label="Avlaora 12 home" class="brand" href="#top">
 <span class="brand-mark">
 <img alt="" onerror="this.hidden=true" src="Logo.png"/>
 </span>
 <span aria-hidden="true" class="brand-divider"></span>
-<span class="brand-name">Avalora</span>
+<span class="brand-name">Avlaora 12</span>
 </a>
 <nav aria-label="Main navigation" class="desktop-nav">
 <a data-view-nav="home" href="#updates">Update Board</a>
@@ -1558,10 +1698,10 @@ body {background:var(--surface);font-size:15px;}
 <span class="update-tag">10H10</span>
 <div class="release-state">Development build · Available to explore</div>
 <h3 id="update-10h10">10H10 · Build 2610125</h3>
-<span class="build-code">2610125.beta-release · KD210 · No published release notes</span>
-<p>10H10 brings a redesigned interface, expanded Settings, deeper glass styling, context-menu customization, and updated Windows Update and Insider experiences.</p>
-<ul aria-label="10H10 highlights" class="update-highlights"><li>New Settings interface</li><li>HDR wallpaper lighting</li><li>Glass customization</li><li>Context menus</li></ul>
-<a class="update-card-link" href="#news">Read development news <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></a>
+<span class="build-code">2610125.beta-release · KD210 · Development release notes available</span>
+<p>Built from scratch, 10H10 introduces a new Avlaora 12 UI and Search flyout, a refreshed taskbar and system panels, expanded Settings, richer Mica styling, and updated Windows Update and Insider experiences.</p>
+<ul aria-label="10H10 highlights" class="update-highlights"><li>New Avlaora 12 UI</li><li>New Search flyout</li><li>Adaptive Settings</li><li>Glass customization</li></ul>
+<a class="update-card-link" href="#10h10-release-notes">Read 10H10 release notes <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></a>
 </article>
 </div>
 </div>
@@ -1628,13 +1768,13 @@ body {background:var(--surface);font-size:15px;}
   <div class="section-label">Avlaora 12 · Build distribution</div>
   <h2 id="downloads-title" class="section-title">Download channels</h2>
   <p class="section-subtitle">Browse the four development channels for 9H09 and 10H10. A link appears only where a source is known; an empty entry does not mean that a channel is cancelled or unavailable.</p>
-  <div class="download-legend"><span class="download-legend-mark"></span> Known channel or release link <span class="download-legend-separator"></span> No direct link provided</div>
+  <div class="download-legend"><span class="download-legend-mark"></span> Known build information or release link <span class="download-legend-separator"></span> No direct link provided</div>
   <div class="downloads-scroll" role="region" aria-label="Avlaora 9H09 and 10H10 download channel table" tabindex="0">
     <table class="downloads-table">
       <thead><tr><th scope="col">Version</th><th scope="col">Experimental</th><th scope="col">Beta</th><th scope="col">Release Preview</th><th scope="col">Release</th></tr></thead>
       <tbody>
         <tr><th scope="row"><strong>10H10</strong><small>Build 2610125 · KD210</small></th>
-          <td><a class="download-action" href="https://fppps.github.io/Win12/update/update/App-Update/index.html" target="_blank" rel="noopener noreferrer">Build 2610125 <span aria-hidden="true">↗</span></a><small>Early UI testing</small></td>
+          <td><a class="download-action" href="#10h10-release-notes">Build 2610125 <span aria-hidden="true">→</span></a><small>Early UI testing</small></td>
           <td><span class="download-empty">No link added</span><small>UI refinement</small></td>
           <td><span class="download-empty">No link added</span><small>Final refinements</small></td>
           <td><span class="download-empty">No release link</span><small>Development build</small></td>
@@ -1650,8 +1790,8 @@ body {background:var(--surface);font-size:15px;}
   </div>
   <p class="download-table-hint">On narrow screens, scroll the table horizontally to see every channel.</p>
   <div class="downloads-details">
-    <div><h3>Looking for 10H10?</h3><p>10H10 is currently available through the Experimental channel, even though its build is labeled 2610125.beta-release (KD210). Use the Experimental link in the table to open that build. The Beta, Release Preview, and Release channels do not have separate links listed here.</p></div>
-    <a class="download-more-link" href="https://fppps.github.io/Win12/update/update/index.html" target="_blank" rel="noopener noreferrer">Open Avlaora updates <span aria-hidden="true">↗</span></a>
+    <div><h3>Looking for 10H10?</h3><p>Choose Build 2610125 in the Experimental column to open its on-site release notes, including the from-scratch rebuild overview and a comparison with 9H09. The notes also link to the development build. Separate Beta, Release Preview, and final Release packages are not listed here.</p></div>
+    <a class="download-more-link" href="#10h10-release-notes">Read 10H10 release notes <span aria-hidden="true">→</span></a>
   </div>
   <div class="downloads-notes"><h3>How to read this table</h3><p>Experimental is for early UI tests; Beta focuses on more functional, refined features; Release Preview is close to shipping; Release is the general-use version. The table tracks known links, not build eligibility or release guarantees.</p></div>
 </section>
@@ -1676,9 +1816,9 @@ body {background:var(--surface);font-size:15px;}
 <div class="news-lead-body">
 <span class="pill">10H10 · Development spotlight</span>
 <h2>Inside the 10H10 interface refresh</h2>
-<p>The current 10H10 source identifies Version 10H10, OS Build 2610125 (KD210). Its interface includes a redesigned Settings experience, configurable Mica materials, HDR wallpaper lighting, context-menu settings, and dedicated Windows Update and Insider views.</p>
-<span class="article-date">Build label: 2610125.beta-release · Development coverage, not release notes</span>
-<a class="text-link" href="#news-features">Explore the build details <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></a>
+<p>The current 10H10 source identifies Version 10H10, OS Build 2610125 (KD210). Built from scratch, it introduces a new Avlaora 12 desktop UI, a responsive Search flyout, refreshed taskbar and system panels, redesigned Settings, configurable Mica materials, HDR-style wallpaper lighting, and dedicated Windows Update and Insider views.</p>
+<span class="article-date">Build label: 2610125.beta-release · Development release notes now available</span>
+<a class="text-link" href="#10h10-release-notes">Read the 10H10 release notes <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></a>
 </div>
 </article>
 <article class="panel news-side">
@@ -1695,16 +1835,18 @@ body {background:var(--surface);font-size:15px;}
 <div class="page-container">
 <div class="section-heading-row"><div>
 <div class="section-label">Seen in the supplied 10H10 build</div>
-<h2 class="section-title" id="build-highlights-heading">An evolving desktop experience</h2>
+<h2 class="section-title" id="build-highlights-heading">A new Avlaora 12 desktop experience</h2>
 <p class="section-subtitle">These topics come from the current 10H10 interface source. They describe visible development work—not a published changelog or release announcement.</p>
 </div></div>
 <div class="dev-feature-grid">
-<article class="dev-feature panel"><span class="dev-number">01 / 06</span><h3>Settings overhaul</h3><p>A redesigned Settings layout with expanded display, personalization, system, and update controls.</p></article>
-<article class="dev-feature panel"><span class="dev-number">02 / 06</span><h3>Mica and glass</h3><p>Controls for glass surface color, transparency, appearance, and related interface styling.</p></article>
-<article class="dev-feature panel"><span class="dev-number">03 / 06</span><h3>HDR wallpaper lighting</h3><p>A wallpaper-specific HDR Lighting option and supporting styling, separate from the controls and windows above it.</p></article>
-<article class="dev-feature panel"><span class="dev-number">04 / 06</span><h3>Windows Update</h3><p>Update checks, available updates, update history, and an option to get the latest updates.</p></article>
-<article class="dev-feature panel"><span class="dev-number">05 / 06</span><h3>Insider channels</h3><p>Channel controls and a release-track interface for Experimental, Beta, and Release Preview.</p></article>
-<article class="dev-feature panel"><span class="dev-number">06 / 06</span><h3>Context menus</h3><p>Context-menu customization joins the other appearance and desktop interaction settings.</p></article>
+<article class="dev-feature panel"><span class="dev-number">01 / 08</span><h3>New Avlaora 12 UI</h3><p>A desktop rebuilt from scratch, bringing the taskbar, Start, windows, system panels and app controls into a more unified design.</p></article>
+<article class="dev-feature panel"><span class="dev-number">02 / 08</span><h3>New Search flyout</h3><p>Responsive Mica Search with action results, a built-in input field and glass-color controls.</p></article>
+<article class="dev-feature panel"><span class="dev-number">03 / 08</span><h3>Settings overhaul</h3><p>A redesigned Settings layout with expanded display, personalization, system, and update controls.</p></article>
+<article class="dev-feature panel"><span class="dev-number">04 / 08</span><h3>Mica and glass</h3><p>Controls for glass surface color, transparency, appearance, and related interface styling.</p></article>
+<article class="dev-feature panel"><span class="dev-number">05 / 08</span><h3>HDR wallpaper lighting</h3><p>A wallpaper-specific HDR Lighting option and supporting styling, separate from the controls and windows above it.</p></article>
+<article class="dev-feature panel"><span class="dev-number">06 / 08</span><h3>Windows Update</h3><p>Update checks, available updates, update history, and an option to get the latest updates.</p></article>
+<article class="dev-feature panel"><span class="dev-number">07 / 08</span><h3>Insider channels</h3><p>Channel controls and a release-track interface for Experimental, Beta, and Release Preview.</p></article>
+<article class="dev-feature panel"><span class="dev-number">08 / 08</span><h3>Context menus</h3><p>Context-menu customization joins the other appearance and desktop interaction settings.</p></article>
 </div>
 <p class="news-context">The supplied HTML exposes these features and interface descriptions; some behaviors are implemented through an external Script.js file not included in the uploaded source. This page does not claim that every control has been functionally verified.</p>
 </div>
@@ -1715,21 +1857,171 @@ body {background:var(--surface);font-size:15px;}
 <a class="text-link" href="https://github.com/Fppps/Win12/releases" rel="noopener noreferrer" target="_blank">Published GitHub releases ↗</a>
 </div>
 <div class="release-feed">
-<article class="release-row"><span class="release-date">Development build</span><div><span class="release-type">10H10 · 2610125.beta-release</span><h3>10H10 development continues</h3><p>The source shows the newer desktop, Settings, update and visual systems. There are no 10H10 release notes linked or represented on this site.</p></div><span aria-hidden="true" class="release-arrow"></span></article>
+<article class="release-row"><span class="release-date">Development build</span><div><span class="release-type">10H10 · 2610125.beta-release</span><h3>10H10 development continues</h3><p>Explore the rebuilt desktop, refreshed Settings, updated visuals and comparison with 9H09 in the dedicated <a href="#10h10-release-notes">10H10 release notes</a>.</p></div><span aria-hidden="true" class="release-arrow"></span></article>
 <article class="release-row"><time datetime="2026-10-07">Oct 7, 2026</time><a href="https://github.com/Fppps/Win12/releases/tag/9H09_Build269120" rel="noopener noreferrer" target="_blank"><span class="release-type">9H09 · Official release</span><h3>9H09 Build 269120 released</h3><p>Updater Security validation, PIN and sign-in improvements, a more functional Security interface, notifications, and interface refinements.</p></a><span aria-hidden="true" class="release-arrow">↗</span></article>
 </div>
-<p class="news-note">10H10 development information is grounded in the supplied Avlaora 10H10 Index.html. Published 9H09 details come from its GitHub release page. This News area is editorial coverage within the main website—not a substitute for separate 10H10 release notes.</p>
+<p class="news-note">10H10 development information is grounded in the supplied Avlaora 10H10 Index.html. Published 9H09 details come from its GitHub release page. This News area offers an overview; the dedicated 10H10 release-notes page provides the full development summary and 9H09 comparison.</p>
 <a class="text-link" href="#channel-insights">Understand the update channels →</a>
 </div>
 </section>
 </main></div>
+
+<!-- A true stand-alone-looking page view, authored within web2.html. -->
+<div class="site-view" data-site-page="releaseNotes" id="site-release-notes" hidden>
+
+<section aria-labelledby="rn-page-title" class="hero">
+<div class="shell hero-inner">
+<div aria-label="Breadcrumb" class="crumbs"><a href="#top">Home</a><span aria-hidden="true">›</span><a href="#download-channels">Download channels</a><span aria-hidden="true">›</span><span aria-current="page">10H10 release notes</span></div>
+<div class="hero-row">
+<div>
+<div class="eyebrow">10H10 · Development release notes</div>
+<h1 id="rn-page-title">10H10, Build 2610125: What's new</h1>
+<p class="lede">Meet the new Avlaora 12 interface: a from-scratch 10H10 rebuild with a new Search flyout, refreshed taskbar and desktop, adaptable Settings, and more connected Mica surfaces.</p>
+<div class="hero-tags"><span>Build 2610125.beta-release</span><span>KD210</span> <span>Early development</span></div>
+</div>
+<aside aria-label="Build details" class="build-summary">
+<div class="summary-label">About this build</div>
+<dl>
+<div><dt>Version</dt><dd>10H10</dd></div>
+<div><dt>OS build</dt><dd>2610125</dd></div>
+<div><dt>KD number</dt><dd>KD210</dd></div>
+<div><dt>Build label</dt><dd>beta-release</dd></div>
+<div><dt>Status</dt><dd><span aria-hidden="true" class="status-dot"></span>Development</dd></div>
+</dl>
+</aside>
+</div>
+</div>
+</section>
+<div class="shell doc-layout">
+<aside aria-label="On this page" class="toc">
+<div class="toc-title">On this page</div>
+<nav>
+<a href="#10h10-release-notes/overview">Overview</a>
+<a href="#10h10-release-notes/highlights">Release highlights</a>
+<a href="#10h10-release-notes/interface">New Avlaora 12 UI</a>
+<a href="#10h10-release-notes/search">New Search flyout</a>
+<a href="#10h10-release-notes/features">What's new</a>
+<a href="#10h10-release-notes/comparison">10H10 vs. 9H09</a>
+<a href="#10h10-release-notes/availability">Availability</a>
+<a href="#10h10-release-notes/notes">Development notes</a>
+</nav>
+</aside>
+<main id="rn-content">
+<details class="mobile-toc"><summary>On this page</summary><nav aria-label="Article sections"><a href="#10h10-release-notes/overview">Overview</a><a href="#10h10-release-notes/highlights">Release highlights</a><a href="#10h10-release-notes/interface">New Avlaora 12 UI</a><a href="#10h10-release-notes/search">New Search flyout</a><a href="#10h10-release-notes/features">What's new</a><a href="#10h10-release-notes/comparison">10H10 vs. 9H09</a><a href="#10h10-release-notes/availability">Availability</a><a href="#10h10-release-notes/notes">Development notes</a></nav></details>
+<section class="doc-section" id="rn-overview">
+<h2>Overview</h2>
+<p class="article-intro">Version 10H10 marks a fresh development chapter for Avlaora 12. Unlike an ordinary update built directly on the preceding version, 10H10 was made from scratch as a new web-desktop experience. It retains familiar Windows-style ideas while introducing a new Avlaora 12 UI, reworked taskbar and Start experiences, a dedicated Search flyout, and redesigned Settings, materials, and update interfaces.</p>
+<div class="keyline"><strong>10H10 is a rebuild, not a 9H09 patch.</strong><p>Build 2610125 is the current 10H10 development build. Its designation <b>2610125.beta-release</b> is a build label, not a claim that all public distribution channels are open or that development is complete.</p></div>
+<p>The main objective is consistency. Rather than concentrating on a single app, 10H10 makes the entire Avlaora 12 interface feel more connected—from the taskbar, Start and Search flyouts to Quick Settings, Settings navigation, and the appearance of windows. Shared surface colors, adaptive layouts, and more consistent interactions tie those elements together.</p>
+</section>
+<section class="doc-section" id="rn-highlights">
+<h2>Release highlights</h2>
+<ul class="highlight-list">
+<li><span aria-hidden="true" class="check">✓</span><span><strong>All-new Avlaora 12 UI:</strong> a from-scratch desktop rebuild with a refreshed taskbar, Start experience, modern application windows, and coordinated system flyouts.</span></li>
+<li><span aria-hidden="true" class="check">✓</span><span><strong>New Search flyout:</strong> a responsive, Mica-styled search panel with results for available actions, a built-in search field, and a direct route to glass-color customization.</span></li>
+<li><span aria-hidden="true" class="check">✓</span><span><strong>More unified Mica:</strong> shared glass-color behavior across windows, taskbar, panels, flyouts and controls, with adjustable transparency.</span></li>
+<li><span aria-hidden="true" class="check">✓</span><span><strong>Redesigned Settings:</strong> a Windows-inspired experience with adaptive navigation and more consistent option rows, controls and typography.</span></li>
+<li><span aria-hidden="true" class="check">✓</span><span><strong>HDR-style wallpaper lighting:</strong> an optional wallpaper-focused enhancement layer with richer highlight presentation and support paths for expanded color on compatible displays.</span></li>
+<li><span aria-hidden="true" class="check">✓</span><span><strong>Updated Windows Update and Insider views:</strong> dedicated available-updates, history, build-information and channel-selection experiences.</span></li>
+<li><span aria-hidden="true" class="check">✓</span><span><strong>Refined everyday flyouts:</strong> Quick Settings with brightness and Night light controls, a date-and-time calendar, and more consistent hover and navigation treatments.</span></li>
+<li><span aria-hidden="true" class="check">✓</span><span><strong>Context-menu customization:</strong> appearance controls brought closer to desktop interactions.</span></li>
+</ul>
+</section>
+<section class="doc-section" id="rn-interface">
+<h2>Introducing the new Avlaora 12 UI</h2>
+<p class="article-intro">10H10 is more than a styling pass. Avlaora 12 gets a newly built desktop interface, developed from scratch rather than layered over 9H09. The goal is for the taskbar, app windows, menus and Settings to look like they belong to the same product.</p>
+<div class="feature-grid">
+<article class="feature-card"><div class="category">Desktop and taskbar</div><h3>A refreshed desktop layout</h3><p>The taskbar brings Start, Search and application shortcuts together in the center, with weather on the left and Quick Settings plus the date and time on the right. The Windows-style logo and app icons receive coordinated sizing and interaction feedback.</p></article>
+<article class="feature-card"><div class="category">Start and system panels</div><h3>New, coordinated flyouts</h3><p>The Start menu, Search flyout, calendar and Quick Settings use shared Mica materials, more consistent spacing and rounded treatments. The goal is a connected desktop rather than independent panels with unrelated styles.</p></article>
+<article class="feature-card"><div class="category">Application experience</div><h3>Updated windows and controls</h3><p>Settings and About Windows use revised title bars, window controls and Windows-inspired layouts. Interface components are designed to stay legible as the glass color, transparency and window size change.</p></article>
+<article class="feature-card"><div class="category">Adaptive design</div><h3>More responsive by design</h3><p>The desktop and Settings include narrow-screen adaptations, while flyouts adjust their layout and size to the available space. More consistent icons, chevrons, toggles and hover behavior carry through the interface.</p></article>
+</div>
+<p class="fine-print">The rebuild refers to the 10H10 desktop implementation, not a claim that every Windows-inspired idea or feature originated in 10H10. Some underlying behaviors still depend on the build's separate scripts.</p>
+</section>
+<section class="doc-section" id="rn-search">
+<h2>A new Search flyout</h2>
+<p class="article-intro">Search is one of the most visible changes in the new Avlaora 12 UI. Selecting the taskbar Search field opens a dedicated, responsive flyout styled with the same glass and Mica material as the rest of 10H10.</p>
+<div class="keyline"><strong>Search is part of the desktop experience.</strong><p>The flyout is designed to help users find and open actions and destinations available inside Avlaora 12. It is not represented here as a web-wide search engine or a full operating-system file index.</p></div>
+<div class="feature-grid">
+<article class="feature-card"><div class="category">Navigation</div><h3>Search results and quick actions</h3><p>Results appear inside the flyout, with an option to open a matching item. The interface also provides an empty-results message when there is no match.</p></article>
+<article class="feature-card"><div class="category">Interaction</div><h3>A built-in Search field</h3><p>The flyout has its own input area and a context-sensitive Open action, while animated result rows and subtle hover affordances improve the visual feedback.</p></article>
+<article class="feature-card"><div class="category">Personalization</div><h3>Adjust Glass Color from Search</h3><p>A dedicated in-flyout editor exposes a color picker, HEX entry, and a reset to the original 10H10 glass color—without switching to a separate color mode.</p></article>
+<article class="feature-card"><div class="category">Responsive layout</div><h3>Search that adapts</h3><p>The panel reflows for smaller screens, retains rounded Mica surfaces, and is designed to fit above the taskbar without taking over the entire desktop.</p></article>
+</div>
+</section>
+<section class="doc-section" id="rn-features">
+<h2>What's new in 10H10</h2>
+<p>These descriptions reflect the 10H10 interface and code exposed by Build 2610125. They are an overview of this development build, not a certification that every control or background update workflow is finalized.</p>
+<div class="feature-grid">
+<article class="feature-card"><div class="category">Desktop experience</div><h3>New Avlaora 12 interface</h3><p>A ground-up refresh of the desktop, taskbar, Start and system panels, with coordinated Windows-style windows, navigation, typography and interaction feedback.</p></article>
+<article class="feature-card"><div class="category">Windows Search</div><h3>New Search experience</h3><p>A dedicated flyout with on-site results, an Open action, responsive sizing, and a Glass Color editor with HEX input and reset controls.</p></article>
+<article class="feature-card"><div class="category">Personalization</div><h3>One glass-color system</h3><p>Adjustable glass color and translucency influence Mica surfaces throughout the UI, with a stronger focus on readability and consistent foreground colors.</p></article>
+<article class="feature-card"><div class="category">Settings</div><h3>Refined navigation and layout</h3><p>A more Windows-like Settings shell with adaptable sidebar behavior, cleaner option rows, responsive layouts and unified navigation arrows.</p></article>
+<article class="feature-card"><div class="category">Display</div><h3>HDR-inspired wallpaper effects</h3><p>Wallpaper-only lighting effects, including highlight-conscious presentation and bloom-related styling. A Display P3 capability check is referenced by the build for supported displays.</p></article>
+<article class="feature-card"><div class="category">Windows Update</div><h3>Dedicated update surfaces</h3><p>Windows Update includes an available-updates section, update-history area, a latest-updates preference and a Windows specifications section showing the current build.</p></article>
+<article class="feature-card"><div class="category">Insider Program</div><h3>Preview channel management</h3><p>A separate Insider view shows Experimental, Beta and Release Preview options. Channel choices may be gated until the corresponding build files exist.</p></article>
+<article class="feature-card"><div class="category">Desktop controls</div><h3>Context-menu options</h3><p>Customization controls for context-menu appearance join the broader desktop and glass-color settings.</p></article>
+<article class="feature-card"><div class="category">Quick Settings</div><h3>Everyday desktop controls</h3><p>A compact Quick Settings panel includes desktop-brightness and Night light intensity controls, alongside a shortcut into Settings.</p></article>
+<article class="feature-card"><div class="category">Date and time</div><h3>Calendar flyout</h3><p>The clock and date open a calendar view with month navigation, a Today shortcut, and an entry into language and time settings.</p></article>
+<article class="feature-card"><div class="category">Usability</div><h3>Consistent interactions</h3><p>More coordinated chevrons, toggles, hover feedback and responsive panel sizing, including Quick Settings and Windows specifications interactions.</p></article>
+</div>
+</section>
+<section class="doc-section" id="rn-comparison">
+<h2>What's different from 9H09?</h2>
+<p>9H09 was a significant version in its own right, including Mica styling, Windows Security work and PIN-based sign-in protections. 10H10 is not presented as 9H09 with a new wallpaper: its purpose is to rebuild and reorganize the desktop foundation while continuing familiar product concepts.</p>
+<div aria-label="Comparison of versions 9H09 and 10H10" class="comparison-scroll" role="region" tabindex="0">
+<table>
+<thead><tr><th scope="col">Area</th><th scope="col">9H09 · Build 269120</th><th scope="col">10H10 · Build 2610125</th></tr></thead>
+<tbody>
+<tr><th scope="row">Development approach</th><td>A mature 9H09 release that refined an existing interface and its features.</td><td>A from-scratch 10H10 rebuild with a newly organized desktop experience.</td></tr>
+<tr><th scope="row">Primary emphasis</th><td>Functional Windows Security, Updater Security, PIN scheduling, sign-in modes, notifications, and UI polish.</td><td>Visual foundation, consistent Mica materials, adaptive Settings, updated Windows Update screens, and the Insider experience.</td></tr>
+<tr><th scope="row">Desktop and taskbar</th><td>Earlier-generation 9H09 desktop and taskbar UI.</td><td>Freshly built Avlaora 12 interface with centered Start/Search/app shortcuts, weather, Quick Settings, and clock/date regions.</td></tr>
+<tr><th scope="row">Search</th><td>Existing 9H09-era navigation and Search experience.</td><td>New responsive Mica Search flyout with results for available actions, an Open control, and a built-in glass-color editor.</td></tr>
+<tr><th scope="row">Everyday flyouts</th><td>Earlier system panels and desktop interactions.</td><td>Coordinated Start, Quick Settings and calendar views, with updated responsiveness and shared material styling.</td></tr>
+<tr><th scope="row">Mica and appearance</th><td>Already had a shared glass/material system and transparency options.</td><td>Pushes toward one glass-color source across desktop surfaces, controls and flyouts, with fewer conflicting treatments.</td></tr>
+<tr><th scope="row">Settings</th><td>Windows-like Settings with updated selection behavior, flyouts and option/card styling.</td><td>A reorganized Settings experience with greater attention to window-size adaptation, navigation consistency and surface styling.</td></tr>
+<tr><th scope="row">Display effects</th><td>Glass and transparency were already part of the interface.</td><td>Adds a separate HDR-style wallpaper-lighting layer and a Display P3 support path on capable displays.</td></tr>
+<tr><th scope="row">Updates and channels</th><td>9H09 introduced and expanded update validation through Updater Security.</td><td>Emphasizes updated Windows Update presentation, available updates, history, build specifications and a dedicated Insider page.</td></tr>
+<tr><th scope="row">Distribution</th><td>Published GitHub release, Build 269120 (KD109).</td><td>Development Build 2610125.beta-release (KD210); not described here as a final public release.</td></tr>
+</tbody>
+</table>
+</div>
+<p class="fine-print">A different emphasis does not mean 9H09 lacked visual polish or that 10H10 removed 9H09's security features. The 9H09 column is based on its published GitHub release notes; the 10H10 column describes the supplied development build and its stated rebuild direction.</p>
+</section>
+<section class="doc-section" id="rn-availability">
+<h2>Build availability</h2>
+<p>10H10 Build 2610125 appears under the Experimental column on the Download Channels page. Although the build itself includes the label <b>beta-release</b>, that label does not establish a separately downloadable Beta-channel package. No separate Release Preview or final Release links are listed for 10H10 here.</p>
+<p>9H09 Build 269120 continues to have its own public GitHub release. The two versions are documented separately so you can follow development of 10H10 without losing access to 9H09.</p>
+<div class="next-links">
+<a class="action-primary" href="https://fppps.github.io/Win12/update/update/App-Update/index.html" rel="noopener noreferrer" target="_blank">Open 10H10 development build <span aria-hidden="true">↗</span></a>
+<a class="action-secondary" href="https://github.com/Fppps/Win12/releases/tag/9H09_Build269120" rel="noopener noreferrer" target="_blank">View 9H09 GitHub release <span aria-hidden="true">↗</span></a>
+</div>
+</section>
+<section class="doc-section" id="rn-notes">
+<h2>Development notes</h2>
+<div class="small-flag"><strong>Early-development disclosure.</strong> This page documents the current 10H10 build, not a completed production release. Features, labels, visuals and channel availability may change as development continues.</div>
+<p>The supplied build includes a separate <code>Script.js</code> dependency for several interactive behaviors. The file was not part of this release-notes package, so features tied to that script—including runtime update discovery and portions of wallpaper processing—are described based on their exposed interface and code references rather than end-to-end testing.</p>
+<p>These release notes are maintained as part of the Avlaora 12 website, independently from the 9H09 GitHub release page. They follow Microsoft-style support-page conventions in layout and navigation but are not Microsoft documentation.</p>
+<div class="next-links"><a class="action-secondary" href="#download-channels">← Back to Download channels</a></div>
+</section>
+</main>
+<aside aria-label="Related links" class="sidefacts">
+<h2>Related information</h2>
+<p>10H10 is a development build. You can still open the published 9H09 release independently.</p>
+<a href="#channel-insights">How update channels work →</a>
+<hr/>
+<a href="https://github.com/Fppps/Win12/releases/tag/9H09_Build269120" rel="noopener noreferrer" target="_blank">9H09 published release ↗</a>
+</aside>
+</div>
+
+</div>
 <footer class="footer"><div class="container footer-inner"><p>Avlaora 12 · An independent community project.</p><nav aria-label="Footer navigation" class="footer-links"><a href="#top">Back to top</a><a href="#updates">Updates</a><a href="#channel-insights">Channel Insights</a><a href="#news">News</a><a href="#pricing">Pricing</a><a href="https://github.com/Fppps/Win12?tab=readme-ov-file" rel="noopener noreferrer" target="_blank">GitHub</a></nav></div></footer>
 
 <script>(() => {
   const menuButton=document.getElementById('mobile-menu-btn');
   const menu=document.getElementById('mobile-menu');
-  const views={home:document.getElementById('site-home'),channels:document.getElementById('site-channels'),news:document.getElementById('site-news')};
-  const titles={home:'Avlaora 12 | Windows-inspired desktop in your browser',channels:'Channel Insights | Avlaora 12',news:'News | Avlaora 12'};
+  const views={home:document.getElementById('site-home'),channels:document.getElementById('site-channels'),news:document.getElementById('site-news'),releaseNotes:document.getElementById('site-release-notes')};
+  const titles={home:'Avlaora 12 | Windows-inspired desktop in your browser',channels:'Channel Insights | Avlaora 12',news:'News | Avlaora 12',releaseNotes:'10H10 Build 2610125 release notes | Avlaora 12'};
   function closeMenu(){menu.hidden=true;menuButton.setAttribute('aria-expanded','false');menuButton.setAttribute('aria-label','Open navigation menu');}
   menuButton.addEventListener('click',()=>{const open=menuButton.getAttribute('aria-expanded')!=='true';menu.hidden=!open;menuButton.setAttribute('aria-expanded',String(open));menuButton.setAttribute('aria-label',open?'Close navigation menu':'Open navigation menu');});
   menu.addEventListener('click',event=>{if(event.target.closest('a'))closeMenu();});
@@ -1757,8 +2049,9 @@ body {background:var(--surface);font-size:15px;}
   // Page navigation is intentionally fragment-based, including for local file:// previews.
   function applyLocation(initial=false){
     const fragment=decodeURIComponent(location.hash.slice(1)).toLowerCase();
-    const page=(fragment==='channel-insights'||fragment==='channels'||fragment==='channel-panel'||fragment==='download-channels')?'channels':(fragment==='news'||fragment==='news-features')?'news':'home';
+    const page=(fragment==='10h10-release-notes'||fragment.startsWith('10h10-release-notes/'))?'releaseNotes':(fragment==='channel-insights'||fragment==='channels'||fragment==='channel-panel'||fragment==='download-channels')?'channels':(fragment==='news'||fragment==='news-features')?'news':'home';
     for(const [name,element] of Object.entries(views)){element.hidden=name!==page;}
+    document.body.classList.toggle('release-notes-active',page==='releaseNotes');
     document.querySelectorAll('[data-view-nav]').forEach(a=>{
       const isCurrent=page==='home' ? (a.getAttribute('href')==='#'+fragment) : a.dataset.viewNav===page;
       a.classList.toggle('is-active',isCurrent);
@@ -1766,7 +2059,18 @@ body {background:var(--surface);font-size:15px;}
     });
     document.title=page==='channels'&&fragment==='download-channels'?'Download Channels | Avlaora 12':titles[page];
     if(page==='channels')setInsightSection(fragment==='download-channels'?'downloads':'overview');
-    if(fragment==='updates'||fragment==='pricing'||fragment==='notes'||fragment==='news-features'){
+    if(page==='releaseNotes'){
+      const activeSection=fragment.startsWith('10h10-release-notes/')?fragment.slice('10h10-release-notes/'.length):'overview';
+      document.querySelectorAll('#site-release-notes .toc a,#site-release-notes .mobile-toc a').forEach(link=>{
+        if(link.getAttribute('href')==='#10h10-release-notes/'+activeSection)link.setAttribute('aria-current','location');
+        else link.removeAttribute('aria-current');
+      });
+    }
+    if(page==='releaseNotes' && fragment.startsWith('10h10-release-notes/')){
+      const section=fragment.slice('10h10-release-notes/'.length);
+      const target=/^(overview|highlights|features|comparison|availability|notes)$/.test(section)?document.getElementById('rn-'+section):null;
+      requestAnimationFrame(()=>{if(target)target.scrollIntoView({block:'start',behavior:'instant'});else window.scrollTo({top:0,behavior:'instant'});});
+    } else if(fragment==='updates'||fragment==='pricing'||fragment==='notes'||fragment==='news-features'){
       const target=document.getElementById(fragment);requestAnimationFrame(()=>target?.scrollIntoView({block:'start',behavior:'instant'}));
     } else if(!initial||fragment==='channel-insights'||fragment==='download-channels'||fragment==='news'){
       window.scrollTo({top:0,behavior:'instant'});
@@ -1781,7 +2085,7 @@ body {background:var(--surface);font-size:15px;}
   const panel=document.getElementById('channel-panel');
   const description=document.getElementById('version-description');
   const details={
-    '10H10':'10H10 is currently listed under the Experimental channel, although the development build is labeled 2610125.beta-release (KD210). The Experimental channel has a direct link; no 10H10 release notes or other channel links are listed.',
+    '10H10':'10H10 Build 2610125.beta-release (KD210) has dedicated on-site release notes linked from Download channels. The build is listed under Experimental; separate Beta, Release Preview, and final Release packages are not listed.',
     '9H09':'9H09 Build 269120 (KD109) has a published release on GitHub. Its Experimental, Beta and Release Preview entries explain the paths of development, not currently verified downloadable channels.'
   };
   function selectTab(tab,focus){
