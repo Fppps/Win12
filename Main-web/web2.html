@@ -1,0 +1,1807 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta content="#1b1b1b" name="theme-color"/>
+<meta content="WebWindows 12: one website for its desktop experience, current update board, development channel insights, and news." name="description"/>
+<title>WebWindows 12 | Desktop, updates and channels</title>
+<style>
+    :root {
+      color-scheme: dark;
+      /* Fluent-inspired dark mode: neutrals for all surfaces, brand blue for actions. */
+      --accent: #75baff;
+      --accent-hover: #a4d4ff;
+      --brand-button: #0067b8;
+      --brand-button-hover: #005a9e;
+      --text: #f7f7f7;
+      --muted: #c6c6c6;
+      --line: #454545;
+      --surface: #1b1b1b;
+      --font: "Segoe UI Variable", "Segoe UI", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+      --page-width: 1264px;
+      --shadow: 0 14px 40px rgba(0,0,0,.25), 0 2px 8px rgba(0,0,0,.12);
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 85px; }
+    body { margin: 0; min-width: 320px; color: var(--text); background: var(--surface); font-family: var(--font); -webkit-font-smoothing: antialiased; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; }
+    :focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+    .container { width: min(calc(100% - 96px), var(--page-width)); margin-inline: auto; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+
+    /* Microsoft's understated, product-first navigation treatment. */
+    .site-header { height: 68px; position: relative; z-index: 30; background: rgba(255,255,255,.98); border-bottom: 1px solid #e9e9e9; }
+    .header-inner { height: 100%; display: flex; align-items: center; gap: 45px; }
+    .brand { flex-shrink: 0; display: inline-flex; align-items: center; gap: 13px; min-width: 0; }
+    .brand-mark { position: relative; display: grid; place-items: center; width: 29px; height: 29px; }
+    .brand-mark img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
+    .brand-fallback { display: grid; width: 27px; height: 27px; grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(2, 1fr); gap: 2px; transform: perspective(100px) rotateY(-4deg); }
+    .brand-fallback i { background: #0078d4; }
+    .brand-divider { height: 25px; width: 1px; background: #737373; margin-inline: 4px 1px; }
+    .brand-name { font-size: 18px; font-weight: 600; white-space: nowrap; letter-spacing: -.35px; }
+    .desktop-nav { display: flex; align-items: center; height: 100%; gap: 8px; margin-left: 8px; }
+    .desktop-nav a { position: relative; display: inline-flex; align-items: center; padding: 22px 12px 21px; font-size: 13px; font-weight: 400; white-space: nowrap; color: #282828; }
+    .desktop-nav a:hover { text-decoration: underline; text-underline-offset: 5px; }
+    .header-cta { margin-left: auto; color: #fff; background: var(--accent); font-weight: 600; font-size: 13px; padding: 10px 17px; border-radius: 2px; white-space: nowrap; transition: background .18s ease; }
+    .header-cta:hover { background: var(--accent-hover); }
+    .menu-toggle { display: none; align-items: center; justify-content: center; width: 40px; height: 40px; padding: 0; border: 0; border-radius: 3px; background: transparent; cursor: pointer; }
+    .menu-toggle:hover { background: #f1f3f5; }
+    .menu-toggle svg { width: 22px; height: 22px; }
+    .mobile-nav { display: none; background: #fff; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); box-shadow: 0 15px 24px rgba(0,0,0,.08); }
+    .mobile-nav a { display: block; padding: 14px 26px; font-size: 14px; border-bottom: 1px solid #f1f1f1; }
+    .mobile-nav a:hover { background: #f4f7fa; }
+    .mobile-nav[hidden] { display: none !important; }
+
+    /* The hero wallpaper is loaded directly from the user's Backgrounds folder. */
+    .hero { position: relative; isolation: isolate; overflow: hidden; background: #111a27 url("Backgrounds/B1.png") center center / cover no-repeat; }
+    .hero-grid { min-height: 640px; padding-block: 78px 96px; display: grid; grid-template-columns: .88fr 1.12fr; align-items: center; gap: 54px; }
+    .hero-copy { position: relative; z-index: 2; max-width: 610px; }
+    .eyebrow { display: inline-flex; align-items: center; gap: 10px; margin-bottom: 22px; color: #235c96; font-size: 12px; font-weight: 700; letter-spacing: 1.8px; text-transform: uppercase; }
+    .eyebrow::before { content: ""; width: 17px; height: 3px; background: #0078d4; }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 { font-size: clamp(47px,4.5vw,70px); line-height: 1.09; letter-spacing: -.049em; font-weight: 600; margin-bottom: 24px; }
+    .hero-description { max-width: 525px; font-size: 18px; line-height: 1.65; color: #424b58; margin-bottom: 33px; }
+    .actions { display: flex; gap: 15px; align-items: center; flex-wrap: wrap; }
+    .button { min-height: 45px; display: inline-flex; justify-content: center; align-items: center; gap: 11px; padding: 12px 22px; border: 1px solid transparent; border-radius: 2px; font-size: 14px; font-weight: 600; line-height: 1.3; transition: background .18s, border-color .18s, box-shadow .18s; }
+    .button-primary { background: var(--accent); color: white; }
+    .button-primary:hover { background: var(--accent-hover); box-shadow: 0 3px 8px rgba(0,103,184,.13); }
+    .button-secondary { background: #fff; border-color: #697581; color: #24282e; }
+    .button-secondary:hover { background: #eef4fa; }
+    .button svg { width: 16px; height: 16px; transition: transform .2s; }
+    .button:hover svg { transform: translateX(3px); }
+    .hero-detail { margin-top: 27px; display: flex; align-items: center; gap: 9px; color: #626a74; font-size: 13px; }
+    .hero-detail svg { color: #1676bd; width: 17px; height: 17px; }
+
+    /* User-provided desktop screenshot: Backgrounds/I1.png. */
+    .showcase { position: relative; min-width: 0; }
+    .showcase-glow { position: absolute; inset: 6% -6% -7%; z-index: -1; background: radial-gradient(ellipse,rgba(46,133,228,.2),transparent 68%); filter: blur(30px); }
+    .desktop-scene { overflow: hidden; position: relative; border: 6px solid #1d2b3b; border-radius: 13px; box-shadow: 0 34px 62px rgba(20,67,123,.2),0 6px 15px rgba(34,49,74,.13); background: #e8f3fd; }
+    .desktop-image { display: block; width: 100%; height: auto; object-fit: contain; }
+    .showcase-caption { display:flex;justify-content:center;gap:8px;align-items:center;font-size:12px;color:#6d7784;margin:18px 0 0;text-align:center; }
+    .showcase-caption::before { content:"";width:5px;height:5px;border-radius:50%;background:#8194aa; }
+
+    /* Update board: wallpaper-based release showcase with Fluent-style acrylic panels. */
+    .update-board {
+      position: relative;
+      isolation: isolate;
+      overflow: hidden;
+      color: #fff;
+      padding: 105px 0 112px;
+      /* Important: B2 is displayed directly. No pseudo-element, gradient, or tint over the wallpaper. */
+      background: url("Backgrounds/B2.png") center center / cover no-repeat;
+    }
+    .update-board-heading { max-width: 760px; margin: 0 auto 48px; text-align: center; }
+    .update-board-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      margin-bottom: 16px;
+      font-size: 12px;
+      font-weight: 650;
+      text-transform: uppercase;
+      letter-spacing: .15em;
+      color: #d4e9ff;
+    }
+    .update-board-kicker::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: #71baff; box-shadow: 0 0 0 4px rgba(113,186,255,.15); }
+    .update-board h2 { font-size: clamp(35px,4vw,51px); font-weight: 600; letter-spacing: -.042em; line-height: 1.13; margin-bottom: 18px; text-wrap: balance; }
+    .update-board-subtitle { color: rgba(255,255,255,.8); max-width: 650px; margin: auto; font-size: 16px; line-height: 1.65; }
+    .updates-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 24px; }
+    .update-card {
+      min-width: 0;
+      min-height: 310px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      position: relative;
+      padding: 36px;
+      background: rgba(245,250,255,.14);
+      border: 1px solid rgba(255,255,255,.33);
+      border-radius: 12px;
+      box-shadow: 0 14px 38px rgba(5,17,37,.2), inset 0 1px 0 rgba(255,255,255,.21);
+      -webkit-backdrop-filter: blur(26px) saturate(145%);
+      backdrop-filter: blur(26px) saturate(145%);
+      transition: background .2s ease, transform .2s ease, box-shadow .2s ease;
+    }
+    .update-card:hover { background: rgba(245,250,255,.2); transform: translateY(-3px); box-shadow: 0 22px 45px rgba(5,17,37,.23), inset 0 1px 0 rgba(255,255,255,.3); }
+    .update-tag {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 7px 15px;
+      border: 1px solid rgba(255,255,255,.39);
+      border-radius: 999px;
+      background: rgba(255,255,255,.15);
+      -webkit-backdrop-filter: blur(13px);
+      backdrop-filter: blur(13px);
+      color: #fff;
+      font-size: 13px;
+      letter-spacing: .015em;
+      font-weight: 650;
+    }
+    .update-card h3 { margin: 21px 0 12px; font-size: 27px; font-weight: 600; letter-spacing: -.03em; }
+    .update-card p { color: rgba(255,255,255,.91); font-size: 16px; line-height: 1.7; margin-bottom: 24px; }
+    .update-card-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      min-height: 38px;
+      margin-top: auto;
+      color: #fff;
+      font-weight: 600;
+      font-size: 14px;
+      border-bottom: 1px solid rgba(255,255,255,.68);
+      transition: border-color .2s ease;
+    }
+    .update-card-link:hover { border-color: #fff; }
+    .update-card-link svg { width: 16px; height: 16px; transition: transform .2s; }
+    .update-card-link:hover svg { transform: translateX(3px); }
+    .pricing { background:#f5f8fc;padding:102px 0 112px; }
+    .pricing-layout { display:grid;grid-template-columns:.83fr 1.17fr;align-items:center;gap:80px; }
+    .pricing-copy .section-kicker { color:var(--accent);font-size:13px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;margin-bottom:15px; }
+    .pricing-copy h2 { font-size:clamp(35px,3.5vw,49px);font-weight:600;letter-spacing:-.04em;line-height:1.13;margin-bottom:19px; }
+    .pricing-copy p { max-width:440px;color:#5d6671;font-size:16px;line-height:1.75;margin-bottom:28px; }
+    .pricing-panel { border-radius:6px;background:#fff;box-shadow:var(--shadow);border:1px solid #edf0f4;padding:38px 41px 35px; }
+    .plan-label { display:flex;align-items:center;gap:10px;font-weight:600;font-size:14px;margin-bottom:21px; }
+    .plan-label svg { color:#0078d4;width:23px;height:23px; }
+    .price { font-size:clamp(49px,4.5vw,69px);font-weight:600;letter-spacing:-.055em;line-height:1;margin-bottom:8px; }
+    .price-note { color:#626c78;font-size:14px;margin-bottom:24px; }
+    .panel-line { border:0;border-top:1px solid var(--line);margin:0 0 21px; }
+    .included-heading {font-size:14px;font-weight:600;margin-bottom:17px;}
+    .included { list-style:none;padding:0;margin:0 0 28px;display:grid;gap:15px; }
+    .included li { display:flex;gap:13px;align-items:flex-start;font-size:14px;line-height:1.55;color:#394450; }
+    .included svg { flex-shrink:0;width:18px;height:18px;color:#128343;margin-top:1px; }
+    .pricing-panel .button { width:100%; }
+    .project-note { background:#fff;padding:33px 0;border-bottom:1px solid #ebedf0; }
+    .project-note-inner { display:flex;gap:17px;align-items:flex-start;max-width:860px; }
+    .project-note svg { flex-shrink:0;width:22px;height:22px;color:#657a91;margin-top:2px; }
+    .project-note h2 { font-size:16px;font-weight:600;margin:0 0 7px; }
+    .project-note p { font-size:14px;color:#626c76;line-height:1.65;margin:0; }
+    .footer { background:#f2f2f2;padding:32px 0; }
+    .footer-inner { display:flex;align-items:center;justify-content:space-between;gap:22px;flex-wrap:wrap; }
+    .footer p { color:#666;font-size:12px;line-height:1.6;margin:0; }
+    .footer-links { display:flex;flex-wrap:wrap;gap:24px; }
+    .footer-links a { font-size:12px;color:#505050; }
+    .footer-links a:hover { text-decoration:underline; }
+
+    /* Microsoft Fluent-inspired neutral dark mode.
+       Wallpaper B1 and B2 remain unfiltered image backgrounds; all page surfaces use
+       grayscale, with Microsoft blue reserved for interactive accents. */
+    .site-header {
+      background: rgba(29,29,29,.97);
+      border-bottom: 1px solid #3b3b3b;
+      -webkit-backdrop-filter: blur(16px);
+      backdrop-filter: blur(16px);
+    }
+    .brand-divider { background: #696969; }
+    .brand-name, .desktop-nav a { color: #f5f5f5; }
+    .desktop-nav a:hover { color: #fff; }
+    .header-cta, .button-primary { background: var(--brand-button); color: #fff; }
+    .header-cta:hover, .button-primary:hover {
+      background: var(--brand-button-hover);
+      box-shadow: 0 3px 12px rgba(0,0,0,.25);
+    }
+    .menu-toggle { color: #f3f3f3; }
+    .menu-toggle:hover { background: rgba(255,255,255,.09); }
+    .mobile-nav { background: #242424; border-color: #484848; box-shadow: 0 16px 28px rgba(0,0,0,.36); }
+    .mobile-nav a { color: #f0f0f0; border-bottom-color: rgba(255,255,255,.09); }
+    .mobile-nav a:hover { background: #363636; }
+
+    /* B1 wallpaper is untouched. Only the text panel uses neutral translucent glass. */
+    .hero { background-color: #202020; }
+    .hero-copy {
+      background: rgba(25,25,25,.72);
+      border: 1px solid rgba(255,255,255,.17);
+      border-radius: 12px;
+      padding: 36px 34px 38px;
+      -webkit-backdrop-filter: blur(20px);
+      backdrop-filter: blur(20px);
+      box-shadow: 0 20px 55px rgba(0,0,0,.32);
+    }
+    .eyebrow { color: #dedede; }
+    .eyebrow::before { background: #b4b4b4; }
+    h1 { color: #fff; }
+    .hero-description { color: #e0e0e0; }
+    .hero-detail { color: #d2d2d2; }
+    .hero-detail svg { color: #dedede; }
+    .button { border-radius: 4px; }
+    .button-secondary { background: rgba(44,44,44,.92); border-color: #8b8b8b; color: #fff; }
+    .button-secondary:hover { background: rgba(67,67,67,.97); }
+    .showcase-glow { display: none; }
+    .desktop-scene {
+      border-color: #252525;
+      background: #202020;
+      box-shadow: 0 28px 63px rgba(0,0,0,.44), 0 6px 20px rgba(0,0,0,.2);
+    }
+    .showcase-caption { color: #f0f0f0; text-shadow: 0 1px 8px rgba(0,0,0,.6); }
+    .showcase-caption::before { background: #dedede; }
+
+    /* No overlay, filter, pseudo-element or gradient above Backgrounds/B2.png.
+       Only the release panels themselves use translucent neutral acrylic. */
+    .update-board { background-color: #1b1b1b; }
+    .update-board-heading { text-shadow: 0 2px 20px rgba(0,0,0,.68), 0 1px 6px rgba(0,0,0,.64); }
+    .update-board-kicker { color: #f0f0f0; }
+    .update-board-kicker::before { background: #e4e4e4; box-shadow: 0 0 0 4px rgba(255,255,255,.14); }
+    .update-board-subtitle { color: #fff; }
+    .update-card {
+      background: rgba(29,29,29,.69);
+      border-color: rgba(255,255,255,.27);
+      box-shadow: 0 16px 40px rgba(0,0,0,.3), inset 0 1px 0 rgba(255,255,255,.1);
+      -webkit-backdrop-filter: blur(28px);
+      backdrop-filter: blur(28px);
+    }
+    .update-card:hover {
+      background: rgba(45,45,45,.78);
+      box-shadow: 0 22px 50px rgba(0,0,0,.37), inset 0 1px 0 rgba(255,255,255,.14);
+    }
+    .update-tag { background: rgba(255,255,255,.1); border-color: rgba(255,255,255,.34); }
+
+    .pricing { background: #202020; }
+    .pricing-copy .section-kicker { color: #d4d4d4; }
+    .pricing-copy p { color: #c8c8c8; }
+    .pricing-panel {
+      background: #2b2b2b;
+      border-color: #464646;
+      box-shadow: 0 20px 55px rgba(0,0,0,.25);
+      border-radius: 10px;
+    }
+    .plan-label svg { color: #dadada; }
+    .price-note { color: #c0c0c0; }
+    .included li { color: #e9e9e9; }
+    .included svg { color: #8fdfac; }
+    .project-note { background: #1c1c1c; border-bottom-color: #383838; }
+    .project-note svg { color: #c4c4c4; }
+    .project-note p { color: #bfbfbf; }
+    .footer { background: #171717; }
+    .footer p, .footer-links a { color: #bebebe; }
+    .footer-links a:hover { color: #fff; }
+
+    @media (min-width: 1550px) { .hero-grid { min-height:690px; } }
+    @media (max-width: 1100px) {
+      .container { width:min(calc(100% - 64px),var(--page-width)); }
+      .header-inner {gap:18px;}
+      .desktop-nav {gap:0;margin-left:0;}
+      .desktop-nav a { padding-inline:9px; }
+      .hero-grid {gap:36px;min-height:560px;padding-block:75px;}
+      h1 {font-size:clamp(42px,4.6vw,59px);}
+      .hero-description {font-size:16px;}
+      .pricing-layout { gap:43px; }
+    }
+    @media (max-width: 820px) {
+      .site-header {height:61px;}
+      .container {width:min(calc(100% - 48px),var(--page-width));}
+      .header-inner {gap:14px;}
+      .desktop-nav {display:none;}
+      .brand-name {font-size:17px;}
+      .menu-toggle {display:inline-flex;margin-left:auto;}
+      .header-cta {margin-left:0;padding:10px 12px;font-size:12px;}
+      .mobile-nav:not([hidden]) {display:block;position:absolute;left:0;right:0;top:100%;}
+      .hero-grid {grid-template-columns:1fr;gap:52px;min-height:0;padding-block:75px 78px;}
+      .hero-copy {max-width:720px;text-align:center;margin-inline:auto;}
+      .eyebrow {justify-content:center;}
+      h1 {font-size:clamp(43px,7vw,62px);}
+      .hero-description {max-width:600px;margin-inline:auto;}
+      .actions,.hero-detail {justify-content:center;}
+      .showcase {width:min(100%,640px);margin-inline:auto;}
+      .updates-grid {gap:16px;}
+      .update-card {padding:28px;min-height:335px;}
+      .pricing-layout {grid-template-columns:1fr;gap:36px;max-width:650px;}
+      .pricing-copy {text-align:center;}
+      .pricing-copy p {margin-inline:auto;}
+    }
+    @media (max-width: 580px) {
+      .container {width:calc(100% - 40px);}
+      .header-inner {gap:7px;}
+      .brand {gap:9px;}
+      .brand-divider {display:none;}
+      .brand-mark {width:25px;height:25px;}
+      .brand-fallback {width:23px;height:23px;}
+      .brand-name {font-size:15px;letter-spacing:-.45px;}
+      .header-cta {display:none;}
+      .hero-grid {padding-block:65px 67px;gap:44px;}
+      .hero-copy {padding:28px 22px 30px;border-radius:10px;}
+      .eyebrow {font-size:10px;letter-spacing:1.4px;margin-bottom:18px;}
+      h1 {font-size:clamp(39px,10.3vw,54px);letter-spacing:-.045em;}
+      .hero-description {font-size:16px;line-height:1.65;}
+      .actions {flex-direction:column;align-items:stretch;gap:11px;}
+      .button {width:100%;}
+      .hero-detail {font-size:12px;}
+      .desktop-scene {border-width:5px;border-radius:9px;}
+      .showcase-caption {font-size:11px;}
+      .update-board,.pricing {padding-block:75px 82px;}
+      .update-board-heading {margin-bottom:34px;}
+      .update-board h2,.pricing-copy h2 {font-size:35px;}
+      .update-board-subtitle {font-size:15px;}
+      .updates-grid {grid-template-columns:1fr;gap:16px;}
+      .update-card {min-height:0;padding:28px;}
+      .update-card h3 {font-size:24px;}
+      .update-card p {font-size:15px;}
+      .pricing-panel {padding:30px 25px;}
+      .project-note {padding:30px 0;}
+      .footer-inner {align-items:flex-start;flex-direction:column;}
+      .footer-links {gap:17px;}
+    }
+    @media (prefers-reduced-motion: reduce) { *,*::before,*::after {scroll-behavior:auto !important;transition:none !important;animation:none !important;} }
+
+    /* Rebuilt introduction — immersive Microsoft-style product hero, neutral dark treatment. */
+    .intro {
+      position: relative;
+      isolation: isolate;
+      overflow: hidden;
+      background-color: #202020;
+      background-image: url("Backgrounds/B1.png");
+      background-position: center center;
+      background-size: cover;
+      background-repeat: no-repeat;
+    }
+    /* Only the introduction receives an accessibility vignette; B2 in the update board stays untouched. */
+    .intro::before {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(90deg, rgba(12,12,12,.78) 0%, rgba(14,14,14,.63) 39%, rgba(12,12,12,.31) 79%, rgba(12,12,12,.30) 100%),
+                  linear-gradient(0deg, rgba(11,11,11,.84), transparent 23%, transparent 85%, rgba(12,12,12,.12));
+    }
+    .intro-inner { position: relative; z-index: 1; }
+    .intro-layout {
+      min-height: 655px;
+      padding: 95px 0 78px;
+      display: grid;
+      grid-template-columns: .94fr 1.06fr;
+      align-items: center;
+      gap: clamp(32px, 5vw, 86px);
+    }
+    .intro-content { max-width: 610px; min-width: 0; }
+    .intro-eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      font-size: 11px;
+      font-weight: 650;
+      color: #e7e7e7;
+      letter-spacing: .15em;
+      margin-bottom: 29px;
+    }
+    .intro-eyebrow-square { display: inline-block; flex: none; width: 9px; height: 9px; background: #f0f0f0; box-shadow: 0 0 0 4px rgba(255,255,255,.12); }
+    .intro h1 { font-size: clamp(56px, 5.1vw, 80px); font-weight: 650; letter-spacing: -.058em; line-height: 1.045; margin-bottom: 27px; text-wrap: balance; color: #fff; }
+    .intro h1 span { display: block; color: #dedede; }
+    .intro-description { max-width: 500px; margin-bottom: 31px; font-size: 17px; line-height: 1.69; color: #dfdfdf; text-wrap: pretty; }
+    .intro-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 13px; }
+    .intro-actions .button { min-height: 48px; padding: 13px 23px; font-size: 14px; border-radius: 4px; }
+    .intro-actions .intro-primary { border-color: #0067b8; background: #0067b8; color: #fff; box-shadow: 0 4px 12px rgba(0,0,0,.2); }
+    .intro-actions .intro-primary:hover { background: #005a9e; border-color: #005a9e; }
+    .intro-secondary { background: rgba(33,33,33,.36); color: #fff; border-color: rgba(255,255,255,.54); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); }
+    .intro-secondary:hover { background: rgba(68,68,68,.63); border-color: rgba(255,255,255,.85); }
+    .intro-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; color: #d5d5d5; font-size: 12px; line-height: 1.5; margin-top: 29px; }
+    .intro-meta svg { width: 17px; height: 17px; color: #eaeaea; }
+    .intro-meta-separator { display: inline-block; width: 3px; height: 3px; border-radius: 50%; background: #b0b0b0; }
+
+    /* Hardware mockup: a realistic laptop, not an app window. The screenshot is never tinted. */
+    .intro-preview { position: relative; min-width: 0; margin: 0; }
+    .intro-preview::before {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      pointer-events: none;
+      inset: 12% -6% 4%;
+      border-radius: 50%;
+      background: radial-gradient(ellipse, rgba(255,255,255,.08), transparent 70%);
+      filter: blur(30px);
+    }
+    .intro-computer { width: 100%; position: relative; padding-top: 10px; perspective: 1500px; }
+    .intro-monitor {
+      position: relative;
+      padding: 10px 10px 0;
+      border: 1px solid #5e5e5e;
+      border-bottom-width: 0;
+      border-radius: 18px 18px 6px 6px;
+      background: linear-gradient(180deg, #353535 0%, #121212 18%, #161616 70%, #252525 100%);
+      box-shadow: 0 30px 75px rgba(0,0,0,.46), 0 8px 20px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.18);
+      transform: rotateY(-2deg) rotateX(1deg);
+      transform-origin: 50% 85%;
+      z-index: 2;
+    }
+    .intro-monitor::after {
+      content: "";
+      position: absolute;
+      pointer-events: none;
+      inset: 3px 3px 0;
+      border-radius: 15px 15px 4px 4px;
+      border: 1px solid rgba(255,255,255,.04);
+    }
+    .intro-screen {
+      position: relative;
+      aspect-ratio: 16 / 10;
+      overflow: hidden;
+      border-radius: 10px 10px 2px 2px;
+      border: 1px solid #080808;
+      background: #0b0b0b;
+      box-shadow: 0 0 0 1px rgba(255,255,255,.05);
+    }
+    .intro-screen::before {
+      content: "";
+      position: absolute;
+      top: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: rgba(27,27,27,.95);
+      box-shadow: 0 0 0 1px rgba(255,255,255,.08);
+      z-index: 3;
+    }
+    .intro-screen::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(135deg, rgba(255,255,255,.09), transparent 18%, transparent 76%, rgba(255,255,255,.04));
+      z-index: 2;
+    }
+    .intro-image { position: relative; z-index: 1; display: block; height: 100%; width: 100%; object-fit: contain; background: #080808; }
+    .intro-image[hidden] { display: none !important; }
+    .intro-image-fallback {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 13px;
+      color: #f4f4f4;
+      background: radial-gradient(ellipse at 50% 36%, #353535 0, #202020 44%, #151515 100%);
+    }
+    .intro-fallback-mark { display: grid; grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(2, 1fr); width: 46px; height: 46px; gap: 4px; margin-bottom: 6px; }
+    .intro-fallback-mark i { display: block; background: #41a0e9; }
+    .intro-fallback-title { font-size: 15px; font-weight: 600; }
+    .intro-fallback-hint { font-size: 12px; color: #c2c2c2; }
+    /* Thin hinge strip between the display and keyboard deck. */
+    .intro-monitor-chin {
+      height: 12px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(180deg, #262626 0%, #161616 100%);
+      border-top: 1px solid rgba(255,255,255,.05);
+    }
+    .intro-monitor-emblem { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5px; width: 9px; height: 9px; opacity: .42; }
+    .intro-monitor-emblem i { display: block; background: #bdbdbd; }
+    .intro-monitor-led { position: absolute; right: 14px; top: 50%; width: 18px; height: 2px; border-radius: 999px; background: rgba(255,255,255,.12); transform: translateY(-50%); }
+    /* Laptop deck with an understated keyboard and trackpad. */
+    .intro-stand { position: relative; height: 124px; margin-top: -1px; z-index: 1; }
+    .intro-stand-neck {
+      width: 82%;
+      height: 9px;
+      margin: 0 auto;
+      border-radius: 0 0 10px 10px;
+      background: linear-gradient(180deg, #2b2b2b 0%, #161616 100%);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.06);
+    }
+    .intro-stand-foot {
+      position: relative;
+      width: 112%;
+      height: 61px;
+      margin: -1px auto 0;
+      left: -6%;
+      border: 1px solid rgba(255,255,255,.12);
+      border-top-color: rgba(255,255,255,.2);
+      border-radius: 0 0 28px 28px / 0 0 14px 14px;
+      background: linear-gradient(180deg, #575757 0%, #343434 18%, #262626 44%, #151515 100%);
+      transform: perspective(620px) rotateX(69deg);
+      transform-origin: top center;
+      box-shadow: 0 15px 24px rgba(0,0,0,.30), inset 0 1px 0 rgba(255,255,255,.15);
+      overflow: hidden;
+    }
+    .intro-stand-foot::before {
+      content: "";
+      position: absolute;
+      left: 12%;
+      right: 12%;
+      top: 12px;
+      height: 18px;
+      border-radius: 8px;
+      background:
+        repeating-linear-gradient(90deg, rgba(15,15,15,.96) 0 14px, transparent 14px 17px),
+        repeating-linear-gradient(180deg, rgba(15,15,15,.22) 0 1px, transparent 1px 9px);
+      opacity: .88;
+    }
+    .intro-stand-foot::after {
+      content: "";
+      position: absolute;
+      left: 37%;
+      right: 37%;
+      bottom: 9px;
+      height: 14px;
+      border-radius: 9px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(0,0,0,.04));
+    }
+    .intro-stand-shadow { position: absolute; left: 15%; right: 15%; bottom: 7px; height: 18px; background: rgba(0,0,0,.45); filter: blur(14px); border-radius: 50%; z-index: -1; }
+    .intro-preview-caption { margin: 12px 0 0; display: flex; justify-content: center; align-items: center; gap: 9px; color: #dedede; font-size: 12px; text-shadow: 0 1px 8px rgba(0,0,0,.55); }
+    .intro-caption-dot { display: inline-block; height: 6px; width: 6px; border-radius: 50%; background: #cfcfcf; }
+
+    .intro-feature-strip { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); align-items: stretch; margin-bottom: 36px; border: 1px solid rgba(255,255,255,.23); border-radius: 8px; background: rgba(25,25,25,.63); -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px); box-shadow: 0 16px 32px rgba(0,0,0,.17); }
+    .intro-feature { display: flex; align-items: center; gap: 14px; min-width: 0; padding: 21px 27px; }
+    .intro-feature + .intro-feature { border-left: 1px solid rgba(255,255,255,.17); }
+    .intro-feature-icon { display: grid; place-items: center; flex: none; width: 38px; height: 38px; border: 1px solid rgba(255,255,255,.20); border-radius: 7px; background: rgba(255,255,255,.08); }
+    .intro-feature-icon svg { width: 19px; height: 19px; color: #f0f0f0; }
+    .intro-feature strong { display: block; font-size: 13px; font-weight: 600; letter-spacing: -.01em; }
+    .intro-feature small { display: block; margin-top: 5px; font-size: 11.5px; line-height: 1.45; color: #cecece; }
+    @media (min-width: 1550px) { .intro-layout { min-height: 735px; } }
+    @media (max-width: 1100px) {
+      .intro-layout { gap: 32px; min-height: 570px; padding: 80px 0 63px; }
+      .intro h1 { font-size: clamp(47px, 5.4vw, 66px); }
+      .intro-description { font-size: 16px; }
+      .intro-feature { padding: 19px 18px; gap: 11px; }
+    }
+    @media (max-width: 820px) {
+      .intro-layout { grid-template-columns: 1fr; gap: 49px; min-height: 0; padding: 75px 0 57px; }
+      .intro-content { margin-inline: auto; max-width: 680px; text-align: center; }
+      .intro-eyebrow, .intro-actions, .intro-meta { justify-content: center; }
+      .intro h1 { font-size: clamp(51px, 7.5vw, 70px); }
+      .intro-description { max-width: 570px; margin-inline: auto; }
+      .intro-preview { width: min(100%, 680px); margin-inline: auto; }
+      .intro-feature-strip { margin-bottom: 26px; }
+      .intro-feature { gap: 10px; padding: 18px 13px; }
+      .intro-feature-icon { width: 34px; height: 34px; }
+    }
+    @media (max-width: 580px) {
+      .intro::before { background: linear-gradient(180deg, rgba(13,13,13,.64), rgba(13,13,13,.72) 55%, rgba(13,13,13,.72)); }
+      .intro-layout { padding: 62px 0 43px; gap: 43px; }
+      .intro-eyebrow { font-size: 10px; letter-spacing: .12em; margin-bottom: 22px; }
+      .intro h1 { font-size: clamp(44px, 11.3vw, 61px); line-height: 1.07; margin-bottom: 23px; }
+      .intro-description { font-size: 15px; line-height: 1.7; margin-bottom: 26px; }
+      .intro-actions { flex-direction: column; align-items: stretch; gap: 11px; }
+      .intro-actions .button { width: 100%; }
+      .intro-meta { margin-top: 23px; font-size: 11px; gap: 9px; }
+      .intro-monitor { padding: 7px 7px 0; border-radius: 14px 14px 5px 5px; transform: none; }
+      .intro-screen { border-radius: 8px 8px 2px 2px; }
+      .intro-screen::before { top: 6px; width: 6px; height: 6px; }
+      .intro-monitor-chin { height: 10px; }
+      .intro-monitor-emblem { width: 8px; height: 8px; }
+      .intro-monitor-led { right: 10px; width: 14px; }
+      .intro-stand { height: 92px; }
+      .intro-stand-neck { height: 8px; width: 74%; }
+      .intro-stand-foot { height: 44px; width: 108%; left: -4%; }
+      .intro-stand-foot::before { left: 10%; right: 10%; top: 8px; height: 14px; background: repeating-linear-gradient(90deg, rgba(15,15,15,.96) 0 10px, transparent 10px 12px), repeating-linear-gradient(180deg, rgba(15,15,15,.18) 0 1px, transparent 1px 7px); }
+      .intro-stand-foot::after { left: 35%; right: 35%; bottom: 7px; height: 11px; }
+      .intro-preview-caption { font-size: 11px; margin-top: 10px; }
+      .intro-feature-strip { grid-template-columns: 1fr; margin-bottom: 25px; }
+      .intro-feature { gap: 13px; padding: 15px 19px; }
+      .intro-feature + .intro-feature { border-left: 0; border-top: 1px solid rgba(255,255,255,.17); }
+      .intro-feature strong { font-size: 13px; }
+      .intro-feature small { font-size: 11px; margin-top: 3px; }
+    }
+  
+/* Expanded website navigation: collapse before the navigation becomes crowded. */
+@media (max-width: 1150px) and (min-width: 821px) {
+  .desktop-nav { display: none; }
+  .menu-toggle { display: inline-flex; margin-left: auto; }
+  .header-cta { margin-left: 0; }
+  .mobile-nav:not([hidden]) { display: block; position: absolute; left: 0; right: 0; top: 100%; }
+}
+
+/* Neutral Fluent editorial pages, designed to match the WebWindows homepage. */
+:root { --editorial-width: 1160px; }
+.desktop-nav a.is-active { font-weight:600; }
+.desktop-nav a.is-active::after { content:"";position:absolute;bottom:13px;left:12px;right:12px;height:2px;background:#f3f3f3; }
+.mobile-nav a.is-active { color:#fff;background:#333; font-weight:600; border-left:3px solid #b4b4b4;padding-left:23px; }
+.page-shell { background:#1b1b1b;color:#f7f7f7;min-height:75vh; }
+.page-container { width:min(calc(100% - 96px),var(--editorial-width));margin:auto; }
+.page-hero { border-bottom:1px solid #3b3b3b; background: linear-gradient(150deg,#242424,#181818 70%);position:relative;overflow:hidden; }
+.page-hero-inner { padding:86px 0 75px; max-width:var(--editorial-width); }
+.page-kicker { font-size:11px; font-weight:650;letter-spacing:.145em;text-transform:uppercase;color:#d7d7d7; margin-bottom:22px; display:flex;align-items:center;gap:13px; }
+.page-kicker::before { content:"";display:block;width:18px;height:2px;background:#c5c5c5; }
+.page-hero h1 { font-weight:600;font-size:clamp(48px,5vw,72px);line-height:1.065;letter-spacing:-.049em;max-width:810px;margin:0 0 22px; }
+.page-lead {color:#c7c7c7;font-size:18px;line-height:1.7;max-width:760px;margin:0; }
+.breadcrumb {font-size:12px; display:flex;gap:8px;align-items:center;color:#bfbfbf;margin-bottom:37px;}
+.breadcrumb a { color:#f5f5f5; }
+.breadcrumb a:hover,.text-link:hover { text-decoration:underline;text-underline-offset:4px; }
+.breadcrumb .chev { color:#898989;font-size:15px; }
+.section-area {padding:78px 0 105px;}
+.section-heading-row {display:flex;justify-content:space-between;align-items:end;gap:20px;margin-bottom:26px;}
+.section-label {color:#b9b9b9;font-size:11px;font-weight:650;text-transform:uppercase;letter-spacing:.14em;margin:0 0 11px;}
+.section-title {font-weight:600;font-size:clamp(26px,3vw,37px);letter-spacing:-.032em;line-height:1.19;margin-bottom:9px;}
+.section-subtitle {font-size:15px;color:#b9b9b9;line-height:1.65;max-width:690px;margin:0;}
+.text-link {color:#fff;font-weight:600;font-size:13px;text-decoration:underline;text-underline-offset:5px;display:inline-flex;align-items:center;gap:8px;white-space:nowrap;}
+.text-link svg,.action-link svg {width:16px;height:16px;flex:none;}
+.panel {background:#252525;border:1px solid #414141;border-radius:9px;}
+.pill {display:inline-flex;gap:7px;align-items:center;border-radius:3px;border:1px solid #565656;background:#333;color:#ededed;padding:7px 11px;font-size:11px;font-weight:650;letter-spacing:.015em;}
+.muted {color:#bcbcbc;}
+.subtle-line {height:1px;background:#414141;border:0;margin:0;}
+.site-header .brand-name { color:#fff; }
+.footer { border-top:1px solid #343434; }
+@media (max-width: 820px) {
+  .page-container {width:min(calc(100% - 48px),var(--editorial-width));}
+  .page-hero-inner {padding:65px 0 61px;}
+  .section-area {padding:58px 0 78px;}
+  .section-heading-row {align-items:start;flex-direction:column;}
+  .page-lead {font-size:16px;}
+}
+@media (max-width: 580px) {
+  .page-container {width:calc(100% - 40px);}
+  .page-hero-inner {padding:45px 0 52px;}
+  .page-hero h1 {font-size:clamp(40px,11vw,54px);}
+  .breadcrumb {margin-bottom:25px;}
+}
+
+
+.channel-chooser {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:35px 0 0;max-width:930px;}
+.channel-choice {appearance:none;cursor:pointer;text-align:left;display:flex;justify-content:space-between;align-items:center;gap:16px;min-height:90px;padding:20px 23px;color:#e9e9e9;border:1px solid #575757;border-radius:7px;background:#292929;transition:background .15s,border-color .15s,box-shadow .15s;}
+.channel-choice:hover {background:#363636;border-color:#9c9c9c;}
+.channel-choice[aria-selected="true"] {background:#363636;border-color:#c5c5c5;box-shadow:inset 0 -3px 0 #dadada;}
+.choice-title {display:block;font-size:17px;font-weight:650;letter-spacing:-.02em;color:#fff;margin-bottom:5px;}
+.choice-desc {display:block;font-size:12px;line-height:1.4;color:#bfbfbf;}
+.choice-radio {display:grid;place-items:center;flex-shrink:0;width:19px;height:19px;border-radius:50%;border:1.5px solid #919191;}
+.channel-choice[aria-selected="true"] .choice-radio {border-color:#dedede;}
+.channel-choice[aria-selected="true"] .choice-radio::after {content:"";background:#e5e5e5;width:9px;height:9px;border-radius:50%;}
+.selected-summary {display:flex;align-items:flex-start;justify-content:space-between;gap:18px;padding:25px 29px;margin-bottom:31px;}
+.selected-summary .summary-title {font-size:26px;font-weight:650;letter-spacing:-.035em;margin:0 0 8px;}
+.selected-summary p {margin:0;max-width:640px;font-size:14px;line-height:1.7;color:#c9c9c9;}
+.selected-flag {font-size:11px;white-space:nowrap;border:1px solid #4a4a4a;padding:7px 10px;color:#ccc;border-radius:3px;}
+.channel-flow {display:flex;align-items:center;gap:10px;overflow-x:auto;padding:5px 0 28px;margin:0 0 5px;color:#d4d4d4;}
+.flow-node {font-size:12px;font-weight:600;border:1px solid #525252;border-radius:3px;padding:9px 12px;white-space:nowrap;background:#2b2b2b;}
+.flow-arrow {color:#999;flex:none;font-size:17px;}
+.channel-cards {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;}
+.stage {padding:27px 28px 26px;min-height:233px;display:flex;flex-direction:column;align-items:start;}
+.stage-top {display:flex;justify-content:space-between;align-items:center;width:100%;gap:12px;margin-bottom:24px;}
+.stage-index {font-family:var(--font);font-size:13px;letter-spacing:.08em;color:#a9a9a9;}
+.stage h3 {font-size:24px;font-weight:600;letter-spacing:-.028em;margin:0 0 12px;color:#fff;}
+.stage p {font-size:14px;line-height:1.77;color:#c9c9c9;margin:0;}
+.stage small {margin-top:auto;padding-top:20px;font-size:11px;color:#a9a9a9;letter-spacing:.02em;}
+.stage-release {border-color:#656565;background:#2d2d2d;}
+.channel-principle {border-top:1px solid #3a3a3a;padding-top:55px;margin-top:62px;display:grid;grid-template-columns:.75fr 1.25fr;gap:65px;}
+.channel-principle h2 {font-size:30px;line-height:1.18;letter-spacing:-.033em;margin-bottom:15px;}
+.channel-principle p {color:#c4c4c4;line-height:1.75;font-size:14px;}
+.channel-principle ul {margin:0;padding:0;list-style:none;display:grid;gap:0;}
+.channel-principle li {padding:16px 0;border-bottom:1px solid #3a3a3a;color:#e5e5e5;font-size:14px;line-height:1.6;}
+.channel-principle li:first-child {padding-top:0;}
+.channel-principle li strong {color:#fff;}
+@media (max-width: 820px) {.channel-principle {grid-template-columns:1fr;gap:15px;}}
+@media (max-width: 600px) {
+ .channel-chooser,.channel-cards {grid-template-columns:1fr;}
+ .channel-choice {min-height:82px;padding:17px 18px;}
+ .selected-summary {flex-direction:column;padding:22px;}
+ .stage {min-height:0;padding:24px;}
+ .channel-flow {display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;overflow:visible;}
+ .channel-flow .flow-arrow {display:none;}
+ .flow-node {font-size:10px;padding:9px 5px;text-align:center;white-space:normal;display:flex;align-items:center;justify-content:center;line-height:1.2;}
+}
+.news-feature {display:grid;grid-template-columns:1.13fr .87fr;gap:22px;margin-top:36px;}
+.lead-article {padding:38px 40px 39px;min-height:370px;display:flex;flex-direction:column;align-items:flex-start;background:#303030;border-color:#5a5a5a;}
+.article-date {font-size:12px;color:#bababa;white-space:nowrap;}
+.lead-article h2 {font-size:clamp(30px,3vw,43px);line-height:1.13;font-weight:600;letter-spacing:-.034em;margin:24px 0 17px;}
+.lead-article p {font-size:15px;line-height:1.76;color:#d2d2d2;max-width:570px;}
+.lead-article .text-link {margin-top:auto;padding-top:14px;}
+.news-side {padding:34px 35px;display:flex;flex-direction:column;align-items:flex-start;}
+.news-side h2 {font-size:26px;line-height:1.22;font-weight:600;letter-spacing:-.025em;margin:22px 0 15px;}
+.news-side p {font-size:15px;line-height:1.73;color:#c2c2c2;}
+.news-side .text-link {margin-top:auto;padding-top:19px;}
+.feed-head {display:flex;align-items:end;justify-content:space-between;gap:22px;margin-bottom:23px;}
+.feed-info {font-size:13px;color:#b9b9b9;margin:0;}
+.release-feed {border-top:1px solid #464646;}
+.release-row {padding:24px 8px 24px 0;display:grid;grid-template-columns:146px minmax(0,1fr) 24px;align-items:start;gap:23px;border-bottom:1px solid #434343;}
+.release-row time,.release-date {font-size:12px;color:#bdbdbd;padding-top:4px;}
+.release-row h3 {font-size:18px;letter-spacing:-.02em;font-weight:600;margin:0 0 7px;line-height:1.4;}
+.release-row p {margin:0;color:#bebebe;font-size:13px;line-height:1.65;max-width:720px;}
+.release-row a:hover h3 {text-decoration:underline;text-underline-offset:4px;}
+.release-arrow {font-size:22px;color:#bcbcbc;align-self:center;text-align:right;}
+.news-note {border:1px solid #404040;background:#222;padding:21px 24px;font-size:13px;line-height:1.65;color:#bdbdbd;border-radius:6px;margin-top:38px;}
+@media (max-width: 820px) {
+ .news-feature {grid-template-columns:1fr;gap:15px;}
+ .lead-article {min-height:0;padding:30px;}
+ .news-side {padding:30px;}
+ .release-row {grid-template-columns:105px minmax(0,1fr) 20px;gap:13px;}
+}
+@media (max-width: 580px) {
+ .lead-article,.news-side {padding:26px;}
+ .lead-article h2 {font-size:31px;}
+ .release-row {grid-template-columns:1fr 20px;gap:9px;}
+ .release-row time {grid-column:1 / -1;}
+ .release-row h3 {font-size:17px;}
+ .feed-head {align-items:start;flex-direction:column;}
+}
+
+
+/* Unified one-file navigation and independently visible site pages. */
+.site-view[hidden] { display: none !important; }
+.desktop-nav a[aria-current="page"] { color:#fff; font-weight:650; }
+.desktop-nav a[aria-current="page"]::after { content:""; position:absolute; left:12px; right:12px; bottom:13px; height:2px; background:#fff; }
+.mobile-nav a[aria-current="page"] { background:#323232; border-left:3px solid #f1f1f1; padding-left:23px; }
+
+/* B1 is the actual introduction background. No full-section gradient, tint,
+   pseudo-element, darkening or decorative glow is laid over its pixels. */
+.intro { background-image: url("Backgrounds/B1.png") !important; background-color:#202020; }
+.intro::before, .intro::after, .intro-preview::before { content:none !important; display:none !important; background:none !important; }
+.intro h1, .intro-eyebrow, .intro-description { text-shadow: 0 2px 11px rgba(0,0,0,.65); }
+
+/* B2 also stays unaltered, while the update cards retain acrylic materials. */
+.update-board { background-image:url("Backgrounds/B2.png") !important; }
+.update-board::before, .update-board::after { content:none !important; display:none !important; }
+.update-card { min-height:345px; }
+.update-card .release-state { display:inline-flex;align-items:center;gap:7px;color:#f1f1f1;font-size:11px;font-weight:650;letter-spacing:.045em;text-transform:uppercase;margin:17px 0 0; }
+.update-card .release-state::before { content:"";width:5px;height:5px;background:currentColor;border-radius:50%; }
+.update-card .build-code { display:block;font-size:12px;line-height:1.5;color:rgba(255,255,255,.78);margin:-3px 0 16px; }
+.update-card .update-highlights { display:flex;flex-wrap:wrap;gap:7px;margin:0 0 23px;padding:0;list-style:none; }
+.update-card .update-highlights li {font-size:11px;line-height:1.4;padding:6px 9px;border:1px solid rgba(255,255,255,.30);border-radius:3px;background:rgba(0,0,0,.16);}
+.update-board-subtitle { max-width:760px; }
+
+/* Development-news feature blocks use the site's restrained Fluent materials. */
+.news-feature > .panel { min-width:0; }
+.lead-article .article-date { white-space:normal !important; overflow-wrap:anywhere; }
+.news-feature .text-link { white-space:normal; }
+@media (max-width:580px) {
+ .release-row > .release-date { grid-column:1 / -1; }
+ .release-row > div { grid-column:1; }
+ .release-row > .release-arrow {grid-column:2; grid-row:2;}
+}
+.development-head { display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin:25px 0 19px; }
+.dev-feature-grid { display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px; }
+.dev-feature {padding:24px 25px;min-height:188px;}
+.dev-feature .dev-number {font-size:11px;letter-spacing:.1em;font-weight:600;color:#a6a6a6;}
+.dev-feature h3 {font-size:19px;line-height:1.3;letter-spacing:-.018em;margin:16px 0 9px;}
+.dev-feature p {color:#c4c4c4;line-height:1.65;font-size:13px;margin:0;}
+.news-context {font-size:12px;line-height:1.65;color:#bdbdbd;max-width:950px;margin-top:20px;}
+.lead-article .article-date {display:block;margin:0 0 12px;}
+.release-row .release-type {font-size:10px;font-weight:650;letter-spacing:.08em;text-transform:uppercase;color:#acacac;display:block;margin-bottom:7px;}
+@media (max-width: 950px) { .dev-feature-grid{grid-template-columns:repeat(2,minmax(0,1fr));} }
+@media (max-width: 580px) { .dev-feature-grid{grid-template-columns:1fr;} .dev-feature{min-height:0;} .update-card{min-height:0;} }
+@media (prefers-reduced-motion: reduce) { .site-view{animation:none!important;} }
+
+/* --------------------------------------------------------------------------
+   WebWindows 12 — refined neutral Microsoft-inspired website, 2026
+   All visual assets are local references to the creator's Backgrounds folder.
+   B1 and B2 remain exact, unfiltered wallpaper images. No entire-section
+   overlay, gradient, opacity, or filter is layered above either bitmap.
+   -------------------------------------------------------------------------- */
+:root {
+  --surface:#181818; --layer:#202020; --layer-raised:#292929;
+  --line:rgba(255,255,255,.12); --muted:#c3c3c3; --text:#f9f9f9;
+  --accent:#75baff; --brand-button:#0067b8; --brand-button-hover:#1377c7;
+  --page-width:1280px; --editorial-width:1200px;
+  --shadow:0 24px 64px rgba(0,0,0,.30);
+}
+html {scroll-padding-top:86px;}
+body {background:var(--surface);font-size:15px;}
+.container {width:min(calc(100% - 112px),var(--page-width));}
+.page-container {width:min(calc(100% - 112px),var(--editorial-width));}
+::selection {background:#276ea9;color:#fff;}
+
+/* Navigation. Single compact chrome and a clear active state. */
+.site-header {height:70px;position:sticky;top:0;z-index:100;background:rgba(24,24,24,.96);
+  border-bottom:1px solid rgba(255,255,255,.11);box-shadow:0 1px 0 rgba(0,0,0,.14);
+  backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);}
+.header-inner {gap:26px;}
+.brand {gap:13px;}
+.brand-mark {height:28px;width:28px;}
+.brand-name {font-size:17px;letter-spacing:-.035em;font-weight:650;}
+.brand-divider {background:#656565;height:22px;}
+.desktop-nav {gap:5px;margin-left:1px;}
+.desktop-nav a {font-size:13px;color:#d4d4d4;padding:24px 11px 22px;line-height:24px;}
+.desktop-nav a:hover {color:#fff;text-decoration:none;}
+.desktop-nav a:hover:after {content:'';position:absolute;bottom:12px;height:2px;left:11px;right:11px;background:#929292;}
+.desktop-nav a[aria-current="page"]:after {background:#fff;bottom:12px;left:11px;right:11px;}
+.header-cta {padding:10px 18px;border-radius:4px;font-size:13px;letter-spacing:.004em;min-height:38px;}
+.header-cta:hover {background:var(--brand-button-hover);}
+.mobile-nav {background:#212121;border-color:#3b3b3b;padding:8px 20px 17px;}
+.mobile-nav a {border-radius:4px;padding:13px 16px;border-bottom:none;color:#e7e7e7;}
+.mobile-nav a:hover,.mobile-nav a[aria-current="page"] {background:#323232;color:#fff;}
+.mobile-nav a[aria-current="page"] {border-left:2px solid #eee;padding-left:14px;}
+.mobile-nav a:last-child {background:#0067b8;text-align:center;font-weight:600;margin-top:10px;}
+
+/* Introduction uses the original B1 pixels directly. No overlay or color filter. */
+.intro {background:#202020 url('Backgrounds/B1.png') center center /cover no-repeat!important;}
+.intro:before,.intro:after,.intro-preview:before {content:none!important;display:none!important;}
+.intro-inner {max-width:none;}
+.intro-layout {grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr);gap:clamp(40px,4.7vw,78px);
+  min-height:630px;padding:91px 0 68px;}
+.intro-content {max-width:580px;}
+.intro-eyebrow {margin-bottom:25px;gap:10px;letter-spacing:.13em;color:#efefef;font-size:10px;font-weight:700;
+  text-shadow:0 2px 10px rgba(0,0,0,.72);}
+.intro-eyebrow-square {width:7px;height:7px;background:#fff;box-shadow:0 0 0 3px rgba(255,255,255,.18);}
+.intro-build-mini {display:inline-block;border-left:1px solid rgba(255,255,255,.50);padding-left:12px;margin-left:5px;color:#e5e5e5;}
+.intro h1 {font-size:clamp(54px,5.05vw,76px);line-height:1.045;letter-spacing:-.057em;font-weight:600;
+  margin-bottom:24px;max-width:650px;text-wrap:balance;text-shadow:0 3px 22px rgba(0,0,0,.58);}
+.intro h1 span {color:#e7e7e7;}
+.intro-description {font-size:17px;line-height:1.66;color:#f0f0f0;max-width:470px;margin-bottom:29px;
+  text-shadow:0 2px 14px rgba(0,0,0,.68);}
+.intro-actions {gap:11px;}
+.intro-actions .button {padding:12px 21px;min-height:46px;border-radius:4px;font-size:13px;}
+.intro-primary {box-shadow:none!important;}
+.intro-secondary {background:rgba(20,20,20,.46);border-color:rgba(255,255,255,.63);}
+.intro-secondary:hover {background:rgba(45,45,45,.70);}
+.intro-meta {font-size:12px;color:#efefef;margin-top:23px;text-shadow:0 1px 12px rgba(0,0,0,.7);}
+.intro-meta svg {width:15px;height:15px;}
+.intro-monitor {padding:8px 8px 0;transform:none;border:1px solid #555;border-bottom-width:0;border-radius:16px 16px 5px 5px;
+  background:linear-gradient(180deg,#2d2d2d 0%,#111 20%,#181818 72%,#2c2c2c 100%);
+  box-shadow:0 22px 60px rgba(0,0,0,.46),0 2px 10px rgba(0,0,0,.25),inset 0 1px rgba(255,255,255,.15);}
+.intro-screen {border:none;border-radius:8px 8px 2px 2px;box-shadow:none;}
+.intro-screen:before {top:7px;width:6px;height:6px;}
+.intro-monitor:after {display:none;}
+.intro-monitor-chin {height:11px;background:linear-gradient(180deg,#1d1d1d,#242424);}
+.intro-stand {height:116px;}
+.intro-stand-neck {width:80%;height:8px;background:linear-gradient(180deg,#2a2a2a,#151515);}
+.intro-stand-foot {width:112%;left:-6%;height:58px;background:linear-gradient(180deg,#505050 0%,#2b2b2b 36%,#121212 100%);}
+.intro-stand-shadow {opacity:.7;}
+.intro-preview-caption {font-size:12px;color:#f0f0f0;margin-top:8px;text-shadow:0 2px 8px #000;}
+.intro-feature-strip {background:rgba(23,23,23,.73);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);
+  border:1px solid rgba(255,255,255,.16);border-radius:8px;box-shadow:0 7px 24px rgba(0,0,0,.23);margin-bottom:32px;}
+.intro-feature {padding:19px 27px;gap:14px;}
+.intro-feature-icon {width:35px;height:35px;border-radius:5px;border-color:rgba(255,255,255,.12);background:rgba(255,255,255,.06);}
+.intro-feature strong {font-size:13px;}
+.intro-feature small {font-size:11px;color:#d1d1d1;}
+
+/* Pure B2 background, release content sits in translucent standalone surfaces. */
+.update-board {background:#1d1d1d url('Backgrounds/B2.png') center /cover no-repeat!important;
+  padding:112px 0 121px;}
+.update-board:before,.update-board:after {display:none!important;content:none!important;}
+.update-board-heading {max-width:850px;margin-bottom:45px;text-shadow:0 2px 12px rgba(0,0,0,.85);}
+.update-board-kicker {letter-spacing:.12em;font-size:11px;margin-bottom:17px;}
+.update-board h2 {font-size:clamp(42px,4.05vw,56px);font-weight:600;letter-spacing:-.049em;margin-bottom:16px;}
+.update-board-subtitle {max-width:720px;font-size:16px;line-height:1.63;color:#f3f3f3;}
+.updates-grid {gap:18px;}
+.update-card {min-height:385px;padding:31px 34px 30px;border-radius:8px;
+  background:rgba(22,22,22,.76);border:1px solid rgba(255,255,255,.29);
+  box-shadow:0 17px 40px rgba(0,0,0,.25);backdrop-filter:blur(30px);-webkit-backdrop-filter:blur(30px);}
+.update-card:hover {transform:translateY(-2px);background:rgba(33,33,33,.81);box-shadow:0 20px 45px rgba(0,0,0,.32);}
+.update-tag {padding:6px 12px;border-radius:4px;background:rgba(255,255,255,.10);font-size:12px;}
+.update-card .release-state {margin:17px 0 0;font-size:10px;letter-spacing:.095em;color:#e7e7e7;}
+.update-card h3 {font-size:28px;font-weight:600;margin:14px 0 9px;letter-spacing:-.035em;}
+.update-card .build-code {font-size:12px;color:#d1d1d1;margin:0 0 18px;}
+.update-card p {font-size:15px;line-height:1.67;margin-bottom:20px;color:#f1f1f1;}
+.update-card .update-highlights {gap:7px;margin-bottom:23px;}
+.update-card .update-highlights li {font-size:11px;padding:5px 9px;border-radius:3px;background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.19);}
+.update-card-link {min-height:31px;font-size:13px;border:0;text-decoration:underline;text-decoration-color:rgba(255,255,255,.6);
+  text-underline-offset:5px;}
+.update-card-link:hover {text-decoration-color:#fff;}
+
+/* More product-like, less pricing-template, same free product information. */
+.pricing {padding:108px 0 116px;background:#1c1c1c;}
+.pricing-layout {grid-template-columns:.84fr 1.16fr;gap:clamp(45px,6.4vw,94px);}
+.pricing-copy .section-kicker {letter-spacing:.12em;color:#d7d7d7;font-size:11px;}
+.pricing-copy h2 {font-size:clamp(37px,3.55vw,52px);font-weight:600;letter-spacing:-.048em;}
+.pricing-copy p {font-size:16px;line-height:1.7;max-width:440px;color:#d2d2d2;}
+.pricing-panel {background:#272727;border-color:#414141;border-radius:8px;padding:37px 40px;box-shadow:0 15px 35px rgba(0,0,0,.17);}
+.plan-label {font-size:13px;}
+.price {font-size:68px;font-weight:600;}
+.panel-line {border-color:#464646;}
+.included {grid-template-columns:repeat(2,minmax(0,1fr));gap:17px 21px;}
+.included li {font-size:13px;color:#ececec;}
+.pricing-panel .button {width:100%;}
+.project-note {background:#202020;padding:30px 0;}
+.footer {background:#151515;padding:33px 0;}
+
+/* Interior pages: neutral atmospheric side, systematic editorial hierarchy. */
+.page-shell {background:#1a1a1a;}
+.page-hero {background:#202020 url('Backgrounds/B1.png') right center /cover no-repeat;border-bottom:1px solid #3d3d3d;}
+/* Unlike the hero background, this is local to the text/card area, not a full-image tint. */
+.page-hero-inner {padding:75px 0 71px;}
+.breadcrumb {font-size:12px;color:#d2d2d2;margin-bottom:30px;}
+.page-kicker {font-size:10px;letter-spacing:.13em;margin-bottom:19px;}
+.page-kicker::before {width:14px;}
+.kicker-separator {color:#969696;}
+.page-hero h1 {font-size:clamp(50px,5.5vw,76px);letter-spacing:-.052em;font-weight:600;line-height:1.08;
+  margin-bottom:20px;text-shadow:0 2px 16px rgba(0,0,0,.45);}
+.page-lead {font-size:17px;line-height:1.67;color:#ebebeb;max-width:760px;text-shadow:0 1px 12px rgba(0,0,0,.75);}
+.section-area {padding:77px 0 95px;}
+.section-label {letter-spacing:.11em;font-size:10px;color:#b9b9b9;}
+.section-title {font-size:clamp(28px,3.1vw,39px);font-weight:600;letter-spacing:-.039em;}
+.section-subtitle {color:#c1c1c1;}
+.panel {background:#252525;border:1px solid #414141;border-radius:7px;}
+.pill {padding:6px 10px;border-color:#595959;border-radius:3px;background:#353535;color:#eee;font-size:11px;}
+
+/* Channel selection controls look like real Fluent choices; no neon, thick rings, fake gradients. */
+.channel-chooser {gap:12px;margin-top:36px;max-width:940px;}
+.channel-choice {min-height:91px;padding:20px 22px;background:rgba(32,32,32,.76);backdrop-filter:blur(14px);
+  border:1px solid rgba(255,255,255,.26);border-radius:5px;box-shadow:none;}
+.channel-choice:hover {background:rgba(52,52,52,.82);border-color:#b9b9b9;}
+.channel-choice[aria-selected="true"] {background:rgba(53,53,53,.95);border-color:#ebebeb;
+  box-shadow:inset 0 -2px #e9e9e9;}
+.choice-title {font-size:18px;}
+.choice-desc {font-size:12px;color:#ccc;}
+.selected-summary {background:#242424;border-color:#404040;padding:24px 27px;}
+.selected-summary .summary-title {font-size:26px;}
+.channel-flow {gap:9px;padding-bottom:30px;}
+.flow-node {border-radius:4px;background:#303030;border-color:#535353;font-size:12px;}
+.flow-arrow {color:#a8a8a8;}
+.channel-cards {gap:14px;}
+.stage {min-height:232px;padding:27px 28px 25px;border-radius:5px;}
+.stage h3 {font-size:24px;}
+.stage p {font-size:14px;line-height:1.7;}
+.stage-release {background:#2a2a2a;border-color:#595959;}
+.channel-principle {border-color:#393939;}
+
+/* New editorial feature image uses the real I1 screenshot and graceful CSS fallback. */
+.news-feature {grid-template-columns:minmax(0,1.25fr) minmax(0,.75fr);gap:17px;align-items:stretch;}
+.lead-article {padding:0!important;overflow:hidden;border-radius:7px;display:flex;flex-direction:column;}
+.news-article-art {position:relative;width:100%;aspect-ratio:16 / 6;min-height:175px;overflow:hidden;
+  background:#252525;border-bottom:1px solid #424242;}
+.news-article-art img {position:relative;z-index:2;display:block;width:100%;height:100%;object-fit:cover;object-position:center;}
+.news-article-art img[hidden] {display:none!important;}
+.news-art-fallback {position:absolute;inset:0;z-index:1;display:flex;align-items:end;justify-content:space-between;padding:25px 30px;
+  background:#202020 url('Backgrounds/B2.png') center/cover no-repeat;color:#fff;text-shadow:0 2px 10px #111;}
+.news-art-label {font-size:12px;font-weight:650;letter-spacing:.08em;}
+.news-art-version {font-size:72px;font-weight:650;letter-spacing:-.06em;line-height:.83;}
+.news-lead-body {display:flex;flex-direction:column;align-items:flex-start;padding:29px 33px 34px;flex:1;}
+.lead-article h2 {font-size:clamp(28px,3vw,37px);margin:19px 0 14px;}
+.lead-article p {font-size:14px;line-height:1.75;max-width:none;}
+.lead-article .article-date {font-size:12px;color:#bbb;}
+.lead-article .text-link {margin-top:auto;padding-top:18px;}
+.news-side {padding:31px 31px 33px;}
+.news-side h2 {font-size:27px;margin-top:19px;}
+.news-side p {font-size:14px;line-height:1.72;}
+.news-side .article-date {margin-top:10px;font-size:12px;}
+.news-side .text-link {font-size:13px;}
+.dev-feature-grid {gap:12px;}
+.dev-feature {min-height:190px;padding:23px 24px;border-radius:5px;}
+.dev-feature h3 {font-size:18px;margin-top:19px;}
+.dev-feature p {font-size:13px;}
+.release-row {grid-template-columns:156px minmax(0,1fr) 20px;padding:27px 2px;}
+.news-note {background:#222;border-color:#444;border-radius:5px;}
+
+@media (min-width:1440px) {
+  .intro-layout {min-height:700px;}
+  .intro-preview {width:calc(100% + 22px);}
+}
+@media (max-width:1180px) {
+  .container,.page-container {width:min(calc(100% - 76px),var(--page-width));}
+  .header-inner {gap:19px;}
+  .intro-layout {gap:35px;min-height:0;padding:83px 0 66px;}
+  .intro h1 {font-size:clamp(50px,5.2vw,66px);}
+  .intro-description {font-size:16px;}
+  .intro-feature {padding:18px 18px;}
+}
+@media (max-width:960px) {
+  .desktop-nav {display:none;}
+  .menu-toggle {display:inline-flex;margin-left:auto;}
+  .header-cta {margin-left:0;}
+  .mobile-nav:not([hidden]) {display:block;position:absolute;inset:100% 0 auto;}
+  .intro-layout {grid-template-columns:1fr;gap:40px;padding:75px 0 60px;}
+  .intro-content {text-align:center;max-width:710px;margin:auto;}
+  .intro-eyebrow,.intro-actions,.intro-meta {justify-content:center;}
+  .intro-description {max-width:590px;margin-inline:auto;}
+  .intro h1 {font-size:clamp(53px,7vw,72px);}
+  .intro-preview {width:min(100%,660px);margin:auto;}
+  .pricing-layout {grid-template-columns:1fr;gap:42px;max-width:720px;margin:auto;}
+  .pricing-copy {text-align:center;}
+  .pricing-copy p {margin-inline:auto;}
+  .news-feature {grid-template-columns:1fr 1fr;}
+  .news-art-version {font-size:58px;}
+}
+@media (max-width:820px) {
+  .site-header {height:62px;}
+  .container,.page-container {width:min(calc(100% - 48px),var(--page-width));}
+  .intro-layout {padding:69px 0 53px;}
+  .intro-feature {padding:16px 12px;gap:9px;}
+  .intro-feature-icon {width:32px;height:32px;}
+  .update-board,.pricing {padding-block:88px 96px;}
+  .updates-grid {grid-template-columns:1fr;}
+  .update-card {min-height:0;}
+  .news-feature {grid-template-columns:1fr;}
+  .news-article-art {aspect-ratio:16/7;}
+  .page-hero-inner {padding:63px 0 61px;}
+  .page-hero h1 {font-size:clamp(51px,7vw,65px);}
+}
+@media (max-width:580px) {
+  .container,.page-container {width:calc(100% - 38px);}
+  .header-inner {gap:8px;}
+  .brand-mark {height:25px;width:25px;}
+  .brand-name {font-size:15px;}
+  .brand-divider {display:none;}
+  .header-cta {display:none;}
+  .intro-layout {padding:59px 0 47px;gap:36px;}
+  .intro-eyebrow {justify-content:center;font-size:9px;letter-spacing:.08em;flex-wrap:wrap;margin-bottom:21px;}
+  .intro-build-mini {padding-left:9px;margin-left:0;}
+  .intro h1 {font-size:clamp(42px,11.1vw,59px);margin-bottom:19px;line-height:1.075;}
+  .intro-description {font-size:15px;line-height:1.7;margin-bottom:24px;}
+  .intro-actions {align-items:stretch;flex-direction:column;}
+  .intro-actions .button {width:100%;}
+  .intro-monitor {padding:5px 5px 0;border-radius:8px 8px 5px 5px;}
+  .intro-preview-caption {font-size:11px;}
+  .intro-feature-strip {grid-template-columns:1fr;margin-bottom:19px;}
+  .intro-feature {padding:13px 18px;gap:12px;}
+  .intro-feature + .intro-feature {border-left:0;border-top:1px solid rgba(255,255,255,.17);}
+  .update-board,.pricing {padding-block:76px 82px;}
+  .update-board-heading {margin-bottom:33px;}
+  .update-board h2 {font-size:clamp(35px,9vw,45px);}
+  .update-board-subtitle {font-size:14px;}
+  .update-card {padding:26px 24px;}
+  .update-card h3 {font-size:24px;}
+  .update-card p {font-size:14px;}
+  .pricing-panel {padding:26px 23px;}
+  .included {grid-template-columns:1fr;}
+  .page-hero-inner {padding:41px 0 49px;}
+  .page-hero h1 {font-size:clamp(41px,11vw,56px);}
+  .page-lead {font-size:15px;}
+  .channel-chooser {grid-template-columns:1fr;gap:10px;}
+  .channel-choice {min-height:73px;padding:16px 18px;}
+  .channel-cards {grid-template-columns:1fr;}
+  .stage {min-height:0;}
+  .selected-summary {padding:22px 19px;}
+  .news-article-art {min-height:155px;aspect-ratio:16/8;}
+  .news-art-version {font-size:51px;}
+  .news-lead-body,.news-side {padding:26px 23px 29px;}
+  .lead-article h2 {font-size:30px;}
+  .dev-feature-grid {grid-template-columns:1fr;}
+  .dev-feature {min-height:0;}
+  .release-row {grid-template-columns:1fr 20px;}
+}
+@media (prefers-reduced-motion:reduce){.update-card:hover {transform:none;}}
+
+
+/* WebWindows background composition — B1 through B4.
+   The actual PNGs are supplied by the project owner in Backgrounds/.
+   Images are never filtered or covered by a section-wide color overlay;
+   readability comes from local text surfaces, glass cards and text shadows. */
+:root {
+  --wallpaper-intro: url("Backgrounds/B1.png");
+  --wallpaper-update: url("Backgrounds/B2.png");
+  --wallpaper-channel: url("Backgrounds/B3.png");
+  --wallpaper-news: url("Backgrounds/B4.png");
+}
+/* B1: introduction, unfiltered and entirely unobstructed outside components. */
+#site-home .intro {
+  background: #202020 var(--wallpaper-intro) center / cover no-repeat;
+}
+#site-home .intro::before, #site-home .intro::after {
+  content: none !important;
+  display: none !important;
+}
+#site-home .intro-content {
+  text-shadow: 0 2px 17px rgba(0,0,0,.8), 0 1px 4px rgba(0,0,0,.7);
+}
+#site-home .intro-actions, #site-home .intro-feature-strip {
+  text-shadow: none;
+}
+/* B2: update board, pure image; acrylic is localized to release cards. */
+#site-home .update-board {
+  background: #1b1b1b var(--wallpaper-update) center / cover no-repeat !important;
+}
+#site-home .update-board::before, #site-home .update-board::after {
+  content: none !important;
+  display: none !important;
+}
+/* B3 is reused on Home as the backdrop to the free product section.
+   The image remains visible in the whitespace around the two content panels. */
+#site-home .pricing {
+  background: #1d1d1d var(--wallpaper-channel) center / cover no-repeat;
+}
+#site-home .pricing-copy {
+  background: rgba(25,25,25,.77);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,.21);
+  border-radius: 8px;
+  padding: 36px 36px 38px;
+  box-shadow: 0 16px 38px rgba(0,0,0,.18);
+}
+#site-home .pricing-copy p {color: #ededed;}
+#site-home .pricing-panel {
+  background: rgba(33,33,33,.9);
+  border: 1px solid rgba(255,255,255,.22);
+  -webkit-backdrop-filter: blur(22px);
+  backdrop-filter: blur(22px);
+}
+/* B3/B4 give Channel Insights and News distinct identities without new files. */
+#site-channels .page-hero {
+  background: #202020 var(--wallpaper-channel) center / cover no-repeat;
+}
+#site-news .page-hero {
+  background: #202020 var(--wallpaper-news) center / cover no-repeat;
+}
+/* Only the text headings have an acrylic surface. No whole-wallpaper tint. */
+.wallpaper-heading {
+  width: fit-content;
+  max-width: 830px;
+  padding: 27px 31px 30px;
+  margin: -12px 0 27px -31px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,.2);
+  background: rgba(27,27,27,.77);
+  -webkit-backdrop-filter: blur(19px);
+  backdrop-filter: blur(19px);
+  box-shadow: 0 10px 36px rgba(0,0,0,.21);
+}
+.wallpaper-heading .breadcrumb { margin-bottom: 25px; }
+.wallpaper-heading h1 { margin-bottom: 16px; }
+.wallpaper-heading .page-lead { color: #f2f2f2; text-shadow: none; }
+/* B1 also appears in the development philosophy band as a contrasting detail. */
+#site-channels .channel-principle {
+  background: #212121 var(--wallpaper-intro) center / cover no-repeat;
+  border: 1px solid rgba(255,255,255,.24);
+  border-radius: 8px;
+  padding: 28px;
+  gap: 20px;
+}
+#site-channels .channel-principle > div,
+#site-channels .channel-principle > ul {
+  min-width: 0;
+  padding: 26px 29px;
+  margin: 0;
+  background: rgba(23,23,23,.83);
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 6px;
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+}
+#site-channels .channel-principle li {border-color: rgba(255,255,255,.17);}
+/* News combines B4 for the headline with B3 as the development-topic backdrop. */
+#site-news #news-features {
+  background: #1d1d1d var(--wallpaper-channel) center / cover no-repeat;
+}
+#site-news #news-features .section-heading-row {
+  display: inline-flex;
+  border-radius: 7px;
+  padding: 20px 27px 22px;
+  background: rgba(23,23,23,.84);
+  border: 1px solid rgba(255,255,255,.17);
+  -webkit-backdrop-filter: blur(15px);
+  backdrop-filter: blur(15px);
+  margin-bottom: 28px;
+}
+#site-news #news-features .section-heading-row .section-subtitle {color: #f0f0f0;}
+#site-news #news-features .dev-feature {
+  background: rgba(32,32,32,.88);
+  border-color: rgba(255,255,255,.21);
+  -webkit-backdrop-filter: blur(15px);
+  backdrop-filter: blur(15px);
+}
+@media (max-width: 960px) {
+  #site-home .pricing-copy {text-align:center;}
+  .wallpaper-heading {max-width: min(100%, 830px);margin-left:0;}
+  #site-channels .channel-principle {grid-template-columns:1fr;}
+}
+@media (max-width: 580px) {
+  #site-home .pricing-copy {padding:27px 23px;}
+  .wallpaper-heading {padding:23px 21px 25px;margin-top:0;}
+  #site-channels .channel-principle {padding:12px;gap:11px;}
+  #site-channels .channel-principle > div,
+  #site-channels .channel-principle > ul {padding:20px 17px;}
+  #site-news #news-features .section-heading-row {padding:20px 19px;}
+}
+
+
+/* Open editorial layout: artwork first, containers only when needed for legibility. */
+/* Preserve untinted B1/B2/B3/B4 assets throughout. */
+#site-home .intro-feature-strip {
+  background:transparent; border:0; border-top:1px solid rgba(255,255,255,.5);
+  border-radius:0; backdrop-filter:none; -webkit-backdrop-filter:none;
+  box-shadow:none; margin:0 0 31px; padding-top:8px;
+}
+#site-home .intro-feature {padding:15px 23px 16px;}
+#site-home .intro-feature:first-child {padding-left:0;}
+#site-home .intro-feature:last-child {padding-right:0;}
+#site-home .intro-feature + .intro-feature {border-left:1px solid rgba(255,255,255,.33);}
+#site-home .intro-feature-icon {border:0;background:none;width:25px;height:30px;}
+#site-home .intro-feature-icon svg {width:23px;height:23px;}
+#site-home .intro-feature strong,#site-home .intro-feature small {text-shadow:0 1px 9px #000;}
+
+/* I2 is a clean, borderless editorial desktop showcase on Home. */
+.desktop-gallery {background:#1b1b1b;padding:91px 0 96px;}
+.gallery-layout {display:grid;grid-template-columns:minmax(0,.73fr) minmax(0,1.27fr);gap:clamp(35px,6vw,88px);align-items:center;}
+.gallery-copy {min-width:0;}
+.gallery-copy .section-label {margin-bottom:19px;}
+.gallery-copy h2 {font-size:clamp(34px,3.25vw,47px);line-height:1.12;font-weight:600;letter-spacing:-.045em;margin:0 0 21px;max-width:400px;}
+.gallery-copy p {font-size:16px;line-height:1.75;color:#c6c6c6;max-width:390px;margin:0 0 27px;}
+.gallery-link {font-size:14px;font-weight:600;color:#eee;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:6px;}
+.gallery-link:hover {color:#fff;text-decoration-color:#fff;}
+.gallery-link span {display:inline-block;margin-left:9px;transition:transform .16s;}
+.gallery-link:hover span {transform:translateX(4px);}
+.gallery-figure {min-width:0;margin:0;}
+.gallery-visual {position:relative;aspect-ratio:16/9;overflow:hidden;background:#242424;box-shadow:0 23px 54px rgba(0,0,0,.32);}
+.gallery-visual img {position:relative;display:block;width:100%;height:100%;object-fit:contain;background:#191919;}
+.gallery-visual img[hidden] {display:none!important;}
+.gallery-fallback {position:absolute;inset:0;display:flex;gap:9px;flex-direction:column;align-items:center;justify-content:center;color:#e5e5e5;font-size:16px;background:#232323;text-align:center;}
+.gallery-fallback span {font-size:12px;color:#a9a9a9;}
+.gallery-figure figcaption {margin-top:13px;text-align:right;color:#aaa;font-size:12px;}
+
+/* Home Pricing on B3: one text-and-benefits composition, not two stacked cards. */
+#site-home .pricing-layout {grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr);gap:clamp(48px,7vw,110px);}
+#site-home .pricing-copy {
+  padding:0; margin:0; background:transparent; border:0;box-shadow:none;
+  backdrop-filter:none;-webkit-backdrop-filter:none; border-radius:0;
+  text-shadow:0 2px 14px rgba(0,0,0,.94),0 1px 3px #000;
+}
+#site-home .pricing-panel {
+  padding:8px 0 0 38px;margin:0;border:0;border-left:1px solid rgba(255,255,255,.63);
+  border-radius:0;background:transparent;box-shadow:none;
+  backdrop-filter:none;-webkit-backdrop-filter:none;
+  text-shadow:0 2px 10px rgba(0,0,0,.95);
+}
+#site-home .pricing-panel .button {width:auto;text-shadow:none;}
+#site-home .pricing-panel .panel-line {border-color:rgba(255,255,255,.45);}
+#site-home .pricing-panel .plan-label {margin-bottom:16px;}
+#site-home .pricing-panel .price-note,#site-home .pricing-panel .included li {color:#f6f6f6;}
+
+/* Wallpaper headings: no acrylic title boxes, just type directly on the image. */
+#site-channels .wallpaper-heading,#site-news .wallpaper-heading {
+  max-width:810px;width:auto;margin:0 0 24px;padding:0;border:0;border-radius:0;
+  background:transparent;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none;
+  text-shadow:0 2px 19px rgba(0,0,0,.95),0 1px 3px #000;
+}
+#site-channels .wallpaper-heading .page-lead,#site-news .wallpaper-heading .page-lead {text-shadow:0 2px 13px #000;color:#f5f5f5;}
+#site-channels .wallpaper-heading .breadcrumb,#site-news .wallpaper-heading .breadcrumb {text-shadow:0 1px 8px #000;}
+#site-channels .page-hero,#site-news .page-hero {background-attachment:scroll;}
+
+/* Channel choice: slim selection bars instead of two bordered product cards. */
+#site-channels .channel-chooser {gap:25px;max-width:850px;margin-top:25px;}
+#site-channels .channel-choice,
+#site-channels .channel-choice:hover,
+#site-channels .channel-choice[aria-selected="true"] {
+  min-height:74px;padding:12px 24px 13px 0;border:0;border-bottom:2px solid rgba(255,255,255,.55);
+  border-radius:0;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none;
+  background:transparent;text-shadow:0 2px 12px #000;
+}
+#site-channels .channel-choice[aria-selected="true"] {border-bottom-color:#fff;}
+#site-channels .channel-choice:hover {border-bottom-color:rgba(255,255,255,.9);}
+#site-channels .channel-choice .choice-desc {color:#ededed;}
+#site-channels .channel-choice .choice-radio {display:none;}
+/* Channel overview + phase grid: divide with whitespace and hairlines. */
+#site-channels .selected-summary {
+  padding:0 0 20px;margin:0 0 20px;background:transparent;border:0;border-radius:0;
+  box-shadow:none;backdrop-filter:none;
+}
+#site-channels .selected-flag {border:0;background:none;letter-spacing:.09em;color:#c6c6c6;}
+#site-channels .channel-cards {gap:23px 25px;}
+#site-channels .stage,#site-channels .stage-release {
+  padding:24px 6px 18px 0;min-height:0;border:0;border-top:1px solid #626262;
+  border-radius:0;background:transparent;box-shadow:none;
+  backdrop-filter:none;-webkit-backdrop-filter:none;
+}
+#site-channels .stage-top {gap:14px;}
+#site-channels .stage .pill {padding:0;border:0;background:transparent;color:#bfbfbf;}
+#site-channels .stage h3 {margin-top:17px;}
+#site-channels .stage p {max-width:340px;}
+#site-channels .stage small {color:#a6a6a6;}
+#site-channels .flow-node {padding:0;border:0;background:transparent;color:#cfcfcf;}
+#site-channels .channel-flow {padding:9px 0 34px;}
+/* Remove the three-tier inset containers around development philosophy. */
+#site-channels .channel-principle {
+  background:#202020 url('Backgrounds/B1.png') center/cover no-repeat;
+  border:0;border-radius:0;padding:33px 36px;gap:clamp(25px,5vw,72px);
+}
+#site-channels .channel-principle > div,#site-channels .channel-principle > ul {
+  padding:0;margin:0;background:transparent;border:0;border-radius:0;
+  backdrop-filter:none;-webkit-backdrop-filter:none;
+  text-shadow:0 2px 12px #000,0 1px 3px #000;
+}
+#site-channels .channel-principle .section-label,#site-channels .channel-principle p,#site-channels .channel-principle li {color:#f1f1f1;}
+#site-channels .channel-principle li {border-color:rgba(255,255,255,.65);}
+
+/* News in editorial columns, rather than two cards containing other cards. */
+#site-news .news-feature {grid-template-columns:minmax(0,1.18fr) minmax(0,.82fr);gap:clamp(25px,4vw,68px);align-items:start;}
+#site-news .lead-article,#site-news .news-side {
+  background:transparent;border:0;border-radius:0;box-shadow:none;overflow:visible;
+}
+#site-news .news-article-art {border:0;aspect-ratio:16/9;min-height:0;background:#222;}
+#site-news .news-article-art img {object-fit:contain;background:#202020;}
+#site-news .news-lead-body {padding:26px 0 0;}
+#site-news .news-side {padding:9px 0 0 29px;border-left:1px solid #525252;}
+#site-news .news-side .pill,#site-news .news-lead-body .pill {background:transparent;padding:0;border:0;color:#cbcbcb;}
+#site-news .news-side h2 {margin-top:19px;}
+#site-news #news-features .section-heading-row {
+  display:block;width:auto;max-width:830px;padding:0;margin:0 0 36px;
+  background:transparent;border:0;border-radius:0;
+  backdrop-filter:none;-webkit-backdrop-filter:none;
+  text-shadow:0 2px 15px #000;
+}
+#site-news #news-features .section-heading-row .section-subtitle {color:#f3f3f3;}
+#site-news #news-features .dev-feature-grid {gap:15px 29px;}
+#site-news #news-features .dev-feature {
+  background:transparent;border:0;border-top:1px solid rgba(255,255,255,.78);
+  border-radius:0;padding:18px 2px 27px 0;min-height:0;
+  backdrop-filter:none;-webkit-backdrop-filter:none;
+  text-shadow:0 2px 12px #000,0 1px 3px #000;
+}
+#site-news #news-features .dev-feature h3 {margin-top:14px;}
+#site-news #news-features .dev-feature p {color:#f0f0f0;}
+#site-news #news-features .dev-feature .dev-number {color:#dedede;}
+#site-news #news-features .news-context {color:#f4f4f4;text-shadow:0 2px 13px #000;}
+
+/* The two release panels stay: here blur is a functional reading surface over B2. */
+#site-home .update-card {background:rgba(23,23,23,.71);border-color:rgba(255,255,255,.23);}
+#site-home .update-card .update-highlights li {border:0;background:rgba(255,255,255,.10);}
+
+@media(max-width:1000px) {
+  .gallery-layout {grid-template-columns:1fr;gap:30px;}
+  .gallery-copy h2,.gallery-copy p {max-width:650px;}
+  #site-home .pricing-layout {grid-template-columns:1fr;gap:30px;}
+  #site-home .pricing-panel {border-left:0;border-top:1px solid rgba(255,255,255,.65);padding:25px 0 0;}
+  #site-home .pricing-copy {text-align:left;}
+  #site-home .pricing-copy p {margin-inline:0;}
+}
+@media(max-width:820px) {
+  .desktop-gallery {padding:75px 0 82px;}
+  #site-home .intro-feature-strip {grid-template-columns:repeat(3,minmax(0,1fr));}
+  #site-home .intro-feature {gap:9px;padding:14px 12px;}
+  #site-home .intro-feature:first-child {padding-left:0;}
+  #site-home .intro-feature-icon {flex:0 0 20px;width:20px;}
+  #site-channels .channel-principle {grid-template-columns:1fr;}
+  #site-news .news-feature {grid-template-columns:1fr;gap:35px;}
+  #site-news .news-side {padding:25px 0 0;border-left:0;border-top:1px solid #525252;}
+}
+@media(max-width:580px) {
+  #site-home .intro-feature-strip {grid-template-columns:1fr;margin-bottom:25px;}
+  #site-home .intro-feature,#site-home .intro-feature:first-child,#site-home .intro-feature:last-child {padding:10px 0;}
+  #site-home .intro-feature + .intro-feature {border-left:0;border-top:1px solid rgba(255,255,255,.3);}
+  #site-home .intro-feature-icon {width:28px;flex-basis:28px;}
+  .desktop-gallery {padding:63px 0 71px;}
+  .gallery-copy h2 {font-size:34px;}
+  .gallery-copy p {font-size:15px;}
+  #site-home .pricing-copy {padding:0;}
+  #site-home .pricing-panel {padding:24px 0 0;}
+  #site-home .pricing-panel .button {width:100%;}
+  #site-channels .wallpaper-heading,#site-news .wallpaper-heading {margin:0 0 20px;padding:0;}
+  #site-channels .channel-chooser {gap:12px;}
+  #site-channels .channel-choice {padding:12px 0;}
+  #site-channels .channel-principle {padding:24px 19px;}
+  #site-channels .channel-principle > div,#site-channels .channel-principle > ul {padding:0;}
+  #site-news #news-features .dev-feature-grid {grid-template-columns:1fr;}
+}
+
+
+/* Channel Insights: streamlined section navigation and a version × channel matrix. */
+#site-channels .insights-section {background:#1a1a1a;padding-top:62px;}
+#site-channels .insights-layout {display:grid;grid-template-columns:215px minmax(0,1fr);align-items:start;gap:clamp(36px,4vw,72px);}
+#site-channels .insights-sidebar {position:sticky;top:98px;min-width:0;border-right:1px solid #414141;padding:0 17px 18px 0;}
+#site-channels .insights-sidebar-title {font-size:10px;font-weight:700;letter-spacing:.11em;color:#bcbcbc;margin:7px 0 18px 11px;}
+#site-channels .insights-nav {display:flex;flex-direction:column;gap:5px;}
+#site-channels .insights-nav a {position:relative;display:flex;align-items:center;gap:11px;min-height:44px;padding:11px 10px 11px 13px;color:#c9c9c9;font-size:13px;font-weight:500;line-height:1.25;text-decoration:none;border-radius:4px;transition:background .15s,color .15s;}
+#site-channels .insights-nav a svg {width:18px;height:18px;flex:none;}
+#site-channels .insights-nav a:hover,#site-channels .insights-nav a:focus-visible {background:#303030;color:#fff;}
+#site-channels .insights-nav a:focus-visible {outline:2px solid #dedede;outline-offset:2px;}
+#site-channels .insights-nav a[aria-current="page"] {background:#323232;color:#fff;font-weight:600;}
+#site-channels .insights-nav a[aria-current="page"]::before {content:"";position:absolute;left:0;top:10px;bottom:10px;width:3px;border-radius:3px;background:#dedede;}
+#site-channels .insights-nav-arrow {margin-left:auto;font-size:20px;font-weight:400;color:#9b9b9b;line-height:1;}
+#site-channels .insights-sidebar-hint {color:#999;font-size:11px;line-height:1.6;margin:25px 10px 0;}
+#site-channels .insights-main {min-width:0;}
+#site-channels .insights-panel[hidden] {display:none!important;}
+#site-channels .channel-chooser {max-width:none;margin:19px 0 32px;}
+#site-channels .channel-principle {margin-top:54px;}
+#site-channels .downloads-panel .section-subtitle {max-width:775px;}
+#site-channels .downloads-panel .section-title {margin:9px 0 15px;font-size:clamp(30px,3.3vw,42px);}
+#site-channels .download-legend {margin:28px 0 15px;display:flex;align-items:center;flex-wrap:wrap;gap:10px;color:#aaa;font-size:12px;}
+#site-channels .download-legend-mark {display:inline-block;width:7px;height:7px;border-radius:50%;background:#77c99e;}
+#site-channels .download-legend-separator {width:1px;height:13px;background:#555;margin:0 4px;}
+#site-channels .downloads-scroll {max-width:100%;overflow-x:auto;overflow-y:hidden;border-top:1px solid #777;border-bottom:1px solid #555;scrollbar-color:#626262 #222;}
+#site-channels .downloads-scroll:focus-visible {outline:2px solid #d0d0d0;outline-offset:2px;}
+#site-channels .downloads-table {width:100%;border-collapse:collapse;table-layout:fixed;min-width:760px;text-align:left;color:#fff;}
+#site-channels .downloads-table th,#site-channels .downloads-table td {padding:19px 12px;vertical-align:top;overflow-wrap:break-word;}
+#site-channels .downloads-table thead th {font-weight:600;color:#d7d7d7;font-size:12px;white-space:nowrap;padding-top:18px;padding-bottom:18px;border-bottom:1px solid #575757;}
+#site-channels .downloads-table tbody tr+tr {border-top:1px solid #404040;}
+#site-channels .downloads-table tbody th {font-size:18px;font-weight:650;letter-spacing:-.03em;}
+#site-channels .downloads-table tbody th strong {display:block;}
+#site-channels .downloads-table small {display:block;margin-top:10px;font-size:11px;line-height:1.5;font-weight:400;letter-spacing:0;color:#a8a8a8;}
+#site-channels .downloads-table td {font-size:12px;line-height:1.45;}
+#site-channels .download-empty {color:#b3b3b3;}
+#site-channels .download-action {display:inline-flex;align-items:center;gap:8px;font-weight:600;text-decoration:none;line-height:1.3;color:#fff;border-bottom:1px solid #d5d5d5;padding-bottom:3px;}
+#site-channels .download-action:hover {color:#b4ddff;border-bottom-color:#b4ddff;}
+#site-channels .download-table-hint {margin:12px 0 0;color:#979797;font-size:11px;}
+#site-channels .downloads-details {margin-top:40px;display:flex;gap:30px;justify-content:space-between;align-items:center;border-top:1px solid #484848;padding:25px 0 0;}
+#site-channels .downloads-details h3,#site-channels .downloads-notes h3 {font-size:19px;letter-spacing:-.02em;font-weight:600;margin:0 0 10px;}
+#site-channels .downloads-details p,#site-channels .downloads-notes p {color:#bfbfbf;font-size:13px;line-height:1.8;max-width:655px;margin:0;}
+#site-channels .download-more-link {display:inline-block;flex:none;text-decoration:none;color:#fff;font-size:13px;font-weight:600;border-bottom:1px solid #ddd;padding-bottom:4px;}
+#site-channels .download-more-link:hover {color:#b4ddff;border-color:#b4ddff;}
+#site-channels .downloads-notes {margin:45px 0 0;padding:25px 0 0;border-top:1px solid #414141;}
+@media(max-width:1060px){
+  #site-channels .insights-layout {grid-template-columns:185px minmax(0,1fr);gap:30px;}
+  #site-channels .insights-sidebar {padding-right:12px;}
+  #site-channels .downloads-details {align-items:flex-start;flex-direction:column;gap:16px;}
+}
+@media(max-width:760px){
+  #site-channels .insights-section {padding-top:32px;}
+  #site-channels .insights-layout {grid-template-columns:minmax(0,1fr);gap:30px;}
+  #site-channels .insights-sidebar {position:static;padding:0 0 14px;border-right:0;border-bottom:1px solid #4a4a4a;}
+  #site-channels .insights-sidebar-title {margin-left:0;margin-bottom:12px;}
+  #site-channels .insights-nav {flex-direction:row;gap:8px;}
+  #site-channels .insights-nav a {padding:11px 12px;flex:1;min-width:0;justify-content:center;}
+  #site-channels .insights-nav-arrow,#site-channels .insights-sidebar-hint {display:none;}
+  #site-channels .insights-nav a[aria-current="page"]::before {top:auto;bottom:0;height:2px;left:14px;right:14px;width:auto;}
+}
+@media(max-width:760px){
+  #site-channels .downloads-table thead th:first-child,
+  #site-channels .downloads-table tbody th {position:sticky;left:0;z-index:2;background:#1a1a1a;box-shadow:1px 0 0 #454545;}
+}
+@media(max-width:420px){
+  #site-channels .insights-nav a {font-size:12px;gap:6px;padding:10px 7px;}
+  #site-channels .insights-nav a svg {width:15px;height:15px;}
+  #site-channels .downloads-panel .section-title {font-size:29px;}
+  #site-channels .download-legend {font-size:11px;}
+}
+
+</style>
+</head>
+<body>
+<header class="site-header">
+<div class="container header-inner">
+<a aria-label="Windows 12 Web home" class="brand" href="#top">
+<span class="brand-mark">
+<span aria-hidden="true" class="brand-fallback"><i></i><i></i><i></i><i></i></span>
+<img alt="" onerror="this.hidden=true" src="Logo.png"/>
+</span>
+<span aria-hidden="true" class="brand-divider"></span>
+<span class="brand-name">WebWindows 12</span>
+</a>
+<nav aria-label="Main navigation" class="desktop-nav">
+<a data-view-nav="home" href="#updates">Update Board</a>
+<a data-view-nav="channels" href="#channel-insights">Channel Insights</a>
+<a data-view-nav="news" href="#news">News</a>
+<a href="https://github.com/Fppps/Win12?tab=readme-ov-file" rel="noopener noreferrer" target="_blank">Contributing</a>
+<a data-view-nav="home" href="#pricing">Pricing</a>
+<a data-view-nav="home" href="#notes">Notes</a>
+</nav>
+<a class="header-cta" href="https://fppps.github.io/Win12/update/update/index.html">Get started</a>
+<button aria-controls="mobile-menu" aria-expanded="false" aria-label="Open navigation menu" class="menu-toggle" id="mobile-menu-btn" type="button">
+<svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.7" viewbox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"></path></svg>
+</button>
+</div>
+<nav aria-label="Mobile navigation" class="mobile-nav" hidden="" id="mobile-menu">
+<a data-view-nav="home" href="#updates">Update Board</a>
+<a data-view-nav="channels" href="#channel-insights">Channel Insights</a>
+<a data-view-nav="news" href="#news">News</a>
+<a href="https://github.com/Fppps/Win12?tab=readme-ov-file" rel="noopener noreferrer" target="_blank">Contributing</a>
+<a data-view-nav="home" href="#pricing">Pricing</a>
+<a data-view-nav="home" href="#notes">Notes</a>
+<a href="https://fppps.github.io/Win12/update/update/index.html">Get started</a>
+</nav>
+</header>
+<div class="site-view" data-site-page="home" id="site-home"><main id="top">
+<!-- Immersive introduction: the site's existing Backgrounds/B1.png wallpaper. -->
+<section aria-labelledby="hero-title" class="intro">
+<div class="container intro-inner">
+<div class="intro-layout">
+<div class="intro-content">
+<div class="intro-eyebrow"><span aria-hidden="true" class="intro-eyebrow-square"></span> A WINDOWS-INSPIRED WEB DESKTOP <span class="intro-build-mini">VERSION 10H10</span></div>
+<h1 id="hero-title">Windows 12.<span>Made for the web.</span></h1>
+<p class="intro-description">The familiar feel of a Windows desktop, brought into your browser. Explore a modern interface, thoughtful details, and a community-driven project built around new ideas.</p>
+<div class="intro-actions">
+<a class="button button-primary intro-primary" href="https://fppps.github.io/Win12/update/update/index.html">Get started <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></a>
+<a class="button intro-secondary" href="https://github.com/Fppps/Win12?tab=readme-ov-file" rel="noopener noreferrer" target="_blank">Learn more <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></a>
+</div>
+<div class="intro-meta"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="m8 12 2.8 2.8L16 9.7"></path></svg><span>Free to explore</span><span aria-hidden="true" class="intro-meta-separator"></span><span>Community-driven</span></div>
+</div>
+<figure aria-label="Laptop showing the WebWindows 12 interface" class="intro-preview">
+<div class="intro-computer">
+<div class="intro-monitor">
+<div class="intro-screen">
+<div aria-hidden="true" class="intro-image-fallback">
+<span class="intro-fallback-mark"><i></i><i></i><i></i><i></i></span>
+<span class="intro-fallback-title">Desktop interface preview</span>
+<span class="intro-fallback-hint">Backgrounds/I1.png</span>
+</div>
+<img alt="Screenshot of the WebWindows 12 desktop shown on a laptop" class="intro-image" decoding="async" fetchpriority="high" onerror="this.hidden=true" src="Backgrounds/I1.png"/>
+</div>
+<div aria-hidden="true" class="intro-monitor-chin">
+<span class="intro-monitor-emblem"><i></i><i></i><i></i><i></i></span>
+<span class="intro-monitor-led"></span>
+</div>
+</div>
+<div aria-hidden="true" class="intro-stand">
+<div class="intro-stand-neck"></div>
+<div class="intro-stand-foot"></div>
+<div class="intro-stand-shadow"></div>
+</div>
+</div>
+<figcaption class="intro-preview-caption"><span aria-hidden="true" class="intro-caption-dot"></span> A closer look at WebWindows on a laptop</figcaption>
+</figure>
+</div>
+<div aria-label="Project highlights" class="intro-feature-strip">
+<div class="intro-feature"><span class="intro-feature-icon"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" viewbox="0 0 24 24"><rect height="16" rx="2" width="18" x="3" y="4"></rect><path d="M3 9h18M8 6.5h.01M11 6.5h.01"></path></svg></span><span><strong>Made for the browser</strong><small>No installation to explore</small></span></div>
+<div class="intro-feature"><span class="intro-feature-icon"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" viewbox="0 0 24 24"><rect height="8" rx="1" width="8" x="3" y="3"></rect><rect height="8" rx="1" width="8" x="13" y="3"></rect><rect height="8" rx="1" width="8" x="3" y="13"></rect><rect height="8" rx="1" width="8" x="13" y="13"></rect></svg></span><span><strong>Windows-inspired UI</strong><small>Familiar desktop interactions</small></span></div>
+<div class="intro-feature"><span class="intro-feature-icon"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" viewbox="0 0 24 24"><path d="M21 7.5 12 3 3 7.5V16.5L12 21l9-4.5V7.5Z"></path><path d="m3 7.5 9 5 9-5M12 12.5V21"></path></svg></span><span><strong>Constantly evolving</strong><small>Discover what's new in updates</small></span></div>
+</div>
+</div>
+</section>
+<!-- Secondary desktop image: intentionally unboxed to let the screenshot speak. -->
+<section class="desktop-gallery" aria-labelledby="gallery-title" id="desktop-gallery">
+  <div class="container gallery-layout">
+    <div class="gallery-copy">
+      <div class="section-label">Desktop / View 02</div>
+      <h2 id="gallery-title">A closer look at the desktop.</h2>
+      <p>A second view of the WebWindows 12 interface, presented without an app window or extra decoration.</p>
+      <a class="gallery-link" href="#updates">Explore current updates <span aria-hidden="true">→</span></a>
+    </div>
+    <figure class="gallery-figure">
+      <div class="gallery-visual">
+        <div class="gallery-fallback" aria-hidden="true">Desktop preview <span>Backgrounds/I2.png</span></div>
+        <img src="Backgrounds/I2.png" alt="Second desktop screenshot of WebWindows 12" loading="lazy" decoding="async" onerror="this.hidden=true" />
+      </div>
+      <figcaption>WebWindows 12 · Desktop image 02</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section aria-labelledby="updates-heading" class="update-board" id="updates">
+<div class="container">
+<div class="update-board-heading">
+<div class="update-board-kicker">Updates and development</div>
+<h2 id="updates-heading">WebWindows 12 Update Board</h2>
+<p class="update-board-subtitle">A published 9H09 release and the current 10H10 development build. Explore what is available, what has changed, and what is still being refined.</p>
+</div>
+<div class="updates-grid">
+<article aria-labelledby="update-9h09" class="update-card">
+<span class="update-tag">9H09</span>
+<div class="release-state">Published release</div>
+<h3 id="update-9h09">9H09 · Build 269120</h3>
+<span class="build-code">Official GitHub release · October 7, 2026 · KD109</span>
+<p>9H09 introduced functional Updater Security and PIN protections alongside modern Mica styling, expanded Windows Security, and more consistent Windows-like UI.</p>
+<ul aria-label="9H09 highlights" class="update-highlights"><li>Updater Security</li><li>PIN &amp; sign-in controls</li><li>Mica refinements</li><li>Notifications</li></ul>
+<a class="update-card-link" href="https://github.com/Fppps/Win12/releases/tag/9H09_Build269120" rel="noopener noreferrer" target="_blank">More information <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></a>
+</article>
+<article aria-labelledby="update-10h10" class="update-card">
+<span class="update-tag">10H10</span>
+<div class="release-state">Development build · Available to explore</div>
+<h3 id="update-10h10">10H10 · Build 2610125</h3>
+<span class="build-code">2610125.beta-release · KD210 · No published release notes</span>
+<p>10H10 brings a redesigned interface, expanded Settings, deeper glass styling, context-menu customization, and updated Windows Update and Insider experiences.</p>
+<ul aria-label="10H10 highlights" class="update-highlights"><li>New Settings interface</li><li>HDR wallpaper lighting</li><li>Glass customization</li><li>Context menus</li></ul>
+<a class="update-card-link" href="#news">Read development news <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></a>
+</article>
+</div>
+</div>
+</section>
+<section aria-labelledby="pricing-heading" class="pricing" id="pricing">
+<div class="container pricing-layout">
+<div class="pricing-copy"><div class="section-kicker">Simple pricing</div><h2 id="pricing-heading">The full experience. No price tag.</h2><p>Windows 12 Web is free to explore. No paid tiers, subscriptions, or hidden fees—just a project made for everyone who's curious to try it.</p><a class="button button-secondary" href="https://github.com/Fppps/Win12?tab=readme-ov-file" rel="noopener noreferrer" target="_blank">Learn about the project <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></a></div>
+<div class="pricing-panel"><div class="plan-label"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.7" viewbox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M3 12h18M12 3c5 5 5 13 0 18M12 3c-5 5-5 13 0 18"></path></svg> Web Edition</div><div class="price">Free</div><div class="price-note">Unlimited access · $0</div><hr class="panel-line"/><div class="included-heading">What's included</div><ul class="included"><li><svg fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="m5 12 5 5L20 7"></path></svg>Unlimited access to web features</li><li><svg fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="m5 12 5 5L20 7"></path></svg>No hidden fees or subscriptions</li><li><svg fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="m5 12 5 5L20 7"></path></svg>An open, collaborative community</li><li><svg fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="m5 12 5 5L20 7"></path></svg>Ongoing project updates</li></ul><a class="button button-primary" href="https://fppps.github.io/Win12/update/update/index.html">Get started <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></a></div>
+</div>
+</section>
+<section aria-labelledby="notes-heading" class="project-note" id="notes"><div class="container project-note-inner"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" viewbox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v6m0-10h.01"></path></svg><div><h2 id="notes-heading">A note about this project</h2><p>Windows 12 Web is an independent, Windows-inspired web project and is not an official Microsoft product or affiliated with Microsoft. The interface image shown above is provided by the project creator. For project information, see the <a href="https://github.com/Fppps/Win12?tab=readme-ov-file" rel="noopener noreferrer" style="color:var(--accent);text-decoration:underline;text-underline-offset:3px" target="_blank">project repository</a>.</p></div></div></section>
+</main></div><div class="site-view" data-site-page="channels" hidden="" id="site-channels"><main class="page-shell">
+<section class="page-hero">
+<div class="page-container page-hero-inner">
+<div class="wallpaper-heading">
+<div class="breadcrumb"><a href="#top">Home</a><span class="chev">›</span><span>Channel Insights</span></div>
+<div class="page-kicker">Development and release channels</div>
+<h1>Channel Insights</h1>
+<p class="page-lead">Understand Experimental, Beta, Release Preview and Release—or compare available release links for 9H09 and 10H10.</p>
+</div>
+</div>
+</section>
+<section aria-label="Channel Insights sections" class="section-area insights-section" id="channels">
+<div class="page-container insights-layout">
+<aside class="insights-sidebar" aria-label="Channel Insights navigation">
+  <div class="insights-sidebar-title">CHANNEL INSIGHTS</div>
+  <nav class="insights-nav" aria-label="Insights sections">
+    <a href="#channel-insights" data-insights-nav="overview" aria-current="page">
+      <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/></svg>
+      <span>Channel overview</span><span class="insights-nav-arrow" aria-hidden="true">›</span>
+    </a>
+    <a href="#download-channels" data-insights-nav="downloads">
+      <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v11m-4-4 4 4 4-4"/><path d="M4 16v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></svg>
+      <span>Download channels</span><span class="insights-nav-arrow" aria-hidden="true">›</span>
+    </a>
+  </nav>
+  <p class="insights-sidebar-hint">Explore channel purposes and release access for 9H09 and 10H10.</p>
+</aside>
+<div class="insights-main">
+<div class="insights-panel" data-insights-section="overview" id="channel-overview">
+<div class="section-heading-row"><div><div class="section-label">How the channels work</div><h2 class="section-title" id="stages-title">From early ideas to a finished update</h2><p class="section-subtitle">Each channel represents a different level of refinement. Availability can vary by build, and descriptions below explain the channel purpose—not the publication status of individual builds.</p></div></div>
+<div aria-label="Choose a WebWindows release series" class="channel-chooser" role="tablist">
+<button aria-controls="channel-panel" aria-label="10H10 Release, Release Preview, Beta &amp; Experimental" aria-selected="true" class="channel-choice" data-version="10H10" id="tab-10h10" role="tab" tabindex="0" type="button"><span><span class="choice-title">10H10</span><span class="choice-desc">Release, Release Preview, Beta &amp; Experimental</span></span><span aria-hidden="true" class="choice-radio"></span></button>
+<button aria-controls="channel-panel" aria-label="9H09 Release, Release Preview, Beta &amp; Experimental" aria-selected="false" class="channel-choice" data-version="9H09" id="tab-9h09" role="tab" tabindex="-1" type="button"><span><span class="choice-title">9H09</span><span class="choice-desc">Release, Release Preview, Beta &amp; Experimental</span></span><span aria-hidden="true" class="choice-radio"></span></button>
+</div>
+<div aria-labelledby="tab-10h10" id="channel-panel" role="tabpanel" tabindex="0">
+<div class="selected-summary panel">
+<div><h3 class="summary-title"><span data-version-text="">10H10</span> channels</h3><p id="version-description">10H10 is currently represented here by development build 2610125.beta-release (KD210); this overview describes the stages, not four published downloads.</p></div>
+<span class="selected-flag">CHANNEL OVERVIEW</span>
+</div>
+<div aria-label="Development path" class="channel-flow">
+<span class="flow-node">Experimental</span><span aria-hidden="true" class="flow-arrow">→</span><span class="flow-node">Beta</span><span aria-hidden="true" class="flow-arrow">→</span><span class="flow-node">Release Preview</span><span aria-hidden="true" class="flow-arrow">→</span><span class="flow-node">Release</span>
+</div>
+<div class="channel-cards">
+<article class="stage panel"><div class="stage-top"><span class="pill">Earliest testing</span><span class="stage-index">01 / 04</span></div><h3>Experimental</h3><p>Early test builds for new UI. This channel is where ideas, layouts, and interactions are tried before they are ready for more refined use. Expect the most frequent changes.</p><small><span data-version-text="">10H10</span> · Experimentation</small></article>
+<article class="stage panel"><div class="stage-top"><span class="pill">UI refinement</span><span class="stage-index">02 / 04</span></div><h3>Beta</h3><p>More refined and functional UI. Features move beyond rough prototypes as usability, visual consistency, and working behavior receive closer attention.</p><small><span data-version-text="">10H10</span> · Refinement</small></article>
+<article class="stage panel"><div class="stage-top"><span class="pill">Final validation</span><span class="stage-index">03 / 04</span></div><h3>Release Preview</h3><p>Features are effectively final and nearly ready to ship. Only minor adjustments, polish, and last-minute fixes should be needed before general release.</p><small><span data-version-text="">10H10</span> · Final checks</small></article>
+<article class="stage panel stage-release"><div class="stage-top"><span class="pill">Public version</span><span class="stage-index">04 / 04</span></div><h3>Release</h3><p>The completed update prepared for general use, after progressing through testing and final review. Release builds represent the finished version of the update.</p><small><span data-version-text="">10H10</span> · Finished update</small></article>
+</div>
+</div>
+<div class="channel-principle"><div><div class="section-label">Development philosophy</div><h2>Test early.<br/>Refine carefully.<br/>Ship confidently.</h2><p>The channel names describe what kind of work belongs in each phase—not a promise that every channel has a publicly available build.</p></div><ul><li><strong>Experimental</strong> prioritizes exploring new interface ideas and early prototypes.</li><li><strong>Beta</strong> focuses on more functional implementations and a polished UI.</li><li><strong>Release Preview</strong> focuses on minor fixes and final checks.</li><li><strong>Release</strong> is the completed build distributed to users.</li></ul></div>
+</div><!-- /Channel overview -->
+<section class="insights-panel downloads-panel" data-insights-section="downloads" id="download-channels" aria-labelledby="downloads-title" hidden>
+  <div class="section-label">WebWindows 12 · Build distribution</div>
+  <h2 id="downloads-title" class="section-title">Download channels</h2>
+  <p class="section-subtitle">Browse the four development channels for 9H09 and 10H10. A link appears only where a source is known; an empty entry does not mean that a channel is cancelled or unavailable.</p>
+  <div class="download-legend"><span class="download-legend-mark"></span> Known channel or release link <span class="download-legend-separator"></span> No direct link provided</div>
+  <div class="downloads-scroll" role="region" aria-label="WebWindows 9H09 and 10H10 download channel table" tabindex="0">
+    <table class="downloads-table">
+      <thead><tr><th scope="col">Version</th><th scope="col">Experimental</th><th scope="col">Beta</th><th scope="col">Release Preview</th><th scope="col">Release</th></tr></thead>
+      <tbody>
+        <tr><th scope="row"><strong>10H10</strong><small>Build 2610125 · KD210</small></th>
+          <td><a class="download-action" href="https://fppps.github.io/Win12/update/update/App-Update/index.html" target="_blank" rel="noopener noreferrer">Open Experimental <span aria-hidden="true">↗</span></a><small>10H10 · Experimental channel</small></td>
+          <td><span class="download-empty">No link added</span><small>Build labeled beta-release</small></td>
+          <td><span class="download-empty">No link added</span><small>Final refinements</small></td>
+          <td><span class="download-empty">No release link</span><small>Development build</small></td>
+        </tr>
+        <tr><th scope="row"><strong>9H09</strong><small>Build 269120</small></th>
+          <td><span class="download-empty">No link added</span><small>Early UI testing</small></td>
+          <td><span class="download-empty">No link added</span><small>UI refinement</small></td>
+          <td><span class="download-empty">No link added</span><small>Final refinements</small></td>
+          <td><a class="download-action" href="https://github.com/Fppps/Win12/releases/tag/9H09_Build269120" target="_blank" rel="noopener noreferrer">View release <span aria-hidden="true">↗</span></a><small>Published GitHub release</small></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="download-table-hint">On narrow screens, scroll the table horizontally to see every channel.</p>
+  <div class="downloads-details">
+    <div><h3>Looking for 10H10?</h3><p>10H10 is currently available through the Experimental channel, even though its build is labeled 2610125.beta-release (KD210). Use the Experimental link in the table to open that build. The Beta, Release Preview, and Release channels do not have separate links listed here.</p></div>
+    <a class="download-more-link" href="https://fppps.github.io/Win12/update/update/index.html" target="_blank" rel="noopener noreferrer">Open WebWindows updates <span aria-hidden="true">↗</span></a>
+  </div>
+  <div class="downloads-notes"><h3>How to read this table</h3><p>Experimental is for early UI tests; Beta focuses on more functional, refined features; Release Preview is close to shipping; Release is the general-use version. The table tracks known links, not build eligibility or release guarantees.</p></div>
+</section>
+</div><!-- /Insights main -->
+</div><!-- /Insights layout -->
+</section>
+</main></div><div class="site-view" data-site-page="news" hidden="" id="site-news"><main aria-labelledby="news-page-title" class="page-shell" role="main">
+<section class="page-hero">
+<div class="page-container page-hero-inner">
+<div class="wallpaper-heading">
+<div class="breadcrumb"><a href="#top">Home</a><span class="chev">›</span><span>News</span></div>
+<div class="page-kicker">WebWindows 12 <span class="kicker-separator">/</span> Newsroom</div>
+<h1 id="news-page-title">News and updates.</h1>
+<p class="page-lead">What is changing in the WebWindows desktop, with development coverage for 10H10 and published release information for 9H09.</p>
+</div>
+<div class="news-feature">
+<article class="panel lead-article">
+<div class="news-article-art" aria-label="WebWindows 12 desktop interface illustration">
+  <div class="news-art-fallback" aria-hidden="true"><span class="news-art-label">WEBWINDOWS 12</span><span class="news-art-version">10H10</span></div>
+  <img src="Backgrounds/I2.png" alt="Additional WebWindows 12 desktop screenshot" loading="lazy" decoding="async" onerror="this.hidden=true">
+</div>
+<div class="news-lead-body">
+<span class="pill">10H10 · Development spotlight</span>
+<h2>Inside the 10H10 interface refresh</h2>
+<p>The current 10H10 source identifies Version 10H10, OS Build 2610125 (KD210). Its interface includes a redesigned Settings experience, configurable Mica materials, HDR wallpaper lighting, context-menu settings, and dedicated Windows Update and Insider views.</p>
+<span class="article-date">Build label: 2610125.beta-release · Development coverage, not release notes</span>
+<a class="text-link" href="#news-features">Explore the build details <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></a>
+</div>
+</article>
+<article class="panel news-side">
+<span class="pill">9H09 · Published release</span>
+<h2>9H09 Build 269120 is available</h2>
+<p>Published October 7, 2026, the 9H09 release expands Updater Security, PIN and sign-in protections, Windows Security features, localization, and refinements throughout the interface.</p>
+<span class="article-date">Official GitHub release · KD109</span>
+<a class="text-link" href="https://github.com/Fppps/Win12/releases/tag/9H09_Build269120" rel="noopener noreferrer" target="_blank">Read 9H09 release notes <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></a>
+</article>
+</div>
+</div>
+</section>
+<section aria-labelledby="build-highlights-heading" class="section-area" id="news-features">
+<div class="page-container">
+<div class="section-heading-row"><div>
+<div class="section-label">Seen in the supplied 10H10 build</div>
+<h2 class="section-title" id="build-highlights-heading">An evolving desktop experience</h2>
+<p class="section-subtitle">These topics come from the current 10H10 interface source. They describe visible development work—not a published changelog or release announcement.</p>
+</div></div>
+<div class="dev-feature-grid">
+<article class="dev-feature panel"><span class="dev-number">01 / 06</span><h3>Settings overhaul</h3><p>A redesigned Settings layout with expanded display, personalization, system, and update controls.</p></article>
+<article class="dev-feature panel"><span class="dev-number">02 / 06</span><h3>Mica and glass</h3><p>Controls for glass surface color, transparency, appearance, and related interface styling.</p></article>
+<article class="dev-feature panel"><span class="dev-number">03 / 06</span><h3>HDR wallpaper lighting</h3><p>A wallpaper-specific HDR Lighting option and supporting styling, separate from the controls and windows above it.</p></article>
+<article class="dev-feature panel"><span class="dev-number">04 / 06</span><h3>Windows Update</h3><p>Update checks, available updates, update history, and an option to get the latest updates.</p></article>
+<article class="dev-feature panel"><span class="dev-number">05 / 06</span><h3>Insider channels</h3><p>Channel controls and a release-track interface for Experimental, Beta, and Release Preview.</p></article>
+<article class="dev-feature panel"><span class="dev-number">06 / 06</span><h3>Context menus</h3><p>Context-menu customization joins the other appearance and desktop interaction settings.</p></article>
+</div>
+<p class="news-context">The supplied HTML exposes these features and interface descriptions; some behaviors are implemented through an external Script.js file not included in the uploaded source. This page does not claim that every control has been functionally verified.</p>
+</div>
+</section>
+<section aria-labelledby="news-available-heading" class="section-area" style="border-top:1px solid #373737;padding-top:64px">
+<div class="page-container">
+<div class="feed-head"><div><div class="section-label">Current status</div><h2 class="section-title" id="news-available-heading">Updates by version</h2><p class="feed-info">A clear distinction between development builds and published releases.</p></div>
+<a class="text-link" href="https://github.com/Fppps/Win12/releases" rel="noopener noreferrer" target="_blank">Published GitHub releases ↗</a>
+</div>
+<div class="release-feed">
+<article class="release-row"><span class="release-date">Development build</span><div><span class="release-type">10H10 · 2610125.beta-release</span><h3>10H10 development continues</h3><p>The source shows the newer desktop, Settings, update and visual systems. There are no 10H10 release notes linked or represented on this site.</p></div><span aria-hidden="true" class="release-arrow"></span></article>
+<article class="release-row"><time datetime="2026-10-07">Oct 7, 2026</time><a href="https://github.com/Fppps/Win12/releases/tag/9H09_Build269120" rel="noopener noreferrer" target="_blank"><span class="release-type">9H09 · Official release</span><h3>9H09 Build 269120 released</h3><p>Updater Security validation, PIN and sign-in improvements, a more functional Security interface, notifications, and interface refinements.</p></a><span aria-hidden="true" class="release-arrow">↗</span></article>
+</div>
+<p class="news-note">10H10 development information is grounded in the supplied WebWindows 10H10 Index.html. Published 9H09 details come from its GitHub release page. This News area is editorial coverage within the main website—not a substitute for separate 10H10 release notes.</p>
+<a class="text-link" href="#channel-insights">Understand the update channels →</a>
+</div>
+</section>
+</main></div>
+<footer class="footer"><div class="container footer-inner"><p>Windows 12 Web · An independent community project.</p><nav aria-label="Footer navigation" class="footer-links"><a href="#top">Back to top</a><a href="#updates">Updates</a><a href="#channel-insights">Channel Insights</a><a href="#news">News</a><a href="#pricing">Pricing</a><a href="https://github.com/Fppps/Win12?tab=readme-ov-file" rel="noopener noreferrer" target="_blank">GitHub</a></nav></div></footer>
+
+<script>(() => {
+  const menuButton=document.getElementById('mobile-menu-btn');
+  const menu=document.getElementById('mobile-menu');
+  const views={home:document.getElementById('site-home'),channels:document.getElementById('site-channels'),news:document.getElementById('site-news')};
+  const titles={home:'WebWindows 12 | Windows-inspired desktop in your browser',channels:'Channel Insights | WebWindows 12',news:'News | WebWindows 12'};
+  function closeMenu(){menu.hidden=true;menuButton.setAttribute('aria-expanded','false');menuButton.setAttribute('aria-label','Open navigation menu');}
+  menuButton.addEventListener('click',()=>{const open=menuButton.getAttribute('aria-expanded')!=='true';menu.hidden=!open;menuButton.setAttribute('aria-expanded',String(open));menuButton.setAttribute('aria-label',open?'Close navigation menu':'Open navigation menu');});
+  menu.addEventListener('click',event=>{if(event.target.closest('a'))closeMenu();});
+  document.addEventListener('keydown',event=>{if(event.key==='Escape')closeMenu();});
+  document.addEventListener('click',event=>{if(!menu.hidden&&!event.target.closest('#mobile-menu,#mobile-menu-btn'))closeMenu();});
+  window.matchMedia('(min-width: 821px)').addEventListener('change',event=>{if(event.matches)closeMenu();});
+  // One Channel Insights page, with two distinct sidebar sections and a shareable URL for each.
+  function setInsightSection(selected){
+    document.querySelectorAll('#site-channels [data-insights-section]').forEach(panel=>{
+      panel.hidden=panel.dataset.insightsSection!==selected;
+    });
+    document.querySelectorAll('#site-channels [data-insights-nav]').forEach(link=>{
+      if(link.dataset.insightsNav===selected){link.setAttribute('aria-current','page');}
+      else{link.removeAttribute('aria-current');}
+    });
+  }
+  document.querySelectorAll('#site-channels [data-insights-nav]').forEach(link=>{
+    link.addEventListener('click',event=>{
+      event.preventDefault();
+      history.pushState(null,'',link.getAttribute('href'));
+      setInsightSection(link.dataset.insightsNav);
+      document.title=link.dataset.insightsNav==='downloads'?'Download Channels | WebWindows 12':titles.channels;
+    });
+  });
+  // Page navigation is intentionally fragment-based, including for local file:// previews.
+  function applyLocation(initial=false){
+    const fragment=decodeURIComponent(location.hash.slice(1)).toLowerCase();
+    const page=(fragment==='channel-insights'||fragment==='channels'||fragment==='channel-panel'||fragment==='download-channels')?'channels':(fragment==='news'||fragment==='news-features')?'news':'home';
+    for(const [name,element] of Object.entries(views)){element.hidden=name!==page;}
+    document.querySelectorAll('[data-view-nav]').forEach(a=>{
+      const isCurrent=page==='home' ? (a.getAttribute('href')==='#'+fragment) : a.dataset.viewNav===page;
+      a.classList.toggle('is-active',isCurrent);
+      if(isCurrent)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');
+    });
+    document.title=page==='channels'&&fragment==='download-channels'?'Download Channels | WebWindows 12':titles[page];
+    if(page==='channels')setInsightSection(fragment==='download-channels'?'downloads':'overview');
+    if(fragment==='updates'||fragment==='pricing'||fragment==='notes'||fragment==='news-features'){
+      const target=document.getElementById(fragment);requestAnimationFrame(()=>target?.scrollIntoView({block:'start',behavior:'instant'}));
+    } else if(!initial||fragment==='channel-insights'||fragment==='download-channels'||fragment==='news'){
+      window.scrollTo({top:0,behavior:'instant'});
+    }
+    closeMenu();
+  }
+  window.addEventListener('hashchange',()=>applyLocation(false));
+  window.addEventListener('popstate',()=>applyLocation(false));
+  applyLocation(true);
+  // Channel option state controls only descriptions and stage labels, not release availability.
+  const tabs=Array.from(document.querySelectorAll('#site-channels .channel-choice'));
+  const panel=document.getElementById('channel-panel');
+  const description=document.getElementById('version-description');
+  const details={
+    '10H10':'10H10 is currently listed under the Experimental channel, although the development build is labeled 2610125.beta-release (KD210). The Experimental channel has a direct link; no 10H10 release notes or other channel links are listed.',
+    '9H09':'9H09 Build 269120 (KD109) has a published release on GitHub. Its Experimental, Beta and Release Preview entries explain the paths of development, not currently verified downloadable channels.'
+  };
+  function selectTab(tab,focus){
+    if(!tab||!panel)return;
+    const version=tab.dataset.version;
+    tabs.forEach(t=>{const selected=t===tab;t.setAttribute('aria-selected',String(selected));t.tabIndex=selected?0:-1;});
+    panel.setAttribute('aria-labelledby',tab.id);
+    panel.querySelectorAll('[data-version-text]').forEach(el=>{el.textContent=version;});
+    description.textContent=details[version]||'';
+    if(focus)tab.focus();
+  }
+  tabs.forEach((tab,i)=>{
+    tab.addEventListener('click',()=>selectTab(tab,false));
+    tab.addEventListener('keydown',event=>{
+      if(!['ArrowLeft','ArrowRight','Home','End'].includes(event.key))return;
+      event.preventDefault();
+      const n=event.key==='Home'?0:event.key==='End'?tabs.length-1:(i+(event.key==='ArrowRight'?1:-1)+tabs.length)%tabs.length;
+      selectTab(tabs[n],true);
+    });
+  });
+})();</script></body>
+</html>
