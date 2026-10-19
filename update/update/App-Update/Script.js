@@ -1304,7 +1304,7 @@ function clearMinimizedWindow(win, taskbarId, kind='restored') {
       'Windows specifications',
       'Edition: Windows 12 Insider Preview',
       'Version: 10H10',
-      'Channel: beta-release',
+      'Channel: experimental',
       'OS build: 2610125',
       'KD: KD210'
     ].join('\n');
@@ -1889,6 +1889,7 @@ function clearMinimizedWindow(win, taskbarId, kind='restored') {
   // Closing it on scroll made keyboard / click selection unreliable in longer pages.
   $('ww-settings-scroll').addEventListener('scroll',()=>positionChoice(),{passive:true});
   window.addEventListener('resize',closeChoice);
+  dialog.addEventListener('ww10-settings-layout-change',()=>closeChoice());
   syncChoices();
 
   // 9H09/WinUI range fill: a unified track/thumb/value layout, not three unrelated slider themes.
@@ -2083,7 +2084,7 @@ function clearMinimizedWindow(win, taskbarId, kind='restored') {
 (() => {
   'use strict';
   const definitions = [
-    {window:'settings-window', button:'ww-settings-maximize', bar:'ww-settings-titlebar', label:'settings', minW:520, minH:350},
+    {window:'settings-window', button:'ww-settings-maximize', bar:'ww-settings-titlebar', label:'settings', minW:390, minH:320},
     {window:'information-window', button:'about-maximize', bar:'about-titlebar', label:'About Windows', minW:335, minH:325}
   ];
   const viewportMax = () => {
@@ -2155,4 +2156,62 @@ function clearMinimizedWindow(win, taskbarId, kind='restored') {
       grip.addEventListener(name,()=>{resize=null;});
     }
   }
+})();
+
+
+/* 10H10 Settings responsive navigation. This observes actual app dimensions,
+   including maximize and drag-to-resize, not only browser resize events. */
+(()=>{
+  'use strict';
+  const windowEl=document.getElementById('settings-window');
+  const button=document.getElementById('ww10-settings-navigation-toggle');
+  const nav=document.getElementById('ww10-settings-navigation');
+  const scrim=document.getElementById('ww10-settings-nav-scrim');
+  const content=document.getElementById('ww-settings-scroll');
+  if(!windowEl||!button||!nav||!scrim||!content)return;
+  let narrow=false;
+  let lastWidth=0;
+  function setOpen(open,{restoreFocus=false}={}){
+    const next=Boolean(open)&&narrow;
+    const wasOpen=windowEl.classList.contains('ww10-settings-nav-open');
+    windowEl.classList.toggle('ww10-settings-nav-open',next);
+    button.setAttribute('aria-expanded',String(next));
+    button.setAttribute('aria-label',next?'Close Settings navigation':'Open Settings navigation');
+    button.title=next?'Close navigation':'Navigation menu';
+    nav.inert=narrow&&!next;
+    if(narrow&&!next)nav.setAttribute('aria-hidden','true');
+    else nav.removeAttribute('aria-hidden');
+    scrim.setAttribute('aria-hidden',String(!next));
+    if(restoreFocus&&wasOpen&&!next&&!windowEl.hidden)button.focus({preventScroll:true});
+  }
+  function updateLayout(){
+    const rect=windowEl.getBoundingClientRect();
+    if(!rect.width)return;
+    const width=Math.round(rect.width),height=Math.round(rect.height);
+    const wasNarrow=narrow;
+    narrow=width<=720;
+    windowEl.classList.toggle('ww10-settings-short',height<510);
+    windowEl.classList.toggle('ww10-settings-compact',narrow);
+    if(wasNarrow!==narrow)setOpen(false);
+    if(!narrow)setOpen(false);
+    if(width!==lastWidth){
+      lastWidth=width;
+      windowEl.dispatchEvent(new Event('ww10-settings-layout-change'));
+    }
+  }
+  button.addEventListener('click',()=>setOpen(!windowEl.classList.contains('ww10-settings-nav-open')));
+  scrim.addEventListener('click',()=>setOpen(false,{restoreFocus:true}));
+  nav.addEventListener('click',event=>{
+    if(narrow&&event.target.closest('[data-ww-page]'))setOpen(false);
+  });
+  document.addEventListener('keydown',event=>{
+    if(event.key==='Escape'&&windowEl.classList.contains('ww10-settings-nav-open')){
+      event.preventDefault();setOpen(false,{restoreFocus:true});
+    }
+  });
+  const observer=typeof ResizeObserver!=='undefined'?new ResizeObserver(updateLayout):null;
+  observer?.observe(windowEl);
+  window.addEventListener('resize',updateLayout,{passive:true});
+  updateLayout();
+  window.addEventListener('pagehide',()=>observer?.disconnect(),{once:true});
 })();
