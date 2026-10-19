@@ -1,5 +1,5 @@
 # Windows 12 Concept
-This is a fan-made project where I & other people theroize and bring stuff into this Concept to see what Microsoft could add to their future Windows product if it comes out.
+This is a fan-made project where I & other people theorize and bring stuff into this Concept to see what Microsoft could add to their future Windows product if it comes out.
 I wouldn't check the Contributing tab on this because this thing just puts 66% of it into mainly 1 thing, so yeah....
 
 ## About me:
