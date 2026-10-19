@@ -40,7 +40,7 @@ WebWindows 12 is an independent, fan-made concept and is not affiliated with, en
 ## WebWindows notice for WebWindows users:
 For any WebWindows user to create any video that includes any WebWindows content, you have my permission to do so, BUT you need to mention my logo & my channel somewhere: thumbnail, description, video, collaboration, or a comment; or I'll have to remind you to redo the video for credit reasons.
 
-Do NOT try to be a bad actor, like: Impersonating me, keeping on not crediting me, or trying to say that it is your work, or I will report the video.
+Do NOT try to be a bad actor, like impersonating me, keeping on not crediting me, or trying to say that it is your work, or I will report the video.
 
 # Section 3:
 This section is for versioning, build & KD systems.
@@ -51,9 +51,9 @@ With the addition of an "H" in there to separate them to make it cleaner.
 
 **Example:** 8H08; Where "8" is the version & "08" is the month. 
 
-Any version can have the same month with it; no rules are saying that 1 version needs a different month.
+Any version can share the same month; no rules require a different month for each version.
 
-For any people who adds ideas into the app, the version numbering doesn't use the users to tell who or who didn't make the version anymore.
+For anyone who adds ideas into the app, the version numbering doesn't use the users to tell who made the version or who didn't make it anymore.
 
 ## Build system:
 
@@ -63,18 +63,18 @@ The Year & version go like this: 26 (year) 0 (version).
 The Full system is 260000, where 26 (Year), 0 (version), & 000 (Build number).
 The build we are currently on is: 268095.
 
-For any people who adds ideas into the app, you may add a dot on the build then put a sub build of like ".1" and higher, but above 10, do not change the build number Like this: 268095.10, to 268095.11. It would help alot.
+For any people who adds ideas into the app, you may add a dot on the build then put a sub-build of like ".1" and higher, but above 10, do not change the build number Like this: 268095.10, to 268095.11. It would help a lot.
 
 ## KD system:
 The KD system is not a new thing added at all; it was added in 7H07 (or KD107).
-The KD system is another version of the version system where it just counts up like this: KD108, KD109, & KD200; it resets every update series & that is just the numbers you see. "1" is the first update series, and "2" is the second one, and it goes on forever. It keeps it from going above 9, and those numbers are the versions of the app.
+The KD system is another version of the version system where it just counts up like this: KD108, KD109, & KD210; it resets every update series, & that is just the numbers you see. "1" is the first update series, and "2" is the second one, and it goes on forever. It keeps it from going above 9, and those numbers are the versions of the app.
 
-For any people who adds ideas into the app, the KD numbering doesn't use the users to tell who or who didn't make the verion.
+For any people who adds ideas into the app, the KD numbering doesn't use the users to tell who or who didn't make the version.
 
 # Section 4:
 This is mainly for newcomers, kinda.
 
-## Premotion:
+## Promotion:
 
 Welcome to the darkest depths of these sections
 Well, if you are new & looking at this from GitHub for the first time, then come to my channel:
