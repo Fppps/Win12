@@ -1,0 +1,13 @@
+{
+    "Version": "9",
+    "Status": "Verified",
+    "Update_type": "UI/UX update",
+    
+    "Updates": [
+        {
+            "Update_name": "Windows 12 UI/UX Update",
+            "Build": "269120",
+            "Description": "New overhaul of the Windows interface, including a redesigned Start menu, improved taskbar functionality, & enhanced window management features."
+        }
+    ]
+}
