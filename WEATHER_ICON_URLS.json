@@ -1,0 +1,155 @@
+{
+  "style": "Icons8 Windows 11 Color / Fluency",
+  "collection": "https://icons8.com/icons/set/weather--style-fluency",
+  "attribution": "Weather icons by Icons8",
+  "icons": {
+    "clear": {
+      "id": "8EUmYhfLPTCF",
+      "url": "https://img.icons8.com/?size=100&id=8EUmYhfLPTCF&format=png"
+    },
+    "night": {
+      "id": "VT8HlhlnhUwL",
+      "url": "https://img.icons8.com/?size=100&id=VT8HlhlnhUwL&format=png"
+    },
+    "partly": {
+      "id": "zIVmoh4T8wh7",
+      "url": "https://img.icons8.com/?size=100&id=zIVmoh4T8wh7&format=png"
+    },
+    "cloudy": {
+      "id": "W8fUZZSmXssu",
+      "url": "https://img.icons8.com/?size=100&id=W8fUZZSmXssu&format=png&color=000000"
+    },
+    "overcast": {
+      "id": "W8fUZZSmXssu",
+      "url": "https://img.icons8.com/?size=100&id=W8fUZZSmXssu&format=png&color=000000"
+    },
+    "fog": {
+      "id": "qHIFUjYhnsFU",
+      "url": "https://img.icons8.com/?size=100&id=qHIFUjYhnsFU&format=png"
+    },
+    "haze": {
+      "id": "IL2szZWdo0Bo",
+      "url": "https://img.icons8.com/?size=100&id=IL2szZWdo0Bo&format=png"
+    },
+    "smoke": {
+      "id": "BncPMNznpkES",
+      "url": "https://img.icons8.com/?size=100&id=BncPMNznpkES&format=png"
+    },
+    "drizzle": {
+      "id": "QZJFPE7TNi5Q",
+      "url": "https://img.icons8.com/?size=100&id=QZJFPE7TNi5Q&format=png"
+    },
+    "rain": {
+      "id": "HWPdQMFoVy95",
+      "url": "https://img.icons8.com/?size=100&id=HWPdQMFoVy95&format=png"
+    },
+    "heavyRain": {
+      "id": "7Dcax1eBasEf",
+      "url": "https://img.icons8.com/?size=100&id=7Dcax1eBasEf&format=png"
+    },
+    "showers": {
+      "id": "PIXtKMDAXCzo",
+      "url": "https://img.icons8.com/?size=100&id=PIXtKMDAXCzo&format=png"
+    },
+    "rainyNight": {
+      "id": "wBPV56Uje50D",
+      "url": "https://img.icons8.com/?size=100&id=wBPV56Uje50D&format=png"
+    },
+    "sleet": {
+      "id": "fyJ8mNcBHced",
+      "url": "https://img.icons8.com/?size=100&id=fyJ8mNcBHced&format=png"
+    },
+    "icePellets": {
+      "id": "4dVnvFFjJIRs",
+      "url": "https://img.icons8.com/?size=100&id=4dVnvFFjJIRs&format=png"
+    },
+    "lightSnow": {
+      "id": "JBQOSn7KOSuD",
+      "url": "https://img.icons8.com/?size=100&id=JBQOSn7KOSuD&format=png"
+    },
+    "snow": {
+      "id": "cyZConbteZk9",
+      "url": "https://img.icons8.com/?size=100&id=cyZConbteZk9&format=png"
+    },
+    "heavySnow": {
+      "id": "Mi2BdbZQWNYQ",
+      "url": "https://img.icons8.com/?size=100&id=Mi2BdbZQWNYQ&format=png"
+    },
+    "blizzard": {
+      "id": "qlJRoffslNg7",
+      "url": "https://img.icons8.com/?size=100&id=qlJRoffslNg7&format=png"
+    },
+    "hail": {
+      "id": "jws4rTJ5EmwZ",
+      "url": "https://img.icons8.com/?size=100&id=jws4rTJ5EmwZ&format=png"
+    },
+    "thunder": {
+      "id": "DlsFhDMp4rhs",
+      "url": "https://img.icons8.com/?size=100&id=DlsFhDMp4rhs&format=png"
+    },
+    "thunderRain": {
+      "id": "6AAyqKfBlzoB",
+      "url": "https://img.icons8.com/?size=100&id=6AAyqKfBlzoB&format=png"
+    },
+    "thunderSnow": {
+      "id": "pvDsNpV5YTxC",
+      "url": "https://img.icons8.com/?size=100&id=pvDsNpV5YTxC&format=png"
+    },
+    "stormNight": {
+      "id": "PwHEPRMlRd4a",
+      "url": "https://img.icons8.com/?size=100&id=PwHEPRMlRd4a&format=png"
+    },
+    "windyNight": {
+      "id": "3RZmbgKAmbsY",
+      "url": "https://img.icons8.com/?size=100&id=3RZmbgKAmbsY&format=png"
+    },
+    "wind": {
+      "id": "3RZmbgKAmbsY",
+      "url": "https://img.icons8.com/?size=100&id=3RZmbgKAmbsY&format=png"
+    },
+    "tornado": {
+      "id": "tEqjiPMXL4U5",
+      "url": "https://img.icons8.com/?size=100&id=tEqjiPMXL4U5&format=png"
+    },
+    "cloudLightning": {
+      "id": "c0Otgmp74zQX",
+      "url": "https://img.icons8.com/?size=100&id=c0Otgmp74zQX&format=png"
+    },
+    "rainCloud": {
+      "id": "MVj2tmasj0Pp",
+      "url": "https://img.icons8.com/?size=100&id=MVj2tmasj0Pp&format=png"
+    },
+    "icy": {
+      "id": "JPFoI922p1gw",
+      "url": "https://img.icons8.com/?size=100&id=JPFoI922p1gw&format=png"
+    },
+    "dust": {
+      "id": "NjsqgHjrCASE",
+      "url": "https://img.icons8.com/?size=100&id=NjsqgHjrCASE&format=png"
+    },
+    "dry": {
+      "id": "svnLDdcfYlch",
+      "url": "https://img.icons8.com/?size=100&id=svnLDdcfYlch&format=png"
+    },
+    "torrential": {
+      "id": "uzabNvAfhNNr",
+      "url": "https://img.icons8.com/?size=100&id=uzabNvAfhNNr&format=png"
+    },
+    "moon": {
+      "id": "3dxwW3xZfAj4",
+      "url": "https://img.icons8.com/?size=100&id=3dxwW3xZfAj4&format=png"
+    }
+  },
+  "supporting_icons": {
+    "humidity": {
+      "id": "hpwbr3sG19tQ",
+      "url": "https://img.icons8.com/?size=100&id=hpwbr3sG19tQ&format=png",
+      "name": "Hygrometer"
+    },
+    "wind": {
+      "id": "RtDA8YDN9Mi9",
+      "url": "https://img.icons8.com/?size=100&id=RtDA8YDN9Mi9&format=png",
+      "name": "Wind"
+    }
+  }
+}
