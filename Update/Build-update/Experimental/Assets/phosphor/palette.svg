@@ -1,7 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round">
-  <path d="M128 24a104 104 0 1 0 104 104 24 24 0 0 0-24-24h-18a22 22 0 0 1-22-22V64a40 40 0 0 0-40-40Z"/>
-  <circle cx="76" cy="124" r="8" fill="currentColor" stroke="none"/>
-  <circle cx="98" cy="77" r="8" fill="currentColor" stroke="none"/>
-  <circle cx="156" cy="171" r="8" fill="currentColor" stroke="none"/>
-  <circle cx="76" cy="175" r="8" fill="currentColor" stroke="none"/>
-</svg>
