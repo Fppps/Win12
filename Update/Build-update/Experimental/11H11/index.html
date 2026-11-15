@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#ffffff">
+  <title>Windows 12 11H11 Insider Preview</title>
+  <link rel="preconnect" href="https://img.icons8.com">
+  <meta name="webwindows-news-endpoint" content="">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<svg id="ww-phosphor-sprite" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" width="0" height="0" style="position:absolute;width:0;height:0;overflow:hidden;pointer-events:none"><defs><symbol id="ww-ph-app-window" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2.5" /><path d="M3 8h18M7 6h.2M10 6h.2" /></symbol><symbol id="ww-ph-arrow-square-out" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round"><path d="M10.5 5H6.5A2.5 2.5 0 0 0 4 7.5v10A2.5 2.5 0 0 0 6.5 20h10a2.5 2.5 0 0 0 2.5-2.5v-4"/><path d="M13 4h7v7"/><path d="M20 4 10.5 13.5"/></symbol><symbol id="ww-ph-arrows-clockwise-regular" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20.3 10a8.4 8.4 0 0 0-14.2-4.2L3.5 8.5M3.5 3.5v5h5M3.7 14a8.4 8.4 0 0 0 14.2 4.2l2.6-2.7M20.5 20.5v-5h-5" /></symbol><symbol id="ww-ph-caret-up-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m6 15 6-6 6 6" /></symbol><symbol id="ww-ph-chat-centered-text" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20 17a3 3 0 0 1-3 3H8l-4 3V6a3 3 0 0 1 3-3h10a3 3 0 0 1 3 3z" /><path d="M8 9h8M8 13h8M10 17h4" /></symbol><symbol id="ww-ph-clock-counter-clockwise-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4.2 7.5A9 9 0 1 1 3 12" /><path d="M4.2 3.7v4h4" /><path d="M12 6.6V12l3.6 2.2" /></symbol><symbol id="ww-ph-desktop" viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><rect x="24" y="40" width="208" height="152" rx="12" />
+  <path d="M24 160h208M128 192v32M88 224h80" />
+</symbol><symbol id="ww-ph-folder" viewBox="0 0 256 256" fill="none"><path d="M28 66c0-11 9-20 20-20h54l20 22h86c11 0 20 9 20 20v112c0 11-9 20-20 20H48c-11 0-20-9-20-20V66Z" stroke="currentColor" stroke-width="16" stroke-linejoin="round" /><path d="M28 103h200" stroke="currentColor" stroke-width="13" /></symbol><symbol id="ww-ph-gear-six" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round"><path d="M10.15 2.95h3.7l.55 2.23c.69.22 1.35.57 1.91 1.04l2.13-.79 1.85 3.2-1.74 1.45c.12.63.12 1.3 0 1.93l1.74 1.45-1.85 3.21-2.13-.8c-.56.47-1.22.82-1.91 1.05l-.55 2.22h-3.7l-.55-2.22a6.94 6.94 0 0 1-1.91-1.05l-2.13.8-1.85-3.21 1.74-1.45a7.4 7.4 0 0 1 0-1.93L3.7 8.63l1.85-3.2 2.13.79c.56-.47 1.22-.82 1.91-1.04z" transform="translate(0 1.1)" />
+  <circle cx="12" cy="12" r="2.55" />
+</symbol><symbol id="ww-ph-house-regular" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1Z" /><path d="M9 21v-8h6v8" /></symbol><symbol id="ww-ph-info-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9" /><path d="M12 10.5v6M12 7.1v.6" /></symbol><symbol id="ww-ph-magnifying-glass" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="10.8" cy="10.8" r="6.6" /><path d="m16 16 5 5" /></symbol><symbol id="ww-ph-newspaper-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4h14v15a2 2 0 0 1-2 2H6a3 3 0 0 1-3-3V8h3" /><path d="M6 4v14a3 3 0 0 1-3 0M9 8h8v4H9zM9 15h8M9 18h6" /></symbol><symbol id="ww-ph-paint-brush-regular" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m13 7 6.4-5 2.6 2.6-5.1 6.3-4.2 1.1-2.3 2.3M8.8 14.5c-1.1-.3-2.2 0-3.2.9C4 17 4.8 19 2.5 21.5c3-.3 5.3-.9 6.8-2.1 1.4-1.2 1.6-3.5-.5-4.9Z" /></symbol><symbol id="ww-ph-palette" viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><path d="M128 24a104 104 0 1 0 104 104 24 24 0 0 0-24-24h-18a22 22 0 0 1-22-22V64a40 40 0 0 0-40-40Z" />
+  <circle cx="76" cy="124" r="8" fill="currentColor" stroke="none" />
+  <circle cx="98" cy="77" r="8" fill="currentColor" stroke="none" />
+  <circle cx="156" cy="171" r="8" fill="currentColor" stroke="none" />
+  <circle cx="76" cy="175" r="8" fill="currentColor" stroke="none" />
+</symbol><symbol id="ww-ph-power-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v9" /><path d="M6 5.4a9 9 0 1 0 12 0" /></symbol><symbol id="ww-ph-shield-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5 20.1 5v6c0 5.2-3.1 8.6-8.1 10.5C7 19.6 3.9 16.2 3.9 11V5z" /><path d="m8.6 11.9 2.2 2.2 4.7-4.8" /></symbol><symbol id="ww-ph-sliders-horizontal-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h4m4 0h8M4 17h8m4 0h4" /><circle cx="10" cy="7" r="2" /><circle cx="14" cy="17" r="2" /></symbol><symbol id="ww-ph-squares-four" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1" /><rect x="14" y="3" width="7" height="7" rx="1" /><rect x="3" y="14" width="7" height="7" rx="1" /><rect x="14" y="14" width="7" height="7" rx="1" /></symbol><symbol id="ww-ph-user" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7.5" r="4" /><path d="M4.1 21a8 8 0 0 1 15.8 0" /></symbol><symbol id="ww-ph-users-three-regular" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.4" /><path d="M5.5 20v-1.8c0-2.7 2.4-4.6 6.5-4.6s6.5 1.9 6.5 4.6V20Z" /><path d="M18 5.1a3 3 0 0 1 0 5.8M19 13.6c2 .5 3 2 3 4.1V19h-3M6 5.1a3 3 0 0 0 0 5.8M5 13.6c-2 .5-3 2-3 4.1V19h3" /></symbol><symbol id="ww-ph-windows-logo" viewBox="0 0 24 24"><g fill="currentColor"><rect x="2.5" y="2.5" width="9" height="9" rx=".65" />
+  <rect x="12.5" y="2.5" width="9" height="9" rx=".65" />
+  <rect x="2.5" y="12.5" width="9" height="9" rx=".65" />
+  <rect x="12.5" y="12.5" width="9" height="9" rx=".65" /></g>
+</symbol><symbol id="ww-ph-x" viewBox="0 0 256 256" fill="none"><path d="m56 56 144 144M200 56 56 200" stroke="currentColor" stroke-width="18" stroke-linecap="round" /></symbol></defs></svg>
+<main class="desktop" aria-label="Windows 12 desktop">
+    <div class="wallpaper-fallback" aria-hidden="true"></div>
+    <img class="wallpaper" id="wallpaper" src="Backgrounds/B1.webp" alt="" draggable="false">
+    <!-- Wallpaper-only HDR-style layers. Kept below desktop UI, so icons and Icons8 artwork remain untouched. -->
+    <canvas id="ww-hdr-tonemap" class="ww-hdr-layer ww-hdr-tonemap" aria-hidden="true"></canvas>
+    <canvas id="ww-hdr-bloom-near" class="ww-hdr-layer ww-hdr-bloom-near" aria-hidden="true"></canvas>
+    <canvas id="ww-hdr-bloom-far" class="ww-hdr-layer ww-hdr-bloom-far" aria-hidden="true"></canvas>
+    <div class="insider-watermark" aria-label="Windows 12 insider preview, Build 2611150.Beta — Version 11H11">
+      <span>Windows 12 insider preview</span>
+      <span>Build 2611150.Beta — Version 11H11</span>
+    </div>
+
+    <!-- Start, Search, and Settings are available; the remaining taskbar apps are placeholders. -->
+    <!-- 11H11 Start: adaptive sub-Mica account rail, primary-Mica Apps and News. -->
+    <section class="start-menu" id="start-menu" role="dialog" aria-modal="false" aria-label="Start menu" aria-hidden="true">
+      <aside class="start-pane start-pane--rail" aria-label="Account and controls">
+<nav class="start-rail-actions start-reveal" aria-label="Account actions">
+          <button class="start-rail-action" type="button" disabled title="Power options are not implemented yet" aria-label="Power options (not yet available)">
+            <span class="start-rail-action-icon"><svg class="ph-fallback ww-ph-icon"  focusable="false" aria-hidden="true"><use href="#ww-ph-power-light"></use></svg></span>
+          </button>
+          <button class="start-rail-action" type="button" disabled title="Settings" aria-label="Settings" data-ww11-open-settings="true">
+            <span class="start-rail-action-icon"><svg class="ph-fallback ww-ph-icon"  focusable="false" aria-hidden="true"><use href="#ww-ph-gear-six"></use></svg></span>
+          </button>
+          <button class="start-rail-action news-info-button" id="ww10-news-sources-toggle" type="button" title="News sources" aria-label="News data sources" aria-expanded="false" aria-controls="ww10-news-sources">
+            <span class="start-rail-action-icon"><svg class="ph-fallback ww-ph-icon"  focusable="false" aria-hidden="true"><use href="#ww-ph-info-light"></use></svg></span>
+          </button>
+        </nav>
+      </aside>
+      <div class="start-pane start-pane--content">
+        <section class="start-apps-region start-stage-two" aria-labelledby="start-apps-heading">
+          <div class="start-main-top-panels">
+            <section class="start-list-section start-used-section">
+              <header class="start-section-heading start-reveal"><h2 id="start-apps-heading">Apps</h2></header>
+              <div class="start-app-list" id="start-pinned-list">
+            <div class="start-app-row start-reveal" data-app-name="settings" role="button" tabindex="0" aria-label="Open Settings">
+              <span class="start-app-icon"><img class="start-remote" src="https://img.icons8.com/?size=100&amp;id=s5NUIabJrb4C&amp;format=png&amp;color=000000" alt=""><svg class="start-icon-fallback ww-ph-icon"  focusable="false" aria-hidden="true"><use href="#ww-ph-gear-six"></use></svg></span>
+              <span class="start-app-label">Settings</span>
+            </div>
+            <div class="start-app-row start-reveal" data-app-name="get started" role="button" tabindex="0" aria-label="Open Get Started">
+              <span class="start-app-icon"><img class="start-remote" src="https://img.icons8.com/?size=100&amp;id=4aFn3qEdMNQO&amp;format=png&amp;color=000000" alt=""><svg class="start-icon-fallback ww-ph-icon"  focusable="false" aria-hidden="true"><use href="#ww-ph-app-window"></use></svg></span>
+              <span class="start-app-label">Get Started</span>
+            </div>
+            <div class="start-app-row start-reveal" data-app-name="windows security">
+              <span class="start-app-icon"><img class="start-remote" src="https://img.icons8.com/?size=100&amp;id=oo5voXhXsnEk&amp;format=png&amp;color=000000" alt=""><svg class="start-icon-fallback ww-ph-icon"  focusable="false" aria-hidden="true"><use href="#ww-ph-shield-check"></use></svg></span>
+              <span class="start-app-label">Windows Security</span>
+            </div>
+            <div class="start-app-row start-reveal" data-app-name="about">
+              <span class="start-app-icon"><img class="start-remote" src="https://img.icons8.com/?size=100&amp;id=IerOpHeUt2OH&amp;format=png&amp;color=000000" alt=""><svg class="start-icon-fallback ww-ph-icon"  focusable="false" aria-hidden="true"><use href="#ww-ph-user"></use></svg></span>
+              <span class="start-app-label">About</span>
+            </div>
+            <div class="start-app-row start-reveal" data-app-name="news">
+              <span class="start-app-icon"><img class="start-remote" src="https://img.icons8.com/?size=100&amp;id=W5To6Q3gjDiK&amp;format=png&amp;color=000000" alt=""><svg class="start-icon-fallback ww-ph-icon"  focusable="false" aria-hidden="true"><use href="#ww-ph-newspaper-light"></use></svg></span>
+              <span class="start-app-label">News</span>
+            </div>
+              </div>
+            </section>
+          </div>
+        </section>
+        <section class="start-news-region" aria-labelledby="start-news-heading">
+          <div class="start-news-toolbar start-reveal">
+            <h2 id="start-news-heading">News</h2><span id="ww10-news-update-status" class="start-news-status" role="status" aria-live="polite">Connecting…</span>
+          </div>
+          <div id="ww10-start-news-grid" class="ww10-start-news-grid" aria-label="Latest four news articles"></div>
+        </section>
+      </div>
+      <div class="start-account-avatar-float start-reveal">
+        <div class="start-account-photo-wrap" aria-hidden="true">
+          <img id="start-account-photo" src="Assets/account-avatar.png" alt="" decoding="async">
+          <span id="start-account-initial" hidden>R</span>
+        </div>
+        <strong id="start-account-name" title="Russel John">Russel John</strong>
+      </div>
+      <div id="ww10-news-sources" class="start-news-sources" hidden>
+        <strong>News sources</strong>
+        <p>Live news from <a href="https://www.gdeltproject.org/" target="_blank" rel="noopener noreferrer">GDELT DOC 2.0</a>. Publisher feeds from <a href="https://www.dw.com/" target="_blank" rel="noopener noreferrer">Deutsche Welle</a> and <a href="https://www.nytimes.com/" target="_blank" rel="noopener noreferrer">The New York Times</a> are used when available. Images are publisher-supplied only.</p>
+      </div>
+    </section>
+
+    <!-- 10H10 Search flyout structure and composer; 11H11 keeps its own available results. -->
+    <section id="search-panel" role="dialog" aria-modal="false" aria-label="Search" aria-hidden="true">
+      <div id="search-results" role="list" aria-label="Search results" aria-live="polite"></div>
+      <p id="search-empty" hidden>No results found.</p>
+      <div class="search-panel-composer">
+        <span class="ww-search-graphic" aria-hidden="true">
+              <svg class="ww-local-icon ww-ph-icon"  focusable="false" aria-hidden="true"><use href="#ww-ph-magnifying-glass"></use></svg>
+              <span class="ww-search-star-mono"></span>
+              <img class="ww-search-star-color" src="https://img.icons8.com/?size=100&amp;id=eoxMN35Z6JKg&amp;format=png&amp;color=000000" alt="" draggable="false">
+            </span>
+        <input id="search-panel-input" type="text" autocomplete="off" spellcheck="false" placeholder="Search" aria-label="Search">
+        <button id="search-panel-open" type="button" aria-label="Open matching item" hidden>Open</button>
+      </div>
+    </section>
+
+    <nav class="taskbar" aria-label="Taskbar">
+      <div class="taskbar__dock" id="taskbar-dock" aria-label="Taskbar applications">
+      <div class="taskbar__left" aria-label="System shortcuts">
+        <button type="button" id="start-toggle" class="taskbar-button" aria-label="Start" title="Start" aria-controls="start-menu" aria-expanded="false">
+          <!-- The original WinIcon.png takes priority; bundled SVG is a fallback only. -->
+          <img class="remote-icon ww-start-original-icon" src="WinIcon.png" alt="" draggable="false" aria-hidden="true">
+          <svg class="icon-fallback ww-ph-icon"  focusable="false" aria-hidden="true"><use href="#ww-ph-windows-logo"></use></svg>
+        </button>
+        <div class="taskbar-search-shell" id="taskbar-search-shell" role="search" aria-label="Taskbar search">
+          <button type="button" id="taskbar-search-toggle" class="taskbar-search-activator" aria-label="Open Search" title="Open Search" aria-controls="search-panel" aria-haspopup="dialog" aria-expanded="false">
+            <span class="ww-search-graphic" aria-hidden="true">
+              <svg class="ww-local-icon ww-ph-icon"  focusable="false" aria-hidden="true"><use href="#ww-ph-magnifying-glass"></use></svg>
+              <span class="ww-search-star-mono"></span>
+              <img class="ww-search-star-color" src="https://img.icons8.com/?size=100&amp;id=eoxMN35Z6JKg&amp;format=png&amp;color=000000" alt="" draggable="false">
+            </span>
+          </button>
+          <input id="taskbar-search-query" class="taskbar-search-placeholder" type="search" autocomplete="off" spellcheck="false" placeholder="Search" aria-label="Search the desktop" aria-controls="search-panel" aria-haspopup="dialog">
+        </div>
+        <button type="button" class="taskbar-button" id="wua-task-view-placeholder" disabled aria-label="Task view (not yet available)" title="Task view">
+          <svg class="wua-task-view-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <defs>
+              <linearGradient id="wua-tv-rear" x1=".15" y1="0" x2=".85" y2="1"><stop stop-color="#f8fbff"/><stop offset="1" stop-color="#a7b5c1"/></linearGradient>
+              <linearGradient id="wua-tv-front" x1="0" y1="0" x2=".8" y2="1"><stop stop-color="#566979"/><stop offset="1" stop-color="#283b4b"/></linearGradient>
+            </defs>
+            <rect class="wua-task-rear" x="8.1" y="2.8" width="13.4" height="13.4" rx="2.3" fill="url(#wua-tv-rear)"/>
+            <rect class="wua-task-front" x="2.6" y="8.3" width="13.4" height="13.4" rx="2.3" fill="url(#wua-tv-front)"/>
+            <path class="wua-task-cross" d="M8.1 8.3h5.6c1.3 0 2.3 1 2.3 2.3v5.6H10.4c-1.3 0-2.3-1-2.3-2.3Z" fill="#8c9da9" fill-opacity=".56"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="taskbar__center" aria-label="Pinned applications">
+        <button type="button" class="taskbar-button" disabled aria-label="News (not yet available)" title="News">
+          <img class="remote-icon" src="https://img.icons8.com/?size=100&amp;id=W5To6Q3gjDiK&amp;format=png&amp;color=000000" alt="" draggable="false">
+          <svg class="icon-fallback ww-ph-icon"  focusable="false" aria-hidden="true"><use href="#ww-ph-newspaper-light"></use></svg>
+        </button>
+        <button type="button" class="taskbar-button" aria-label="Settings" title="Settings" data-ww11-open-settings="true" data-ww11-app="settings" data-ww11-app-state="closed" aria-pressed="false">
+          <img class="remote-icon" src="https://img.icons8.com/?size=100&amp;id=s5NUIabJrb4C&amp;format=png&amp;color=000000" alt="" draggable="false">
+          <svg class="icon-fallback ww-ph-icon"  focusable="false" aria-hidden="true"><use href="#ww-ph-gear-six"></use></svg>
+        </button>
+        <button type="button" class="taskbar-button" data-ww11-open-get-started="true" data-ww11-app="get-started" data-ww11-app-state="closed" aria-label="Get Started" title="Get Started" aria-pressed="false">
+          <img class="remote-icon" src="https://img.icons8.com/?size=100&amp;id=4aFn3qEdMNQO&amp;format=png&amp;color=000000" alt="" draggable="false">
+          <svg class="icon-fallback ww-ph-icon"  focusable="false" aria-hidden="true"><use href="#ww-ph-app-window"></use></svg>
+        </button>
+        <button type="button" class="taskbar-button" disabled aria-label="Windows Security (not yet available)" title="Windows Security">
+          <img class="remote-icon" src="https://img.icons8.com/?size=100&amp;id=oo5voXhXsnEk&amp;format=png&amp;color=000000" alt="" draggable="false">
+          <svg class="icon-fallback ww-ph-icon"  focusable="false" aria-hidden="true"><use href="#ww-ph-shield-check"></use></svg>
+        </button>
+        <button type="button" class="taskbar-button" disabled aria-label="About (not yet available)" title="About">
+          <img class="remote-icon" src="https://img.icons8.com/?size=100&amp;id=IerOpHeUt2OH&amp;format=png&amp;color=000000" alt="" draggable="false">
+          <svg class="icon-fallback ww-ph-icon"  focusable="false" aria-hidden="true"><use href="#ww-ph-user"></use></svg>
+        </button>
+      </div>
+
+      </div><!-- End taskbar launcher group -->
+      <div class="taskbar__right" aria-label="System tray and clock">
+        <button type="button" class="tray-button tray-chevron" disabled title="Show hidden icons" aria-label="Show hidden icons (not yet available)">
+          <svg class="ph-fallback ww-ph-icon"  focusable="false" aria-hidden="true"><use href="#ww-ph-caret-up-light"></use></svg>
+        </button>
+        <button type="button" class="tray-button tray-quick" disabled title="Quick settings" aria-label="Quick settings (not yet available)">
+          <svg class="ph-fallback ww-ph-icon"  focusable="false" aria-hidden="true"><use href="#ww-ph-sliders-horizontal-light"></use></svg>
+        </button>
+        <div class="clock" id="taskbar-clock" aria-label="Current local date and time">
+          <time id="taskbar-time">--:--</time>
+          <span id="taskbar-date">--/--/----</span>
+        </div>
+      </div>
+    </nav>
+  <!-- 11H11 Settings: non-modal native window in the desktop stack. -->
+  <section id="settings-overlay" class="settings-overlay" role="dialog" aria-modal="false" aria-label="Settings" aria-hidden="true" hidden>
+    <div id="ww-settings-window" class="ww-settings-window" role="document">
+      <div class="ww-settings-resize-handle" data-edge="n" aria-hidden="true"></div>
+      <div class="ww-settings-resize-handle" data-edge="e" aria-hidden="true"></div>
+      <div class="ww-settings-resize-handle" data-edge="s" aria-hidden="true"></div>
+      <div class="ww-settings-resize-handle" data-edge="w" aria-hidden="true"></div>
+      <div class="ww-settings-resize-handle" data-edge="ne" aria-hidden="true"></div>
+      <div class="ww-settings-resize-handle" data-edge="se" aria-hidden="true"></div>
+      <div class="ww-settings-resize-handle" data-edge="sw" aria-hidden="true"></div>
+      <div class="ww-settings-resize-handle" data-edge="nw" aria-hidden="true"></div>
+      <header id="ww-settings-titlebar" class="ww-settings-titlebar">
+        <button class="ww-settings-title-back" type="button" id="ww-settings-back" aria-label="Toggle Settings navigation" aria-expanded="true" title="Toggle navigation">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 6.5h16M4 12h16M4 17.5h16" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+        </button>
+        <span class="ww-settings-app-identity" aria-label="Settings"><svg class="ww-ph-icon" aria-hidden="true" focusable="false"><use href="#ww-ph-gear-six"></use></svg><span class="ww-settings-title-text">Settings</span></span>
+        <div class="wua-titlebar-center">
+          <div class="wua-titlebar-navigation" role="group" aria-label="Settings page navigation">
+            <button id="ww-settings-nav-back" type="button" title="Back" aria-label="Go back in Settings" disabled><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m14.5 5.5-6.5 6.5 6.5 6.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+            <button id="ww-settings-nav-forward" type="button" title="Forward" aria-label="Go forward in Settings" disabled><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m9.5 5.5 6.5 6.5-6.5 6.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          </div>
+          <div class="ww-settings-search-wrap wua-titlebar-search">
+            <label class="ww-settings-searchbox" for="ww-settings-search">
+              <svg class="ww-local-icon ww-settings-search-icon ww-ph-icon" focusable="false" aria-hidden="true"><use href="#ww-ph-magnifying-glass"></use></svg>
+              <input id="ww-settings-search" type="search" placeholder="Find a setting" autocomplete="off" aria-label="Search settings" aria-expanded="false" aria-controls="ww-settings-search-results" />
+            </label>
+            <div id="ww-settings-search-results" class="ww-settings-search-results" hidden role="listbox" aria-label="Settings search results"></div>
+          </div>
+        </div>
+        <div class="ww-gs-window-controls ww-settings-window-controls" aria-label="Window controls">
+          <button id="ww-settings-minimize" type="button" aria-label="Minimize Settings" title="Minimize"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/></svg></button>
+          <button id="ww-settings-maximize" type="button" aria-label="Maximize Settings" title="Maximize"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5.3" y="5.3" width="13.4" height="13.4" rx=".7"/></svg></button>
+          <button id="ww-settings-close" type="button" aria-label="Close Settings" title="Close"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6 18 18M18 6 6 18"/></svg></button>
+        </div>
+      </header>
+      <div class="ww-settings-columns">
+        <aside class="ww-settings-sidebar" aria-label="Settings navigation">
+          <div class="ww-settings-profile" aria-label="Current account">
+            <div class="ww-settings-profile-image"><img id="ww-settings-avatar" src="Assets/account-avatar.png" alt=""/><svg class="ww-local-icon ww-ph-icon" id="ww-settings-avatar-fallback"  hidden focusable="false" aria-hidden="true"><use href="#ww-ph-user"></use></svg></div>
+            <div class="ww-settings-profile-labels"><strong id="ww-settings-account-name">Russel John</strong><span>Windows 12 · 11H11</span></div>
+          </div>
+          <nav id="ww-settings-navigation" class="ww-settings-nav" aria-label="Settings categories">
+            <button class="ww-settings-nav-row is-active" type="button" data-ww-settings-nav="home" aria-current="page" title="System home">
+              <span class="ww-settings-nav-icon"><img class="ww-nav-icons8" src="https://img.icons8.com/fluency/48/home.png" alt=""><svg class="ww-nav-fallback ww-ph-icon"  focusable="false" aria-hidden="true"><use href="#ww-ph-house-regular"></use></svg></span><span>Home</span>
+            </button>
+            <button class="ww-settings-nav-row" type="button" data-ww-settings-nav="personalization" title="Personalization">
+              <span class="ww-settings-nav-icon"><img class="ww-nav-icons8" src="https://img.icons8.com/fluency/48/paint-palette.png" alt=""><img class="ww-nav-fallback" src="Assets/ww11-fluent/personalization.svg" alt=""></span><span>Personalization</span>
+            </button>
+            <button class="ww-settings-nav-row" type="button" data-ww-settings-nav="time" aria-disabled="true" title="Time &amp; Language is not available">
+              <span class="ww-settings-nav-icon"><img class="ww11-custom-nav-svg" src="Assets/ww11-fluent/time-language.svg" alt=""></span><span>Time &amp; Language</span>
+            </button>
+            <button class="ww-settings-nav-row" type="button" data-ww-settings-nav="accounts" title="Accounts">
+              <span class="ww-settings-nav-icon"><img class="ww11-custom-nav-svg" src="Assets/ww11-fluent/accounts.svg" alt=""></span><span>Accounts</span>
+            </button>
+            <button class="ww-settings-nav-row" type="button" data-ww-settings-nav="privacy" aria-disabled="true" title="Privacy is not available">
+              <span class="ww-settings-nav-icon"><img class="ww11-custom-nav-svg" src="Assets/ww11-fluent/privacy.svg" alt=""></span><span>Privacy</span>
+            </button>
+            <button class="ww-settings-nav-row" type="button" data-ww-settings-nav="updates" aria-disabled="true" title="Windows Update is not available">
+              <span class="ww-settings-nav-icon"><img class="ww11-custom-nav-svg" src="Assets/ww11-fluent/windows-update.svg" alt=""></span><span>Windows Update</span>
+            </button>
+          </nav>
+        </aside>
+        <main class="ww-settings-main" id="ww-settings-main">
+          <h1 id="ww-settings-heading">System</h1>
+          <div id="ww-settings-home-banner" class="ww-settings-device-banner" hidden></div>
+          <div id="ww-settings-section" class="ww-settings-section" aria-live="polite"></div>
+        </main>
+      </div>
+    </div>
+  </section>
+
+  <!-- 11H11 Get Started: standalone, non-modal native app with a shared Settings transition. -->
+  <section id="ww-gs-overlay" class="ww-gs-overlay" role="dialog" aria-modal="false" aria-label="Get Started" aria-hidden="true" hidden>
+    <div id="ww-gs-window" class="ww-gs-window" role="document">
+      <header id="ww-gs-titlebar" class="ww-gs-titlebar">
+        <span class="wua-gs-identity"><svg class="ww-ph-icon" aria-hidden="true" focusable="false"><use href="#ww-ph-app-window"></use></svg><span class="ww-gs-title">Get Started</span></span>
+        <div class="ww-gs-window-controls" aria-label="Window controls">
+          <button id="ww-gs-minimize" aria-label="Minimize Get Started" title="Minimize" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/></svg></button>
+          <button id="ww-gs-maximize" aria-label="Maximize Get Started" title="Maximize" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5.3" y="5.3" width="13.4" height="13.4" rx=".7"/></svg></button>
+          <button id="ww-gs-close" aria-label="Close Get Started" title="Close" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6 18 18M18 6 6 18"/></svg></button>
+        </div>
+      </header>
+      <div class="ww-gs-stage" id="ww-gs-stage">
+        <section class="ww-gs-copy" id="ww-gs-copy" aria-live="polite" aria-atomic="true">
+          <p class="ww-gs-step-label" id="ww-gs-step-label" hidden></p>
+          <h1 id="ww-gs-heading">Welcome back</h1>
+          <p id="ww-gs-description">Let's set up a few things to get you going.</p>
+          <ul class="ww-gs-highlights" id="ww-gs-highlights" aria-label="Things to explore" hidden></ul>
+          <button id="ww-gs-main-action" class="ww-gs-primary" type="button">Get started</button>
+        </section>
+        <div class="ww-gs-device" aria-label="Windows desktop on a laptop" role="img">
+          <svg class="ww-gs-laptop" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 570" aria-hidden="true" focusable="false">
+            <defs>
+              <linearGradient id="ww-gs-bezel" x1=".15" y1="0" x2=".8" y2="1"><stop stop-color="#52565c"/><stop offset=".47" stop-color="#22282e"/><stop offset="1" stop-color="#0b1016"/></linearGradient>
+              <linearGradient id="ww-gs-base" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#dce1e5"/><stop offset=".27" stop-color="#9ca7af"/><stop offset=".65" stop-color="#e6eaed"/><stop offset="1" stop-color="#6a7881"/></linearGradient>
+              <linearGradient id="ww-gs-panel" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#202930"/><stop offset="1" stop-color="#0a0e12"/></linearGradient>
+              <clipPath id="ww-gs-screen-clip"><rect x="69" y="57" width="722" height="412" rx="4"/></clipPath>
+              <filter id="ww-gs-laptop-shadow" x="-20%" y="-20%" width="140%" height="160%"><feGaussianBlur stdDeviation="9"/></filter>
+            </defs>
+            <ellipse cx="425" cy="530" rx="405" ry="16" fill="#132332" opacity=".23" filter="url(#ww-gs-laptop-shadow)"/>
+            <rect x="48" y="28" width="764" height="465" rx="20" fill="#30353a" stroke="#8c9297" stroke-width="3"/>
+            <rect x="56" y="35" width="748" height="451" rx="14" fill="url(#ww-gs-bezel)"/>
+            <rect x="69" y="57" width="722" height="412" rx="4" fill="#a4cce2"/>
+            <g clip-path="url(#ww-gs-screen-clip)"><image href="Assets/Get-started/GS.png" x="69" y="57" width="722" height="412" preserveAspectRatio="none"/></g>
+            <circle cx="430" cy="43" r="4.6" fill="#454c53"/><circle cx="430" cy="43" r="1.6" fill="#828c97"/>
+            <path d="M0 497h860l-13 18c-4 6-15 10-26 10H39c-11 0-22-4-26-10Z" fill="url(#ww-gs-base)"/>
+            <path d="M0 496h860" stroke="#7d8992" stroke-width="2"/>
+            <path d="M347 498h166c-4 8-9 11-22 11H370c-13 0-19-3-23-11Z" fill="#79848c" opacity=".6"/>
+          </svg>
+        </div>
+      </div>
+      <footer class="ww-gs-footer">
+        <button type="button" id="ww-gs-skip" class="ww-gs-skip">Skip tour</button>
+        <div class="ww-gs-progress-group" aria-label="Setup progress">
+          <span id="ww-gs-progress" class="ww-gs-progress" aria-live="off"></span>
+          <div class="ww-gs-progress-track" role="progressbar" aria-label="Setup progress" aria-valuemin="0" aria-valuemax="8" aria-valuenow="0"><span id="ww-gs-progress-fill"></span></div>
+        </div>
+        <div class="ww-gs-footer-right">
+          <button type="button" class="ww-gs-footer-icon" id="ww-gs-previous" aria-label="Previous step" title="Previous"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m14.5 5-7 7 7 7"/></svg></button>
+          <button type="button" class="ww-gs-footer-icon" id="ww-gs-next" aria-label="Next step" title="Next"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9.5 5 7 7-7 7"/></svg></button>
+        </div>
+      </footer>
+    </div>
+  </section>
+  </main>
+  <script src="script.js"></script>
+</body>
+</html>
