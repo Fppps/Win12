@@ -1779,27 +1779,25 @@ WWCompat.boot('Settings', () => {
   const insiderReleaseLabel=$('ww10-insider-release-state');
   const insiderAdvancedTrigger=$('ww10-insider-advanced-trigger');
   const insiderAdvancedContent=$('ww10-insider-advanced-content');
-  const MANIFEST_SOURCES=Object.freeze({
-    experimental:['Build-update/Experimental/Experimental_2610140_1.json'],
-    beta:['Build-update/Beta/Beta_2610140_5.json'],
-    release:['Build-update/Release-preview/Release-Preview_2610140_10.json','Build-update/Release-preview/Release-preview_2610140_10.json'],
-    stable:['Build-update/Release/Release_2610140_15.json']
-  });
-  // Both products share Build-update channels. Each JSON manifest's
-  // `version` field, not its numeric build, identifies the target product.
+  // Every channel has one real installer index.html, and separate folders
+  // for 10H10 and 11H11 JSON manifests. No numbered filename suffix is needed.
   const CHANNEL_DIRS=Object.freeze({
     experimental:'Build-update/Experimental/',
     beta:'Build-update/Beta/',
     release:'Build-update/Release-preview/',
     stable:'Build-update/Release/'
   });
+  // Accept e.g. Beta_2611145.json and the older Beta_2611145_1.json.
+  // The JSON's `build` and `version` fields, not the filename, are authoritative.
   const CHANNEL_FILE_PREFIX=Object.freeze({
-    experimental:/^Experimental_\d{5,10}_\d{1,6}\.json$/i,
-    beta:/^Beta_\d{5,10}_\d{1,6}\.json$/i,
-    release:/^Release[-_]Preview_\d{5,10}_\d{1,6}\.json$/i,
-    stable:/^Release_\d{5,10}_\d{1,6}\.json$/i
+    experimental:/^Experimental_\d{5,10}(?:[._]\d{1,6})?\.json$/i,
+    beta:/^Beta_\d{5,10}(?:[._]\d{1,6})?\.json$/i,
+    release:/^Release[-_]Preview_\d{5,10}(?:[._]\d{1,6})?\.json$/i,
+    stable:/^Release_\d{5,10}(?:[._]\d{1,6})?\.json$/i
   });
   const INSIDER_CHANNEL_PATHS=Object.freeze(Object.fromEntries(Object.entries(CHANNEL_DIRS).map(([k,path])=>[k,path+'index.html'])));
+  const UPDATE_GITHUB_REPO=(document.querySelector('meta[name="webwindows-update-repository"]')?.content||'').trim();
+  const UPDATE_GITHUB_REF=(document.querySelector('meta[name="webwindows-update-ref"]')?.content||'').trim();
   const UPDATE_RECORDS_KEY='webwindows.10h10.applied-updates.v1';
   const UPDATE_SKIPPED_KEY='webwindows.10h10.declined-updates.v1';
   const readLocalJson=(key,fallback)=>{try{const val=JSON.parse(localStorage.getItem(key)||'null');return val && typeof val==='object'?val:fallback;}catch{return fallback;}};
@@ -1882,39 +1880,80 @@ WWCompat.boot('Settings', () => {
       throw Error('Missing installer page or main-app fallback');
     return source;
   }
-  async function discoverChannelManifests(channel,signal){
-    const folder=CHANNEL_DIRS[channel];
-    const indexPath=folder+'index.html';
-    const source=await checkedInstallerPage(indexPath,signal);
-    const page=new DOMParser().parseFromString(source.slice(0,1024*1024),'text/html');
-    const directoryUrl=strictSameOriginUrl(folder);
-    const names=new Set(MANIFEST_SOURCES[channel]);
-    // Static hosting cannot enumerate folder contents. Every additional
-    // manifest is linked from the folder index.html, either with an href or
-    // data-update-manifest attribute. Only appropriately named same-folder
-    // JSON files are accepted; links to other directories are ignored.
-    for(const element of page.querySelectorAll('[href],[data-update-manifest]')){
-      const value=element.getAttribute('data-update-manifest') || element.getAttribute('href');
-      if(!value)continue;
-      try{
-        const candidate=new URL(value,directoryUrl);
-        if(candidate.origin!==directoryUrl.origin || !candidate.pathname.startsWith(directoryUrl.pathname))continue;
-        const name=decodeURIComponent(candidate.pathname.slice(directoryUrl.pathname.length));
-        if(!name || name.includes('/') || !CHANNEL_FILE_PREFIX[channel].test(name))continue;
-        names.add(folder+name);
-      }catch{}
-      if(names.size>=36)break;
+  // Directory listing is not available to ordinary browser fetch() on a static
+  // website. The configured public GitHub repository provides a read-only file
+  // listing so authors can add standalone JSON files without hand-writing links.
+  // A single updates.json containing an array also works without GitHub API.
+  async function githubVersionFileNames(folder,channel,signal){
+    if(!/^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/.test(UPDATE_GITHUB_REPO))return [];
+    const source='https://api.github.com/repos/'+UPDATE_GITHUB_REPO+'/contents/'+
+      folder.replace(/\/$/,'').split('/').map(encodeURIComponent).join('/');
+    const url=new URL(source);
+    if(UPDATE_GITHUB_REF)url.searchParams.set('ref',UPDATE_GITHUB_REF);
+    // Directory listings must not make the entire update check stall if GitHub
+    // is slow, rate-limited, or temporarily unreachable. Fall back independently.
+    const listingAbort=new AbortController();
+    const cancelWithScan=()=>listingAbort.abort();
+    if(signal?.aborted)listingAbort.abort();
+    else signal?.addEventListener('abort',cancelWithScan,{once:true});
+    const listingTimeout=setTimeout(()=>listingAbort.abort(),3500);
+    try{
+      const response=await fetch(url.href,{cache:'no-store',signal:listingAbort.signal,headers:{Accept:'application/vnd.github+json'}});
+      if(!response.ok)throw Error(`GitHub directory listing HTTP ${response.status}`);
+      const items=await response.json();
+      if(!Array.isArray(items))return [];
+      return items.filter(item=>item?.type==='file' && typeof item.name==='string' &&
+        CHANNEL_FILE_PREFIX[channel].test(item.name) && (!Number.isFinite(item.size)||item.size<=32768))
+        .map(item=>folder+item.name).slice(0,40);
+    }catch(error){
+      if(error?.name==='AbortError' && signal?.aborted)throw error;
+      // Still check the self-contained updates.json fallback in this folder.
+      return [];
+    }finally{
+      clearTimeout(listingTimeout);
+      signal?.removeEventListener('abort',cancelWithScan);
     }
-    return {indexPath,paths:[...names].slice(0,36)};
   }
-  async function fetchManifestEntries(channel,force=false,signal){
-    const cached=manifestCache.get(channel);
+  async function discoverChannelManifests(channel,version,signal){
+    // The real channel installer is still mandatory even when a version folder
+    // has JSON files. 200 responses containing the main desktop are rejected.
+    const indexPath=INSIDER_CHANNEL_PATHS[channel];
+    const source=await checkedInstallerPage(indexPath,signal);
+    const product=String(version).trim().toUpperCase();
+    if(!['10H10','11H11'].includes(product))return {indexPath,paths:[]};
+    const folder=CHANNEL_DIRS[channel]+product+'/';
+    const directoryUrl=strictSameOriginUrl(folder);
+    // No per-file references required: updates.json may hold 1 or many records.
+    // When on GitHub, additional single-update JSON files are auto-discovered.
+    const names=new Set([folder+'updates.json']);
+    for(const path of await githubVersionFileNames(folder,channel,signal))names.add(path);
+    // Optional HTML links are backward-compatible but no longer required.
+    // They must point strictly inside the matching version folder.
+    const page=new DOMParser().parseFromString(source.slice(0,1024*1024),'text/html');
+    const channelUrl=strictSameOriginUrl(CHANNEL_DIRS[channel]);
+    for(const element of page.querySelectorAll('[href],[data-update-manifest]')){
+      const href=element.getAttribute('data-update-manifest')||element.getAttribute('href');
+      if(!href)continue;
+      try{
+        const candidate=new URL(href,channelUrl);
+        if(candidate.origin!==directoryUrl.origin||!candidate.pathname.startsWith(directoryUrl.pathname))continue;
+        const filename=decodeURIComponent(candidate.pathname.slice(directoryUrl.pathname.length));
+        if(filename && !filename.includes('/') && CHANNEL_FILE_PREFIX[channel].test(filename))names.add(folder+filename);
+      }catch{}
+      if(names.size>=41)break;
+    }
+    return {indexPath,paths:[...names].slice(0,41)};
+  }
+  async function fetchManifestEntries(channel,version,force=false,signal){
+    const product=String(version).trim().toUpperCase();
+    const cacheKey=`${channel}:${product}`;
+    const cached=manifestCache.get(cacheKey);
     if(!force && cached && Date.now()-cached.time<45000)return cached.records;
     let index;
-    try{index=await discoverChannelManifests(channel,signal);}
+    try{index=await discoverChannelManifests(channel,product,signal);}
     catch(error){
       if(error?.name==='AbortError')throw error;
-      manifestCache.set(channel,{records:[],time:Date.now()});
+      manifestCache.set(cacheKey,{records:[],time:Date.now()});
       return [];
     }
     const fetched=await Promise.all(index.paths.map(async path=>{
@@ -1923,23 +1962,25 @@ WWCompat.boot('Settings', () => {
         const text=await response.text();
         if(text.length>32768)throw Error('Manifest too large');
         const payload=JSON.parse(text);
-        // A manifest can describe one update or several in an array/updates
-        // collection. Files linked from the folder index add further tiles.
         const rawEntries=Array.isArray(payload)?payload:(Array.isArray(payload?.updates)?payload.updates:[payload]);
-        return rawEntries.slice(0,32).flatMap(raw=>{
-          try{return [checkManifestFields(raw,channel,path,index.indexPath)];}
-          catch(error){console.warn(`[WebWindows Update] Ignoring invalid record in ${path}:`,error.message);return [];}
+        return rawEntries.slice(0,40).flatMap(raw=>{
+          try{
+            const record=checkManifestFields(raw,channel,path,index.indexPath);
+            // Do not let mislabeled files in 10H10 appear as 11H11 (or vice versa).
+            return String(record.version).trim().toUpperCase()===product ? [record]:[];
+          }catch(error){console.warn(`[WebWindows Update] Ignoring invalid record in ${path}:`,error.message);return [];}
         });
       }catch(error){
         if(error?.name==='AbortError')throw error;
-        console.warn(`[WebWindows Update] Skipping invalid or missing ${path}:`,error?.message||error);
+        // A missing fallback file is normal; standalone manifests can be used.
+        if(!path.endsWith('/updates.json'))console.warn(`[WebWindows Update] Skipping invalid or missing ${path}:`,error?.message||error);
         return [];
       }
     }));
     const unique=new Map();
     for(const record of fetched.flat())if(!unique.has(record.key))unique.set(record.key,record);
     const records=[...unique.values()].sort((a,b)=>b.update_date.localeCompare(a.update_date)||compareBuild(b.build,a.build)).slice(0,40);
-    manifestCache.set(channel,{records,time:Date.now()});
+    manifestCache.set(cacheKey,{records,time:Date.now()});
     return records;
   }
   function forSelectedProduct(records,product=state.insiderProduct){
@@ -1970,7 +2011,7 @@ WWCompat.boot('Settings', () => {
     const notice=$('ww10-insider-availability-status');
     if(notice)notice.textContent=['experimental','beta','release'].map(channel=>
       eligible[channel].length?`${channel} updates available.`:
-      `${channel} requires ${INSIDER_CHANNEL_PATHS[channel]} and a matching ${state.insiderProduct} update manifest.`).join(' ');
+      `${channel} requires ${INSIDER_CHANNEL_PATHS[channel]} and update JSON in ${CHANNEL_DIRS[channel]}${state.insiderProduct}/.`).join(' ');
   }
   async function scanUpdateSources(force=false){
     if(scanInFlight && !force)return scanInFlight;
@@ -1982,13 +2023,13 @@ WWCompat.boot('Settings', () => {
     const promise=(async()=>{
       try{
         const names=['experimental','beta','release','stable'];
-        const values=await Promise.all(names.map(name=>fetchManifestEntries(name,force,controller.signal)));
+        // Scan the selected product's own version subfolders only.
+        const product=state.insiderProduct;
+        const values=await Promise.all(names.map(name=>fetchManifestEntries(name,product,force,controller.signal)));
         const items=Object.fromEntries(names.map((name,i)=>[name,values[i]]));
-        // 11H11 availability requires an 11H11 manifest at build 2611145+;
-        // older mislabeled manifests are rejected during validation.
-        const has11H11=Object.values(items).some(records=>forSelectedProduct(records,'11H11').length>0);
+        const has11H11=product==='11H11' && Object.values(items).some(records=>records.length>0);
         if(generation!==updateScanCounter)return latestUpdateScan;
-        latestUpdateScan={items,has11H11,checkedAt:Date.now()};
+        latestUpdateScan={items,product,has11H11,checkedAt:Date.now()};
         reflectAvailableChannels(items);
         renderAvailableUpdates();
         WWCompat.emit('webwindows:update-manifests-scanned',{channels:Object.keys(items).filter(k=>items[k].length),has11H11});
@@ -2027,11 +2068,13 @@ WWCompat.boot('Settings', () => {
       if(!input.checked)return;
       state.insiderProduct=input.value;
       persist();
-      // A product switch matches JSON version fields, not build numbers or folders
-      // are scanned. Refresh radio availability from the current results now.
-      if(latestUpdateScan)reflectAvailableChannels(latestUpdateScan.items);
+      // A product switch changes the manifest directory. Never show stale
+      // update cards from the previously selected version while scanning.
+      latestUpdateScan=null;
+      for(const channel of ['experimental','beta','release'])insiderChannelAvailable[channel]=null;
+      syncInsiderExperienceChoices();
       renderAvailableUpdates();
-      void scanUpdateSources();
+      void scanUpdateSources(true);
     });
   });
   insiderExperienceChoices.forEach(input=>input.addEventListener('change',()=>{
