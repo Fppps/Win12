@@ -1813,6 +1813,10 @@ WWCompat.boot('Settings', () => {
   let insiderProbe=null;
   let insiderLastProbe=0;
   const insiderChannelAvailable={experimental:null,beta:null,release:null};
+  // 11H11's first build is 2611145. The manifest's version field still
+  // determines its target product; this floor only rejects invalid 11H11
+  // build records (including 2610145 or earlier 2611xxx builds).
+  const FIRST_11H11_BUILD='2611145';
   const strictDate=value=>typeof value==='string' && /^\d{4}-\d{2}-\d{2}$/.test(value) && !Number.isNaN(Date.parse(`${value}T00:00:00Z`)) && new Date(`${value}T00:00:00Z`).toISOString().slice(0,10)===value;
   function checkManifestFields(raw,channel,path,indexPath){
     if (!raw || Array.isArray(raw) || typeof raw!=='object') throw Error('Expected an update object');
@@ -1820,6 +1824,10 @@ WWCompat.boot('Settings', () => {
     if(typeof version!=='string' || !/^[A-Za-z0-9][A-Za-z0-9 .-]{0,29}$/.test(version))throw Error('Invalid version');
     if(typeof description!=='string' || !description.trim() || description.length>180 || /[<>]/.test(description))throw Error('Invalid description');
     if(typeof build!=='string' || !/^\d{5,10}(?:\.\d{1,6})?$/.test(build))throw Error('Invalid build');
+    // Respect the declared product as the source of truth, while enforcing
+    // the actual 11H11 series start. Do not infer 11H11 from build alone.
+    if(version.trim().toUpperCase()==='11H11' && compareBuild(build,FIRST_11H11_BUILD)<0)
+      throw Error(`11H11 starts at build ${FIRST_11H11_BUILD}`);
     if(!strictDate(update_date))throw Error('Invalid update_date');
     for(const name of ['Verification','Feature-Update','Major-Update']) if(typeof raw[name]!=='boolean')throw Error(`Missing or invalid ${name}`);
     if(raw['Feature-Update'] && raw['Major-Update'])throw Error('Feature and Major cannot both be true');
@@ -1935,8 +1943,9 @@ WWCompat.boot('Settings', () => {
     return records;
   }
   function forSelectedProduct(records,product=state.insiderProduct){
-    // Version is authoritative: a build number alone never promotes a 10H10
-    // update to 11H11 or excludes a correctly labeled 11H11 update.
+    // Version is authoritative: only 11H11-labeled manifests can become
+    // 11H11 updates. checkManifestFields() additionally enforces the actual
+    // 11H11 build floor (2611145) before an entry reaches this filter.
     const target=String(product).trim().toUpperCase();
     return records.filter(record=>String(record.version).trim().toUpperCase()===target);
   }
@@ -1975,7 +1984,8 @@ WWCompat.boot('Settings', () => {
         const names=['experimental','beta','release','stable'];
         const values=await Promise.all(names.map(name=>fetchManifestEntries(name,force,controller.signal)));
         const items=Object.fromEntries(names.map((name,i)=>[name,values[i]]));
-        // 11H11 availability requires a manifest declaring version: 11H11.
+        // 11H11 availability requires an 11H11 manifest at build 2611145+;
+        // older mislabeled manifests are rejected during validation.
         const has11H11=Object.values(items).some(records=>forSelectedProduct(records,'11H11').length>0);
         if(generation!==updateScanCounter)return latestUpdateScan;
         latestUpdateScan={items,has11H11,checkedAt:Date.now()};
