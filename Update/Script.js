@@ -1796,8 +1796,8 @@ WWCompat.boot('Settings', () => {
     stable:/^Release_\d{5,10}(?:[._]\d{1,6})?\.json$/i
   });
   const INSIDER_CHANNEL_PATHS=Object.freeze(Object.fromEntries(Object.entries(CHANNEL_DIRS).map(([k,path])=>[k,path+'index.html'])));
-  const UPDATE_GITHUB_REPO=(document.querySelector('meta[name="webwindows-update-repository"]')?.content||'').trim();
-  const UPDATE_GITHUB_REF=(document.querySelector('meta[name="webwindows-update-ref"]')?.content||'').trim();
+  const UPDATE_GITHUB_REPO=(document.querySelector('meta[name="webwindows-update-repository"]')?.content||'Fppps/Win12').trim();
+  const UPDATE_GITHUB_REF=(document.querySelector('meta[name="webwindows-update-ref"]')?.content||'main').trim();
   const UPDATE_RECORDS_KEY='webwindows.10h10.applied-updates.v1';
   const UPDATE_SKIPPED_KEY='webwindows.10h10.declined-updates.v1';
   const readLocalJson=(key,fallback)=>{try{const val=JSON.parse(localStorage.getItem(key)||'null');return val && typeof val==='object'?val:fallback;}catch{return fallback;}};
@@ -1880,34 +1880,50 @@ WWCompat.boot('Settings', () => {
       throw Error('Missing installer page or main-app fallback');
     return source;
   }
-  // Directory listing is not available to ordinary browser fetch() on a static
-  // website. The configured public GitHub repository provides a read-only file
-  // listing so authors can add standalone JSON files without hand-writing links.
-  // A single updates.json containing an array also works without GitHub API.
+  // Discover every JSON update automatically from the public GitHub repository.
+  // Use the directory of the currently running app in the repository, not a
+  // fixed repository-root Build-update path. This matters for /Update/index.html
+  // deployments (GitHub Pages may also add a /Win12/ path prefix).
+  function githubUpdatePrefixes(){
+    const repoName=UPDATE_GITHUB_REPO.split('/')[1]||'';
+    const appPath=new URL(document.baseURI).pathname.replace(/[^/]*$/,'').replace(/^\/+/, '');
+    const relative=repoName && appPath.toLowerCase().startsWith((repoName+'/').toLowerCase())
+      ?appPath.slice(repoName.length+1):appPath;
+    return [...new Set([relative,'Update/',''].map(v=>v.replace(/^\/+|\/+$/g,'')).filter((v,i,a)=>a.indexOf(v)===i))];
+  }
   async function githubVersionFileNames(folder,channel,signal){
     if(!/^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/.test(UPDATE_GITHUB_REPO))return [];
-    const source='https://api.github.com/repos/'+UPDATE_GITHUB_REPO+'/contents/'+
-      folder.replace(/\/$/,'').split('/').map(encodeURIComponent).join('/');
-    const url=new URL(source);
-    if(UPDATE_GITHUB_REF)url.searchParams.set('ref',UPDATE_GITHUB_REF);
-    // Directory listings must not make the entire update check stall if GitHub
-    // is slow, rate-limited, or temporarily unreachable. Fall back independently.
     const listingAbort=new AbortController();
     const cancelWithScan=()=>listingAbort.abort();
     if(signal?.aborted)listingAbort.abort();
     else signal?.addEventListener('abort',cancelWithScan,{once:true});
-    const listingTimeout=setTimeout(()=>listingAbort.abort(),3500);
+    const listingTimeout=setTimeout(()=>listingAbort.abort(),6000);
     try{
-      const response=await fetch(url.href,{cache:'no-store',signal:listingAbort.signal,headers:{Accept:'application/vnd.github+json'}});
-      if(!response.ok)throw Error(`GitHub directory listing HTTP ${response.status}`);
-      const items=await response.json();
-      if(!Array.isArray(items))return [];
-      return items.filter(item=>item?.type==='file' && typeof item.name==='string' &&
-        CHANNEL_FILE_PREFIX[channel].test(item.name) && (!Number.isFinite(item.size)||item.size<=32768))
-        .map(item=>folder+item.name).slice(0,40);
+      for(const prefix of githubUpdatePrefixes()){
+        const fullPath=[prefix,folder.replace(/\/$/,'')].filter(Boolean).join('/');
+        const url=new URL('https://api.github.com/repos/'+UPDATE_GITHUB_REPO+'/contents/'+
+          fullPath.split('/').map(encodeURIComponent).join('/'));
+        if(UPDATE_GITHUB_REF)url.searchParams.set('ref',UPDATE_GITHUB_REF);
+        let response;
+        try{
+          response=await fetch(url.href,{cache:'no-store',signal:listingAbort.signal,
+            headers:{Accept:'application/vnd.github+json'}});
+        }catch(error){
+          if(error?.name==='AbortError' && signal?.aborted)throw error;
+          break;
+        }
+        if(response.status===404)continue; // The repo may store the app under /Update/.
+        if(!response.ok)break; // A rate limit or outage must not invent updates.
+        const items=await response.json();
+        if(!Array.isArray(items))continue;
+        return items.filter(item=>item?.type==='file' && typeof item.name==='string' &&
+          CHANNEL_FILE_PREFIX[channel].test(item.name) &&
+          (!Number.isFinite(item.size)||item.size<=32768))
+          .map(item=>folder+item.name).slice(0,40);
+      }
+      return [];
     }catch(error){
       if(error?.name==='AbortError' && signal?.aborted)throw error;
-      // Still check the self-contained updates.json fallback in this folder.
       return [];
     }finally{
       clearTimeout(listingTimeout);
@@ -1915,28 +1931,32 @@ WWCompat.boot('Settings', () => {
     }
   }
   async function discoverChannelManifests(channel,version,signal){
-    // The real channel installer is still mandatory even when a version folder
-    // has JSON files. 200 responses containing the main desktop are rejected.
-    const indexPath=INSIDER_CHANNEL_PATHS[channel];
-    const source=await checkedInstallerPage(indexPath,signal);
     const product=String(version).trim().toUpperCase();
-    if(!['10H10','11H11'].includes(product))return {indexPath,paths:[]};
+    if(!['10H10','11H11'].includes(product))return {indexPath:'',paths:[]};
     const folder=CHANNEL_DIRS[channel]+product+'/';
     const directoryUrl=strictSameOriginUrl(folder);
-    // No per-file references required: updates.json may hold 1 or many records.
-    // When on GitHub, additional single-update JSON files are auto-discovered.
+    // The installer lives INSIDE the chosen version folder on the deployed
+    // WebWindows website. Prefer it there, with a channel-level index as a
+    // backwards-compatible fallback for older installations.
+    const installerCandidates=[folder+'index.html',INSIDER_CHANNEL_PATHS[channel]];
+    let indexPath='',source='';
+    for(const path of installerCandidates){
+      try{source=await checkedInstallerPage(path,signal);indexPath=path;break;}
+      catch(error){if(error?.name==='AbortError')throw error;}
+    }
+    if(!indexPath)throw Error(`No installer for ${channel} ${product}`);
+    // Neither a numbered JSON suffix nor links in index.html are required.
     const names=new Set([folder+'updates.json']);
     for(const path of await githubVersionFileNames(folder,channel,signal))names.add(path);
-    // Optional HTML links are backward-compatible but no longer required.
-    // They must point strictly inside the matching version folder.
+    // Optional legacy references still work when they are inside this version.
     const page=new DOMParser().parseFromString(source.slice(0,1024*1024),'text/html');
-    const channelUrl=strictSameOriginUrl(CHANNEL_DIRS[channel]);
+    const installerUrl=strictSameOriginUrl(indexPath);
     for(const element of page.querySelectorAll('[href],[data-update-manifest]')){
       const href=element.getAttribute('data-update-manifest')||element.getAttribute('href');
       if(!href)continue;
       try{
-        const candidate=new URL(href,channelUrl);
-        if(candidate.origin!==directoryUrl.origin||!candidate.pathname.startsWith(directoryUrl.pathname))continue;
+        const candidate=new URL(href,installerUrl);
+        if(candidate.origin!==directoryUrl.origin || !candidate.pathname.startsWith(directoryUrl.pathname))continue;
         const filename=decodeURIComponent(candidate.pathname.slice(directoryUrl.pathname.length));
         if(filename && !filename.includes('/') && CHANNEL_FILE_PREFIX[channel].test(filename))names.add(folder+filename);
       }catch{}
@@ -2008,10 +2028,17 @@ WWCompat.boot('Settings', () => {
       [channel,forSelectedProduct(records)]));
     for(const channel of ['experimental','beta','release'])insiderChannelAvailable[channel]=eligible[channel].length>0;
     syncInsiderExperienceChoices();
+    // If the selected version has only one available Insider channel, show
+    // its update without requiring an extra click on the channel radio.
+    const available=['experimental','beta','release'].filter(channel=>
+      insiderChannelAvailable[channel]===true && (channel!=='release'||state.insiderReleasePreview));
+    if(!state.insiderExperience && available.length===1){
+      state.insiderExperience=available[0];persist();syncInsiderExperienceChoices();
+    }
     const notice=$('ww10-insider-availability-status');
     if(notice)notice.textContent=['experimental','beta','release'].map(channel=>
       eligible[channel].length?`${channel} updates available.`:
-      `${channel} requires ${INSIDER_CHANNEL_PATHS[channel]} and update JSON in ${CHANNEL_DIRS[channel]}${state.insiderProduct}/.`).join(' ');
+      `${channel} requires a real installer in ${CHANNEL_DIRS[channel]}${state.insiderProduct}/ and valid update JSON there.`).join(' ');
   }
   async function scanUpdateSources(force=false){
     if(scanInFlight && !force)return scanInFlight;
