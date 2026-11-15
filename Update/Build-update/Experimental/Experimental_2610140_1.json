@@ -1,7 +1,7 @@
 {
-    "version": "10H10",
-    "description": "10H10 Beta insider update.",
-    "build": "2610140.1",
+    "version": "11H11",
+    "description": "11H11 Experimental (Alpha) insider update.",
+    "build": "2610145",
     "update_date": "2026-11-26",
     "Verification": false,
     "Feature-Update": true,
