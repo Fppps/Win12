@@ -1,0 +1,13 @@
+{
+    "Version": "10",
+    "Status": "Verified",
+    "Update_type": "Major update.",
+    
+    "Updates": [
+        {
+            "Update_name": "Windows 12 10H10 Major Update.",
+            "Build": "269140",
+            "Description": "10H10 Major UI, UX, Styling & functionality Update."
+        }
+    ]
+}
