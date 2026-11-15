@@ -1785,7 +1785,8 @@ WWCompat.boot('Settings', () => {
     release:['Build-update/Release-preview/Release-Preview_2610140_10.json','Build-update/Release-preview/Release-preview_2610140_10.json'],
     stable:['Build-update/Release/Release_2610140_15.json']
   });
-  const INSTALLER_PATH='Update/index.html';
+  // Both products share Build-update channels. Each JSON manifest's
+  // `version` field, not its numeric build, identifies the target product.
   const CHANNEL_DIRS=Object.freeze({
     experimental:'Build-update/Experimental/',
     beta:'Build-update/Beta/',
@@ -1933,11 +1934,11 @@ WWCompat.boot('Settings', () => {
     manifestCache.set(channel,{records,time:Date.now()});
     return records;
   }
-  async function probe11H11(signal){
-    try{
-      await checkedInstallerPage(INSTALLER_PATH,signal);
-      return true;
-    }catch{return false;}
+  function forSelectedProduct(records,product=state.insiderProduct){
+    // Version is authoritative: a build number alone never promotes a 10H10
+    // update to 11H11 or excludes a correctly labeled 11H11 update.
+    const target=String(product).trim().toUpperCase();
+    return records.filter(record=>String(record.version).trim().toUpperCase()===target);
   }
   function syncInsiderExperienceChoices(){
     const chosen=insiderExperienceChoices.find(input=>input.value===state.insiderExperience);
@@ -1953,11 +1954,14 @@ WWCompat.boot('Settings', () => {
     }
   }
   function reflectAvailableChannels(items){
-    for(const channel of ['experimental','beta','release'])insiderChannelAvailable[channel]=items[channel].length>0;
+    const eligible=Object.fromEntries(Object.entries(items).map(([channel,records])=>
+      [channel,forSelectedProduct(records)]));
+    for(const channel of ['experimental','beta','release'])insiderChannelAvailable[channel]=eligible[channel].length>0;
     syncInsiderExperienceChoices();
     const notice=$('ww10-insider-availability-status');
     if(notice)notice.textContent=['experimental','beta','release'].map(channel=>
-      items[channel].length?`${channel} updates available.`:`${channel} requires ${INSIDER_CHANNEL_PATHS[channel]} and a valid update manifest.`).join(' ');
+      eligible[channel].length?`${channel} updates available.`:
+      `${channel} requires ${INSIDER_CHANNEL_PATHS[channel]} and a matching ${state.insiderProduct} update manifest.`).join(' ');
   }
   async function scanUpdateSources(force=false){
     if(scanInFlight && !force)return scanInFlight;
@@ -1971,7 +1975,8 @@ WWCompat.boot('Settings', () => {
         const names=['experimental','beta','release','stable'];
         const values=await Promise.all(names.map(name=>fetchManifestEntries(name,force,controller.signal)));
         const items=Object.fromEntries(names.map((name,i)=>[name,values[i]]));
-        const has11H11=await probe11H11(controller.signal);
+        // 11H11 availability requires a manifest declaring version: 11H11.
+        const has11H11=Object.values(items).some(records=>forSelectedProduct(records,'11H11').length>0);
         if(generation!==updateScanCounter)return latestUpdateScan;
         latestUpdateScan={items,has11H11,checkedAt:Date.now()};
         reflectAvailableChannels(items);
@@ -2011,7 +2016,11 @@ WWCompat.boot('Settings', () => {
     input.addEventListener('change',()=>{
       if(!input.checked)return;
       state.insiderProduct=input.value;
-      persist();renderAvailableUpdates();
+      persist();
+      // A product switch matches JSON version fields, not build numbers or folders
+      // are scanned. Refresh radio availability from the current results now.
+      if(latestUpdateScan)reflectAvailableChannels(latestUpdateScan.items);
+      renderAvailableUpdates();
       void scanUpdateSources();
     });
   });
@@ -2107,8 +2116,8 @@ WWCompat.boot('Settings', () => {
     insiderProbe?.abort();
   },{once:true});
 
-  // Early Updates only controls automatic Release-channel surfacing. 11H11
-  // Update/index.html detection is independent and belongs to the 11H11 choice.
+  // Early Updates controls automatic Release-channel surfacing for both
+  // products; each manifest is matched by its version field.
   const earlyUpdatesInput=$('ww10-early-updates');
   const earlyUpdatesState=$('ww10-early-updates-state');
   let showReleaseOnManualCheck=false;
@@ -2138,20 +2147,14 @@ WWCompat.boot('Settings', () => {
   manageAutomaticUpdateChecks();
   function getVisibleUpdates(){
     if(!latestUpdateScan)return [];
-    const {items,has11H11}=latestUpdateScan;
+    const {items}=latestUpdateScan;
     const list=[];
-    if(state.insiderProduct==='11H11'){
-      if(has11H11)list.push(Object.freeze({
-        key:'11H11:Update/index.html',channel:'11h11',version:'11H11',
-        build:'',title:'Windows 12 — Version 11H11',description:'A new Windows version is available.',
-        update_date:'',kind:'major',verified:true,path:INSTALLER_PATH,majorUpdate:true,featureUpdate:false,installer:true
-      }));
-    } else {
-      const channel=state.insiderExperience;
-      if(channel && items[channel]?.length)list.push(...items[channel]);
-      // Release updates are independent of the selected preview channel.
-      if((state.earlyUpdates||showReleaseOnManualCheck) && items.stable?.length)list.push(...items.stable);
-    }
+    const channel=state.insiderExperience;
+    if(channel && items[channel]?.length)list.push(...forSelectedProduct(items[channel]));
+    // Release updates are independent of the selected preview channel for
+    // both products, with version-field matching on each selected product.
+    if((state.earlyUpdates||showReleaseOnManualCheck) && items.stable?.length)
+      list.push(...forSelectedProduct(items.stable));
     return list.filter(item=>!appliedUpdateRecords[item.key] && (!skippedUpdateRecords[item.key] || showReleaseOnManualCheck))
       .sort((a,b)=>b.update_date.localeCompare(a.update_date)||compareBuild(b.build,a.build));
   }
@@ -2184,9 +2187,9 @@ WWCompat.boot('Settings', () => {
   }
   async function activateUpdate(item){
     if(state.pausedUntil){showUpdaterStatus(`Updates are paused until ${state.pausedUntil}.`,true);return;}
-    // Every offered update points to a real folder index.html. Navigate to
-    // that updater instead of pretending a JSON document installs app code.
-    const path=item.installer?INSTALLER_PATH:item.indexPath;
+    // Every offered update points to a real Build-update channel index.html.
+    // The manifest and selected product identify which build to install.
+    const path=item.indexPath;
     if(!path){showUpdaterStatus('Update page is unavailable.',true);return;}
     const requestController=new AbortController();
     const requestTimeout=setTimeout(()=>requestController.abort(),12000);
@@ -2196,13 +2199,12 @@ WWCompat.boot('Settings', () => {
       // Revalidate immediately before activation; a missing installer must not
       // redirect into the main desktop or record a pending update.
       await checkedInstallerPage(path,requestController.signal);
-      if(!item.installer){
-        // Each tile identifies its own update even when several builds share
-        // the same folder's installer entry point.
-        const selected={channel:item.channel,version:item.version,build:item.build,manifest:item.path};
-        try{sessionStorage.setItem('webwindows.10h10.pending-update.v1',JSON.stringify(selected));}catch{}
-        for(const [key,value] of Object.entries(selected))destination.searchParams.set(key,value);
-      }
+      // Each tile identifies its own update, even when several builds share
+      // one folder index. Also pass the chosen product for 11H11 installers.
+      const selected={channel:item.channel,product:state.insiderProduct,
+        version:item.version,build:item.build,manifest:item.path};
+      try{sessionStorage.setItem('webwindows.10h10.pending-update.v1',JSON.stringify(selected));}catch{}
+      for(const [key,value] of Object.entries(selected))destination.searchParams.set(key,value);
       window.location.assign(destination.href);
     }catch{
       showUpdaterStatus('Update page is unavailable. Check for updates again.',true);
