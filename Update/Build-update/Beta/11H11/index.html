@@ -1,0 +1,440 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#ffffff">
+  <title>Windows 12 11H11 Insider Preview</title>
+  <link rel="preconnect" href="https://img.icons8.com">
+  <meta name="webwindows-news-endpoint" content="">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<svg id="ww-phosphor-sprite" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" width="0" height="0" style="position:absolute;width:0;height:0;overflow:hidden;pointer-events:none"><defs><symbol id="ww-ph-clock-app" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 6.5v5.7l3.8 2.3"/></symbol><symbol id="ww-ph-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.55" stroke-linecap="round" stroke-linejoin="round"><path d="M4 3.5h10a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-5l-3.5 3v-3H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2Z"/><path d="M5.5 12 8.9 6l3.4 6M6.7 10h4.5"/><path d="M17 10.5h3a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-.5v2l-2.5-2h-1.5"/></symbol><symbol id="ww-ph-app-window" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2.5" /><path d="M3 8h18M7 6h.2M10 6h.2" /></symbol><symbol id="ww-ph-arrow-square-out" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round"><path d="M10.5 5H6.5A2.5 2.5 0 0 0 4 7.5v10A2.5 2.5 0 0 0 6.5 20h10a2.5 2.5 0 0 0 2.5-2.5v-4"/><path d="M13 4h7v7"/><path d="M20 4 10.5 13.5"/></symbol><symbol id="ww-ph-arrows-clockwise-regular" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20.3 10a8.4 8.4 0 0 0-14.2-4.2L3.5 8.5M3.5 3.5v5h5M3.7 14a8.4 8.4 0 0 0 14.2 4.2l2.6-2.7M20.5 20.5v-5h-5" /></symbol><symbol id="ww-ph-caret-up-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m6 15 6-6 6 6" /></symbol><symbol id="ww-ph-chat-centered-text" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20 16.5a3 3 0 0 1-3 3H8l-4 2V6a3 3 0 0 1 3-3h10a3 3 0 0 1 3 3z" /><path d="M8 9h8M8 13h8M10 17h4" /></symbol><symbol id="ww-ph-clock-counter-clockwise-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4.2 7.5A9 9 0 1 1 3 12" /><path d="M4.2 3.7v4h4" /><path d="M12 6.6V12l3.6 2.2" /></symbol><symbol id="ww-ph-desktop" viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><rect x="24" y="40" width="208" height="152" rx="12" />
+  <path d="M24 160h208M128 192v32M88 224h80" />
+</symbol><symbol id="ww-ph-folder" viewBox="0 0 256 256" fill="none"><path d="M28 66c0-11 9-20 20-20h54l20 22h86c11 0 20 9 20 20v112c0 11-9 20-20 20H48c-11 0-20-9-20-20V66Z" stroke="currentColor" stroke-width="16" stroke-linejoin="round" /><path d="M28 103h200" stroke="currentColor" stroke-width="13" /></symbol><symbol id="ww-ph-house-regular" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1Z" /><path d="M9 21v-8h6v8" /></symbol><symbol id="ww-ph-info-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9" /><path d="M12 10.5v6M12 7.1v.6" /></symbol><symbol id="ww-ph-magnifying-glass" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="10.8" cy="10.8" r="6.6" /><path d="m16 16 5 5" /></symbol><symbol id="ww-ph-newspaper-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4h14v15a2 2 0 0 1-2 2H6a3 3 0 0 1-3-3V8h3" /><path d="M6 4v14a3 3 0 0 1-3 0M9 8h8v4H9zM9 15h8M9 18h6" /></symbol><symbol id="ww-ph-paint-brush-regular" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m13 7 6.4-5 2.6 2.6-5.1 6.3-4.2 1.1-2.3 2.3M8.8 14.5c-1.1-.3-2.2 0-3.2.9C4 17 4.8 19 2.5 21.5c3-.3 5.3-.9 6.8-2.1 1.4-1.2 1.6-3.5-.5-4.9Z" /></symbol><symbol id="ww-ph-palette" viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><path d="M128 24a104 104 0 1 0 104 104 24 24 0 0 0-24-24h-18a22 22 0 0 1-22-22V64a40 40 0 0 0-40-40Z" />
+  <circle cx="76" cy="124" r="8" fill="currentColor" stroke="none" />
+  <circle cx="98" cy="77" r="8" fill="currentColor" stroke="none" />
+  <circle cx="156" cy="171" r="8" fill="currentColor" stroke="none" />
+  <circle cx="76" cy="175" r="8" fill="currentColor" stroke="none" />
+</symbol><symbol id="ww-ph-power-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v9" /><path d="M6 5.4a9 9 0 1 0 12 0" /></symbol><symbol id="ww-ph-shield-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5 20.1 5v6c0 5.2-3.1 8.6-8.1 10.5C7 19.6 3.9 16.2 3.9 11V5z" /><path d="m8.6 11.9 2.2 2.2 4.7-4.8" /></symbol><symbol id="ww-ph-sliders-horizontal-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h4m4 0h8M4 17h8m4 0h4" /><circle cx="10" cy="7" r="2" /><circle cx="14" cy="17" r="2" /></symbol><symbol id="ww-ph-squares-four" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1" /><rect x="14" y="3" width="7" height="7" rx="1" /><rect x="3" y="14" width="7" height="7" rx="1" /><rect x="14" y="14" width="7" height="7" rx="1" /></symbol><symbol id="ww-ph-user" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7.5" r="4" /><path d="M4.1 21a8 8 0 0 1 15.8 0" /></symbol><symbol id="ww-ph-users-three-regular" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.4" /><path d="M5.5 20v-1.8c0-2.7 2.4-4.6 6.5-4.6s6.5 1.9 6.5 4.6V20Z" /><path d="M18 5.1a3 3 0 0 1 0 5.8M19 13.6c2 .5 3 2 3 4.1V19h-3M6 5.1a3 3 0 0 0 0 5.8M5 13.6c-2 .5-3 2-3 4.1V19h3" /></symbol><symbol id="ww-ph-windows-logo" viewBox="0 0 24 24"><g fill="currentColor"><rect x="2.5" y="2.5" width="9" height="9" rx=".65" />
+  <rect x="12.5" y="2.5" width="9" height="9" rx=".65" />
+  <rect x="2.5" y="12.5" width="9" height="9" rx=".65" />
+  <rect x="12.5" y="12.5" width="9" height="9" rx=".65" /></g>
+</symbol><symbol id="ww-ph-x" viewBox="0 0 256 256" fill="none"><path d="m56 56 144 144M200 56 56 200" stroke="currentColor" stroke-width="18" stroke-linecap="round" /></symbol></defs></svg>
+<main class="desktop" aria-label="Windows 12 desktop">
+    <div class="wallpaper-fallback" aria-hidden="true"></div>
+    <img class="wallpaper" id="wallpaper" src="Backgrounds/B1.webp" alt="" draggable="false">
+    <!-- Wallpaper-only HDR-style layers. Kept below desktop UI, so icons and Icons8 artwork remain untouched. -->
+    <canvas id="ww-hdr-tonemap" class="ww-hdr-layer ww-hdr-tonemap" aria-hidden="true"></canvas>
+    <canvas id="ww-hdr-bloom-near" class="ww-hdr-layer ww-hdr-bloom-near" aria-hidden="true"></canvas>
+    <canvas id="ww-hdr-bloom-far" class="ww-hdr-layer ww-hdr-bloom-far" aria-hidden="true"></canvas>
+    <!-- Independently movable live Time and Weather widgets from Discover. -->
+    <div id="ww11-desktop-widget-layer" class="ww11-desktop-widget-layer" aria-label="Desktop widgets"></div>
+    <!-- Desktop-only secondary-Mica context menu; no unrelated Windows actions. -->
+    <div id="ww11-desktop-context-menu" class="ww11-desktop-context-menu" role="menu" aria-label="Desktop context menu" hidden>
+      <button type="button" class="ww11-desktop-menu-item" role="menuitem" data-ww11-desktop-action="display">
+        <svg class="ww11-desktop-menu-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false">
+          <rect x="2.7" y="3.1" width="17.7" height="14.6" rx="2.0" stroke="currentColor" stroke-width="1.25"/>
+          <path d="M8.4 20h5.4M11.25 17.8V20" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+          <path d="M17.202,14.400 L17.342,13.078 L19.458,13.078 L19.598,14.400 L19.674,14.432 L20.708,13.596 L22.204,15.092 L21.368,16.126 L21.400,16.202 L22.722,16.342 L22.722,18.458 L21.400,18.598 L21.368,18.674 L22.204,19.708 L20.708,21.204 L19.674,20.368 L19.598,20.400 L19.458,21.722 L17.342,21.722 L17.202,20.400 L17.126,20.368 L16.092,21.204 L14.596,19.708 L15.432,18.674 L15.400,18.598 L14.078,18.458 L14.078,16.342 L15.400,16.202 L15.432,16.126 L14.596,15.092 L16.092,13.596 L17.126,14.432Z" fill="var(--ww11-context-gear,#0089df)" stroke="var(--ww11-context-gear-stroke,#187ab0)" stroke-width=".25" stroke-linejoin="round"/>
+          <circle cx="18.4" cy="17.4" r="1.38" fill="var(--ww11-context-gear-hole,#f6f6f5)"/>
+        </svg>
+        <span>Display settings</span>
+      </button>
+      <button type="button" class="ww11-desktop-menu-item" role="menuitem" data-ww11-desktop-action="personalize">
+        <svg class="ww11-desktop-menu-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false">
+          <path d="M13.65 7.4 17.88 3.1c1.1-1.12 2.34-1.37 3.27-.45.93.92.72 2.12-.4 3.25l-4.27 4.28-3.35 1.06-1.01-1.13Z" fill="#eef0f0" stroke="#55646b" stroke-width="1.15" stroke-linejoin="round"/>
+          <path d="M12.94 10.3 8.23 15.46" stroke="#5f6a71" stroke-width="2.1" stroke-linecap="round"/>
+          <path d="M7.78 15.35c-1.69-.37-2.9.61-3.28 2.16-.33 1.41-1.05 2.41-2.28 3.42 3.16.11 5.56-.67 6.67-2.22.96-1.37.43-2.98-1.11-3.36Z" fill="var(--ww11-context-gear,#0089df)" stroke="#3978a1" stroke-width=".68" stroke-linejoin="round"/>
+          <path d="M4.2 19.3c1.24-.04 1.85-.6 2.23-1.58" stroke="#c9eafb" stroke-width=".94" stroke-linecap="round"/>
+        </svg>
+        <span>Personalize</span>
+      </button>
+      <div class="ww11-desktop-menu-divider" role="separator"></div>
+      <button type="button" class="ww11-desktop-menu-item" role="menuitem" data-ww11-desktop-action="customize">
+        <svg class="ww11-desktop-menu-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false">
+          <rect x="3.3" y="2.6" width="16.3" height="18.5" rx="2.2" stroke="currentColor" stroke-width="1.23"/>
+          <path d="M6.6 6.9h9.5M6.6 10.45h9.5M6.6 14h7" stroke="currentColor" stroke-width="1.05" stroke-linecap="round" opacity=".78"/>
+          <path d="M17.202,14.400 L17.342,13.078 L19.458,13.078 L19.598,14.400 L19.674,14.432 L20.708,13.596 L22.204,15.092 L21.368,16.126 L21.400,16.202 L22.722,16.342 L22.722,18.458 L21.400,18.598 L21.368,18.674 L22.204,19.708 L20.708,21.204 L19.674,20.368 L19.598,20.400 L19.458,21.722 L17.342,21.722 L17.202,20.400 L17.126,20.368 L16.092,21.204 L14.596,19.708 L15.432,18.674 L15.400,18.598 L14.078,18.458 L14.078,16.342 L15.400,16.202 L15.432,16.126 L14.596,15.092 L16.092,13.596 L17.126,14.432Z" fill="var(--ww11-context-gear,#0089df)" stroke="var(--ww11-context-gear-stroke,#187ab0)" stroke-width=".25" stroke-linejoin="round"/>
+          <circle cx="18.4" cy="17.4" r="1.38" fill="var(--ww11-context-gear-hole,#f6f6f5)"/>
+        </svg>
+        <span>Customize menu</span>
+      </button>
+    </div>
+    <div class="insider-watermark" aria-label="Windows 12 insider preview, Build 2611150.Beta — Version 11H11">
+      <span>Windows 12 insider preview</span>
+      <span>Build 2611150.Beta — Version 11H11</span>
+    </div>
+
+    <!-- Start, Search, and Settings are available; the remaining taskbar apps are placeholders. -->
+    <!-- 11H11 Start: adaptive sub-Mica account rail, primary-Mica Apps and News. -->
+    <section class="start-menu" id="start-menu" role="dialog" aria-modal="false" aria-label="Start menu" aria-hidden="true">
+      <aside class="start-pane start-pane--rail" aria-label="Account and controls">
+<nav class="start-rail-actions start-reveal" aria-label="Account actions">
+          <button class="start-rail-action" type="button" disabled title="Power options are not implemented yet" aria-label="Power options (not yet available)">
+            <span class="start-rail-action-icon"><svg class="ph-fallback ww-ph-icon"  focusable="false" aria-hidden="true" viewBox="0 0 24 24"><use href="#ww-ph-power-light"></use></svg></span>
+          </button>
+          <button class="start-rail-action" type="button" disabled title="Settings" aria-label="Settings" data-ww11-open-settings="true">
+            <span class="start-rail-action-icon"><i class="ph ph-gear" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M128,80a48,48,0,1,0,48,48A48.05,48.05,0,0,0,128,80Zm0,80a32,32,0,1,1,32-32A32,32,0,0,1,128,160Zm88-29.84q.06-2.16,0-4.32l14.92-18.64a8,8,0,0,0,1.48-7.06,107.21,107.21,0,0,0-10.88-26.25,8,8,0,0,0-6-3.93l-23.72-2.64q-1.48-1.56-3-3L186,40.54a8,8,0,0,0-3.94-6,107.71,107.71,0,0,0-26.25-10.87,8,8,0,0,0-7.06,1.49L130.16,40Q128,40,125.84,40L107.2,25.11a8,8,0,0,0-7.06-1.48A107.6,107.6,0,0,0,73.89,34.51a8,8,0,0,0-3.93,6L67.32,64.27q-1.56,1.49-3,3L40.54,70a8,8,0,0,0-6,3.94,107.71,107.71,0,0,0-10.87,26.25,8,8,0,0,0,1.49,7.06L40,125.84Q40,128,40,130.16L25.11,148.8a8,8,0,0,0-1.48,7.06,107.21,107.21,0,0,0,10.88,26.25,8,8,0,0,0,6,3.93l23.72,2.64q1.49,1.56,3,3L70,215.46a8,8,0,0,0,3.94,6,107.71,107.71,0,0,0,26.25,10.87,8,8,0,0,0,7.06-1.49L125.84,216q2.16.06,4.32,0l18.64,14.92a8,8,0,0,0,7.06,1.48,107.21,107.21,0,0,0,26.25-10.88,8,8,0,0,0,3.93-6l2.64-23.72q1.56-1.48,3-3L215.46,186a8,8,0,0,0,6-3.94,107.71,107.71,0,0,0,10.87-26.25,8,8,0,0,0-1.49-7.06Zm-16.1-6.5a73.93,73.93,0,0,1,0,8.68,8,8,0,0,0,1.74,5.48l14.19,17.73a91.57,91.57,0,0,1-6.23,15L187,173.11a8,8,0,0,0-5.1,2.64,74.11,74.11,0,0,1-6.14,6.14,8,8,0,0,0-2.64,5.1l-2.51,22.58a91.32,91.32,0,0,1-15,6.23l-17.74-14.19a8,8,0,0,0-5-1.75h-.48a73.93,73.93,0,0,1-8.68,0,8,8,0,0,0-5.48,1.74L100.45,215.8a91.57,91.57,0,0,1-15-6.23L82.89,187a8,8,0,0,0-2.64-5.1,74.11,74.11,0,0,1-6.14-6.14,8,8,0,0,0-5.1-2.64L46.43,170.6a91.32,91.32,0,0,1-6.23-15l14.19-17.74a8,8,0,0,0,1.74-5.48,73.93,73.93,0,0,1,0-8.68,8,8,0,0,0-1.74-5.48L40.2,100.45a91.57,91.57,0,0,1,6.23-15L69,82.89a8,8,0,0,0,5.1-2.64,74.11,74.11,0,0,1,6.14-6.14A8,8,0,0,0,82.89,69L85.4,46.43a91.32,91.32,0,0,1,15-6.23l17.74,14.19a8,8,0,0,0,5.48,1.74,73.93,73.93,0,0,1,8.68,0,8,8,0,0,0,5.48-1.74L155.55,40.2a91.57,91.57,0,0,1,15,6.23L173.11,69a8,8,0,0,0,2.64,5.1,74.11,74.11,0,0,1,6.14,6.14,8,8,0,0,0,5.1,2.64l22.58,2.51a91.32,91.32,0,0,1,6.23,15l-14.19,17.74A8,8,0,0,0,199.87,123.66Z"/></svg></i></span>
+          </button>
+          <button class="start-rail-action news-info-button" id="ww10-news-sources-toggle" type="button" title="News sources" aria-label="News data sources" aria-expanded="false" aria-controls="ww10-news-sources">
+            <span class="start-rail-action-icon"><svg class="ph-fallback ww-ph-icon"  focusable="false" aria-hidden="true" viewBox="0 0 24 24"><use href="#ww-ph-info-light"></use></svg></span>
+          </button>
+        </nav>
+      </aside>
+      <div class="start-pane start-pane--content">
+        <section class="start-apps-region start-stage-two" aria-labelledby="start-apps-heading">
+          <div class="start-main-top-panels">
+            <section class="start-list-section start-used-section">
+              <header class="start-section-heading start-reveal"><h2 id="start-apps-heading">Apps</h2></header>
+              <div class="start-app-list" id="start-pinned-list">
+            <div class="start-app-row start-reveal" data-app-name="settings" data-ww11-mica-tooltip="Settings" role="button" tabindex="0" aria-label="Open Settings">
+              <span class="start-app-icon"><img class="start-remote" src="https://img.icons8.com/?size=100&amp;id=s5NUIabJrb4C&amp;format=png&amp;color=000000" alt=""><i class="ph ph-gear start-icon-fallback" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M128,80a48,48,0,1,0,48,48A48.05,48.05,0,0,0,128,80Zm0,80a32,32,0,1,1,32-32A32,32,0,0,1,128,160Zm88-29.84q.06-2.16,0-4.32l14.92-18.64a8,8,0,0,0,1.48-7.06,107.21,107.21,0,0,0-10.88-26.25,8,8,0,0,0-6-3.93l-23.72-2.64q-1.48-1.56-3-3L186,40.54a8,8,0,0,0-3.94-6,107.71,107.71,0,0,0-26.25-10.87,8,8,0,0,0-7.06,1.49L130.16,40Q128,40,125.84,40L107.2,25.11a8,8,0,0,0-7.06-1.48A107.6,107.6,0,0,0,73.89,34.51a8,8,0,0,0-3.93,6L67.32,64.27q-1.56,1.49-3,3L40.54,70a8,8,0,0,0-6,3.94,107.71,107.71,0,0,0-10.87,26.25,8,8,0,0,0,1.49,7.06L40,125.84Q40,128,40,130.16L25.11,148.8a8,8,0,0,0-1.48,7.06,107.21,107.21,0,0,0,10.88,26.25,8,8,0,0,0,6,3.93l23.72,2.64q1.49,1.56,3,3L70,215.46a8,8,0,0,0,3.94,6,107.71,107.71,0,0,0,26.25,10.87,8,8,0,0,0,7.06-1.49L125.84,216q2.16.06,4.32,0l18.64,14.92a8,8,0,0,0,7.06,1.48,107.21,107.21,0,0,0,26.25-10.88,8,8,0,0,0,3.93-6l2.64-23.72q1.56-1.48,3-3L215.46,186a8,8,0,0,0,6-3.94,107.71,107.71,0,0,0,10.87-26.25,8,8,0,0,0-1.49-7.06Zm-16.1-6.5a73.93,73.93,0,0,1,0,8.68,8,8,0,0,0,1.74,5.48l14.19,17.73a91.57,91.57,0,0,1-6.23,15L187,173.11a8,8,0,0,0-5.1,2.64,74.11,74.11,0,0,1-6.14,6.14,8,8,0,0,0-2.64,5.1l-2.51,22.58a91.32,91.32,0,0,1-15,6.23l-17.74-14.19a8,8,0,0,0-5-1.75h-.48a73.93,73.93,0,0,1-8.68,0,8,8,0,0,0-5.48,1.74L100.45,215.8a91.57,91.57,0,0,1-15-6.23L82.89,187a8,8,0,0,0-2.64-5.1,74.11,74.11,0,0,1-6.14-6.14,8,8,0,0,0-5.1-2.64L46.43,170.6a91.32,91.32,0,0,1-6.23-15l14.19-17.74a8,8,0,0,0,1.74-5.48,73.93,73.93,0,0,1,0-8.68,8,8,0,0,0-1.74-5.48L40.2,100.45a91.57,91.57,0,0,1,6.23-15L69,82.89a8,8,0,0,0,5.1-2.64,74.11,74.11,0,0,1,6.14-6.14A8,8,0,0,0,82.89,69L85.4,46.43a91.32,91.32,0,0,1,15-6.23l17.74,14.19a8,8,0,0,0,5.48,1.74,73.93,73.93,0,0,1,8.68,0,8,8,0,0,0,5.48-1.74L155.55,40.2a91.57,91.57,0,0,1,15,6.23L173.11,69a8,8,0,0,0,2.64,5.1,74.11,74.11,0,0,1,6.14,6.14,8,8,0,0,0,5.1,2.64l22.58,2.51a91.32,91.32,0,0,1,6.23,15l-14.19,17.74A8,8,0,0,0,199.87,123.66Z"/></svg></i></span>
+              <span class="start-app-label">Settings</span>
+            </div>
+            <div class="start-app-row start-reveal" data-app-name="get started" data-ww11-mica-tooltip="Get Started" role="button" tabindex="0" aria-label="Open Get Started">
+              <span class="start-app-icon"><img class="start-remote" src="https://img.icons8.com/?size=100&amp;id=4aFn3qEdMNQO&amp;format=png&amp;color=000000" alt=""><svg class="start-icon-fallback ww-ph-icon"  focusable="false" aria-hidden="true" viewBox="0 0 24 24"><use href="#ww-ph-app-window"></use></svg></span>
+              <span class="start-app-label">Get Started</span>
+            </div>
+            <div class="start-app-row start-reveal" data-app-name="about" data-ww11-mica-tooltip="About">
+              <span class="start-app-icon"><img class="start-remote" src="https://img.icons8.com/?size=100&amp;id=IerOpHeUt2OH&amp;format=png&amp;color=000000" alt=""><svg class="start-icon-fallback ww-ph-icon"  focusable="false" aria-hidden="true" viewBox="0 0 24 24"><use href="#ww-ph-user"></use></svg></span>
+              <span class="start-app-label">About</span>
+            </div>
+            <div class="start-app-row start-reveal ww11-placeholder-app" data-app-name="clock" data-ww11-mica-tooltip="Clock" aria-label="Clock (not yet available)">
+              <span class="start-app-icon"><img class="start-remote" src="https://img.icons8.com/?size=100&amp;id=RQGrXdtQw2CT&amp;format=png&amp;color=000000" alt=""><svg class="start-icon-fallback ww-ph-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><use href="#ww-ph-clock-app"></use></svg></span>
+              <span class="start-app-label">Clock</span>
+            </div>
+            <div class="start-app-row start-reveal ww11-placeholder-app" data-app-name="languages" data-ww11-mica-tooltip="Languages" aria-label="Languages (not yet available)">
+              <span class="start-app-icon"><img class="start-remote" src="https://img.icons8.com/?size=100&amp;id=3ZVHr47ogpJp&amp;format=png&amp;color=000000" alt=""><svg class="start-icon-fallback ww-ph-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><use href="#ww-ph-languages"></use></svg></span>
+              <span class="start-app-label">Languages</span>
+            </div>
+
+              </div>
+            </section>
+          </div>
+        </section>
+        <section class="start-news-region" aria-labelledby="start-news-heading">
+          <div class="start-news-toolbar start-reveal">
+            <h2 id="start-news-heading">News</h2>
+          </div>
+          <div id="ww10-start-news-grid" class="ww10-start-news-grid" aria-label="Latest four news articles"></div>
+        </section>
+      </div>
+      <div class="start-account-avatar-float start-reveal">
+        <div class="start-account-photo-wrap" aria-hidden="true">
+          <img id="start-account-photo" src="Assets/account-avatar.png" alt="" decoding="async">
+          <span id="start-account-initial" hidden>R</span>
+        </div>
+        <strong id="start-account-name" title="Russel John">Russel John</strong>
+      </div>
+      <div id="ww10-news-sources" class="start-news-sources" hidden>
+        <strong>News sources</strong>
+        <p>Live news from <a href="https://www.gdeltproject.org/" target="_blank" rel="noopener noreferrer">GDELT DOC 2.0</a>. Publisher feeds from <a href="https://www.dw.com/" target="_blank" rel="noopener noreferrer">Deutsche Welle</a> and <a href="https://www.nytimes.com/" target="_blank" rel="noopener noreferrer">The New York Times</a> are used when available. Images are publisher-supplied only. Weather forecasts provided by <a href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer">Open-Meteo</a> (CC BY 4.0); weather icons by <a href="https://icons8.com/icons/set/weather--style-fluency" target="_blank" rel="noopener noreferrer">Icons8</a>.</p>
+      </div>
+    </section>
+
+    <!-- 10H10 Search flyout structure and composer; 11H11 keeps its own available results. -->
+    <section id="search-panel" role="dialog" aria-modal="false" aria-label="Search" aria-hidden="true">
+      <div id="search-results" role="list" aria-label="Search results" aria-live="polite"></div>
+      <p id="search-empty" hidden>No results found.</p>
+      <div class="search-panel-composer">
+        <span class="ww-search-graphic" aria-hidden="true">
+              <svg class="ww-local-icon ww-ph-icon"  focusable="false" aria-hidden="true" viewBox="0 0 24 24"><use href="#ww-ph-magnifying-glass"></use></svg>
+              <span class="ww-search-star-mono"></span>
+              <img class="ww-search-star-color" src="https://img.icons8.com/?size=100&amp;id=eoxMN35Z6JKg&amp;format=png&amp;color=000000" alt="" draggable="false">
+            </span>
+        <input id="search-panel-input" type="text" autocomplete="off" spellcheck="false" placeholder="Search" aria-label="Search">
+        <button id="search-panel-open" type="button" aria-label="Open matching item" hidden>Open</button>
+      </div>
+    </section>
+
+    <nav class="taskbar" aria-label="Taskbar">
+      <div class="taskbar__dock" id="taskbar-dock" aria-label="Taskbar applications">
+      <div class="taskbar__left" aria-label="System shortcuts">
+        <button type="button" id="start-toggle" class="taskbar-button" aria-label="Start" title="Start" aria-controls="start-menu" aria-expanded="false">
+          <!-- The original WinIcon.png takes priority; bundled SVG is a fallback only. -->
+          <img class="remote-icon ww-start-original-icon" src="WinIcon.png" alt="" draggable="false" aria-hidden="true">
+          <svg class="icon-fallback ww-ph-icon"  focusable="false" aria-hidden="true" viewBox="0 0 24 24"><use href="#ww-ph-windows-logo"></use></svg>
+        </button>
+        <div class="taskbar-search-shell" id="taskbar-search-shell" role="search" aria-label="Taskbar search">
+          <button type="button" id="taskbar-search-toggle" class="taskbar-search-activator" aria-label="Open Search" title="Open Search" aria-controls="search-panel" aria-haspopup="dialog" aria-expanded="false">
+            <span class="ww-search-graphic" aria-hidden="true">
+              <svg class="ww-local-icon ww-ph-icon"  focusable="false" aria-hidden="true" viewBox="0 0 24 24"><use href="#ww-ph-magnifying-glass"></use></svg>
+              <span class="ww-search-star-mono"></span>
+              <img class="ww-search-star-color" src="https://img.icons8.com/?size=100&amp;id=eoxMN35Z6JKg&amp;format=png&amp;color=000000" alt="" draggable="false">
+            </span>
+          </button>
+          <input id="taskbar-search-query" class="taskbar-search-placeholder" type="search" autocomplete="off" spellcheck="false" placeholder="Search" aria-label="Search the desktop" aria-controls="search-panel" aria-haspopup="dialog">
+        </div>
+        <button type="button" class="taskbar-button" id="wua-task-view-placeholder" aria-disabled="true" tabindex="-1" aria-label="Task view (not yet available)" data-ww11-mica-tooltip="Task view">
+          <!-- Two independently animated translucent task-view panes; no lower-left drop shadow. -->
+          <svg class="wua-task-view-icon" viewBox="-6 -6 268 268" width="25" height="25" focusable="false" aria-hidden="true">
+            <defs>
+              <!-- Each pane is a glass surface rather than a solid bitmap. -->
+              <linearGradient id="ww11-tv-black-surface" x1="0" y1="0" x2="1" y2="1">
+                <stop stop-color="#282c2f"/><stop offset=".55" stop-color="#1a1d20"/><stop offset="1" stop-color="#202326"/>
+              </linearGradient>
+              <linearGradient id="ww11-tv-white-surface" x1=".05" y1="0" x2=".94" y2="1">
+                <stop stop-color="#ffffff"/><stop offset=".5" stop-color="#f5f6f7"/><stop offset="1" stop-color="#e1e3e6"/>
+              </linearGradient>
+            </defs>
+            <g class="wua-task-front">
+              <rect x="3.5" y="68" width="190" height="171" rx="16" fill="url(#ww11-tv-black-surface)" fill-opacity=".88" stroke="#6e7378" stroke-opacity=".48" stroke-width="2"/>
+              <!-- Gloss, top rim and inner edge. No heavy shadow below or at bottom left. -->
+              <path d="M19 70h160a13 13 0 0 1 13 13v12H5V83a14 14 0 0 1 14-13Z" fill="#ffffff" fill-opacity=".065"/>
+              <path d="M5 220v4c0 8 6 13 14 13h158c8 0 14-5 14-13" stroke="#ffffff" stroke-opacity=".13" stroke-width="2" fill="none"/>
+              <path d="M18 70h160" stroke="#ffffff" stroke-opacity=".2" stroke-width="2" stroke-linecap="round"/>
+            </g>
+            <g class="wua-task-rear">
+              <!-- Single translucent white pane: overlap is created by actual pane stacking,
+                   never by a separate gray rectangle or L-shaped fill. -->
+              <rect x="62" y="2" width="192" height="173" rx="16" fill="url(#ww11-tv-white-surface)" fill-opacity=".84"/>
+              <!-- Rounded glass rim, upper highlight, understated bottom bevel. -->
+              <rect x="62.8" y="2.8" width="190.4" height="171.4" rx="15.4" fill="none" stroke="#ffffff" stroke-opacity=".77" stroke-width="2"/>
+              <path d="M78 5h159c8 0 14 6 14 14v129" fill="none" stroke="#ffffff" stroke-opacity=".51" stroke-width="2" stroke-linecap="round"/>
+              <path d="M78 172h160c8 0 13-5 13-13" fill="none" stroke="#5c646d" stroke-opacity=".27" stroke-width="1.8" stroke-linecap="round"/>
+            </g>
+          </svg>
+        </button>
+      </div>
+
+      <div class="taskbar__center" aria-label="Pinned applications">
+        <button type="button" class="taskbar-button" data-ww11-discover="true" aria-label="Discover" aria-expanded="false" aria-controls="ww11-discover-overlay" data-ww11-mica-tooltip="Discover">
+          <img class="remote-icon" src="Assets/ww11/MSN.png" data-ww-fallback-src="https://img.icons8.com/?size=100&amp;id=W5To6Q3gjDiK&amp;format=png&amp;color=000000" alt="" draggable="false">
+          <svg class="icon-fallback ww-ph-icon"  focusable="false" aria-hidden="true" viewBox="0 0 24 24"><use href="#ww-ph-newspaper-light"></use></svg>
+        </button>
+        <button type="button" class="taskbar-button" aria-label="Settings" data-ww11-open-settings="true" data-ww11-app="settings" data-ww11-app-state="closed" aria-pressed="false" data-ww11-mica-tooltip="Settings">
+          
+          <img class="remote-icon" src="https://img.icons8.com/?size=100&amp;id=s5NUIabJrb4C&amp;format=png&amp;color=000000" alt="" draggable="false">
+          <i class="ph ph-gear icon-fallback" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M128,80a48,48,0,1,0,48,48A48.05,48.05,0,0,0,128,80Zm0,80a32,32,0,1,1,32-32A32,32,0,0,1,128,160Zm88-29.84q.06-2.16,0-4.32l14.92-18.64a8,8,0,0,0,1.48-7.06,107.21,107.21,0,0,0-10.88-26.25,8,8,0,0,0-6-3.93l-23.72-2.64q-1.48-1.56-3-3L186,40.54a8,8,0,0,0-3.94-6,107.71,107.71,0,0,0-26.25-10.87,8,8,0,0,0-7.06,1.49L130.16,40Q128,40,125.84,40L107.2,25.11a8,8,0,0,0-7.06-1.48A107.6,107.6,0,0,0,73.89,34.51a8,8,0,0,0-3.93,6L67.32,64.27q-1.56,1.49-3,3L40.54,70a8,8,0,0,0-6,3.94,107.71,107.71,0,0,0-10.87,26.25,8,8,0,0,0,1.49,7.06L40,125.84Q40,128,40,130.16L25.11,148.8a8,8,0,0,0-1.48,7.06,107.21,107.21,0,0,0,10.88,26.25,8,8,0,0,0,6,3.93l23.72,2.64q1.49,1.56,3,3L70,215.46a8,8,0,0,0,3.94,6,107.71,107.71,0,0,0,26.25,10.87,8,8,0,0,0,7.06-1.49L125.84,216q2.16.06,4.32,0l18.64,14.92a8,8,0,0,0,7.06,1.48,107.21,107.21,0,0,0,26.25-10.88,8,8,0,0,0,3.93-6l2.64-23.72q1.56-1.48,3-3L215.46,186a8,8,0,0,0,6-3.94,107.71,107.71,0,0,0,10.87-26.25,8,8,0,0,0-1.49-7.06Zm-16.1-6.5a73.93,73.93,0,0,1,0,8.68,8,8,0,0,0,1.74,5.48l14.19,17.73a91.57,91.57,0,0,1-6.23,15L187,173.11a8,8,0,0,0-5.1,2.64,74.11,74.11,0,0,1-6.14,6.14,8,8,0,0,0-2.64,5.1l-2.51,22.58a91.32,91.32,0,0,1-15,6.23l-17.74-14.19a8,8,0,0,0-5-1.75h-.48a73.93,73.93,0,0,1-8.68,0,8,8,0,0,0-5.48,1.74L100.45,215.8a91.57,91.57,0,0,1-15-6.23L82.89,187a8,8,0,0,0-2.64-5.1,74.11,74.11,0,0,1-6.14-6.14,8,8,0,0,0-5.1-2.64L46.43,170.6a91.32,91.32,0,0,1-6.23-15l14.19-17.74a8,8,0,0,0,1.74-5.48,73.93,73.93,0,0,1,0-8.68,8,8,0,0,0-1.74-5.48L40.2,100.45a91.57,91.57,0,0,1,6.23-15L69,82.89a8,8,0,0,0,5.1-2.64,74.11,74.11,0,0,1,6.14-6.14A8,8,0,0,0,82.89,69L85.4,46.43a91.32,91.32,0,0,1,15-6.23l17.74,14.19a8,8,0,0,0,5.48,1.74,73.93,73.93,0,0,1,8.68,0,8,8,0,0,0,5.48-1.74L155.55,40.2a91.57,91.57,0,0,1,15,6.23L173.11,69a8,8,0,0,0,2.64,5.1,74.11,74.11,0,0,1,6.14,6.14,8,8,0,0,0,5.1,2.64l22.58,2.51a91.32,91.32,0,0,1,6.23,15l-14.19,17.74A8,8,0,0,0,199.87,123.66Z"/></svg></i>
+        </button>
+        <button type="button" class="taskbar-button" data-ww11-open-get-started="true" data-ww11-app="get-started" data-ww11-app-state="closed" aria-label="Get Started" aria-pressed="false" data-ww11-mica-tooltip="Get Started">
+          <img class="remote-icon" src="https://img.icons8.com/?size=100&amp;id=4aFn3qEdMNQO&amp;format=png&amp;color=000000" alt="" draggable="false">
+          <svg class="icon-fallback ww-ph-icon"  focusable="false" aria-hidden="true" viewBox="0 0 24 24"><use href="#ww-ph-app-window"></use></svg>
+        </button>
+        <button type="button" class="taskbar-button" aria-disabled="true" aria-label="About (not yet available)" data-ww11-mica-tooltip="About">
+          <img class="remote-icon" src="https://img.icons8.com/?size=100&amp;id=IerOpHeUt2OH&amp;format=png&amp;color=000000" alt="" draggable="false">
+          <svg class="icon-fallback ww-ph-icon"  focusable="false" aria-hidden="true" viewBox="0 0 24 24"><use href="#ww-ph-user"></use></svg>
+        </button>
+        <button type="button" class="taskbar-button ww11-placeholder-app" data-ww11-placeholder="clock" data-ww11-mica-tooltip="Clock" aria-label="Clock (not yet available)" aria-disabled="true">
+          <img class="remote-icon" src="https://img.icons8.com/?size=100&amp;id=RQGrXdtQw2CT&amp;format=png&amp;color=000000" alt="" draggable="false">
+          <svg class="icon-fallback ww-ph-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><use href="#ww-ph-clock-app"></use></svg>
+        </button>
+        <button type="button" class="taskbar-button ww11-placeholder-app" data-ww11-placeholder="languages" data-ww11-mica-tooltip="Languages" aria-label="Languages (not yet available)" aria-disabled="true">
+          <img class="remote-icon" src="https://img.icons8.com/?size=100&amp;id=3ZVHr47ogpJp&amp;format=png&amp;color=000000" alt="" draggable="false">
+          <svg class="icon-fallback ww-ph-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><use href="#ww-ph-languages"></use></svg>
+        </button>
+      </div>
+
+      </div><!-- End taskbar launcher group -->
+      <div class="taskbar__right" aria-label="System tray and clock">
+        <button type="button" class="tray-button tray-chevron" disabled title="Show hidden icons" aria-label="Show hidden icons (not yet available)">
+          <svg class="ph-fallback ww-ph-icon"  focusable="false" aria-hidden="true" viewBox="0 0 24 24"><use href="#ww-ph-caret-up-light"></use></svg>
+        </button>
+        <button type="button" class="tray-button tray-quick" disabled title="Quick settings" aria-label="Quick settings (not yet available)">
+          <svg class="ph-fallback ww-ph-icon"  focusable="false" aria-hidden="true" viewBox="0 0 24 24"><use href="#ww-ph-sliders-horizontal-light"></use></svg>
+        </button>
+        <div class="clock" id="taskbar-clock" aria-label="Current local date and time">
+          <time id="taskbar-time">--:--</time>
+          <span id="taskbar-date">--/--/----</span>
+        </div>
+      </div>
+    </nav>
+  <!-- 11H11 Settings: non-modal native window in the desktop stack. -->
+  <script type="application/json" id="ww11-weather-icon-map">{"style":"Icons8 Windows 11 Color / Fluency","collection":"https://icons8.com/icons/set/weather--style-fluency","attribution":"Weather icons by Icons8","icons":{"clear":{"id":"8EUmYhfLPTCF","url":"https://img.icons8.com/?size=100&id=8EUmYhfLPTCF&format=png"},"night":{"id":"VT8HlhlnhUwL","url":"https://img.icons8.com/?size=100&id=VT8HlhlnhUwL&format=png"},"partly":{"id":"zIVmoh4T8wh7","url":"https://img.icons8.com/?size=100&id=zIVmoh4T8wh7&format=png"},"cloudy":{"id":"W8fUZZSmXssu","url":"https://img.icons8.com/?size=100&id=W8fUZZSmXssu&format=png&color=000000"},"overcast":{"id":"W8fUZZSmXssu","url":"https://img.icons8.com/?size=100&id=W8fUZZSmXssu&format=png&color=000000"},"fog":{"id":"qHIFUjYhnsFU","url":"https://img.icons8.com/?size=100&id=qHIFUjYhnsFU&format=png"},"haze":{"id":"IL2szZWdo0Bo","url":"https://img.icons8.com/?size=100&id=IL2szZWdo0Bo&format=png"},"smoke":{"id":"BncPMNznpkES","url":"https://img.icons8.com/?size=100&id=BncPMNznpkES&format=png"},"drizzle":{"id":"QZJFPE7TNi5Q","url":"https://img.icons8.com/?size=100&id=QZJFPE7TNi5Q&format=png"},"rain":{"id":"HWPdQMFoVy95","url":"https://img.icons8.com/?size=100&id=HWPdQMFoVy95&format=png"},"heavyRain":{"id":"7Dcax1eBasEf","url":"https://img.icons8.com/?size=100&id=7Dcax1eBasEf&format=png"},"showers":{"id":"PIXtKMDAXCzo","url":"https://img.icons8.com/?size=100&id=PIXtKMDAXCzo&format=png"},"rainyNight":{"id":"wBPV56Uje50D","url":"https://img.icons8.com/?size=100&id=wBPV56Uje50D&format=png"},"sleet":{"id":"fyJ8mNcBHced","url":"https://img.icons8.com/?size=100&id=fyJ8mNcBHced&format=png"},"icePellets":{"id":"4dVnvFFjJIRs","url":"https://img.icons8.com/?size=100&id=4dVnvFFjJIRs&format=png"},"lightSnow":{"id":"JBQOSn7KOSuD","url":"https://img.icons8.com/?size=100&id=JBQOSn7KOSuD&format=png"},"snow":{"id":"cyZConbteZk9","url":"https://img.icons8.com/?size=100&id=cyZConbteZk9&format=png"},"heavySnow":{"id":"Mi2BdbZQWNYQ","url":"https://img.icons8.com/?size=100&id=Mi2BdbZQWNYQ&format=png"},"blizzard":{"id":"qlJRoffslNg7","url":"https://img.icons8.com/?size=100&id=qlJRoffslNg7&format=png"},"hail":{"id":"jws4rTJ5EmwZ","url":"https://img.icons8.com/?size=100&id=jws4rTJ5EmwZ&format=png"},"thunder":{"id":"DlsFhDMp4rhs","url":"https://img.icons8.com/?size=100&id=DlsFhDMp4rhs&format=png"},"thunderRain":{"id":"6AAyqKfBlzoB","url":"https://img.icons8.com/?size=100&id=6AAyqKfBlzoB&format=png"},"thunderSnow":{"id":"pvDsNpV5YTxC","url":"https://img.icons8.com/?size=100&id=pvDsNpV5YTxC&format=png"},"stormNight":{"id":"PwHEPRMlRd4a","url":"https://img.icons8.com/?size=100&id=PwHEPRMlRd4a&format=png"},"windyNight":{"id":"3RZmbgKAmbsY","url":"https://img.icons8.com/?size=100&id=3RZmbgKAmbsY&format=png"},"wind":{"id":"3RZmbgKAmbsY","url":"https://img.icons8.com/?size=100&id=3RZmbgKAmbsY&format=png"},"tornado":{"id":"tEqjiPMXL4U5","url":"https://img.icons8.com/?size=100&id=tEqjiPMXL4U5&format=png"},"cloudLightning":{"id":"c0Otgmp74zQX","url":"https://img.icons8.com/?size=100&id=c0Otgmp74zQX&format=png"},"rainCloud":{"id":"MVj2tmasj0Pp","url":"https://img.icons8.com/?size=100&id=MVj2tmasj0Pp&format=png"},"icy":{"id":"JPFoI922p1gw","url":"https://img.icons8.com/?size=100&id=JPFoI922p1gw&format=png"},"dust":{"id":"NjsqgHjrCASE","url":"https://img.icons8.com/?size=100&id=NjsqgHjrCASE&format=png"},"dry":{"id":"svnLDdcfYlch","url":"https://img.icons8.com/?size=100&id=svnLDdcfYlch&format=png"},"torrential":{"id":"uzabNvAfhNNr","url":"https://img.icons8.com/?size=100&id=uzabNvAfhNNr&format=png"},"moon":{"id":"3dxwW3xZfAj4","url":"https://img.icons8.com/?size=100&id=3dxwW3xZfAj4&format=png"}},"supporting_icons":{"humidity":{"id":"hpwbr3sG19tQ","url":"https://img.icons8.com/?size=100&id=hpwbr3sG19tQ&format=png","name":"Hygrometer"},"wind":{"id":"RtDA8YDN9Mi9","url":"https://img.icons8.com/?size=100&id=RtDA8YDN9Mi9&format=png","name":"Wind"}}}</script>
+  <!-- Discover taskbar hub: shared news images, no standalone app window. -->
+  <section id="ww11-discover-overlay" class="ww11-discover-overlay" role="region" aria-label="Discover taskbar hub" aria-hidden="true" hidden>
+    <div id="ww11-discover-window" class="ww11-discover-window">
+      <header id="ww11-discover-titlebar" class="ww11-discover-titlebar" aria-label="Discover title bar">
+        <div class="ww11-discover-brand">
+          <span>Discover</span>
+          <span class="ww11-discover-logo"><img id="ww11-discover-logo-img" src="Assets/ww11/MSN.png" alt="" draggable="false"></span>
+        </div>
+        <div id="ww11-discover-actions" class="ww11-discover-actions" aria-label="Discover quick actions">
+          <button id="ww11-discover-more" class="ww11-discover-more" type="button" aria-label="Show Discover actions" aria-expanded="false" aria-controls="ww11-discover-action-list">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="2.1"/><circle cx="12" cy="12" r="2.1"/><circle cx="19" cy="12" r="2.1"/></svg>
+          </button>
+          <div id="ww11-discover-action-list" class="ww11-discover-action-list" aria-hidden="true" inert>
+            <a class="ww11-discover-action ww11-discover-action--bing" href="https://www.bing.com/" target="_blank" rel="noopener noreferrer" aria-label="Open Bing Search in a new tab">
+              <span class="ww11-discover-action-icon" aria-hidden="true"><img src="https://img.icons8.com/?size=100&amp;id=pOADWgX6vV63&amp;format=png&amp;color=000000" alt="" loading="lazy"></span>
+              <span class="ww11-discover-action-label">Bing Search</span>
+            </a>
+            <button id="ww11-discover-action-settings" class="ww11-discover-action ww11-discover-action--settings" type="button" aria-label="Open Settings">
+              <span class="ww11-discover-action-icon" aria-hidden="true"><i class="ph ph-gear"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M128,80a48,48,0,1,0,48,48A48.05,48.05,0,0,0,128,80Zm0,80a32,32,0,1,1,32-32A32,32,0,0,1,128,160Zm88-29.84q.06-2.16,0-4.32l14.92-18.64a8,8,0,0,0,1.48-7.06,107.21,107.21,0,0,0-10.88-26.25,8,8,0,0,0-6-3.93l-23.72-2.64q-1.48-1.56-3-3L186,40.54a8,8,0,0,0-3.94-6,107.71,107.71,0,0,0-26.25-10.87,8,8,0,0,0-7.06,1.49L130.16,40Q128,40,125.84,40L107.2,25.11a8,8,0,0,0-7.06-1.48A107.6,107.6,0,0,0,73.89,34.51a8,8,0,0,0-3.93,6L67.32,64.27q-1.56,1.49-3,3L40.54,70a8,8,0,0,0-6,3.94,107.71,107.71,0,0,0-10.87,26.25,8,8,0,0,0,1.49,7.06L40,125.84Q40,128,40,130.16L25.11,148.8a8,8,0,0,0-1.48,7.06,107.21,107.21,0,0,0,10.88,26.25,8,8,0,0,0,6,3.93l23.72,2.64q1.49,1.56,3,3L70,215.46a8,8,0,0,0,3.94,6,107.71,107.71,0,0,0,26.25,10.87,8,8,0,0,0,7.06-1.49L125.84,216q2.16.06,4.32,0l18.64,14.92a8,8,0,0,0,7.06,1.48,107.21,107.21,0,0,0,26.25-10.88,8,8,0,0,0,3.93-6l2.64-23.72q1.56-1.48,3-3L215.46,186a8,8,0,0,0,6-3.94,107.71,107.71,0,0,0,10.87-26.25,8,8,0,0,0-1.49-7.06Zm-16.1-6.5a73.93,73.93,0,0,1,0,8.68,8,8,0,0,0,1.74,5.48l14.19,17.73a91.57,91.57,0,0,1-6.23,15L187,173.11a8,8,0,0,0-5.1,2.64,74.11,74.11,0,0,1-6.14,6.14,8,8,0,0,0-2.64,5.1l-2.51,22.58a91.32,91.32,0,0,1-15,6.23l-17.74-14.19a8,8,0,0,0-5-1.75h-.48a73.93,73.93,0,0,1-8.68,0,8,8,0,0,0-5.48,1.74L100.45,215.8a91.57,91.57,0,0,1-15-6.23L82.89,187a8,8,0,0,0-2.64-5.1,74.11,74.11,0,0,1-6.14-6.14,8,8,0,0,0-5.1-2.64L46.43,170.6a91.32,91.32,0,0,1-6.23-15l14.19-17.74a8,8,0,0,0,1.74-5.48,73.93,73.93,0,0,1,0-8.68,8,8,0,0,0-1.74-5.48L40.2,100.45a91.57,91.57,0,0,1,6.23-15L69,82.89a8,8,0,0,0,5.1-2.64,74.11,74.11,0,0,1,6.14-6.14A8,8,0,0,0,82.89,69L85.4,46.43a91.32,91.32,0,0,1,15-6.23l17.74,14.19a8,8,0,0,0,5.48,1.74,73.93,73.93,0,0,1,8.68,0,8,8,0,0,0,5.48-1.74L155.55,40.2a91.57,91.57,0,0,1,15,6.23L173.11,69a8,8,0,0,0,2.64,5.1,74.11,74.11,0,0,1,6.14,6.14,8,8,0,0,0,5.1,2.64l22.58,2.51a91.32,91.32,0,0,1,6.23,15l-14.19,17.74A8,8,0,0,0,199.87,123.66Z"/></svg></i></span>
+              <span class="ww11-discover-action-label">Settings</span>
+            </button>
+          </div>
+        </div>
+      </header>
+      <div class="ww11-discover-main">
+        <div class="ww11-discover-controls" aria-label="Discover sections">
+          <h2 id="ww11-discover-section-name" class="ww11-discover-section-name" aria-live="polite">News</h2>
+          <div class="ww11-discover-section-nav" role="group" aria-label="Switch Discover section">
+            <button type="button" class="ww11-discover-page-control" id="ww11-discover-previous" aria-label="Show News" title="News" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15.5 4.5-8 7.5 8 7.5"/></svg></button>
+            <button type="button" class="ww11-discover-page-control" id="ww11-discover-next" aria-label="Show Widgets" title="Widgets"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8.5 4.5 8 7.5-8 7.5"/></svg></button>
+          </div>
+        </div>
+        <div id="ww11-discover-page-viewport" class="ww11-discover-page-viewport" aria-label="Discover content">
+          <div id="ww11-discover-page-track" class="ww11-discover-page-track" data-page="news">
+          <div class="ww11-discover-gallery" id="ww11-discover-gallery" aria-label="Discover news articles" aria-live="polite"></div>
+          <section id="ww11-discover-widgets" class="ww11-discover-widgets" aria-label="Widgets" inert>
+            <div class="ww11-widget-tooltips">
+              <h3>Tooltips</h3>
+              <section class="ww11-widget-card ww11-widget-time" aria-label="Time widget">
+                <div class="ww11-widget-card-heading"><h4>Time</h4></div>
+                <div class="ww11-widget-time-content">
+                  <div class="ww11-widget-central"><time id="ww11-widget-central-time">--:--:--</time><span>Local Time</span></div>
+                  <div class="ww11-widget-timezones"><h5>Timezones</h5><div class="ww11-widget-zone"><time id="ww11-widget-eastern-time">--:--:--</time><span>Eastern Time</span></div><div class="ww11-widget-zone"><time id="ww11-widget-pacific-time">--:--:--</time><span>Pacific Time</span></div></div>
+                </div>
+              </section>
+              <section class="ww11-widget-card ww11-widget-weather" aria-label="Weather widget">
+                <div class="ww11-widget-card-heading"><h4>Weather</h4></div>
+                <div class="ww11-widget-weather-content">
+                  <div class="ww11-widget-now"><img id="ww11-widget-now-icon" src="Assets/ww11/Sun.png" alt="" draggable="false"><div class="ww11-widget-current-label" id="ww11-widget-current-label" role="status" aria-live="polite">Loading weather…</div></div>
+                  <div class="ww11-widget-next"><h5>Next 3 Days</h5><div id="ww11-widget-forecast-days" class="ww11-widget-forecast-days" aria-live="polite"><div class="ww11-widget-day-placeholder" aria-hidden="true">—</div></div></div>
+                </div>
+              </section>
+            </div>
+          </section>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="settings-overlay" class="settings-overlay" role="dialog" aria-modal="false" aria-label="Settings" aria-hidden="true" hidden>
+    <div id="ww-settings-window" class="ww-settings-window" role="document">
+      <div class="ww-settings-resize-handle" data-edge="n" aria-hidden="true"></div>
+      <div class="ww-settings-resize-handle" data-edge="e" aria-hidden="true"></div>
+      <div class="ww-settings-resize-handle" data-edge="s" aria-hidden="true"></div>
+      <div class="ww-settings-resize-handle" data-edge="w" aria-hidden="true"></div>
+      <div class="ww-settings-resize-handle" data-edge="ne" aria-hidden="true"></div>
+      <div class="ww-settings-resize-handle" data-edge="se" aria-hidden="true"></div>
+      <div class="ww-settings-resize-handle" data-edge="sw" aria-hidden="true"></div>
+      <div class="ww-settings-resize-handle" data-edge="nw" aria-hidden="true"></div>
+      <header id="ww-settings-titlebar" class="ww-settings-titlebar">
+        <button class="ww-settings-title-back" type="button" id="ww-settings-back" aria-label="Toggle Settings navigation" aria-expanded="true" title="Toggle navigation">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 6.5h16M4 12h16M4 17.5h16" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+        </button>
+        <span class="ww-settings-app-identity"><span class="ww-settings-title-text">Settings</span></span>
+        <div class="wua-titlebar-center">
+          <div class="wua-titlebar-navigation" role="group" aria-label="Settings page navigation">
+            <button id="ww-settings-nav-back" type="button" title="Back" aria-label="Go back in Settings" disabled><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m14.5 5.5-6.5 6.5 6.5 6.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+            <button id="ww-settings-nav-forward" type="button" title="Forward" aria-label="Go forward in Settings" disabled><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m9.5 5.5 6.5 6.5-6.5 6.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          </div>
+          <div class="ww-settings-search-wrap wua-titlebar-search">
+            <label class="ww-settings-searchbox" for="ww-settings-search">
+              <svg class="ww-local-icon ww-settings-search-icon ww-ph-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><use href="#ww-ph-magnifying-glass"></use></svg>
+              <input id="ww-settings-search" type="text" inputmode="search" placeholder="Find a setting" autocomplete="off" spellcheck="false" role="combobox" aria-autocomplete="list" aria-haspopup="listbox" aria-label="Search settings" aria-expanded="false" aria-controls="ww-settings-search-results" />
+            </label>
+            <div id="ww-settings-search-results" class="ww-settings-search-results" hidden role="listbox" aria-label="Settings search results"></div>
+          </div>
+        </div>
+        <div class="ww-gs-window-controls ww-settings-window-controls" aria-label="Window controls">
+          <button id="ww-settings-minimize" type="button" aria-label="Minimize Settings" title="Minimize"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/></svg></button>
+          <button id="ww-settings-maximize" type="button" aria-label="Maximize Settings" title="Maximize"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5.3" y="5.3" width="13.4" height="13.4" rx=".7"/></svg></button>
+          <button id="ww-settings-close" type="button" aria-label="Close Settings" title="Close"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6 18 18M18 6 6 18"/></svg></button>
+        </div>
+      </header>
+      <div class="ww-settings-columns">
+        <aside class="ww-settings-sidebar" aria-label="Settings navigation">
+          <div class="ww-settings-profile" aria-label="Current account">
+            <div class="ww-settings-profile-image"><img id="ww-settings-avatar" src="Assets/account-avatar.png" alt=""/><svg class="ww-local-icon ww-ph-icon" id="ww-settings-avatar-fallback"  hidden focusable="false" aria-hidden="true" viewBox="0 0 24 24"><use href="#ww-ph-user"></use></svg></div>
+            <div class="ww-settings-profile-labels"><strong id="ww-settings-account-name">Russel John</strong><span>Windows 12 · 11H11</span></div>
+          </div>
+          <nav id="ww-settings-navigation" class="ww-settings-nav" aria-label="Settings categories">
+            <button class="ww-settings-nav-row is-active" type="button" data-ww-settings-nav="home" aria-current="page" title="System home">
+              <span class="ww-settings-nav-icon"><img class="ww-nav-icons8" src="https://img.icons8.com/fluency/48/home.png" alt=""><svg class="ww-nav-fallback ww-ph-icon"  focusable="false" aria-hidden="true" viewBox="0 0 24 24"><use href="#ww-ph-house-regular"></use></svg></span><span>Home</span>
+            </button>
+            <button class="ww-settings-nav-row" type="button" data-ww-settings-nav="personalization" title="Personalization">
+              <span class="ww-settings-nav-icon"><img class="ww-nav-icons8" src="https://img.icons8.com/?size=100&amp;id=rufzEhS2OFRa&amp;format=png&amp;color=000000" alt=""><img class="ww-nav-fallback" src="Assets/ww11-fluent/personalization.svg" alt=""></span><span>Personalization</span>
+            </button>
+            <button class="ww-settings-nav-row" type="button" data-ww-settings-nav="time" aria-disabled="true" title="Time &amp; Language is not available">
+              <span class="ww-settings-nav-icon"><img class="ww11-custom-nav-svg" src="Assets/ww11-fluent/time-language.svg" alt=""></span><span>Time &amp; Language</span>
+            </button>
+            <button class="ww-settings-nav-row" type="button" data-ww-settings-nav="accounts" title="Accounts">
+              <span class="ww-settings-nav-icon"><img class="ww11-custom-nav-svg" src="Assets/ww11-fluent/accounts.svg" alt=""></span><span>Accounts</span>
+            </button>
+            <button class="ww-settings-nav-row" type="button" data-ww-settings-nav="privacy" aria-disabled="true" title="Privacy is not available">
+              <span class="ww-settings-nav-icon"><img class="ww11-custom-nav-svg" src="Assets/ww11-fluent/privacy.svg" alt=""></span><span>Privacy</span>
+            </button>
+            <button class="ww-settings-nav-row" type="button" data-ww-settings-nav="updates" aria-disabled="true" title="Windows Update is not available">
+              <span class="ww-settings-nav-icon"><img class="ww11-custom-nav-svg" src="Assets/ww11-fluent/windows-update.svg" alt=""></span><span>Windows Update</span>
+            </button>
+          </nav>
+        </aside>
+        <main class="ww-settings-main" id="ww-settings-main">
+          <h1 id="ww-settings-heading">System</h1>
+          <div id="ww-settings-home-banner" class="ww-settings-device-banner" hidden></div>
+          <div id="ww-settings-section" class="ww-settings-section" aria-live="polite"></div>
+        </main>
+      </div>
+    </div>
+  </section>
+
+  <!-- 11H11 Get Started: standalone, non-modal native app with a shared Settings transition. -->
+  <section id="ww-gs-overlay" class="ww-gs-overlay" role="dialog" aria-modal="false" aria-label="Get Started" aria-hidden="true" hidden>
+    <div id="ww-gs-window" class="ww-gs-window" role="document">
+      <div class="ww-gs-resize-handle" data-edge="n" aria-hidden="true"></div>
+      <div class="ww-gs-resize-handle" data-edge="e" aria-hidden="true"></div>
+      <div class="ww-gs-resize-handle" data-edge="s" aria-hidden="true"></div>
+      <div class="ww-gs-resize-handle" data-edge="w" aria-hidden="true"></div>
+      <div class="ww-gs-resize-handle" data-edge="ne" aria-hidden="true"></div>
+      <div class="ww-gs-resize-handle" data-edge="se" aria-hidden="true"></div>
+      <div class="ww-gs-resize-handle" data-edge="sw" aria-hidden="true"></div>
+      <div class="ww-gs-resize-handle" data-edge="nw" aria-hidden="true"></div>
+      <header id="ww-gs-titlebar" class="ww-gs-titlebar">
+        <span class="wua-gs-identity"><span class="ww-gs-title">Get Started</span></span>
+        <div class="ww-gs-window-controls" aria-label="Window controls">
+          <button id="ww-gs-minimize" aria-label="Minimize Get Started" title="Minimize" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/></svg></button>
+          <button id="ww-gs-maximize" aria-label="Maximize Get Started" title="Maximize" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5.3" y="5.3" width="13.4" height="13.4" rx=".7"/></svg></button>
+          <button id="ww-gs-close" aria-label="Close Get Started" title="Close" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6 18 18M18 6 6 18"/></svg></button>
+        </div>
+      </header>
+      <div class="ww-gs-stage" id="ww-gs-stage">
+        <section class="ww-gs-copy" id="ww-gs-copy" aria-live="polite" aria-atomic="true">
+          <p class="ww-gs-step-label" id="ww-gs-step-label" hidden></p>
+          <h1 id="ww-gs-heading">Welcome back</h1>
+          <p id="ww-gs-description">Let's set up a few things to get you going.</p>
+          <ul class="ww-gs-highlights" id="ww-gs-highlights" aria-label="Things to explore" hidden></ul>
+          <button id="ww-gs-main-action" class="ww-gs-primary" type="button">Get started</button>
+        </section>
+        <div class="ww-gs-device" aria-label="Windows desktop on a laptop" role="img">
+          <svg class="ww-gs-laptop" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 570" aria-hidden="true" focusable="false">
+            <defs>
+              <linearGradient id="ww-gs-bezel" x1=".15" y1="0" x2=".8" y2="1"><stop stop-color="#52565c"/><stop offset=".47" stop-color="#22282e"/><stop offset="1" stop-color="#0b1016"/></linearGradient>
+              <linearGradient id="ww-gs-base" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#dce1e5"/><stop offset=".27" stop-color="#9ca7af"/><stop offset=".65" stop-color="#e6eaed"/><stop offset="1" stop-color="#6a7881"/></linearGradient>
+              <linearGradient id="ww-gs-panel" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#202930"/><stop offset="1" stop-color="#0a0e12"/></linearGradient>
+              <clipPath id="ww-gs-screen-clip"><rect x="69" y="57" width="722" height="412" rx="4"/></clipPath>
+              <filter id="ww-gs-laptop-shadow" x="-20%" y="-20%" width="140%" height="160%"><feGaussianBlur stdDeviation="9"/></filter>
+            </defs>
+            <ellipse cx="425" cy="530" rx="405" ry="16" fill="#132332" opacity=".23" filter="url(#ww-gs-laptop-shadow)"/>
+            <rect x="48" y="28" width="764" height="465" rx="20" fill="#30353a" stroke="#8c9297" stroke-width="3"/>
+            <rect x="56" y="35" width="748" height="451" rx="14" fill="url(#ww-gs-bezel)"/>
+            <rect x="69" y="57" width="722" height="412" rx="4" fill="#a4cce2"/>
+            <g clip-path="url(#ww-gs-screen-clip)"><image href="Assets/Get-started/GS.png" x="69" y="57" width="722" height="412" preserveAspectRatio="none"/></g>
+            <circle cx="430" cy="43" r="4.6" fill="#454c53"/><circle cx="430" cy="43" r="1.6" fill="#828c97"/>
+            <path d="M0 497h860l-13 18c-4 6-15 10-26 10H39c-11 0-22-4-26-10Z" fill="url(#ww-gs-base)"/>
+            <path d="M0 496h860" stroke="#7d8992" stroke-width="2"/>
+            <path d="M347 498h166c-4 8-9 11-22 11H370c-13 0-19-3-23-11Z" fill="#79848c" opacity=".6"/>
+          </svg>
+        </div>
+      </div>
+      <footer class="ww-gs-footer">
+        <button type="button" id="ww-gs-skip" class="ww-gs-skip">Skip tour</button>
+        <div class="ww-gs-progress-group" aria-label="Tour progress">
+          <span id="ww-gs-progress" class="ww-gs-progress" aria-live="off"></span>
+          <div class="ww-gs-progress-track" role="progressbar" aria-label="Tour progress" aria-valuemin="0" aria-valuemax="10" aria-valuenow="0"><span id="ww-gs-progress-fill"></span></div>
+        </div>
+        <div class="ww-gs-footer-right">
+          <button type="button" class="ww-gs-footer-icon" id="ww-gs-previous" aria-label="Previous step" title="Previous"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m14.5 5-7 7 7 7"/></svg></button>
+          <button type="button" class="ww-gs-footer-icon" id="ww-gs-next" aria-label="Next step" title="Next"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9.5 5 7 7-7 7"/></svg></button>
+        </div>
+      </footer>
+    </div>
+  </section>
+  </main>
+  <script src="script.js"></script>
+</body>
+</html>
