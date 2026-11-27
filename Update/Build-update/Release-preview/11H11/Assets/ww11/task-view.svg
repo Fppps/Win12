@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="wua-task-view-icon" viewBox="-6 -6 268 268" width="25" height="25" focusable="false" aria-hidden="true">
+            <defs>
+              <!-- Each pane is a glass surface rather than a solid bitmap. -->
+              <linearGradient id="ww11-tv-black-surface" x1="0" y1="0" x2="1" y2="1">
+                <stop stop-color="#282c2f"/><stop offset=".55" stop-color="#1a1d20"/><stop offset="1" stop-color="#202326"/>
+              </linearGradient>
+              <linearGradient id="ww11-tv-white-surface" x1=".05" y1="0" x2=".94" y2="1">
+                <stop stop-color="#ffffff"/><stop offset=".5" stop-color="#f5f6f7"/><stop offset="1" stop-color="#e1e3e6"/>
+              </linearGradient>
+              <!-- The shared area is the white glass seen through against the black pane,
+                   not an additional gray rectangle or a bottom-left shadow. -->
+              <clipPath id="ww11-tv-white-clip">
+                <rect x="62" y="2" width="192" height="173" rx="16"/>
+              </clipPath>
+            </defs>
+            <g class="wua-task-front">
+              <rect x="3.5" y="68" width="190" height="171" rx="16" fill="url(#ww11-tv-black-surface)" fill-opacity=".88" stroke="#6e7378" stroke-opacity=".48" stroke-width="2"/>
+              <!-- Gloss, top rim and inner edge. No heavy shadow below or at bottom left. -->
+              <path d="M19 70h160a13 13 0 0 1 13 13v12H5V83a14 14 0 0 1 14-13Z" fill="#ffffff" fill-opacity=".065"/>
+              <path d="M5 220v4c0 8 6 13 14 13h158c8 0 14-5 14-13" stroke="#ffffff" stroke-opacity=".13" stroke-width="2" fill="none"/>
+              <path d="M18 70h160" stroke="#ffffff" stroke-opacity=".2" stroke-width="2" stroke-linecap="round"/>
+            </g>
+            <g class="wua-task-rear">
+              <g clip-path="url(#ww11-tv-white-clip)">
+                <!-- The L-shaped bright region and the translucent overlap have
+                     separate opacities so the dark pane itself creates the gray. -->
+                <path d="M62 2H254V175H194V68H62Z" fill="url(#ww11-tv-white-surface)" fill-opacity=".94"/>
+                <rect x="62" y="68" width="132" height="107" fill="url(#ww11-tv-white-surface)" fill-opacity=".52"/>
+              </g>
+              <!-- Rounded glass rim, upper highlight, understated bottom bevel. -->
+              <rect x="62.8" y="2.8" width="190.4" height="171.4" rx="15.4" fill="none" stroke="#ffffff" stroke-opacity=".77" stroke-width="2"/>
+              <path d="M78 5h159c8 0 14 6 14 14v129" fill="none" stroke="#ffffff" stroke-opacity=".51" stroke-width="2" stroke-linecap="round"/>
+              <path d="M78 172h160c8 0 13-5 13-13" fill="none" stroke="#5c646d" stroke-opacity=".27" stroke-width="1.8" stroke-linecap="round"/>
+            </g>
+          </svg>

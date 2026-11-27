@@ -1,0 +1,9 @@
+{
+    "version": "11H11",
+    "description": "11H11 Release-Preview UI insider update.",
+    "build": "2611155",
+    "update_date": "2026-11-27",
+    "Verification": false,
+    "Feature-Update": true,
+    "Major-Update": false
+}
